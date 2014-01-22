@@ -1,17 +1,8 @@
 # Author: przemol
 ###############################################################################
 
-# actionButton <- function(inputId, label) {
-# 	tagList(
-# 			singleton(tags$head(tags$script(src = 'js/actionbutton.js'))),
-# 			tags$button(id=inputId, type="button", class="btn action-button", label)
-# 	)
-# }
-#source('functions/files_modal.R')
-
-
-require(rCharts)
-options(RCHART_LIB = 'nvd3')
+# require(rCharts)
+# options(RCHART_LIB = 'nvd3')
 
 GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
 names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
@@ -36,12 +27,8 @@ shinyUI(
 						# CSS impprt
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/style.css")),
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/DT_bootstrap.css")),
-						singleton(tags$link(rel="stylesheet", type="text/css", href="css/bootstrapSwitch.css")),
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/TableTools.css")),
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/font-awesome.min.css")),
-						#singleton(tags$link(rel="stylesheet", type="text/css", href="css/nv.d3.css")),
-						#singleton(tags$link(rel="stylesheet", type="text/css", href="css/rNVD3.css")),
-						
 						
 						
 						# JS import
@@ -53,12 +40,9 @@ shinyUI(
 						singleton(tags$script(src = "js/DT_filter.js")),
 						singleton(tags$script(src = "js/js_addons.js")),
 						singleton(tags$script(src = "js/load_finished.js")),
-						#singleton(tags$script(src = "js/bootstrapSwitch.js")),
 						singleton(tags$script(src = "js/tmpl.min.js")),
 						singleton(tags$script(src = "js/TableTools.min.js")),
 						singleton(tags$script(src = "js/dataTables.scroller.min.js")),
-						#singleton(HTML('<script src="js/d3.v3.min.js" type="text/javascript"></script>')),
-						#singleton(HTML('<script src="js/nv.d3.min-new.js" type="text/javascript"></script>')),
 						
 						
 						# Title
@@ -101,7 +85,7 @@ shinyUI(
 				
 				
 				#Dynamically injected scripts output
-				uiOutput('scripts'),
+				#uiOutput('scripts'),
 				
 				#File management modal
 				tagList(
@@ -113,7 +97,6 @@ shinyUI(
 				             tabPanel("Features", 	div(class='fileMoodalInnerDiv', div("Loading...",id="featuretable")	)),
 				             tabPanel("Sequence features",   div(class='row', div(class='span4', wellPanel(class='SFform', 
 				                                                       selectInput("SFgenome", "Reference sequence (genmoe)", GENOMES),
-				                                                       #selectInput(inputId='SFgenome', label='Reference sequence', choices=''),
 				                                                       textInput(inputId='SFpattern', label='DNA motif'),
 				                                                       numericInput(inputId='SFbin', label='Sliding window size in base pairs [bp]', value=200, min=10, step=10),
 				                                                       textInput(inputId='SFname', label='Display name'),
@@ -129,8 +112,7 @@ shinyUI(
 				      div( class="modal-footer",
 				           div(id='modalToolbar', class='row-fluid',
 				               div(class="span2", 
-				                   selectInput('algo_type', 'Choose method', c( 'Quick [track-at-once]', 'Iterative [loci-by-chromosome]' ) ), 
-				                   conditionalPanel( class="form-inline", condition = "input.algo_type == 'Quick [track-at-once]'", numericInput("BWbin", "Bin track @ [bp]: ", 10))
+                          numericInput("BWbin", "Bin track @ [bp]: ", 10)
 				               ),
 				               div(class="span2", radioButtons('plot_type', 'Choose the plot type', c( 'Point Features', 'Midpoint Features', 'Anchored Features' ) ) ),
 				               div(class="span2", p("Additional options:"), 
@@ -332,19 +314,19 @@ shinyUI(
 					,singleton(tags$link(rel="stylesheet", type="text/css", href="upload/css/jquery.fileupload-ui.css"))
 					,includeHTML('www/upload/upload.html'),
           
-					tabsetPanel(
-					  tabPanel("Plots selection", 
+# 					tabsetPanel(
+# 					  tabPanel("Plots selection", 
 					           tags$br(),tags$br(),tags$br(),tags$br(),
 					           div(class="control-group", uiOutput("htmltab") )
-            ),
-					  tabPanel("Interactive lineplot",
-                     checkboxInput('interactiveLinePlot', 'Enable intercative plot', FALSE),
-                     conditionalPanel(condition = "input.interactiveLinePlot", 
-                        selectInput('chart1Type', label='Select type', choices=c('lineWithFocusChart','lineChart','stackedAreaChart','scatterChart', 'multiBarChart'), selected='lineWithFocusChart'),              
-					              showOutput("chart1", "nvd3")
-                     )
-            )
-					)
+#             ),
+# 					  tabPanel("Interactive lineplot",
+#                      checkboxInput('interactiveLinePlot', 'Enable intercative plot', FALSE),
+#                      conditionalPanel(condition = "input.interactiveLinePlot", 
+#                         selectInput('chart1Type', label='Select type', choices=c('lineWithFocusChart','lineChart','stackedAreaChart','scatterChart', 'multiBarChart'), selected='lineWithFocusChart'),              
+# 					              showOutput("chart1", "nvd3")
+#                      )
+#             )
+# 					)
           
 					
 					
