@@ -9,15 +9,17 @@ library(rtracklayer)
 require(RJSONIO)
 require(RSQLite)
 require(BSgenome)
+
 options("xtable.sanitize.text.function" = identity)
 options("shiny.maxRequestSize" = -1)
 options("bitmapType" = "cairo")
-options(shiny.reactlog = FALSE)
+#options(shiny.reactlog = FALSE)
 
 #some comment to resolve
 
-require(rCharts)
-options(RCHART_WIDTH = 800)
+##Turn off experimental
+#require(rCharts)
+#options(RCHART_WIDTH = 800)
 
 toGFF <- function(ex, fname) {
   writeLines(paste(	
@@ -237,22 +239,17 @@ mcCalcStart <- quote({
 				              type = input$plot_type, bin= as.numeric(input$BWbin),
 				              cat3=cat3, cat4=cat4, rm0=input$rm0, ignore_strand=input$ignore_strand, add_heatmap=input$add_heatmap)
             )
-				  } else if ( length( values$SFsetup ) > 0) {
+				  } else if ( length( values$SFsetup ) > 0 ) {
             procSF(values$SFsetup, input$f_features,
                    x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
                    type=input$plot_type, rm0=input$rm0, ignore_strand=input$ignore_strand, 
                    add_heatmap=input$SFadvanced, cat3=cat3, cat4=cat4)
-          } else if ( input$algo_type == 'Quick [track-at-once]' & length( input$f_tracks ) > 0) {
+          } else if ( length( input$f_tracks ) > 0 ) {
 						procQuick(input$f_tracks, input$f_features,
 							x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
 							type = input$plot_type, bin= as.numeric(input$BWbin),
 							cat3=cat3, cat4=cat4, rm0=input$rm0, ignore_strand=input$ignore_strand, add_heatmap=input$add_heatmap)		
-					} else if ( length( input$f_tracks ) > 0 ) {
-						procTSSsimple(input$f_tracks, input$f_features,
-								XlimMin = input$plot_upstream, XlimMid = input$anchored_downstream, XlimMax = input$plot_downstream,
-								type = input$plot_type,
-								cat3=cat3, cat4=cat4, output=NULL, rm0=input$rm0, ignore_strand=input$ignore_strand)
-					} else ( stop('Nothing to calculate!') )
+					}  else ( stop('Nothing to calculate!') )
 						
 				)
 				values$calcMsg1 <- 'Started NOW'
@@ -265,18 +262,17 @@ mcCalcStart <- quote({
 					values[[ res[1] ]] <- res[2]	
 				} else {
 					if(class(res) == 'try-error' ) {
-					  parallel::mccollect( isolate(values$proc) )
-						values$script <- tags$script( paste0("$('#progressModal').modal('hide'); alert('",gsub('[^A-Za-z1-9 \\(\\)\\.!",:=]', '', gettext(res)),"');"), id=input$TR_calculate )
+					  parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
+					  session$sendCustomMessage("jsAlert", res); session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
 					} else if ( is.null(res) ) {
-					  parallel::mccollect( isolate(values$proc) )
-					  values$proc <- NULL 
+					  parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
 					  session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
 					} else {
 					  parallel::mccollect( isolate(values$proc) )
 						values$grfile <- res
 						values$proc <- NULL 
 						values$calcMsg1 <-  paste('FINISHED') 
-						values$script <- tags$script( "$('#progressModal').modal('hide'); alert('Done!');", id=input$TR_calculate )
+						session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Done!');")
 						values$plotMsg <- ok_msg
 					}
 				}
@@ -294,16 +290,11 @@ if(Sys.getenv('root') !='') {
   con <- dbConnect(sqlite, dbname = 'files.sqlite')
 }
 
-shinyServer(function(input, output, clientData, session, grfile=NULL, calcID=NULL, plot_message=NULL, env=environment()) {
+shinyServer(function(input, output, clientData, session) {
 	
   if( Sys.getenv('web') != '' ) setwd(Sys.getenv('web'))
 	source('functions/plotMext.R')
 	source('functions/renderHTMLgrid.R')
-	source('functions/renderHTMLfilesGrid.R')
-	source('functions/calc.R')
-	source('functions/calcAnchored.R')
-	source('functions/calcMidpoints.R')
-	source('functions/procTSSsimple.R')
 	source('functions/files_modal.R')
 	source('functions/procQuick.R')
 	source('functions/fnPlotHeatmap.R')
@@ -350,7 +341,7 @@ shinyServer(function(input, output, clientData, session, grfile=NULL, calcID=NUL
 # 	}, deleteFile = TRUE)
 	#observe( { input$parast; values$script <- paste("alert('",abs(rnorm(1)*1e10),"')"); } )
 	
-	values <- reactiveValues( grfile=NULL, calcID=NULL, calcMsg1=NULL, calcMsg2=NULL, script=NULL, plotMsg=NULL, 
+	values <- reactiveValues( grfile=NULL, calcID=NULL, calcMsg1=NULL, calcMsg2=NULL, plotMsg=NULL, 
                             refFileGrids=NULL, proc=NULL, im=NULL, clusters=NULL, include=NULL, SFsetup=list(), plotHistory=list() )
 	
   
@@ -404,7 +395,7 @@ shinyServer(function(input, output, clientData, session, grfile=NULL, calcID=NUL
   observe( mcDoParallel, quoted = TRUE, label = 'Plotting')
 	
 	#Scripts calculations
-	output$reactiveScripts 	<- renderUI({ if( !is.null(values$script) )  values$script  })
+	#output$reactiveScripts 	<- renderUI({ if( !is.null(values$script) )  values$script  })
 	
 	#Plot message output
 	output$plot_message 	<- renderUI({ if( !is.null(values$plotMsg) ) values$plotMsg })
@@ -419,7 +410,6 @@ shinyServer(function(input, output, clientData, session, grfile=NULL, calcID=NUL
 		row_aff <- dbGetRowsAffected(dbSendQuery(con, sql_string))
 		moved <- file.rename(file.path('files', input$delFileVar), file.path('removedFiles', input$delFileVar))
 		
-		values$script <-  tags$script( sprintf("alert('Db=%i; Mv=%i; OK');", row_aff, moved), id=as.numeric(Sys.time()) )
 		values$refFileGrids <- runif(1)	
 	})
 	
@@ -572,15 +562,7 @@ shinyServer(function(input, output, clientData, session, grfile=NULL, calcID=NUL
 				 }
 	})
 	
-	#additional scripts output
-	output$scripts <- renderUI({ 
-				 if( length(input$files) > 0 )
-					 return( div(id=sprintf('%.0f', abs(rnorm(1)*1e10)), tags$script("$('#fileprogressdiv').hide(500);")) ) 
-				 if( input$cust_col )
-					 return( div(id=sprintf('%.0f', abs(rnorm(1)*1e10)), tags$script("$('input[type=color]').show(500);")) )
-				 if( !input$cust_col )
-					 return( div(id=sprintf('%.0f', abs(rnorm(1)*1e10)), tags$script("$('input[type=color]').hide(500);")) )		
-			})
+
 	
 	#Legend download handler
 	output$downloadLegend <- downloadHandler(
@@ -801,17 +783,18 @@ shinyServer(function(input, output, clientData, session, grfile=NULL, calcID=NUL
 # 			})
 # 		})
 	
-	#Save dataset file logic	
+	#Save dataset file logic
+  updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
 	observe({
 		if( input$RdataSaveButton == 0 ) return()	
 		isolate({
-			if (is.null(values$grfile)) values$script <- tags$script( "alert('Run calculation first')", id=input$TR_calculate ) 	
+			if (is.null(values$grfile)) session$sendCustomMessage("jsAlert", 'Run calculation firs')
 			to_save <- values$grfile
 			save(to_save, file=file.path('publicFiles', paste0(input$RdataSaveName, '.Rdata')))
 					
 			message(paste('File saved: ',input$RdataSaveName))
-			values$script <- tags$script( sprintf("alert('File saved: %s')", paste0(input$RdataSaveName, '.Rdata')), id=input$TR_calculate )
-			values$refreshRfiles <- runif(1)
+			session$sendCustomMessage("jsAlert", sprintf("alert('File saved: %s')", paste0(input$RdataSaveName, '.Rdata')) )
+			updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
 		})
 	})
 	
@@ -821,8 +804,8 @@ shinyServer(function(input, output, clientData, session, grfile=NULL, calcID=NUL
 		isolate({
 			file.remove( file.path('publicFiles', input$publicRdata) )
 			message(paste('File removed: ',input$publicRdata))
-			values$script <- tags$script( sprintf("alert('File removed: %s')", input$publicRdata), id=as.numeric(Sys.time()) )
-			values$refreshRfiles <- runif(1)
+			session$sendCustomMessage("jsAlert", sprintf("alert('File removed: %s')", input$publicRdata) )
+			updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
 		})
 	})
   observe({
@@ -835,17 +818,22 @@ shinyServer(function(input, output, clientData, session, grfile=NULL, calcID=NUL
         if(row_aff & moved) return(TRUE) else return(FALSE)
       }
       res <- sapply( input$f_delate, rmf)
-      
-      values$script <-  tags$script( sprintf("alert('Db=%i; Mv=%i; OK');", sum(res), sum(res)), id=as.numeric(Sys.time()) )
+      session$sendCustomMessage("jsAlert", sprintf("alert('Db=%i; Mv=%i; OK');", sum(res), sum(res)) )
       values$refFileGrids <- runif(1)	
     })
   })
-	
+
+  #ColorButtons
+  observe({ 
+    if( input$cust_col )
+      session$sendCustomMessage("jsExec", "$('input[type=color]').show(0)")
+    if( !input$cust_col )
+      session$sendCustomMessage("jsExec", "$('input[type=color]').hide(0)")
+  })
 	#Remove dataset file logic
-	observe({
-				values$refreshRfiles
-				updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
-			})
+
+				
+			
 	
 	#Generate file table for tracks and features
   observe({
@@ -939,34 +927,36 @@ shinyServer(function(input, output, clientData, session, grfile=NULL, calcID=NUL
     session$sendCustomMessage("jsExec", "location.reload(true)")
 
   })
-  output$chart1 <- renderChart({
-    
-    if( !input$interactiveLinePlot ) stop('Loading...')
-    if( is.null(input$plot_this) ) stop('Nothing to plot')
-    
 
-    pl <- lapply( lapply(input$plot_this, function(x) fromJSON(x)) , function(x) values$grfile[[x[2]]][[x[1]]] )
-    
-    x <- pl[[1]]$all_ind
-    a <- data.frame( sapply(pl, '[[', 'means') )
-    a <- cbind(a, x=x)
-    
-    if (input$cust_col) {
-      cols <- sapply( lapply(input$plot_this, function(x) fromJSON(x)) , function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) )
-      cols[ grepl('#ffffff', cols) ] <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow(length(pl)-8))[ grepl('#ffffff', cols) ]
-    } else {
-      cols <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow(length(pl)-8))	
-    }
- 
-    n1=nPlot(value ~ x, group = 'variable', data = reshape2::melt(a, id='x'), type = input$chart1Type)
-    #p$chart(margin=list(top= 30, right= 20, bottom= 50, left= 250))
-    n1$xAxis(axisLabel='GenomicPosition')
-    n1$yAxis(axisLabel='Signal')
-    n1$chart(color = cols)
-    n1$set(dom = "chart1")
-    #n1$addControls("type", value = "lineWithFocusChart", values = c('lineWithFocusChart', 'stackedAreaChart') )
-    
-    return(n1)
-  })
-		#outputOptions(output, "featuretable", suspendWhenHidden = FALSE)
-})
+##Turn off experimental
+#   output$chart1 <- renderChart({
+#     
+#     if( !input$interactiveLinePlot ) stop('Loading...')
+#     if( is.null(input$plot_this) ) stop('Nothing to plot')
+#     
+# 
+#     pl <- lapply( lapply(input$plot_this, function(x) fromJSON(x)) , function(x) values$grfile[[x[2]]][[x[1]]] )
+#     
+#     x <- pl[[1]]$all_ind
+#     a <- data.frame( sapply(pl, '[[', 'means') )
+#     a <- cbind(a, x=x)
+#     
+#     if (input$cust_col) {
+#       cols <- sapply( lapply(input$plot_this, function(x) fromJSON(x)) , function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) )
+#       cols[ grepl('#ffffff', cols) ] <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow(length(pl)-8))[ grepl('#ffffff', cols) ]
+#     } else {
+#       cols <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow(length(pl)-8))	
+#     }
+#  
+#     n1=nPlot(value ~ x, group = 'variable', data = reshape2::melt(a, id='x'), type = input$chart1Type)
+#     #p$chart(margin=list(top= 30, right= 20, bottom= 50, left= 250))
+#     n1$xAxis(axisLabel='GenomicPosition')
+#     n1$yAxis(axisLabel='Signal')
+#     n1$chart(color = cols)
+#     n1$set(dom = "chart1")
+#     #n1$addControls("type", value = "lineWithFocusChart", values = c('lineWithFocusChart', 'stackedAreaChart') )
+#     
+#     return(n1)
+#   })
+ 		#outputOptions(output, "featuretable", suspendWhenHidden = FALSE)
+ })
