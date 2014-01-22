@@ -14,6 +14,8 @@ options("shiny.maxRequestSize" = -1)
 options("bitmapType" = "cairo")
 options(shiny.reactlog = FALSE)
 
+#some comment to resolve
+
 require(rCharts)
 options(RCHART_WIDTH = 800)
 
