@@ -1,12 +1,12 @@
-# TODO: Add comment
+# SeqPlots server file
 # 
-# Author: przemol
+# Author: PS
 ###############################################################################
+
 require(parallel)
 library(shiny)
 library(rtracklayer)
 require(RJSONIO)
-##require(GenomicFeatures)
 require(RSQLite)
 require(BSgenome)
 options("xtable.sanitize.text.function" = identity)
@@ -286,6 +286,9 @@ mcCalcStart <- quote({
 
 sqlite <- dbDriver("SQLite")
 if(Sys.getenv('root') !='') {
+  con <- dbConnect(sqlite, dbname = file.path(Sys.getenv('root'),'files.sqlite'))
+} else if( file.exists('server_config.R')  ) {
+  source('server_config.R')
   con <- dbConnect(sqlite, dbname = file.path(Sys.getenv('root'),'files.sqlite'))
 } else {
   con <- dbConnect(sqlite, dbname = 'files.sqlite')
