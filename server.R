@@ -9,6 +9,7 @@ library(rtracklayer)
 require(RJSONIO)
 require(RSQLite)
 require(BSgenome)
+<<<<<<< HEAD
 require(seqnames.db)
 
 #options("xtable.sanitize.text.function" = identity)
@@ -16,6 +17,13 @@ options("shiny.maxRequestSize" = -1)
 options("bitmapType" = "cairo")
 #options(shiny.reactlog = FALSE)
 
+=======
+
+options("xtable.sanitize.text.function" = identity)
+options("shiny.maxRequestSize" = -1)
+options("bitmapType" = "cairo")
+#options(shiny.reactlog = FALSE)
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 
 
 ##Turn off experimental
@@ -300,6 +308,10 @@ shinyServer(function(input, output, clientData, session) {
   if( Sys.getenv('web') != '' ) setwd(Sys.getenv('web'))
 	source('functions/plotMext.R')
 	source('functions/renderHTMLgrid.R')
+<<<<<<< HEAD
+=======
+	source('functions/files_modal.R')
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 	source('functions/procQuick.R')
 	source('functions/fnPlotHeatmap.R')
 	
@@ -316,7 +328,39 @@ shinyServer(function(input, output, clientData, session) {
 				eval(parse(text=input$caption))
 			})
   
+<<<<<<< HEAD
 	#Reactive values definition
+=======
+  observe({
+    if(input$ab1==0) return()
+    #mcDoParallel(Sys.sleep(5))
+ #     session$sendCustomMessage("jsExec", "alert('Job canceled.');")
+#  		  session$sendCustomMessage(
+#  	    type = "jsAlert",
+#  	    message = input$ab1
+#  	  )
+#     updateTextInput(session, 'tt1', label = NULL,
+#                     value = as.character(input$ab1))
+#        
+ 		  
+	})
+# 	output$plot2 <- renderImage({
+# 
+# 	  if (input$ab1==0) return()
+# 	  # A temp file to save the output.
+# 	  outfile <- tempfile(fileext='.png')
+# 	  
+# 	  png(outfile, width=600, height=400)
+# 	  hist(rnorm(input$ab*100))
+# 	  dev.off()
+# 	  
+# 	  # Return a list containing the filename
+# 	  list(src = outfile,
+# 	       alt = "This is alternate text")
+# 	}, deleteFile = TRUE)
+	#observe( { input$parast; values$script <- paste("alert('",abs(rnorm(1)*1e10),"')"); } )
+	
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 	values <- reactiveValues( grfile=NULL, calcID=NULL, calcMsg1=NULL, calcMsg2=NULL, plotMsg=NULL, 
                             refFileGrids=NULL, proc=NULL, im=NULL, clusters=NULL, include=NULL, SFsetup=list(), plotHistory=list() )
 	
@@ -356,10 +400,40 @@ shinyServer(function(input, output, clientData, session) {
     if(input$cancel==0) return()
     parallel:::mckill( isolate(values$proc), signal = 9L )
   })
+<<<<<<< HEAD
+=======
+	#output$timer <- renderText({ invalidateLater(1000); isolate({ t <- values$ttt1; t=t+1; values$ttt1<-t; return(values$ttt1) }) })
+	#Multicore calculations
+	observe( mcCalcStart, quoted = TRUE, label = 'BigCalc')
+		output$summary2 <- renderPrint({ values$calcMsg1 })
+		output$summary3 <- renderPrint({ values$calcMsg2 })
+  
+  #
+  observe( mcDoParallel, quoted = TRUE, label = 'Plotting')
+	
+	#Scripts calculations
+	#output$reactiveScripts 	<- renderUI({ if( !is.null(values$script) )  values$script  })
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 	
 	#Plot message output
 	output$plot_message 	<- renderUI({ if( !is.null(values$plotMsg) ) values$plotMsg })
 	
+<<<<<<< HEAD
+=======
+	#File removal
+	observe({
+		if( is.null(input$delFileVar) ) return()
+		
+		message(input$delFileVar)
+		
+		sql_string <- paste0("DELETE FROM files WHERE name = '", input$delFileVar , "'")
+		row_aff <- dbGetRowsAffected(dbSendQuery(con, sql_string))
+		moved <- file.rename(file.path('files', input$delFileVar), file.path('removedFiles', input$delFileVar))
+		
+		values$refFileGrids <- runif(1)	
+	})
+	
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 	#Rendering plot table	
 	observe({
 		if( is.null(input$publicRdata) ) { return() }		
@@ -481,8 +555,12 @@ shinyServer(function(input, output, clientData, session) {
 	})
 	
 
+<<<<<<< HEAD
   ## Download handlers
   
+=======
+	
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 	#Legend download handler
 	output$downloadLegend <- downloadHandler(
 		filename = function() {
@@ -684,10 +762,15 @@ shinyServer(function(input, output, clientData, session) {
 		})
 	})
 	
+<<<<<<< HEAD
   #Get the list of save datasets
   updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
   
 	#Save dataset file logic
+=======
+	#Save dataset file logic
+  updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 	observe({
 		if( input$RdataSaveButton == 0 ) return()	
 		isolate({
@@ -696,7 +779,11 @@ shinyServer(function(input, output, clientData, session) {
 			save(to_save, file=file.path('publicFiles', paste0(input$RdataSaveName, '.Rdata')))
 					
 			message(paste('File saved: ',input$RdataSaveName))
+<<<<<<< HEAD
 			session$sendCustomMessage("jsAlert", sprintf("File saved: %s", paste0(input$RdataSaveName, '.Rdata')) )
+=======
+			session$sendCustomMessage("jsAlert", sprintf("alert('File saved: %s')", paste0(input$RdataSaveName, '.Rdata')) )
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 			updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
 		})
 	})
@@ -707,7 +794,11 @@ shinyServer(function(input, output, clientData, session) {
 		isolate({
 			file.remove( file.path('publicFiles', input$publicRdata) )
 			message(paste('File removed: ',input$publicRdata))
+<<<<<<< HEAD
 			session$sendCustomMessage("jsAlert", sprintf("File removed: %s", input$publicRdata) )
+=======
+			session$sendCustomMessage("jsAlert", sprintf("alert('File removed: %s')", input$publicRdata) )
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 			updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
 		})
 	})
@@ -733,7 +824,11 @@ shinyServer(function(input, output, clientData, session) {
         if(row_aff & moved) return(TRUE) else return(FALSE)
       }
       res <- sapply( input$f_delate, rmf)
+<<<<<<< HEAD
       session$sendCustomMessage("jsAlert", sprintf("Db=%i; Mv=%i; OK", sum(res), sum(res)) )
+=======
+      session$sendCustomMessage("jsAlert", sprintf("alert('Db=%i; Mv=%i; OK');", sum(res), sum(res)) )
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
       values$refFileGrids <- runif(1)	
     })
   })
@@ -745,11 +840,19 @@ shinyServer(function(input, output, clientData, session) {
     if( !input$cust_col )
       session$sendCustomMessage("jsExec", "$('input[type=color]').hide(0)")
   })
+<<<<<<< HEAD
 
   
   #Generating feature/track tables
   #TODO: merge in one observer
   
+=======
+	#Remove dataset file logic
+
+				
+			
+	
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 	#Generate file table for tracks and features
   observe({
     values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile; input$delFileVar;
@@ -842,7 +945,10 @@ shinyServer(function(input, output, clientData, session) {
   })
 
 ##Turn off experimental
+<<<<<<< HEAD
 
+=======
+>>>>>>> 02551164f3959af373a60448057a49ebcd553dab
 #   output$chart1 <- renderChart({
 #     
 #     if( !input$interactiveLinePlot ) stop('Loading...')
