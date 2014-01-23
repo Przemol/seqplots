@@ -9,6 +9,7 @@ library(rtracklayer)
 require(RJSONIO)
 require(RSQLite)
 require(BSgenome)
+require(seqnames.db)
 
 #options("xtable.sanitize.text.function" = identity)
 options("shiny.maxRequestSize" = -1)
@@ -37,12 +38,12 @@ toGFF <- function(ex, fname) {
 
 doFileOperations <- function(x, final_folder='files', file_genome, file_user, file_comment) {
 	
-	corrrectCeChroms <- function(tss) {
-		chrnames <- c("chrI","chrII","chrIII","chrIV","chrV","chrX","chrM")
-		col <- sapply( names(sort(unlist( sapply(c('.*([^I]|^)I$', '.*([^I]|^)II$', '.*III$', '.*IV$', '.*([^I]|^)V$', '.*X$', 'M'), function(x) {grep(x, seqlevels(tss), perl=T)}) ))), function(x) {grep(x, chrnames)})
-		seqlevels(tss) <- chrnames[col]
-		return(tss)
-	}
+# 	corrrectCeChroms <- function(tss) {
+# 		chrnames <- c("chrI","chrII","chrIII","chrIV","chrV","chrX","chrM")
+# 		col <- sapply( names(sort(unlist( sapply(c('.*([^I]|^)I$', '.*([^I]|^)II$', '.*III$', '.*IV$', '.*([^I]|^)V$', '.*X$', 'M'), function(x) {grep(x, seqlevels(tss), perl=T)}) ))), function(x) {grep(x, chrnames)})
+# 		seqlevels(tss) <- chrnames[col]
+# 		return(tss)
+# 	}
 	
 	if ( dbGetQuery(con, paste0("SELECT count(*) FROM files WHERE name LIKE('%",gsub('\\.\\w+(|.gz)$', '',basename(x)),"%')")) > 0 )
 		stop('File already exists, change the name or remove old one.')
@@ -55,20 +56,24 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
 	import_file <- file(x)
 	if( grepl('.(gff|GFF)$', x) ) {
 		tss <- import.gff(import_file, asRangedData=FALSE); file.remove(x)
-		if( grepl('ce[0-9]+', file_genome) ) { tss <- corrrectCeChroms(tss) }
-		if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { stop('Unknown chr names in GFF file, use UCSC compatible!') }
-		  #if( any(strand(tss)=='*') ) { stop('Unknown strand in GFF file: Set to "+" or "-"!') }
-		  #elementMetadata(tss) <- NULL; elementMetadata(tss)$type <- '.'; 
+		#if( grepl('ce[0-9]+', file_genome) ) { tss <- corrrectCeChroms(tss) }
+		if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
+		  seqnameStyle(tss) <- "UCSC"
+		  if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
+		}
+
 		toGFF(tss, x)
 		type <- 'feature'; file_type <- 'GFF';
 		message('GFF file added', x)
 		
 	} else if( grepl('.(bed|BED)$', x) ){
 		tss <- import.bed(import_file, asRangedData=FALSE);  file.remove(x)
-		if( grepl('ce[0-9]+', file_genome) ) { tss <- corrrectCeChroms(tss) }
-		if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { stop('Unknown chr names in BED file, use UCSC compatible!') }
-		  #if( any(strand(tss)=='*') ) { stop('Unknown strand in BED file: Set to "+" or "-"!') }
-		  #elementMetadata(tss) <- NULL; elementMetadata(tss)$type <- '.'; 
+		#if( grepl('ce[0-9]+', file_genome) ) { tss <- corrrectCeChroms(tss) }
+		if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
+		  seqnameStyle(tss) <- "UCSC"
+		  if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
+		}
+
 		toGFF(tss, gsub('.(bed|BED)$', '.gff', x))
 		x <- gsub('.(bed|BED)$', '.gff', x) ; type <- 'feature'; file_type <- 'BED';
 		message('BED file added', x)
@@ -93,9 +98,11 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
 				}) 
 		if(is(try_result, 'try-error')) {
 			try_result2 <<- try({	
-						wig <- import.wig(import_file, asRangedData=F);
-						if( grepl('ce[0-9]+', file_genome) ) { wig <- corrrectCeChroms(wig); }
-						if( !all(seqlevels(wig) %in% seqlevels(gnm)) ) { stop('Unknown chr names in WIG file, use UCSC compatible!') }
+						wig <- import.wig(import_file, asRangedData=FALSE);
+						if( !all(seqlevels(wig) %in% seqlevels(gnm)) ) { 
+						  seqnameStyle(wig) <- "UCSC"
+						  if( !all(seqlevels(wig) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
+						}
 						seqlengths(wig) <- seqlengths(gnm)[seqlevels(wig)];
 						export.bw(coverage(wig, weight='score'), pth);
 					})
