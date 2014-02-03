@@ -1,57 +1,7 @@
 # TODO: Add comment
 ###############################################################################
-procSF <- function(setup, filelist, rm0=FALSE, ignore_strand=FALSE, x1=500, x2=2000, xm=1000, type='Point Features', 
+procSF <- function(setup, filelist, bin=10L, rm0=FALSE, ignore_strand=FALSE, x1=500, x2=2000, xm=1000, type='Point Features', 
                       add_heatmap=TRUE, cat3=NULL, cat4=NULL) {
-  
-  getSF  <- function(genome, gr, pattern, bin, simple=TRUE, revcomp=FALSE) {
-    
-    sl <- median(width(gr))
-    gr <- gr[width(gr)==sl]
-    
-    grf <- resize(gr, width(gr)+(bin*2), fix='center')
-    seqs <- getSeq(genome,  grf)
-    
-    pattern <- DNAString(pattern)
-    
-    if (simple) {
-      #Simle line plot
-      hits <- unlist( vmatchPattern(pattern, seqs, algo="naive-exact") )
-      if(revcomp) {
-        hits <- c(hits, unlist( vmatchPattern(reverseComplement(pattern), seqs, algo="naive-exact") ))
-      }
-      vec <- coverage( restrict( resize(hits, bin, fix='center'), 
-                                 start=1, end=sl+(2*bin), keep.all.ranges=TRUE, use.names=FALSE) ) / length(grf)
-      return( as.numeric( as.numeric(vec)[bin:(bin+sl)] ) )
-    } else {
-      #Matrix-like results
-      rd <- as(vmatchPattern(pattern, seqs, algo="naive-exact"), "CompressedIRangesList")
-      if(revcomp) {
-        rd.rev <- as(vmatchPattern(reverseComplement(pattern), seqs, algo="naive-exact"), "CompressedIRangesList")
-        pos <- NumericList(Map(c, start(rd), start(rd.rev))) + ( floor(nchar(pattern)/2) -1  )
-      } else {
-        pos <- start(rd) + ( floor(nchar(pattern)/2) -1  )
-      }
-      
-      #Quick
-      nviews <- length(seqs[[1]]) - bin + 1L
-      idx <- logical(width(seqs)[1])
-      
-      #ex <- -seq_len( bin - nchar(pattern) + 2L )
-      ex <- -seq_len( bin - 1L )
-      out <- lapply(pos, function(x) { 
-        idx[x] <- TRUE; 
-        NLP0 <- cumsum(idx)
-        NLP1 <- NLP0[ex]
-        length(NLP1) <- nviews
-        NLP2 <- c(0L, NLP0)
-        length(NLP2) <- nviews
-        return(NLP1 - NLP2)
-      } )
-      M <- do.call(rbind, out)
-      return( M[ ,(bin/2):((bin/2)+sl)] )
-    }
-    
-  }
   
   GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
   names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
@@ -69,7 +19,7 @@ procSF <- function(setup, filelist, rm0=FALSE, ignore_strand=FALSE, x1=500, x2=2
       
       pattern <- setup[[i]]$pattern
       genome  <- setup[[i]]$genome
-      bin     <- setup[[i]]$window
+      seq_win <- setup[[i]]$window
       pnam    <- setup[[i]]$name
       revcomp <- setup[[i]]$revcomp
       
@@ -84,9 +34,7 @@ procSF <- function(setup, filelist, rm0=FALSE, ignore_strand=FALSE, x1=500, x2=2
         
         cat4("Processing genome...")
         pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome]))
-        
         require(pkg, character.only = TRUE)
-        #cat4(strsplit(pkg, '\\.')[[1]][[2]]); Sys.sleep(1);
         
         gr <- GenomicRanges::promoters(sel, x1, x2)
         gen <- get(strsplit(pkg, '\\.')[[1]][[2]])
@@ -94,8 +42,11 @@ procSF <- function(setup, filelist, rm0=FALSE, ignore_strand=FALSE, x1=500, x2=2
         gr <- trim(gr)
         
         cat4("Searching for motif...")
-        M <- getSF(gen, gr, pattern, bin, !add_heatmap, revcomp=revcomp)
-        all_ind  <- seq(-x1, x2, by=1 )
+        M <- getSF(gen, gr, pattern, seq_win, !add_heatmap, revcomp=revcomp)
+        
+        cat4("Binning the motif...")
+        M <-  t(apply(M, 1, function(x) approx(x, n=ceiling(ncol(M)/bin))$y ))        
+        all_ind  <- seq(-x1, x2, by=bin )
 
       } else if (type == 'Anchored Features') {
         
@@ -127,7 +78,7 @@ procSF <- function(setup, filelist, rm0=FALSE, ignore_strand=FALSE, x1=500, x2=2
       cat4("Calculeating means/stderr/95%CIs...")
       if (rm0) M[M==0] <- NA
       if(!add_heatmap) {
-        means 	<- M
+        means 	<- as.vector(M)
         stderror<- rep(0, length(M))
         conint  <- rep(0, length(M))
       } else {
@@ -163,6 +114,7 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 	n <- 1
 	k <- 1
 	TSS <- list()
+  
 	for (j in filelist)	{
 		cat(n, ") Processing TSS file: ", basename(j), "\n", sep="")
 		
