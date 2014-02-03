@@ -302,6 +302,7 @@ shinyServer(function(input, output, clientData, session) {
 	source('functions/renderHTMLgrid.R')
 	source('functions/procQuick.R')
 	source('functions/fnPlotHeatmap.R')
+  source('functions/fnProcSequenceFeatures.R')
 	
   if( Sys.getenv('root') != '' ) setwd(Sys.getenv('root'))
 	addResourcePath(prefix='files', directoryPath='./files')
