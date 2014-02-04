@@ -35,7 +35,7 @@
   height: 17px;
 }
 
-#title, #xlabel, #ylabel {
+#title, #xlabel, #ylabel, #pdf_x_size, #pdf_y_size {
 		width: 85px;
 }
 
@@ -127,15 +127,11 @@ input#BWbin {
 	
 }
 
-input#ymin1 {
+#xmin1, #xmin2, #ymin1, #ymin2, #zmin1, #zmin2 {
 	width: 80px;
 	display: inline;
 }
 
-input#ymin2 {
-	width: 80px;
-	display: inline;
-}
 p > label {
 	
 	display: inline;
@@ -150,8 +146,18 @@ div.img > div > img {
       z-index:3;
       cursor: -webkit-zoom-in; cursor: -moz-zoom-in;
 }
-div.img > div > img:hover { 
-      max-width: 100%;
+ /*div.img > div > img:active { 
+      max-width: 100% !important;
+      cursor: -webkit-zoom-out; cursor: -moz-zoom-out;
+}*/
+
+.zoom_image { 
+      max-width: 100% !important;
+      cursor: -webkit-zoom-out !important; 
+      cursor: -moz-zoom-out !important;
+      position: absolute !important;
+      top: 35px !important;
+      left: 35px !important;
 }
 
 th > span {
