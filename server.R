@@ -233,27 +233,13 @@ mcCalcStart <- quote({
 			
 			if (is.null(isolate(values$proc))) {
 				values$proc <- parallel::mcparallel(
-				  if ( length( values$SFsetup ) > 0 & length( input$f_tracks ) > 0 ) {
-				    Map(c,
-				      procSF(values$SFsetup, input$f_features,
-				           x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
-				           type=input$plot_type, rm0=input$rm0, ignore_strand=input$ignore_strand, 
-				           add_heatmap=input$SFadvanced, cat3=cat3, cat4=cat4),
-				      procQuick(input$f_tracks, input$f_features,
+				  if ( length( values$SFsetup ) > 0 | length( input$f_tracks ) > 0 ) {
+            
+				      procQuick(c(input$f_tracks, values$SFsetup), input$f_features,
 				              x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
 				              type = input$plot_type, bin= as.numeric(input$BWbin),
 				              cat3=cat3, cat4=cat4, rm0=input$rm0, ignore_strand=input$ignore_strand, add_heatmap=input$add_heatmap)
-            )
-				  } else if ( length( values$SFsetup ) > 0 ) {
-            procSF(values$SFsetup, input$f_features,
-                   x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
-                   type=input$plot_type, rm0=input$rm0, ignore_strand=input$ignore_strand, 
-                   add_heatmap=input$SFadvanced, cat3=cat3, cat4=cat4)
-          } else if ( length( input$f_tracks ) > 0 ) {
-						procQuick(input$f_tracks, input$f_features,
-							x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
-							type = input$plot_type, bin= as.numeric(input$BWbin),
-							cat3=cat3, cat4=cat4, rm0=input$rm0, ignore_strand=input$ignore_strand, add_heatmap=input$add_heatmap)		
+            
 					}  else ( stop('Nothing to calculate!') )
 						
 				)
@@ -308,9 +294,6 @@ shinyServer(function(input, output, clientData, session) {
 	addResourcePath(prefix='files', directoryPath='./files')
 	cat3 <- function(x) { parallel:::sendMaster(c('calcMsg1', as.character(x))) }
 	cat4 <- function(x) { parallel:::sendMaster(c('calcMsg2', as.character(x))) }
-	
-	session$onSessionEnded(function() { warning( 'Client connection closed' ) })
-	
 	
 	#Debug code: Testing eval statement
 	output$summary <- renderPrint({
@@ -828,8 +811,13 @@ shinyServer(function(input, output, clientData, session) {
   	session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = function () { $(document.body).addClass('disconnected'); alert('Connection to server lost!'); location.reload('true'); }")
     session$sendCustomMessage("jsExec", "$('.load_div').fadeOut(100);")
     session$sendCustomMessage("jsExec", "animateTitle();")
-    message('Running at ', session$request$HTTP_ORIGIN)
+    #Session elem:  "clientData","input","isClosed","onFlush","onFlushed","onSessionEnded","output","request","sendCustomMessage","sendInputMessage" 
+    #sapply(ls(session$request), function(x) session$request[[x]])
+  	#sapply(names(session$clientData), function(x) session$clientData[[x]])
+  	#str(as.list(session$clientData))
+    message(Sys.time(), ' -> Running at ', session$request$HTTP_ORIGIN, session$clientData$url_hostname, ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']')
   })
+  session$onSessionEnded(function() { message(Sys.time(), ' -> Client connection closed', ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']' ) })
   
   #Server reset action
   observe({

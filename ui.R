@@ -120,7 +120,7 @@ shinyUI(
 				                   checkboxInput("ignore_strand", "Ignore strand", FALSE),
 				                   #), 
 				                   checkboxInput("rm0", "Remove zeros", FALSE),
-				                   checkboxInput("add_heatmap", "Calculate Heatmap", FALSE)
+				                   checkboxInput("add_heatmap", "Calculate Heatmap", TRUE)
 				               ),
 				               div(class="span1", style="text-align:right;", 'Plotting distances in [bp]:'),
 				               div(class="span1", numericInput("plot_upstream", "Upstream:", 1000)),
