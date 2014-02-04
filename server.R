@@ -22,252 +22,108 @@ options("bitmapType" = "cairo")
 #require(rCharts)
 #options(RCHART_WIDTH = 800)
 
-toGFF <- function(ex, fname) {
-  writeLines(paste(	
-    as.character(chrom(ex)), #seqname - The name of the sequence. Must be a chromosome or scaffold.
-    '.', #source - The program that generated this feature.
-    '.', #feature - The name of this type of feature. Some examples of standard feature types are "CDS", "start_codon", "stop_codon", and "exon".
-    start(ex), #start - The starting position of the feature in the sequence. The first base is numbered 1.
-    end(ex), #end - The ending position of the feature (inclusive).
-    if( is.null(score(ex)) ) '.' else score(ex), #score - A score between 0 and 1000. If the track line useScore attribute is set to 1 for this annotation data set, the score value will determine the level of gray in which this feature is displayed (higher numbers = darker gray). If there is no score value, enter ".".
-    as.character(strand(ex)), #strand - Valid entries include '+', '-', or '.' (for don't know/don't care).
-    '.', #frame - If the feature is a coding exon, frame should be a number between 0-2 that represents the reading frame of the first base. If the feature is not a coding exon, the value should be '.'.
-    '.', #group - All lines with the same group are linked together into a single item.
-    sep='\t'), fname) 
-}
-
 doFileOperations <- function(x, final_folder='files', file_genome, file_user, file_comment) {
-	
-# 	corrrectCeChroms <- function(tss) {
-# 		chrnames <- c("chrI","chrII","chrIII","chrIV","chrV","chrX","chrM")
-# 		col <- sapply( names(sort(unlist( sapply(c('.*([^I]|^)I$', '.*([^I]|^)II$', '.*III$', '.*IV$', '.*([^I]|^)V$', '.*X$', 'M'), function(x) {grep(x, seqlevels(tss), perl=T)}) ))), function(x) {grep(x, chrnames)})
-# 		seqlevels(tss) <- chrnames[col]
-# 		return(tss)
-# 	}
-	
-	if ( dbGetQuery(con, paste0("SELECT count(*) FROM files WHERE name LIKE('%",gsub('\\.\\w+(|.gz)$', '',basename(x)),"%')")) > 0 )
-		stop('File already exists, change the name or remove old one.')
-	
-	#File does not have correct genome
-	gnm <- SeqinfoForBSGenome(file_genome); if( is.null(gnm) ) { stop('Unknown genome name/genome not installed! Use UCSC compatible or contact administrator.') }
-	
-	#File does not exist
-	if( !file.exists(x) ) stop('Cannot add, file not on the server!')
-	import_file <- file(x)
-	if( grepl('.(gff|GFF)$', x) ) {
-		tss <- import.gff(import_file, asRangedData=FALSE); file.remove(x)
-		#if( grepl('ce[0-9]+', file_genome) ) { tss <- corrrectCeChroms(tss) }
-		if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
-		  seqnameStyle(tss) <- "UCSC"
-		  if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
-		}
-
-		toGFF(tss, x)
-		type <- 'feature'; file_type <- 'GFF';
-		message('GFF file added', x)
-		
-	} else if( grepl('.(bed|BED)$', x) ){
-		tss <- import.bed(import_file, asRangedData=FALSE);  file.remove(x)
-		#if( grepl('ce[0-9]+', file_genome) ) { tss <- corrrectCeChroms(tss) }
-		if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
-		  seqnameStyle(tss) <- "UCSC"
-		  if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
-		}
-
-		toGFF(tss, gsub('.(bed|BED)$', '.gff', x))
-		x <- gsub('.(bed|BED)$', '.gff', x) ; type <- 'feature'; file_type <- 'BED';
-		message('BED file added', x)
-		
-	} else if( grepl('.(bw|BW)$', x) ){
-		type <- 'track'; file_type <- 'BigWiggle';
-		if( !all(seqlevels(BigWigFile(x)) %in% seqlevels(gnm)) ) { 
+  
+  #   corrrectCeChroms <- function(tss) {
+  # 		chrnames <- c("chrI","chrII","chrIII","chrIV","chrV","chrX","chrM")
+  # 		col <- sapply( names(sort(unlist( sapply(c('.*([^I]|^)I$', '.*([^I]|^)II$', '.*III$', '.*IV$', '.*([^I]|^)V$', '.*X$', 'M'), function(x) {grep(x, seqlevels(tss), perl=T)}) ))), function(x) {grep(x, chrnames)})
+  # 		seqlevels(tss) <- chrnames[col]
+  # 		return(tss)
+  # 	}
+  
+  if ( dbGetQuery(con, paste0("SELECT count(*) FROM files WHERE name LIKE('%",gsub('\\.\\w+(|.gz)$', '',basename(x)),"%')")) > 0 )
+    stop('File already exists, change the name or remove old one.')
+  
+  #File does not have correct genome
+  gnm <- SeqinfoForBSGenome(file_genome); if( is.null(gnm) ) { stop('Unknown genome name/genome not installed! Use UCSC compatible or contact administrator.') }
+  
+  #File does not exist
+  if( !file.exists(x) ) stop('Cannot add, file not on the server!')
+  import_file <- file(x)
+  if( grepl('.(gff|GFF)$', x) ) {
+    tss <- import.gff(import_file, asRangedData=FALSE); file.remove(x)
+    #if( grepl('ce[0-9]+', file_genome) ) { tss <- corrrectCeChroms(tss) }
+    if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
+      seqnameStyle(tss) <- "UCSC"
+      if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
+    }
+    
+    toGFF(tss, x)
+    type <- 'feature'; file_type <- 'GFF';
+    message('GFF file added', x)
+    
+  } else if( grepl('.(bed|BED)$', x) ){
+    tss <- import.bed(import_file, asRangedData=FALSE);  file.remove(x)
+    #if( grepl('ce[0-9]+', file_genome) ) { tss <- corrrectCeChroms(tss) }
+    if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
+      seqnameStyle(tss) <- "UCSC"
+      if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
+    }
+    
+    toGFF(tss, gsub('.(bed|BED)$', '.gff', x))
+    x <- gsub('.(bed|BED)$', '.gff', x) ; type <- 'feature'; file_type <- 'BED';
+    message('BED file added', x)
+    
+  } else if( grepl('.(bw|BW)$', x) ){
+    type <- 'track'; file_type <- 'BigWiggle';
+    if( !all(seqlevels(BigWigFile(x)) %in% seqlevels(gnm)) ) { 
       warning('Correcting chr...') 
       bw <- import.bw(BigWigFile(x))
       bw <- corrrectCeChroms(bw)
       if( !all(seqlevels(bw) %in% seqlevels(gnm)) ) { stop('Unable to correct chr names in BigWiggle file, use UCSC compatible!') } 
       file.remove(x)
       export.bw(bw, x);
-		}
-		message('BW file added', x)
-		
-	} else if( grepl('.(wig|WIG|wig.gz|WIG.gz)$', x) ){
-		pth <- gsub('.(wig|WIG|wig.gz|WIG.gz)$', '.bw', x) ;
-		try_result <- try({ 
-					#stop('test'); pth <- path(wigToBigWig(file.path('files', x), gnm)); 
-					.Call(  get('BWGFile_fromWIG', environment(wigToBigWig)), x, seqlengths(gnm), pth )
-				}) 
-		if(is(try_result, 'try-error')) {
-			try_result2 <<- try({	
-						wig <- import.wig(import_file, asRangedData=FALSE);
-						if( !all(seqlevels(wig) %in% seqlevels(gnm)) ) { 
-						  seqnameStyle(wig) <- "UCSC"
-						  if( !all(seqlevels(wig) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
-						}
-						seqlengths(wig) <- seqlengths(gnm)[seqlevels(wig)];
-						export.bw(coverage(wig, weight='score'), pth);
-					})
-			if(is(try_result2, 'try-error')) { stop('Error in adding wiggle: ', as.character(try_result2)) }
-		} 
-		
-		file.remove( x )
-		x <- pth; type <- 'track'; file_type <- 'Wiggle';
-		if( !all(seqlevels(BigWigFile(x)) %in% seqlevels(gnm)) ) { stop('Unknown chr names in Wiggle file, use UCSC compatible!') }
-		message('WIG file added', x)
-		
-	} else {
-		stop('Unknown file format!')
-	}
-	
-	file.rename( x, file.path(final_folder, basename(x)) )
-	
-	sql_string <- paste0("INSERT INTO files (name, ctime, type, format, genome, user, comment) VALUES (", paste0("'",c(basename(x), as.character(Sys.time()), type, file_type, file_genome, file_user, file_comment), "'", collapse=", "),")") 
-	dbBeginTransaction(con)
-	res <- dbSendQuery(con, sql_string )
-	
-	if ( file.exists(file.path(final_folder, basename(x))) ) {
-		dbCommit(con)
-	} else {
-		dbRollback(con)
-	}
+    }
+    message('BW file added', x)
+    
+  } else if( grepl('.(wig|WIG|wig.gz|WIG.gz)$', x) ){
+    pth <- gsub('.(wig|WIG|wig.gz|WIG.gz)$', '.bw', x) ;
+    try_result <- try({ 
+      #stop('test'); pth <- path(wigToBigWig(file.path('files', x), gnm)); 
+      .Call(  get('BWGFile_fromWIG', environment(wigToBigWig)), x, seqlengths(gnm), pth )
+    }) 
+    if(is(try_result, 'try-error')) {
+      try_result2 <<- try({	
+        wig <- import.wig(import_file, asRangedData=FALSE);
+        if( !all(seqlevels(wig) %in% seqlevels(gnm)) ) { 
+          seqnameStyle(wig) <- "UCSC"
+          if( !all(seqlevels(wig) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
+        }
+        seqlengths(wig) <- seqlengths(gnm)[seqlevels(wig)];
+        export.bw(coverage(wig, weight='score'), pth);
+      })
+      if(is(try_result2, 'try-error')) { stop('Error in adding wiggle: ', as.character(try_result2)) }
+    } 
+    
+    file.remove( x )
+    x <- pth; type <- 'track'; file_type <- 'Wiggle';
+    if( !all(seqlevels(BigWigFile(x)) %in% seqlevels(gnm)) ) { stop('Unknown chr names in Wiggle file, use UCSC compatible!') }
+    message('WIG file added', x)
+    
+  } else {
+    stop('Unknown file format!')
+  }
+  
+  file.rename( x, file.path(final_folder, basename(x)) )
+  
+  sql_string <- paste0("INSERT INTO files (name, ctime, type, format, genome, user, comment) VALUES (", paste0("'",c(basename(x), as.character(Sys.time()), type, file_type, file_genome, file_user, file_comment), "'", collapse=", "),")") 
+  dbBeginTransaction(con)
+  res <- dbSendQuery(con, sql_string )
+  
+  if ( file.exists(file.path(final_folder, basename(x))) ) {
+    dbCommit(con)
+  } else {
+    dbRollback(con)
+  }
 }
 
-
-mcDoParallel <- quote({
-
-  if( (input$reactive) ) {
-    #common
-    is.null(list(
-      input$plot_this, input$xmin1, input$xmin2, input$xauto, input$title, input$xlabel, input$ylabel, input$scale_signal, input$legend,
-      input$legend_font_size, input$axis_font_size, input$labels_font_size, input$title_font_size, input$lnv, input$lnh, values$priors, values$lables
-    ))
-    
-    if (!input$img_heatmap) { 
-      #colors
-      is.null( sapply( lapply(input$plot_this, function(x) fromJSON(x)), function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) ) )
-      is.null(list(
-        input$yauto, input$ymin1, input$ymin2, input$cust_col, input$ee,  input$lnh_pos,
-        legend_pos=input$legend_pos, legend_ext_pos=input$legend_ext_pos, legend_ext=input$legend_ext
-      ))
-    } else {
-      is.null(list(
-        input$heatmapzauto, input$zmin1, input$zmin2, values$override_max, values$override_max, input$img_clusters, input$img_sort,
-        input$lnv, indi=input$indi, s=input$hsccoef
-      ))
-    }
-  } else {
-    if(input$replot==0) return()
+sourceDir <- function(path, trace = TRUE, ...) {
+  for (nm in list.files(path, pattern = "[.][RrSsQq]$")) {
+    if(trace) cat(nm,":")
+    source(file.path(path, nm), ...)
+    if(trace) cat("\n")
   }
-  if( is.null(isolate(input$plot_this)) ) return()
-  
-  
-  if(is.null(isolate(values$proc))) {
-    n<<-0
-    session$sendCustomMessage("jsExec", "$('#progressModal').modal('show');")
-    
-    values$proc <- parallel::mcparallel({
-      out <- list()
-      a <- tempfile(pattern = "sessionID_", tmpdir = 'tmp', fileext = '.png')
-      # Generate the PNG
-      png(a, width=1240, height=720)
-     
-        co <- lapply(input$plot_this, function(x) fromJSON(x))
-        pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
-        
-        if(input$recordHistory) { dev.control(displaylist="enable") }
-      
-        if ( !input$img_heatmap ) {
-          plotLineplot(pl=pl)
-        } else {
-          plotHeatmap(pl=pl)
-        }
-      
-        if(input$recordHistory) { out$plot <- recordPlot(); dev.control(displaylist="inhibit");  }
-      
-      dev.off()
-      out$url <- a
-      
-      class(out) <- 'ans'; out 
-    
-    })
-    values$calcMsg1 <- 'Plotting'; values$calcMsg2 <- '.'
-    
-    invalidateLater(100, session)
-  } else if ( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
-    res <- parallel::mccollect(isolate(values$proc), wait=FALSE)[[1]]
-    if( class(res) == 'character' ) {
-      invalidateLater(100, session)
-      values[[ res[1] ]] <- res[2]	
-    } else {
-      if(class(res) == 'try-error' ) {
-        parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
-        session$sendCustomMessage("jsAlert", res); session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
-      } else if ( is.null(res) ) {
-        parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
-        session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
-      } else {
-        parallel::mccollect( isolate(values$proc) )
-        values$proc <- NULL 
-        session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
-        values$im <- as.character(res$url)
-        if( !is.null(res$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
-        #values$plotHistory <- res$plot
-      }
-    }
-  } else {   n<<-n+1; if(!n%%10) values$calcMsg2 <- paste0(isolate(values$calcMsg2), '.'); invalidateLater(100, session); }
-})
-
-
-
-mcCalcStart <- quote({
-			
-			if( is.null(input$TR_calculate) )  return()
-			
-			values$calcID <- input$TR_calculate
-			
-			ok_msg <- div(style='margin-top:10px;', id=as.character(input$TR_calculate), class="alert alert-success", 
-					HTML('<button type="button" class="close" data-dismiss="alert">x</button><strong>Calculation complete!</strong> You can plot or save the results in public files.')
-			) 
-			
-			
-			if (is.null(isolate(values$proc))) {
-				values$proc <- parallel::mcparallel(
-				  if ( length( values$SFsetup ) > 0 | length( input$f_tracks ) > 0 ) {
-            
-				      procQuick(c(input$f_tracks, values$SFsetup), input$f_features,
-				              x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
-				              type = input$plot_type, bin= as.numeric(input$BWbin),
-				              cat3=cat3, cat4=cat4, rm0=input$rm0, ignore_strand=input$ignore_strand, add_heatmap=input$add_heatmap)
-            
-					}  else ( stop('Nothing to calculate!') )
-						
-				)
-				values$calcMsg1 <- 'Started NOW'
-				invalidateLater(100, session)
-			} else if ( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
-				res <- parallel::mccollect(isolate(values$proc), wait=FALSE)[[1]]
-				
-				if( class(res) == 'character' ) {
-					invalidateLater(100, session)
-					values[[ res[1] ]] <- res[2]	
-				} else {
-					if(class(res) == 'try-error' ) {
-					  parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
-					  session$sendCustomMessage("jsAlert", res); session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
-					} else if ( is.null(res) ) {
-					  parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
-					  session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
-					} else {
-					  parallel::mccollect( isolate(values$proc) )
-						values$grfile <- res
-						values$proc <- NULL 
-						values$calcMsg1 <-  paste('FINISHED') 
-						session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Done!');")
-						values$plotMsg <- ok_msg
-					}
-				}
-				
-			} else { invalidateLater(100, session); }
-		})
+}
 
 sqlite <- dbDriver("SQLite")
 if(Sys.getenv('root') !='') {
@@ -282,11 +138,7 @@ if(Sys.getenv('root') !='') {
 shinyServer(function(input, output, clientData, session) {
 	
   if( Sys.getenv('web') != '' ) setwd(Sys.getenv('web'))
-	source('functions/plotMext.R')
-	source('functions/renderHTMLgrid.R')
-	source('functions/procQuick.R')
-	source('functions/fnPlotHeatmap.R')
-  source('functions/fnProcSequenceFeatures.R')
+  sourceDir('functions')
 	
   if( Sys.getenv('root') != '' ) setwd(Sys.getenv('root'))
 	addResourcePath(prefix='files', directoryPath='./files')
