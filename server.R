@@ -315,14 +315,14 @@ shinyServer(function(input, output, clientData, session) {
       if(!  grepl( paste0('^[',paste(DNA_BASES,collapse=''),']+$'), toupper(input$SFpattern) ) ) { session$sendCustomMessage("jsAlert", 'Use DNA letters only'); return() }
         #DNA_ALPHABET
         values$SFsetup[[length(values$SFsetup)+1]] <- list(
+          name=ifelse(nchar(input$SFname)==0, toupper(input$SFpattern), input$SFname),
           genome=input$SFgenome,
           pattern=toupper(input$SFpattern),
           window=input$SFbin,
-          name=ifelse(nchar(input$SFname)==0, toupper(input$SFpattern), input$SFname),
           heatmap=input$SFadvanced,
           revcomp=input$SFrevcomp
         ) 
-        names(values$SFsetup) <-  make.unique( sapply(values$SFsetup, '[[', 4) )
+        names(values$SFsetup) <-  make.unique( sapply(values$SFsetup, '[[', 'name') )
       })
   })
   output$SFsetup  <- renderPrint({ 

@@ -1,5 +1,4 @@
-
-# TODO: Add comment
+# Function to process extrack genomic signal from trackfiles and/or motif data, calculate statistics and present the data in nested list format.
 ###############################################################################
 
 procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FALSE, x1=500, x2=2000, xm=1000, type='Point Features', 

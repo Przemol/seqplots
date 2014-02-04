@@ -1,7 +1,6 @@
 getSF  <- function(genome, gr, pattern, bin, simple=TRUE, revcomp=FALSE) {
     
   sl <- median(width(gr))
-  gr <- gr[width(gr)==sl]
   
   grf <- resize(gr, width(gr)+(bin*2), fix='center')
   seqs <- getSeq(genome,  grf)
@@ -46,7 +45,7 @@ getSF  <- function(genome, gr, pattern, bin, simple=TRUE, revcomp=FALSE) {
     
     if(revcomp) {
       rd.rev <- as(vmatchPattern(reverseComplement(pattern), seqs, algo="naive-exact"), "CompressedIRangesList")
-      out <- out + npl_count(rd, bin, seqs, sl, pattern)
+      out <- out + npl_count(rd.rev, bin, seqs, sl, pattern)
     }
     return( out )
   }
