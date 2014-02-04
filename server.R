@@ -135,19 +135,24 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
 mcDoParallel <- quote({
 
   if( (input$reactive) ) {
-    if (!input$img_heatmap) {
-    co <- lapply(input$plot_this, function(x) fromJSON(x))
-    sapply( co, function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) )
-    list(x1=input$xlim[1], x2=input$xlim[2], y1=if(input$yauto) NULL else input$ymin1, y2=if(input$yauto) NULL else input$ymin2,
-                   title=input$title, Xtitle = input$xlabel, Ytitle = input$ylabel, colvec = input$cust_col, plotScale = input$scale_signal, EE = input$ee, Leg = input$legend,
-                   cex.axis = input$axis_font_size, cex.lab = input$labels_font_size, cex.main = input$title_font_size, cex.legend = input$legend_font_size, 
-                   ln.v=input$lnv, ln.h=if(input$lnh) input$lnh_pos else NULL, 
-         legend_pos=input$legend_pos, legend_ext_pos=input$legend_ext_pos, legend_ext=input$legend_ext, values$priors, values$lables)
+    #common
+    is.null(list(
+      input$plot_this, input$xmin1, input$xmin2, input$xauto, input$title, input$xlabel, input$ylabel, input$scale_signal, input$legend,
+      input$legend_font_size, input$axis_font_size, input$labels_font_size, input$title_font_size, input$lnv, input$lnh, values$priors, values$lables
+    ))
+    
+    if (!input$img_heatmap) { 
+      #colors
+      is.null( sapply( lapply(input$plot_this, function(x) fromJSON(x)), function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) ) )
+      is.null(list(
+        input$yauto, input$ymin1, input$ymin2, input$cust_col, input$ee,  input$lnh_pos,
+        legend_pos=input$legend_pos, legend_ext_pos=input$legend_ext_pos, legend_ext=input$legend_ext
+      ))
     } else {
-      list(input$plot_this, input$title, input$scale_signal,input$img_clusters, input$img_sort, xlim=input$xlim, ylabel=input$ylabel,
-           lfs=input$labels_font_size, afs=input$axis_font_size, xlabel=input$xlabel, Leg = input$legend, lgfs=input$legend_font_size,
-           autoscale=input$yauto, zmin=input$ymin1, zmax=input$ymin2, ln.v=input$lnv, indi=input$indi, s=input$hsccoef, values$priors, values$lables)
-      #lapply( names(input), function(x) input[[x]])
+      is.null(list(
+        input$heatmapzauto, input$zmin1, input$zmin2, values$override_max, values$override_max, input$img_clusters, input$img_sort,
+        input$lnv, indi=input$indi, s=input$hsccoef
+      ))
     }
   } else {
     if(input$replot==0) return()
@@ -583,35 +588,35 @@ shinyServer(function(input, output, clientData, session) {
     contentType = 'application/pdf'
   )
 	
-	#main PDF plotting function
-	plot.pdf <- function(ff='res/out3.pdf') { 
-		co <- lapply(input$plot_this, function(x) fromJSON(x))
-		pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
-		
-		if (input$cust_col) {
-			cltab <- sapply( co, function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) )
-		} else {
-			cltab <- NULL
-		}
-		
-		if ( input$scale_signal == "Do not transform" ) {
-			plotScale <-  'linear'
-		} else if ( input$scale_signal ==  "Log2 transform" ) {
-			plotScale <-  'log2'
-		} else if ( input$scale_signal == "Z-score transform" ) {
-			plotScale <-  'zscore'
-		}
-		
-		message('Plotting pdf...')
-		pdf(ff, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size))
-		plotMext(pl, x1=input$xlim[1], x2=input$xlim[2], y1=if(input$yauto) NULL else input$ymin1, y2=if(input$yauto) NULL else input$ymin2,
-				title=input$title, Xtitle = input$xlabel, Ytitle = input$ylabel, colvec = cltab, plotScale = plotScale, EE = input$ee, Leg = input$legend,
-				cex.axis = input$axis_font_size, cex.lab = input$labels_font_size, cex.main = input$title_font_size, cex.legend = input$legend_font_size, 
-				ln.v=input$lnv, ln.h=if(input$lnh) input$lnh_pos else NULL)
-		dev.off()
-		Sys.sleep(1)
-		message('done.')
-	}
+# 	#main PDF plotting function
+# 	plot.pdf <- function(ff='res/out3.pdf') { 
+# 		co <- lapply(input$plot_this, function(x) fromJSON(x))
+# 		pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
+# 		
+# 		if (input$cust_col) {
+# 			cltab <- sapply( co, function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) )
+# 		} else {
+# 			cltab <- NULL
+# 		}
+# 		
+# 		if ( input$scale_signal == "Do not transform" ) {
+# 			plotScale <-  'linear'
+# 		} else if ( input$scale_signal ==  "Log2 transform" ) {
+# 			plotScale <-  'log2'
+# 		} else if ( input$scale_signal == "Z-score transform" ) {
+# 			plotScale <-  'zscore'
+# 		}
+# 		
+# 		message('Plotting pdf...')
+# 		pdf(ff, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size))
+# 		plotMext(pl, x1=input$xlim[1], x2=input$xlim[2], y1=if(input$yauto) NULL else input$ymin1, y2=if(input$yauto) NULL else input$ymin2,
+# 				title=input$title, Xtitle = input$xlabel, Ytitle = input$ylabel, colvec = cltab, plotScale = plotScale, EE = input$ee, Leg = input$legend,
+# 				cex.axis = input$axis_font_size, cex.lab = input$labels_font_size, cex.main = input$title_font_size, cex.legend = input$legend_font_size, 
+# 				ln.v=input$lnv, ln.h=if(input$lnh) input$lnh_pos else NULL)
+# 		dev.off()
+# 		Sys.sleep(1)
+# 		message('done.')
+# 	}
 	
 	#Lineplot PDF download handler
 	output$downloadPlot <- downloadHandler(
@@ -619,7 +624,12 @@ shinyServer(function(input, output, clientData, session) {
 			paste('Plot_', gsub(' ', '_', Sys.time()), '.pdf', sep='')
 		},
 		content = function( file ) {			
-			plot.pdf(file)		
+		  co <- lapply(input$plot_this, function(x) fromJSON(x))
+		  pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
+		  pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size))
+		    plotLineplot(pl=pl)		
+		  dev.off()
+		  #Sys.sleep(1)
 		},
 		contentType = 'application/pdf'
 	)
@@ -627,13 +637,13 @@ shinyServer(function(input, output, clientData, session) {
 	#Heatmap download handler
 	output$downloadHeatmap <- downloadHandler(
 			filename = function() {
-				paste('Plot_', gsub(' ', '_', Sys.time()), '.jpeg', sep='')
+				paste('Plot_', gsub(' ', '_', Sys.time()), '.pdf', sep='')
 			},
 			content = function( file ) {
 				co <- lapply(input$plot_this, function(x) fromJSON(x))
 				pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
-				
-				jpeg(file, width = as.integer(input$pdf_x_size)*80, height = as.integer(input$pdf_y_size)*80)
+				#jpeg(file, width = as.integer(input$pdf_x_size)*80, height = as.integer(input$pdf_y_size)*80)
+				pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size))
 					plotHeatmap(pl=pl)				
 				dev.off()
 			}
