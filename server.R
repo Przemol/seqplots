@@ -171,7 +171,7 @@ mcDoParallel <- quote({
         if(input$recordHistory) { dev.control(displaylist="enable") }
       
         if ( !input$img_heatmap ) {
-            plotLineplot(pl=pl)
+          plotLineplot(pl=pl)
         } else {
           plotHeatmap(pl=pl)
         }
@@ -180,13 +180,6 @@ mcDoParallel <- quote({
       
       dev.off()
       out$url <- a
-      
-      
-#       if ( !input$img_heatmap ) {
-#         pdf( paste('tmp/History_', gsub(' ', '_', Sys.time()), '.pdf', sep=''), 16, 10 )
-#         replayPlot(myplots)
-#         dev.off()
-#       }
       
       class(out) <- 'ans'; out 
     
@@ -361,9 +354,6 @@ shinyServer(function(input, output, clientData, session) {
 	output$showplot <- reactive({ !is.null(input$plot_this) })
 	outputOptions(output, "showplot", suspendWhenHidden = FALSE)
 	
-	output$showsaveGUI <- reactive({ !is.null(values$calcID) })
-	outputOptions(output, "showsaveGUI", suspendWhenHidden = FALSE)
-  
   #Lineplot plotting function
 	plotLineplot <- function(pl, title=input$title) {
     
@@ -386,7 +376,11 @@ shinyServer(function(input, output, clientData, session) {
 	    plotScale <-  'zscore'
 	  }
 	  
-	  plotMext(pl, x1=input$xlim[1], x2=input$xlim[2], y1=if(input$yauto) NULL else input$ymin1, y2=if(input$yauto) NULL else input$ymin2,
+	  plotMext(pl, 
+             x1=if(!input$xauto) NULL else input$xmin1, 
+             x2=if(!input$xauto) NULL else input$xmin2, 
+             y1=if(!input$yauto) NULL else input$ymin1, 
+             y2=if(!input$yauto) NULL else input$ymin2,
 	           title=title, Xtitle = input$xlabel, Ytitle = input$ylabel, colvec = cltab, plotScale = plotScale, EE = input$ee, Leg = input$legend,
 	           cex.axis = input$axis_font_size, cex.lab = input$labels_font_size, cex.main = input$title_font_size, cex.legend = input$legend_font_size, 
 	           ln.v=input$lnv, ln.h=if(input$lnh) input$lnh_pos else NULL, 
@@ -437,10 +431,23 @@ shinyServer(function(input, output, clientData, session) {
     o_max <- as.numeric( values$override_max[order(values$priors, decreasing=TRUE)] )
     
 		runGalaxy( H, clusts, wigcount=length(pl), 
-		           bins=pl[[1]]$all_ind, titles=lab, e=pl[[1]]$e, xlim=input$xlim, ylabel=input$ylabel,
-		           lfs=input$labels_font_size, afs=input$axis_font_size, xlabel=input$xlabel, Leg = input$legend, lgfs=input$legend_font_size,
-		           autoscale=input$yauto, zmin=input$ymin1, zmax=input$ymin2, ln.v=input$lnv, indi=input$indi, s=input$hsccoef,
-               o_min=o_min, o_max=o_max)
+		           bins=pl[[1]]$all_ind, 
+               titles=lab, e=pl[[1]]$e, 
+               xlim=if(!input$xauto) NULL else c(input$xmin1, input$xmin2), 
+               ylabel=input$ylabel,
+		           lfs=input$labels_font_size, 
+               afs=input$axis_font_size, 
+               xlabel=input$xlabel, 
+               Leg = input$legend, 
+               lgfs=input$legend_font_size,
+		           autoscale=!input$heatmapzauto, 
+               zmin=input$zmin1, 
+               zmax=input$zmin2, 
+               ln.v=input$lnv, 
+               indi=input$indi, 
+               s=input$hsccoef,
+               o_min=o_min, 
+               o_max=o_max)
 		par(cex=input$title_font_size)
 		title(input$title, outer = TRUE)
 	}
@@ -457,10 +464,15 @@ shinyServer(function(input, output, clientData, session) {
   
 	#renderin data dependant plot controles
   #outputOptions(output, "plotUI", suspendWhenHidden = FALSE)
-	output$plotUI <- renderUI({
-				 if(!is.null(input$plot_this)) {
-					 rn <- range(values$grfile[[1]][[1]]$all_ind)
-					 sliderInput('xlim', 'X-axis limits:', min=rn[1], max=rn[2], value=c(rn[1], rn[2]), step=1)
+	observe({
+				 if(!is.null(values$grfile)) {
+				   
+				   rn <- range(values$grfile[[1]][[1]]$all_ind)
+				   updateNumericInput(session, 'xmin1', value = rn[1], min = rn[1], max = rn[2], step = 1L)
+				   updateNumericInput(session, 'xmin2', value = rn[2], min = rn[1], max = rn[2], step = 1L)
+				   #updateNumericInput(session, 'xmin1', value = 100, min = 1, max = 200, step = 1L)
+					 #rn <- range(values$grfile[[1]][[1]]$all_ind)
+					 #sliderInput('xlim', 'X-axis limits:', min=rn[1], max=rn[2], value=c(rn[1], rn[2]), step=1)
 				 }
 	})
 	
@@ -675,7 +687,10 @@ shinyServer(function(input, output, clientData, session) {
 	observe({
 		if( input$RdataSaveButton == 0 ) return()	
 		isolate({
-			if (is.null(values$grfile)) session$sendCustomMessage("jsAlert", 'Run calculation firs')
+			if (is.null(values$grfile)) {
+        session$sendCustomMessage("jsAlert", 'Run calculation first!')
+        return(NULL)
+			}
 			to_save <- values$grfile
 			save(to_save, file=file.path('publicFiles', paste0(input$RdataSaveName, '.Rdata')))
 					
@@ -767,7 +782,7 @@ shinyServer(function(input, output, clientData, session) {
 	      values$override_max <- rep(NA, length(pl))
 	      names(values$lables) <- names(values$priors) <- names(values$include) <- names(values$override_min) <- names(values$override_max) <- nam
 	      updateSelectInput(session, inputId='img_ch', choices=nam)
-	      outputOptions(output, "plotUI", suspendWhenHidden = FALSE)
+	      #outputOptions(output, "plotUI", suspendWhenHidden = FALSE)
       })
 	  }
 	}, priority = 1)
