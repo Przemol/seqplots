@@ -2,7 +2,7 @@
 ###############################################################################
 
 procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FALSE, x1=500, x2=2000, xm=1000, type='Point Features', 
-						add_heatmap=FALSE, cat3=NULL, cat4=NULL) {
+						add_heatmap=FALSE, cat3=NULL, cat4=NULL, con=NULL) {
 	n <- 1
 	k <- 1
 	TSS <- list()
@@ -10,7 +10,11 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 	for (j in filelist)	{
 		cat(n, ") Processing TSS file: ", basename(j), "\n", sep="")
 		
-		sel <- import.gff(file.path('files',j), asRangedData=FALSE)
+		sel <- import(file.path('files',j), asRangedData=FALSE)
+		  genome_ind <- dbGetQuery(con, paste0("SELECT genome FROM files WHERE name = '", j, "'"))
+		  pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))
+		  require(pkg, character.only = TRUE); GENOME <- get(pkg)
+		  remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(supportedSeqnameStyles())
 		
 		proc <- list()
 		for(i in 1:length(trackfiles) ) {
@@ -19,20 +23,23 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 			cat3(paste('Processing:', basename(j), '@', trackfiles[[i]][[1]], '[', k, '/',length(filelist)*length(trackfiles), ']'))
       
 			if (ignore_strand) strand(sel) <- '*'
+			gr <- GenomicRanges::promoters(sel, x1, x2)
       
       if( class(trackfiles[[i]]) == 'character' ) {
 			  cat4("Loading track...")
 			  track <- BigWigFile(file.path('files', trackfiles[[i]]))
+			  if(remap_chr) { seqnameStyle(gr) <- seqnameStyle(track) }
       
 		  } else if ( class(trackfiles[[i]]) == 'list' ) {
         
-		    GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-		    names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())  
+		    #GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+		    #names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())  
 		    pattern <- trackfiles[[i]]$pattern
-		    genome  <- trackfiles[[i]]$genome
+		    # genome  <- trackfiles[[i]]$genome
 		    seq_win <- trackfiles[[i]]$window
 		    pnam    <- trackfiles[[i]]$name
 		    revcomp <- trackfiles[[i]]$revcomp
+		    if(remap_chr) { seqnameStyle(gr) <- seqnameStyle(GENOME) }
 		        
 		  }
 			
@@ -43,7 +50,7 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
         
 				if( class(trackfiles[[i]]) == 'character' ) {
 				  cat4("Processing BW...")
-				  sum <- summary(track, IRanges::promoters(sel, x1, x2+1), type='mean', size=length(all_ind))					
+				  sum <- summary(track, gr, type='mean', size=length(all_ind))					
 				  
 				  cat4("Processing matrix...")
 				  if (!ignore_strand){ 
@@ -54,15 +61,11 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 				} else if ( class(trackfiles[[i]]) == 'list' ) {
 
 				  cat4("Processing genome...")
-				  pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome]))
-				  require(pkg, character.only = TRUE)
-				  gr <- GenomicRanges::promoters(sel, x1, x2)
-				  gen <- get(strsplit(pkg, '\\.')[[1]][[2]])
-				  seqlengths(gr) <- seqlengths(gen)[seqlevels(gr)]
+				  seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)]
 				  gr <- trim(gr)
 				  
 				  cat4("Searching for motif...")
-				  M <- getSF(gen, gr, pattern, seq_win, !add_heatmap, revcomp=revcomp)
+				  M <- getSF(GENOME, gr, pattern, seq_win, !add_heatmap, revcomp=revcomp)
 				  
 				  cat4("Binning the motif...")
 				  M <-  t(apply(M, 1, function(x) approx(x, n=ceiling(ncol(M)/bin))$y ))        

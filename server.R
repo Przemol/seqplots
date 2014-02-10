@@ -48,7 +48,7 @@ shinyServer(function(input, output, clientData, session) {
 	
   
   
-  doFileOperations <- function(x, final_folder='files', file_genome, file_user, file_comment) {
+  doFileOperations <- function(x, final_folder='files', file_genome, file_user, file_comment, con=NULL) {
     
     #   corrrectCeChroms <- function(tss) {
     #   	chrnames <- c("chrI","chrII","chrIII","chrIV","chrV","chrX","chrM")
@@ -68,39 +68,30 @@ shinyServer(function(input, output, clientData, session) {
     #File does not exist
     if( !file.exists(x) ) stop('Cannot add, file not on the server!')
     import_file <- file(x)
+    
     if( grepl('.(gff|GFF)$', x) ) {
-      tss <- import.gff(import_file, asRangedData=FALSE); file.remove(x)
-      #if( grepl('ce[0-9]+', file_genome) ) { tss <- corrrectCeChroms(tss) }
+      type <- 'feature'; file_type <- 'GFF';
+      tss <- import(import_file, asRangedData=FALSE)
       if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
         seqnameStyle(tss) <- seqnameStyle(gnm)
         if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
       }
-      
-      toGFF(tss, x)
-      type <- 'feature'; file_type <- 'GFF';
       message('GFF file added', x)
       
     } else if( grepl('.(bed|BED)$', x) ){
-      tss <- import.bed(import_file, asRangedData=FALSE);  file.remove(x)
-      #if( grepl('ce[0-9]+', file_genome) ) { tss <- corrrectCeChroms(tss) }
+      type <- 'feature'; file_type <- 'BED';
+      tss <- import(import_file, asRangedData=FALSE)
       if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
         seqnameStyle(tss) <- seqnameStyle(gnm)
         if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
       }
-      
-      toGFF(tss, gsub('.(bed|BED)$', '.gff', x))
-      x <- gsub('.(bed|BED)$', '.gff', x) ; type <- 'feature'; file_type <- 'BED';
       message('BED file added', x)
       
     } else if( grepl('.(bw|BW)$', x) ){
       type <- 'track'; file_type <- 'BigWiggle';
       if( !all(seqlevels(BigWigFile(x)) %in% seqlevels(gnm)) ) { 
-        warning('Correcting chr...') 
-        bw <- import.bw(BigWigFile(x))
-        seqnameStyle(bw) <- seqnameStyle(gnm)
-        if( !all(seqlevels(bw) %in% seqlevels(gnm)) ) { stop('Unable to correct chr names in BigWiggle file!') } 
-        file.remove(x)
-        export.bw(bw, x);
+        bwinfo <- seqinfo(BigWigFile(x)); seqnameStyle(bwinfo) <- seqnameStyle(gnm)
+        if( !all(seqlevels(bwinfo) %in% seqlevels(gnm)) ) { stop('Unable to correct chr names in BigWiggle file!') }
       }
       message('BW file added', x)
       
@@ -533,7 +524,7 @@ shinyServer(function(input, output, clientData, session) {
   				file_user	<- input$TR_addFile$user
   				file_comment<- input$TR_addFile$comments
   				file.copy(from=input[[x]][['datapath']], to=file.path('tmp', file_name))
-  				doFileOperations(file.path('tmp', file_name), final_folder='files', file_genome, file_user, file_comment)
+  				doFileOperations(file.path('tmp', file_name), final_folder='files', file_genome, file_user, file_comment, con=con)
   			
   				session$sendCustomMessage("jsExec", sprintf( '$("#%s").html(\' <span class="label label-success">SUCCESS</span> File %s [%.2f MB] uploaded. \')', 
   				                                             x,  input[[x]][['name']],  input[[x]][['size']] / 1e6 ))
