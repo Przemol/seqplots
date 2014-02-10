@@ -16,7 +16,7 @@ mcCalcStart <- quote({
         procQuick(c(input$f_tracks, values$SFsetup), input$f_features,
                   x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
                   type = input$plot_type, bin= as.numeric(input$BWbin),
-                  cat3=cat3, cat4=cat4, rm0=input$rm0, ignore_strand=input$ignore_strand, add_heatmap=input$add_heatmap)
+                  cat3=cat3, cat4=cat4, rm0=input$rm0, ignore_strand=input$ignore_strand, add_heatmap=input$add_heatmap, con=con)
         
       }  else ( stop('Nothing to calculate!') )
       
