@@ -4,8 +4,7 @@
 # require(rCharts)
 # options(RCHART_LIB = 'nvd3')
 
-GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+
 # Define UI
 shinyUI(
 		bootstrapPage(
