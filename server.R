@@ -75,7 +75,7 @@ shinyServer(function(input, output, clientData, session) {
         #DNA_ALPHABET
         values$SFsetup[[length(values$SFsetup)+1]] <- list(
           name=ifelse(nchar(input$SFname)==0, toupper(input$SFpattern), input$SFname),
-          genome=input$SFgenome,
+          genome="Determined automatically from feature file",
           pattern=toupper(input$SFpattern),
           window=input$SFbin,
           heatmap=input$SFadvanced,

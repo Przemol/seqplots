@@ -95,7 +95,7 @@ shinyUI(
 				             tabPanel("Tracks", 		div(class='fileMoodalInnerDiv', div("Loading...",id="tracktable")	)),
 				             tabPanel("Features", 	div(class='fileMoodalInnerDiv', div("Loading...",id="featuretable")	)),
 				             tabPanel("Sequence features",   div(class='row', div(class='span4', wellPanel(class='SFform', 
-				                                                       selectInput("SFgenome", "Reference sequence (genmoe)", GENOMES),
+				                                                       #selectInput("SFgenome", "Reference sequence (genmoe)", GENOMES),
 				                                                       textInput(inputId='SFpattern', label='DNA motif'),
 				                                                       numericInput(inputId='SFbin', label='Sliding window size in base pairs [bp]', value=200, min=10, step=10),
 				                                                       textInput(inputId='SFname', label='Display name'),
@@ -177,7 +177,7 @@ shinyUI(
 												  	Please provide your user ID (initials, eg JS fot John Smith) and genome specify version.
 													You can drag-and-drop the files to browser window. Comments are optional.") # TIP: You can add multiple files at once.
 		  								,HTML('<a href="#fileUploadModal" role="button" class="btn btn-success" data-toggle="modal"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</a>')
-                      ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES)) #This should stay for conning, unless I can figure out something better using JS
+                      ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES)) #This should stay for clonning, unless I can figure out something better using JS
                     ,tags$hr()
                     
 										,h5('Create new plot array:')
