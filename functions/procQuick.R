@@ -10,7 +10,7 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 	for (j in filelist)	{
 		cat(n, ") Processing TSS file: ", basename(j), "\n", sep="")
 		
-		sel <- import(file.path('files',j), asRangedData=FALSE)
+		sel <- import(file(file.path('files',j)), asRangedData=FALSE)
 		  genome_ind <- dbGetQuery(con, paste0("SELECT genome FROM files WHERE name = '", j, "'"))
 		  pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))
 		  require(pkg, character.only = TRUE); GENOME <- get(pkg)
