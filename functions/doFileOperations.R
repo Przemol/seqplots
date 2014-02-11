@@ -6,43 +6,52 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   # 		seqlevels(tss) <- chrnames[col]
   # 		return(tss)
   # 	}
+  testChromosomeNames <-  function(tss, gnm) {
+    if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
+      try( seqnameStyle(tss) <- seqnameStyle(gnm) )
+      if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) 
+        stop('Chromosome names provided in the file does not match ones defined in reference genome. \nINPUT: [', 
+             paste(seqlevels(tss)[!seqlevels(tss) %in% seqlevels(gnm)], collapse=', '), "]\nGENOME: [", paste(head(seqlevels(gnm), 5), collapse=', '), ', ...]', call. = FALSE) 
+    }
+  }
+  testFeatureFile <-  function(PATH, gnm){
+    tss <- try(import(file(PATH), asRangedData=FALSE), silent = TRUE)
+    if (class(tss) == "try-error") {
+      nfields <- count.fields(PATH, comment.char = '', skip = 1)
+      problem <- which(nfields != median( head(nfields, 1000) ))+1
+      stop('Problem with line ', problem, ': "', readLines(PATH, n=problem)[problem], '" [',attr(tss, 'condition')$message,']', call. = FALSE)
+    }
+    testChromosomeNames(tss, gnm)
+  }
+
   
-  if ( dbGetQuery(con, paste0("SELECT count(*) FROM files WHERE name LIKE('%",gsub('\\.\\w+(|.gz)$', '',basename(x)),"%')")) > 0 )
-    stop('File already exists, change the name or remove old one.')
+  
+  if ( dbGetQuery(con, paste0("SELECT count(*) FROM files WHERE name = '",basename(x),"'")) > 0 )
+    stop('File already exists, change the name or remove old one.', call. = FALSE)
   
   #File does not have correct genome
-  gnm <- SeqinfoForBSGenome(file_genome); if( is.null(gnm) ) { stop('Unknown genome name/genome not installed! Use UCSC compatible or contact administrator.') }
+  gnm <- SeqinfoForBSGenome(file_genome); if( is.null(gnm) ) { 
+    stop('Unknown genome name/genome not installed! Use UCSC compatible or contact administrator.', call. = FALSE) 
+  }
   
   #session$sendCustomMessage("jsAlert", sprintf("adding file: %s", x))
   
   #File does not exist
   if( !file.exists(x) ) stop('Cannot add, file not on the server!')
-  import_file <- file(x)
   
-  if( grepl('.(gff|GFF)$', x) ) {
+  #import(text=grep('^#', readLines('sample.bed.gz'), invert = TRUE, value=TRUE), format='bed') 
+  
+  if( grepl('.(gff|GFF|gff.gz|GFF.gz)$', x) ) {
     type <- 'feature'; file_type <- 'GFF';
-    tss <- import(import_file, asRangedData=FALSE)
-    if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
-      seqnameStyle(tss) <- seqnameStyle(gnm)
-      if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
-    }
-    message('GFF file added', x)
+    testFeatureFile(x, gnm); message('GFF file added', x)
     
-  } else if( grepl('.(bed|BED)$', x) ){
+  } else if( grepl('.(bed|BED|bed.gz|BED.gz)$', x) ) {
     type <- 'feature'; file_type <- 'BED';
-    tss <- import(import_file, asRangedData=FALSE)
-    if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
-      seqnameStyle(tss) <- seqnameStyle(gnm)
-      if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
-    }
-    message('BED file added', x)
+    testFeatureFile(x, gnm); message('BED file added', x)
     
-  } else if( grepl('.(bw|BW)$', x) ){
+  } else if( grepl('.(bw|BW)$', x) ) {
     type <- 'track'; file_type <- 'BigWiggle';
-    if( !all(seqlevels(BigWigFile(x)) %in% seqlevels(gnm)) ) { 
-      bwinfo <- seqinfo(BigWigFile(x)); seqnameStyle(bwinfo) <- seqnameStyle(gnm)
-      if( !all(seqlevels(bwinfo) %in% seqlevels(gnm)) ) { stop('Unable to correct chr names in BigWiggle file!') }
-    }
+    testChromosomeNames(seqinfo(BigWigFile(x)), gnm)
     message('BW file added', x)
     
   } else if( grepl('.(wig|WIG|wig.gz|WIG.gz)$', x) ){
@@ -53,6 +62,7 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     }) 
     if(is(try_result, 'try-error')) {
       try_result2 <<- try({	
+        import_file <- file(x)
         wig <- import.wig(import_file, asRangedData=FALSE);
         if( !all(seqlevels(wig) %in% seqlevels(gnm)) ) { 
           seqnameStyle(wig) <- seqnameStyle(gnm)
