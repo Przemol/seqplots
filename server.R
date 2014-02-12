@@ -11,7 +11,7 @@ suppressPackageStartupMessages({
   require(RSQLite)
   require(BSgenome)
   require(seqnames.db)
-)}
+})
 
 #options("xtable.sanitize.text.function" = identity)
 options("shiny.maxRequestSize" = -1)
