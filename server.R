@@ -3,13 +3,15 @@
 # Author: PS
 ###############################################################################
 
-require(parallel)
-library(shiny)
-library(rtracklayer)
-require(RJSONIO)
-require(RSQLite)
-require(BSgenome)
-require(seqnames.db)
+suppressPackageStartupMessages({
+  require(parallel)
+  library(shiny)
+  library(rtracklayer)
+  require(RJSONIO)
+  require(RSQLite)
+  require(BSgenome)
+  require(seqnames.db)
+)}
 
 #options("xtable.sanitize.text.function" = identity)
 options("shiny.maxRequestSize" = -1)
@@ -17,17 +19,13 @@ options("bitmapType" = "cairo")
 #options(shiny.reactlog = FALSE)
 
 
-
 ##Turn off experimental
 #require(rCharts)
 #options(RCHART_WIDTH = 800)
 
-
-sourceDir <- function(path, trace = TRUE, ...) {
+sourceDir <- function(path, ...) {
   for (nm in list.files(path, pattern = "[.][RrSsQq]$")) {
-    if(trace) cat(nm,":")
     source(file.path(path, nm), ...)
-    if(trace) cat("\n")
   }
 }
 
