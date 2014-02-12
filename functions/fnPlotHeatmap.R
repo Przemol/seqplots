@@ -182,9 +182,15 @@ runGalaxy <- function(datafull, axhline=NULL, wigcount=4, titles=rep('', wigcoun
       if( is.na(o_min[i]) ) data[data<zmin] <- zmin else data[data<o_min[i]] <- o_min[i]
       if( is.na(o_max[i]) ) data[data>zmax] <- zmax else data[data>o_max[i]] <- o_max[i]
       
+      keycolor_lim <- range(data, na.rm=TRUE)
+      if( is.na(o_min[i]) ) keycolor_lim[1] <- zmin else keycolor_lim[1] <- o_min[i]
+      if( is.na(o_max[i]) ) keycolor_lim[2] <- zmax else keycolor_lim[2] <- o_max[i]
+      
       par(cex=1, cex.main=lfs/1.4, cex.lab=lfs/1.2, cex.axis=afs/1.2)
-      imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlabel, ylab=ylabel, xlim=if (is.null(xlim)) range(bins) else xlim, legend.width=1, horizontal=TRUE,
-            useRaster=raster)
+      imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlabel, ylab=ylabel, 
+              xlim=if (is.null(xlim)) range(bins) else xlim, 
+              zlim=keycolor_lim,
+              legend.width=1, horizontal=TRUE, useRaster=raster)
     }
 	
 		#if (subtitle==True){
