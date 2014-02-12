@@ -74,12 +74,17 @@ shinyUI(
 				tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">SeqPlots</a></h2>')), # v1.0b
 				
 				#Banner
-									HTML('<div class="row" style="margin-left:0px;"><div style="width:318px" class="alert alert-info alert-block span4">
-											<button type="button" class="close" data-dismiss="alert">&times;</button>
-  											<h4>Heads up!</h4>
-  											The desktop version of SeqPlot is available. Easy installation, no R or terminal. <br />Download link:
-  											<strong><a href="SeqPlots.dmg" target="_blank">SeqPlots.dmg</a></strong>
-									</div></div>'),
+				if (Sys.getenv("SHINY_SERVER_VERSION") != '') {div(
+				  HTML('<div class="row" style="margin-left:0px;"><div style="width:318px" class="alert alert-info alert-block span4">
+  										<button type="button" class="close" data-dismiss="alert">&times;</button>
+  											<h4>Update!</h4>
+  											The <b>new</b> version of SeqPlot for Mac available.<br />Download link:
+  											<strong><a href="http://ws190.gurdon.private.cam.ac.uk/SeqPlots_0.8.0b.dmg" target="_blank">SeqPlots_0.8.0b.dmg</a></strong>
+									</div></div>')
+				  )} else {
+				    tags$span()
+				  },
+									
 			
 				
 				
