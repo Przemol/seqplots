@@ -1,20 +1,10 @@
 # Author: przemol
 ###############################################################################
 
-# actionButton <- function(inputId, label) {
-# 	tagList(
-# 			singleton(tags$head(tags$script(src = 'js/actionbutton.js'))),
-# 			tags$button(id=inputId, type="button", class="btn action-button", label)
-# 	)
-# }
-#source('functions/files_modal.R')
+# require(rCharts)
+# options(RCHART_LIB = 'nvd3')
 
 
-require(rCharts)
-options(RCHART_LIB = 'nvd3')
-
-GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
 # Define UI
 shinyUI(
 		bootstrapPage(
@@ -36,12 +26,8 @@ shinyUI(
 						# CSS impprt
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/style.css")),
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/DT_bootstrap.css")),
-						singleton(tags$link(rel="stylesheet", type="text/css", href="css/bootstrapSwitch.css")),
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/TableTools.css")),
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/font-awesome.min.css")),
-						#singleton(tags$link(rel="stylesheet", type="text/css", href="css/nv.d3.css")),
-						#singleton(tags$link(rel="stylesheet", type="text/css", href="css/rNVD3.css")),
-						
 						
 						
 						# JS import
@@ -53,12 +39,9 @@ shinyUI(
 						singleton(tags$script(src = "js/DT_filter.js")),
 						singleton(tags$script(src = "js/js_addons.js")),
 						singleton(tags$script(src = "js/load_finished.js")),
-						#singleton(tags$script(src = "js/bootstrapSwitch.js")),
 						singleton(tags$script(src = "js/tmpl.min.js")),
 						singleton(tags$script(src = "js/TableTools.min.js")),
 						singleton(tags$script(src = "js/dataTables.scroller.min.js")),
-						#singleton(HTML('<script src="js/d3.v3.min.js" type="text/javascript"></script>')),
-						#singleton(HTML('<script src="js/nv.d3.min-new.js" type="text/javascript"></script>')),
 						
 						
 						# Title
@@ -101,7 +84,7 @@ shinyUI(
 				
 				
 				#Dynamically injected scripts output
-				uiOutput('scripts'),
+				#uiOutput('scripts'),
 				
 				#File management modal
 				tagList(
@@ -112,8 +95,7 @@ shinyUI(
 				             tabPanel("Tracks", 		div(class='fileMoodalInnerDiv', div("Loading...",id="tracktable")	)),
 				             tabPanel("Features", 	div(class='fileMoodalInnerDiv', div("Loading...",id="featuretable")	)),
 				             tabPanel("Sequence features",   div(class='row', div(class='span4', wellPanel(class='SFform', 
-				                                                       selectInput("SFgenome", "Reference sequence (genmoe)", GENOMES),
-				                                                       #selectInput(inputId='SFgenome', label='Reference sequence', choices=''),
+				                                                       #selectInput("SFgenome", "Reference sequence (genmoe)", GENOMES),
 				                                                       textInput(inputId='SFpattern', label='DNA motif'),
 				                                                       numericInput(inputId='SFbin', label='Sliding window size in base pairs [bp]', value=200, min=10, step=10),
 				                                                       textInput(inputId='SFname', label='Display name'),
@@ -129,8 +111,7 @@ shinyUI(
 				      div( class="modal-footer",
 				           div(id='modalToolbar', class='row-fluid',
 				               div(class="span2", 
-				                   selectInput('algo_type', 'Choose method', c( 'Quick [track-at-once]', 'Iterative [loci-by-chromosome]' ) ), 
-				                   conditionalPanel( class="form-inline", condition = "input.algo_type == 'Quick [track-at-once]'", numericInput("BWbin", "Bin track @ [bp]: ", 10))
+                          numericInput("BWbin", "Bin track @ [bp]: ", 10)
 				               ),
 				               div(class="span2", radioButtons('plot_type', 'Choose the plot type', c( 'Point Features', 'Midpoint Features', 'Anchored Features' ) ) ),
 				               div(class="span2", p("Additional options:"), 
@@ -138,7 +119,7 @@ shinyUI(
 				                   checkboxInput("ignore_strand", "Ignore strand", FALSE),
 				                   #), 
 				                   checkboxInput("rm0", "Remove zeros", FALSE),
-				                   checkboxInput("add_heatmap", "Calculate Heatmap", FALSE)
+				                   checkboxInput("add_heatmap", "Calculate Heatmap", TRUE)
 				               ),
 				               div(class="span1", style="text-align:right;", 'Plotting distances in [bp]:'),
 				               div(class="span1", numericInput("plot_upstream", "Upstream:", 1000)),
@@ -159,6 +140,7 @@ shinyUI(
 				#Sidebar panel definitions
 				sidebarPanel(
 				  
+          #0) PLOT PANEL
 					conditionalPanel(condition = "output.showplot",
 						p(class='pull-left', HTML("Download: &nbsp;"),
               div(class="btn-toolbar", div(class="btn-group",
@@ -184,37 +166,20 @@ shinyUI(
 						)
 					),
 					div(class='row-fluid', div(class='span6',conditionalPanel(condition = "!input.reactive", actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"), HTML('Replot [&crarr;]') )))),
-					    div(class='span6',checkboxInput("reactive", "Reactive plotting [F5]", TRUE)), tags$hr()
+					    div(class='span6',checkboxInput("reactive", "Reactive plotting [F5]", FALSE)), tags$hr()
 					),
-						tabsetPanel(id='ctltabs',
-								tabPanel( tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plotset/Upload new files") #, "New"
-										
+					
+					tabsetPanel(id='ctltabs',
+					#1) NEW PLOT SET PANEL
+								tabPanel(value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plotset/Upload new files") #, "New"
 										,h5('Upload files:')
 										,helpText( "This panel is used to add track (BigWig, Wiggle or BedGraph) and feature (GFF and BED) files to file collection.
-												  	Please provide your user ID (initials, eg JS fot John Smith) and genome version in UCSC format (e.g. 'ce10', 'mm9', 'hg19').
+												  	Please provide your user ID (initials, eg JS fot John Smith) and genome specify version.
 													You can drag-and-drop the files to browser window. Comments are optional.") # TIP: You can add multiple files at once.
 		  								,HTML('<a href="#fileUploadModal" role="button" class="btn btn-success" data-toggle="modal"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</a>')
-                      ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES))
-# 										,HTML(' Upload form: <div class="switch" id="old_style_switch"><input type="checkbox"></div>')
-# 										#,checkboxInput('old_style', '')						
-# 										,div(class="alert alert-info", style="margin-top:10px; display:none;", id='oldff'
-# 											#
-# 											#,conditionalPanel("true", textInput("file_genome", "Genmoe (e.g. 'ce10', 'mm9', 'hg19'):", ""))
-# 											,conditionalPanel("true", selectInput("file_genome", "Genmoe:", GENOMES))
-# 											,conditionalPanel("input.file_genome !== ''", textInput("file_user", "User name", ""))
-# 											,conditionalPanel("input.file_user !== ''", conditionalPanel("! input.file_comment_skip", textInput("file_comment", "Comments", "")), checkboxInput('file_comment_skip', "Skip comments", TRUE))
-# 											,conditionalPanel("((input.file_comment !== '') | (input.file_comment_skip)) & input.file_user !== '' & input.file_genome !== '' & input.file_type !== 'none'", 
-# 													fileInput("files", "", multiple=FALSE) #Server
-# 											#actionButton("upload", "Choose a file with GUI") #Local
-# 											)
-# 											
-# #											,HTML('	<div id="fileprogressdiv" style="display: none;"> <lable>File upload/conversion progress:</label> <div class="progress progress-striped active">
-# #															<div class="bar" style="width: 0%;"></div>
-# #															</div></div>')
-# #											,tableOutput("filetable"), uiOutput('GUIfile')
-# 											,conditionalPanel("true", tags$button(id = 'fileFormClearBtn', class = "btn btn-warning", type = "button", tags$i(class="icon-remove-sign icon-white"), 'Reset file form.'))
-# 										)
-										,uiOutput('FileUploadScripts'), tags$hr()
+                      ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES)) #This should stay for clonning, unless I can figure out something better using JS
+                    ,tags$hr()
+                    
 										,h5('Create new plot array:')
 										,helpText( "This panel allows to calculate new plot array. Each track will be summarized using each feature file.
 													Subsequently the plot arry will be shown to indicate which pairs should be plotted.")
@@ -230,37 +195,39 @@ shinyUI(
                       						tags$br()
 								    	}
 								),
-								tabPanel( tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
-										#uiOutput('GUIloadRdata'),
-								    selectInput('publicRdata', 'Load public file:', ' ', ' '),
+					#2) SAVE/LOAD PLOT SET PANEL
+								tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
+                    selectInput('publicRdata', 'Load public file:', ' ', ' '),
 										conditionalPanel("input.publicRdata !== ' '", actionButton('RdataRemoveButton', 'Remove this dataset') ),
-											uiOutput('GUIrmRdata'),
 										tags$hr(),
-										conditionalPanel("input.publicRdata == ' ' & output.showsaveGUI", 
-											textInput('RdataSaveName', 'Save current dataset name:', ''), 
-											conditionalPanel("input.RdataSaveName !== ''", actionButton('RdataSaveButton', 'Save') ) ),
-											uiOutput('GUIsaveRdata')
+										textInput('RdataSaveName', 'Save current plot set as:', ''), 
+										conditionalPanel("input.RdataSaveName !== ''", actionButton('RdataSaveButton', 'Save') ) 
 								),
-								tabPanel(tags$i(class="icon-bar-chart icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Axis and titles"), #"Axis", 
-									#conditionalPanel(condition = "output.showplot", 										
+					#3) TITLES AND AXIS PANEL
+								tabPanel(value = 'panel3', title=tags$i(class="icon-font icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Title and axis"), #"Axis", 
+                         #conditionalPanel(condition = "output.showplot", 										
 										div(class='row-fluid', 
-												div(class='span4', textInput("title", "Title:", "")),
-												div(class='span4', textInput("xlabel", "X-axis label:", "")),
-												div(class='span4', textInput("ylabel", "Y-axis label:", ""))
+												div(class='span4', textInput("title", "Title:", ""),         
+                            sliderInput("title_font_size", "Title font size:",   0.5, 10, 2.0, 0.5, ticks = TRUE, animate = TRUE) ),
+												div(class='span4', textInput("xlabel", "X-axis label:", ""), 
+                            sliderInput("labels_font_size", "Labels font size:", 0.5, 10, 2.0, 0.5, ticks = TRUE, animate = TRUE) ),
+												div(class='span4', textInput("ylabel", "Y-axis label:", ""), 
+                            sliderInput("axis_font_size", "Axis font size:",     0.5, 10, 2.0, 0.5, ticks = TRUE, animate = TRUE) )
 										),
-										uiOutput("plotUI"),
-									                 
-										checkboxInput("yauto", "Y-axis/Heatmap colors autoscale", TRUE),
-										conditionalPanel( condition = "input.yauto != true",
-											p(numericInput("ymin1", "Y-axis limits:", -1), numericInput("ymin2", "-", 10))
-										),
-									  conditionalPanel( condition = "input.yauto == true",
-									    sliderInput("hsccoef", "Heatmap color scaling coefficient:", 0, 0.1, 0.01, NULL, ticks = TRUE, animate = TRUE)
-									  )
+										#uiOutput("plotUI"),
+                    tags$hr(),
+									  checkboxInput("xauto", "Set X-axis limits", FALSE),
+									  conditionalPanel( condition = "input.xauto == true",
+									    p( numericInput("xmin1", "-> ", 0), numericInput("xmin2", "-", 0) )
+									  ),               
+										checkboxInput("yauto", "Set Y-axis limits", FALSE),
+										conditionalPanel( condition = "input.yauto == true",
+											p( numericInput("ymin1", "-> ", -1), numericInput("ymin2", "-", 10) )
+										)
 									#)
 								),
-								tabPanel( tags$i(class="icon-dashboard icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Plot setup"),# "Setup", 
-
+					  #4) Legands, guiding lines, and data scaling
+								tabPanel(value = 'panel4', title=tags$i(class="icon-tags icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Legands, guiding lines, and data scaling"),# "Setup", 
 												selectInput('scale_signal', 'Transform signal:', c( 'Do not transform', 'Log2 transform')), #, 'Z-score transform')),
 												checkboxInput("lnv", "Show vertical guiding line", TRUE),
 								        div(class='row-fluid',  
@@ -275,22 +242,30 @@ shinyUI(
 								        div(class='row-fluid', 
 								            div(class='span8',checkboxInput("legend_ext", "Show error estimate legend", FALSE)),
 								            div(class='span4',conditionalPanel( condition = "input.legend_ext == true", selectInput("legend_ext_pos", "-> position:", c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center"),  "topleft" )))
-								        )
+								        ),
+												sliderInput("legend_font_size", "Legend font size:", 0.5, 10, 1.5, 0.5, ticks = TRUE, animate = TRUE)
             
 										#)
 								),
-								tabPanel( tags$i(class="icon-text-height icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Font and output file sizes"), #("Sizes", 
+					#5) HEATMAP SPECIFIC OPTIONS
+								tabPanel(value = 'panel5', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
 									#conditionalPanel(condition = "output.showplot", 
-										sliderInput("title_font_size", "Title font size:", 0.1, 10, 3.0, 0.1, ticks = TRUE, animate = TRUE),
-										sliderInput("labels_font_size", "Labels font size:", 0.1, 10, 2.0, 0.05, ticks = TRUE, animate = TRUE),
-										sliderInput("axis_font_size", "Axis font size:", 0.1, 5, 2, 0.05, ticks = TRUE, animate = TRUE),
-										sliderInput("legend_font_size", "Legend font size:", 0.1, 5, 1.5, 0.05, ticks = TRUE, animate = TRUE),
-										numericInput("pdf_x_size", "PDF X size:", 16),
-										numericInput("pdf_y_size", "PDF Y size:", 10)
+										
+									checkboxInput("heatmapzauto", "Set heatmap colors limits", FALSE),
+									conditionalPanel( condition = "input.heatmapzauto == true",
+									    p( numericInput("zmin1", "-> ", -1), numericInput("zmin2", "-", 10) )
+									),
+									conditionalPanel( condition = "input.heatmapzauto == false",
+									    sliderInput("hsccoef", "Heatmap color scaling coefficient:", 0, 0.1, 0.01, NULL, ticks = TRUE, animate = TRUE)
+									)
+				                               
+									
+										
+										
 									#)
 								),
-						                      
-						    tabPanel(tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Subplot options"), #"Subplots", 
+					#6) Subplot options               
+						    tabPanel(value = 'panel6', title=tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Subplot options"), #"Subplots", 
 						        selectInput(inputId='img_ch', label='Choose sub-plot:', ''),
 						        textInput(inputId='img_lab', label='Sub-plot label:', ''),
 						        numericInput(inputId='img_prior', label='Sub-plot priority:', 0),
@@ -304,7 +279,14 @@ shinyUI(
 						          )
 						        )
 						    ),
-						    tabPanel(tags$i(class="icon-gift icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations"), #"Batch", 
+					#7) BATCH
+						    tabPanel(tags$i(class="icon-gears icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations"), #"Batch", 
+						            
+						      div(class='form-inline', 
+						        numericInput("pdf_x_size", "PDF output size:", 16) ,  
+						        numericInput("pdf_y_size", "x", 10) 
+						      ),      
+                  tags$hr(),     
 						      checkboxInput('recordHistory', 'Record plot history', FALSE),      
 						      downloadLink('downloadHistory',   tags$span(tags$i(class="icon-time icon-large"), 'Get plot history'),   class="btn btn-small btn-success"),
                   tags$hr(),
@@ -312,10 +294,9 @@ shinyUI(
                     selectInput('batch_what', 'Plot', c('lineplots', 'heatmaps') ),  
                     selectInput('batch_how', 'by', c('rows', 'columns', 'single') )                                
 						      ),
-						      downloadLink('downloadBatchColLineplot', tags$span(tags$i(class="icon-align-justify icon-rotate-90"), tags$i(class="icon-double-angle-right icon-large"),  tags$i(class="icon-picture icon-large icon-white"), 'Get PDF'),   class="btn btn-small btn-success")       
-    
+						      downloadLink('downloadBatchColLineplot', tags$span(tags$i(class="icon-align-justify icon-rotate-90"), tags$i(class="icon-double-angle-right icon-large"),  tags$i(class="icon-picture icon-large icon-white"), 'Get PDF'),   class="btn btn-small btn-success")  
 						                     
-						            )
+						    )
 
 						),
 				    div(class='hidden', textInput('clusters', 'Clusters'))
@@ -332,19 +313,19 @@ shinyUI(
 					,singleton(tags$link(rel="stylesheet", type="text/css", href="upload/css/jquery.fileupload-ui.css"))
 					,includeHTML('www/upload/upload.html'),
           
-					tabsetPanel(
-					  tabPanel("Plots selection", 
+# 					tabsetPanel(
+# 					  tabPanel("Plots selection", 
 					           tags$br(),tags$br(),tags$br(),tags$br(),
 					           div(class="control-group", uiOutput("htmltab") )
-            ),
-					  tabPanel("Interactive lineplot",
-                     checkboxInput('interactiveLinePlot', 'Enable intercative plot', FALSE),
-                     conditionalPanel(condition = "input.interactiveLinePlot", 
-                        selectInput('chart1Type', label='Select type', choices=c('lineWithFocusChart','lineChart','stackedAreaChart','scatterChart', 'multiBarChart'), selected='lineWithFocusChart'),              
-					              showOutput("chart1", "nvd3")
-                     )
-            )
-					)
+#             ),
+# 					  tabPanel("Interactive lineplot",
+#                      checkboxInput('interactiveLinePlot', 'Enable intercative plot', FALSE),
+#                      conditionalPanel(condition = "input.interactiveLinePlot", 
+#                         selectInput('chart1Type', label='Select type', choices=c('lineWithFocusChart','lineChart','stackedAreaChart','scatterChart', 'multiBarChart'), selected='lineWithFocusChart'),              
+# 					              showOutput("chart1", "nvd3")
+#                      )
+#             )
+# 					)
           
 					
 					

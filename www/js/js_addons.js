@@ -202,6 +202,11 @@ $(function() {
     }
   })
   
+  $('div.img').click(function(e){
+    $(this).find('div > img').toggleClass('zoom_image');
+    e.preventDefault();
+  });
+  
   /*$('#myModal').find('a[data-toggle="tab"]').on("shown", function(e) { 
     act =e.target;
     if($.fn.dataTable.fnTables().length > 0) {
