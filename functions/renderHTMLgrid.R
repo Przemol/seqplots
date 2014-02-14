@@ -26,7 +26,17 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='') {
 						} else {
 							cat('<input type="checkbox" name="plot_this" value="',toJSON(c(i,j)) ,'" />')
 						}
-						if (CC) cat('<br /><input type="color" name="plot_col" id="col_',i,'x', j,'" value="',cltab[j,i] ,'" style="width:25px; display:none;" />', sep='')
+						if (CC) {
+              cat('<br /><input type="color" name="plot_col"   id="col_',i,'x', j,'" value="',cltab[j,i] ,'" style="width:25px; display:none;" />', sep='')
+              cat('<div class="div_label" style="display:none;"> <input type="text"   id="lbl_',i,'x', j,'" style="width:50px" placeholder="Label"/> </div> ', sep='')
+              cat('<div class="div_prior" style="display:none;"> <input type="number" id="prr_',i,'x', j,'" style="width:40px" placeholder="Prior" value=0 /> </div> ', sep='')
+              
+              cat('<div class="div_min" style="display:none;"> <input type="text"     id="min_',i,'x', j,'" style="width:50px" /> </div> ', sep='')
+              cat('<div class="div_max" style="display:none;"> <input type="text"     id="max_',i,'x', j,'" style="width:50px" /> </div> ', sep='')
+              cat('<div class="div_max" style="display:none;"> <input type="checkbox" id="inc_',i,'x', j,'" style="width:50px" /> </div> ', sep='')
+              
+              
+						}
 						cat('</td>')
 					}	
 					cat("</tr>")
