@@ -22,7 +22,8 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 			cat("\tProcessing track/motif: ", trackfiles[[i]][[1]], "\n")
 			cat3(paste('Processing:', basename(j), '@', trackfiles[[i]][[1]], '[', k, '/',length(filelist)*length(trackfiles), ']'))
       
-			if (ignore_strand) strand(sel) <- '*'
+			if (ignore_strand)                strand(sel) <- '*'
+			if( type == 'Midpoint Features' ) sel <- resize(sel, 1, fix='center')
 			gr <- GenomicRanges::promoters(sel, x1, x2)
       
       if( class(trackfiles[[i]]) == 'character' ) {
@@ -45,7 +46,7 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 			
 			if ( (type == 'Point Features') | (type == 'Midpoint Features') ) {
 				
-        if( type == 'Midpoint Features' ) sel <- resize(sel, 1, fix='center')
+        
         all_ind  <- seq(-x1, x2, by=as.numeric(bin) )
         
 				if( class(trackfiles[[i]]) == 'character' ) {
