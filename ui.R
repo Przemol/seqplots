@@ -13,6 +13,9 @@ shinyUI(
 						# JS error message
 						singleton(tags$script('var error = false; window.onerror =  function() { if (!error) {alert("JavaScript error! Some elements might not work proprely. Please reload the page."); error=true;} }')),		
 						
+            # JS protect against unintended exit
+						singleton(tags$script('function closeEditorWarning(){ return "If you leave unsaved changes will be lost." }; window.onbeforeunload = closeEditorWarning;')),
+						
             # JS alert handle
 						#singleton(tags$script('Shiny.addCustomMessageHandler("jsAlert", function(message) {alert(JSON.stringify(message));});')),
 						singleton(tags$script('Shiny.addCustomMessageHandler("jsAlert", function(message) {alert(message);});')),
@@ -162,7 +165,7 @@ shinyUI(
                 div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
 						    div(class="img", imageOutput(outputId = "image", width = "1240px", height = "720px") ),
 								div(class='form-inline', 
-                    checkboxInput("cust_col", "Colors"), HTML(' &#8226; '), 
+                    #checkboxInput("cust_col", "Colors"), HTML(' &#8226; '), 
 										checkboxInput("img_heatmap", "Heatmap"), 
 								    conditionalPanel(condition = "input.img_heatmap", style="display: inline; margin-top",           
                       HTML(' &#8226; '),numericInput("img_clusters", "k =", 5, min=1), HTML(' &#8226; '),
@@ -183,7 +186,7 @@ shinyUI(
 												  	Please provide your user ID (initials, eg JS fot John Smith) and genome specify version.
 													You can drag-and-drop the files to browser window. Comments are optional.") # TIP: You can add multiple files at once.
 		  								,HTML('<a href="#fileUploadModal" role="button" class="btn btn-success" data-toggle="modal"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</a>')
-                      ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES)) #This should stay for clonning, unless I can figure out something better using JS
+                      ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES, selected = 'Celegans.UCSC.ce10')) #This should stay for clonning, unless I can figure out something better using JS
                     ,tags$hr()
                     
 										,h5('Create new plot array:')
@@ -257,13 +260,27 @@ shinyUI(
 								tabPanel(value = 'panel5', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
 									#conditionalPanel(condition = "output.showplot", 
 										
-									checkboxInput("heatmapzauto", "Set heatmap colors limits", FALSE),
+									checkboxInput("heatmapzauto", "Set manual heatmap colors limits", FALSE),
 									conditionalPanel( condition = "input.heatmapzauto == true",
 									    p( numericInput("zmin1", "-> ", -1), numericInput("zmin2", "-", 10) )
 									),
 									conditionalPanel( condition = "input.heatmapzauto == false",
 									    sliderInput("hsccoef", "Heatmap color scaling coefficient:", 0, 0.1, 0.01, NULL, ticks = TRUE, animate = TRUE)
+									),
+									checkboxInput("indi", "Independent color scaling for heatmaps", FALSE),
+									checkboxInput('heat_include', 'Exclude specific heatmaps from sorting/clustering', FALSE),
+									conditionalPanel( condition = "input.indi == true",
+									    checkboxInput('heat_min_max', 'Override colors limits for specific heatmaps', FALSE)
+									),
+									checkboxInput('heat_colorspace', 'Custom colorspace for heatmap', FALSE),
+									conditionalPanel( condition = "input.heat_colorspace == true",
+									                  div(class='row-fluid', 
+									                      div(class='span4', HTML('Min: <input type="color" id="heat_csp_min" value="#FFFFFF" style="width:40px;" title=""/>')),
+									                      div(class='span4', HTML('Mid: <input type="color" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
+									                      div(class='span4', HTML('Max: <input type="color" id="heat_csp_max" value="#00008B" style="width:40px;" title=""/>'))
+									                  )
 									)
+									
 				                               
 									
 										
@@ -271,7 +288,12 @@ shinyUI(
 									#)
 								),
 					#6) Subplot options               
-						    tabPanel(value = 'panel6', title=tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Subplot options"), #"Subplots", 
+						    tabPanel(value = 'panel6', title=tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Subplot options"), #"Subplots",
+                    
+						        checkboxGroupInput('subplot_options', 'Set sub-plot specific:', c('Colors'='color', 'Label'='label', 'Priority'='prior'), selected = NULL),
+                    tags$hr(),    
+                    
+                    
 						        selectInput(inputId='img_ch', label='Choose sub-plot:', ''),
 						        textInput(inputId='img_lab', label='Sub-plot label:', ''),
 						        numericInput(inputId='img_prior', label='Sub-plot priority:', 0),
@@ -337,14 +359,12 @@ shinyUI(
 					
 			
 					#Debug code
+          #,div(HTML(' <input type="text" id="prr" style="width:40px" placeholder="Prior" value=0 /> '), class="zezol", title='Something')
 					,div( tags$hr(),textInput("caption", "EVAL!:", ""),
 					      textInput("tt1", "tt1", ""),
+					      
                 verbatimTextOutput("summary"), actionButton('ab1', 'Test'),
-					      radioButtons("dist", "Distribution type:",
-					                   c("Normal" = "norm",
-					                     "Uniform" = "unif",
-					                     "Log-normal" = "lnorm",
-					                     "Exponential" = "exp")),
+
                 
           class='hidden', id='debug')
 #					,verbatimTextOutput("timer")
