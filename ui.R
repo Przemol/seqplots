@@ -45,6 +45,7 @@ shinyUI(
 						singleton(tags$script(src = "js/tmpl.min.js")),
 						singleton(tags$script(src = "js/TableTools.min.js")),
 						singleton(tags$script(src = "js/dataTables.scroller.min.js")),
+						singleton(tags$script(src = "js/jquery.cookie.js")),
 						
 						
 						# Title
