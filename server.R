@@ -43,23 +43,21 @@ shinyServer(function(input, output, clientData, session) {
 	
   if( Sys.getenv('web') != '' ) setwd(Sys.getenv('web'))
   sourceDir('functions')
-	
-  
-
   
   if( Sys.getenv('root') != '' ) setwd(Sys.getenv('root'))
 	addResourcePath(prefix='files', directoryPath='./files')
 	cat3 <- function(x) { parallel:::sendMaster(c('calcMsg1', as.character(x))) }
 	cat4 <- function(x) { parallel:::sendMaster(c('calcMsg2', as.character(x))) }
-	
+  
 	#Debug code: Testing eval statement
 	output$summary <- renderPrint({
 				eval(parse(text=input$caption))
 			})
   
 	#Reactive values definition
-	values <- reactiveValues( grfile=NULL, calcID=NULL, calcMsg1=NULL, calcMsg2=NULL, plotMsg=NULL, 
-                            refFileGrids=NULL, proc=NULL, im=NULL, clusters=NULL, include=NULL, SFsetup=list(), plotHistory=list() )
+  subplotSetup <- reactiveValues( )
+  urlSetup <- reactiveValues( )
+	values <- reactiveValues( grfile=NULL, calcID=NULL, calcMsg1=NULL, calcMsg2=NULL, plotMsg=NULL, refFileGrids=NULL, proc=NULL, im=NULL, clusters=NULL, SFsetup=list(), plotHistory=list() )
 	
   #Add [S]equence [F]eature setup and reset observers
   observe({
@@ -111,7 +109,7 @@ shinyServer(function(input, output, clientData, session) {
 	})
 	output$htmltab <- reactive({
 		if( is.null( values$grfile ) )	return('')	
-		return( renderHTMLgrid(values$grfile, TRUE, NULL, addcls=digest::digest(input$publicRdata)) )					
+		return( renderHTMLgrid(values$grfile, TRUE, urlSetup$select, addcls=digest::digest(input$publicRdata)) )					
 	})
 	
 	#Determined if plot and dataset save menu shoud be visible
@@ -119,18 +117,13 @@ shinyServer(function(input, output, clientData, session) {
 	outputOptions(output, "showplot", suspendWhenHidden = FALSE)
 	
   #Lineplot plotting function
-	plotLineplot <- function(pl, title=input$title) {
+	plotLineplot <- function(pl, title=input$title, type='dev') {
     
-    ord <- order(values$priors, decreasing=TRUE)
+    ord <- if( length(subplotSetup$prior) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
 	  pl <- pl[ ord ]
-	  pl <- Map(function(x, y) {if(nchar(y)) x[['desc']]<-y; return(x)}, pl, values$lables[ ord ])
-	  
-	  if (input$cust_col) {
-	    co <- lapply(input$plot_this, function(x) fromJSON(x))
-	    cltab <- sapply( co, function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) )
-	  } else {
-	    cltab <- NULL
-	  }
+    if( length(subplotSetup$label) ) {
+	    pl <- Map(function(x, y) {if(nchar(y)) x[['desc']]<-y; return(x)}, pl, subplotSetup$label[ ord ])
+    }
 	  
 	  if ( input$scale_signal == "Do not transform" ) {
 	    plotScale <-  'linear'
@@ -145,19 +138,24 @@ shinyServer(function(input, output, clientData, session) {
              x2=if(!input$xauto) NULL else input$xmin2, 
              y1=if(!input$yauto) NULL else input$ymin1, 
              y2=if(!input$yauto) NULL else input$ymin2,
-	           title=title, Xtitle = input$xlabel, Ytitle = input$ylabel, colvec = cltab, plotScale = plotScale, EE = input$ee, Leg = input$legend,
+	           title=title, Xtitle = input$xlabel, Ytitle = input$ylabel, colvec = subplotSetup$color[ord], plotScale = plotScale, EE = input$ee, Leg = input$legend,
 	           cex.axis = input$axis_font_size, cex.lab = input$labels_font_size, cex.main = input$title_font_size, cex.legend = input$legend_font_size, 
 	           ln.v=input$lnv, ln.h=if(input$lnh) input$lnh_pos else NULL, 
-	           legend_pos=input$legend_pos, legend_ext_pos=input$legend_ext_pos, legend_ext=input$legend_ext)  
+	           legend_pos=input$legend_pos, legend_ext_pos=input$legend_ext_pos, legend_ext=input$legend_ext, type=type)  
 	}
   
 	#Heatmap plotting function
 	plotHeatmap <- function(pl, title=input$title) {
 		if( length(pl) > 10 ) stop('Heatmap plotting: Select less than 10 checkboxes!')
 		if( is.null(pl[[1]]$heatmap) ) stop('Heatmap plotting: No heatmap data avilabe! Re-run with "Calculate Heatmap" option selected.')
-		Hclc <- do.call(cbind, lapply(pl[values$include], '[[', 'heatmap')) 
+		if( length(subplotSetup$inc) ) {
+		  Hclc <- do.call(cbind, lapply(pl[ as.logical(subplotSetup$inc) ], '[[', 'heatmap'))
+		} else {
+		  Hclc <- do.call(cbind, lapply(pl, '[[', 'heatmap'))
+		}
     
-		pl <- pl[order(values$priors, decreasing=TRUE)]
+		ord <- if( length(subplotSetup$prior) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
+		pl <- pl[ ord ]
 		H <- do.call(cbind, lapply(pl, '[[', 'heatmap'))
     
 		if ( input$scale_signal == "Do not transform" ) {
@@ -168,7 +166,7 @@ shinyServer(function(input, output, clientData, session) {
 			H <- scale(H)
 		}
 		#H[is.na(H)] <- 0
-		if(input$img_sort) { H <- H[order(rowMeans(Hclc, na.rm=TRUE)),] }
+		if(input$img_sort) { H <- H[order(rowMeans(Hclc, na.rm=TRUE), decreasing = TRUE),] }
 		if(input$img_clusters > 1) {
 			Hcl <- Hclc; Hcl[is.na(Hcl)] <- 0
 			k<-kmeans(Hcl, input$img_clusters) #OPTIONAL: Change this line for differnt number of clusters
@@ -187,14 +185,15 @@ shinyServer(function(input, output, clientData, session) {
 		  clusts <- NULL
 		}
 		lab <- sapply(pl, '[[', 'desc')
-    new_lab <- values$lables[ order(values$priors, decreasing=TRUE) ]
-    lab[new_lab!=''] <- new_lab[new_lab!='']
-    #lab <- lab[order(values$priors, decreasing=TRUE)]
+    if( length(subplotSetup$label) ) {
+      new_lab <- subplotSetup$label[ord]
+      lab[new_lab!=''] <- new_lab[new_lab!='']
+    }
 
-    o_min <- as.numeric( values$override_min[order(values$priors, decreasing=TRUE)] )
-    o_max <- as.numeric( values$override_max[order(values$priors, decreasing=TRUE)] )
+    o_min <- if( length(subplotSetup$min) ) as.numeric( subplotSetup$min[ord] ) else rep(NA, length(pl))
+    o_max <- if( length(subplotSetup$max) ) as.numeric( subplotSetup$max[ord] ) else rep(NA, length(pl))
     
-		runGalaxy( H, clusts, wigcount=length(pl), 
+		heatmapPlotWrapper( H, clusts, wigcount=length(pl), 
 		           bins=pl[[1]]$all_ind, 
                titles=lab, e=pl[[1]]$e, 
                xlim=if(!input$xauto) NULL else c(input$xmin1, input$xmin2), 
@@ -211,7 +210,9 @@ shinyServer(function(input, output, clientData, session) {
                indi=input$indi, 
                s=input$hsccoef,
                o_min=o_min, 
-               o_max=o_max)
+               o_max=o_max,
+               colvec=subplotSetup$color[ord],
+		           colorspace=if(input$heat_colorspace) c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max) else NULL)
 		par(cex=input$title_font_size)
 		title(input$title, outer = TRUE)
 	}
@@ -248,22 +249,11 @@ shinyServer(function(input, output, clientData, session) {
 		filename = function() {
 			paste('Legend_', gsub(' ', '_', Sys.time()), '.pdf', sep='')
 		},
-			content = function(file) {
+		content = function(file) {
 			co <- lapply(input$plot_this, function(x) fromJSON(x))
 			pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
-			
-			if (input$cust_col) {
-				cols <- sapply( co, function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) )
-				cols[ grepl('#ffffff', cols) ] <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow(length(pl)-8))[ grepl('#ffffff', cols) ]
-			} else {
-				cols <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow(length(pl)-8))	
-			}
-			legendText <- sapply(pl, function(x) x$desc) 
-		
-			pdf(file, width = 10.0, height = 10.0, onefile = FALSE, paper = "special") #, encoding = "TeXtext.enc")
-				plot.new()
-				if(input$ee) { legend("topleft", c("Mean\n(solid line)","Standard error\n(dark filed)", "95% CI\n(light field)"), pch=c(-1, 0, 0),  title="Fields and lines legend", lwd=c(3,15,15), lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), bg=rainbow(1, alpha=0), bty="n", cex=1, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2)) }
-				legend("topright", legendText, col=cols, bg=rainbow(1, alpha=0),  bty="n", cex=1, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2), lwd=15, pch=0, lty=0)
+			pdf(file, width = 10.0, height = 10.0, onefile = FALSE, paper = "special")
+			  plotLineplot(pl=pl, type='legend')
 			dev.off()
 		},
 		contentType = 'application/pdf'
@@ -411,11 +401,15 @@ shinyServer(function(input, output, clientData, session) {
 	#Clusters download handler
 	output$downloadClusters <- downloadHandler(
 	  filename = function() {
-	    paste('Clusters_', gsub(' ', '_', Sys.time()), '.txt', sep='')
+	    paste('Clusters_', gsub(' ', '_', Sys.time()), '.csv', sep='')
 	  },
 	  content = function( file ) {
-      if(!nchar(input$clusters)) stop('Plot heatmap with clusters first!')
-	    cat(fromJSON(input$clusters), sep='\n', file=file)
+	    if(!nchar(input$clusters)) stop('Plot heatmap with clusters first!')
+	    infile <- file.path( 'files', names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ) )
+      gr <- import(infile); elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
+	    gr$original_order <- 1:length(gr); gr$clusters <- fromJSON(input$clusters)
+	    write.csv(as.data.frame(gr), file=file, rwo.names = FALSE)
+	    #cat(fromJSON(input$clusters), sep='\n', file=file)
 	  }
 	)
 	
@@ -508,12 +502,30 @@ shinyServer(function(input, output, clientData, session) {
     })
   })
 
-  #ColorButtons
+  #Subplot setup logic
   observe({ 
-    if( input$cust_col )
-      session$sendCustomMessage("jsExec", "$('input[type=color]').show(0)")
-    if( !input$cust_col )
-      session$sendCustomMessage("jsExec", "$('input[type=color]').hide(0)")
+    selections <- c(input$subplot_options, c('inc', 'min', 'max')[c(input$heat_include, input$heat_min_max, input$heat_min_max)])
+    
+    if( length( selections ) ) {  
+      show <- paste(paste0('.div_', selections), collapse=', ')
+      session$sendCustomMessage("jsExec", paste0("$('.div_separator,",  show, "').show().children().tooltip()") )
+      opt <- c("color", "label", "prior", 'inc', 'min', 'max')
+      hide <- paste(paste0('.div_', opt[!opt %in% selections]), collapse=', ')
+      session$sendCustomMessage("jsExec", paste0("$('",  hide, "').hide()") )
+      extract_grid_values <- function(nam) {
+        sapply( lapply(input$plot_this, fromJSON), function(x) eval(substitute(input$b, list(b = paste0(nam,'_',x[1],'x', x[2]) ))) ) 
+      }
+      for(n in opt) {
+        if(n %in% selections) {
+          subplotSetup[[n]] <- extract_grid_values(n)
+        } else {
+          subplotSetup[[n]] <- NULL
+        }
+      }
+    } else {
+      session$sendCustomMessage("jsExec", "$('.div_setup').hide()" )
+      subplotSetup <- reactiveValues( )
+    }
   })
 
   
@@ -540,58 +552,6 @@ shinyServer(function(input, output, clientData, session) {
 
 	})
   
-  #Set up subplots option engine on new plotset and show plotUI (checkboxes)
-	observe({
-	  if(!is.null(input$plot_this)) { 
-      isolate({
-	      pl <- lapply(lapply(input$plot_this, function(x) fromJSON(x)), function(x) values$grfile[[x[2]]][[x[1]]] )
-	      nam <- sapply(pl, '[[', 'desc')
-	      values$lables <- vector(mode='character', length=length(pl))
-	      values$priors <- vector(mode='integer', length=length(pl))
-	      values$include <- rep(TRUE, length(pl))
-	      values$override_min <- rep(NA, length(pl))
-	      values$override_max <- rep(NA, length(pl))
-	      names(values$lables) <- names(values$priors) <- names(values$include) <- names(values$override_min) <- names(values$override_max) <- nam
-	      updateSelectInput(session, inputId='img_ch', choices=nam)
-	      #outputOptions(output, "plotUI", suspendWhenHidden = FALSE)
-      })
-	  }
-	}, priority = 1)
-  
-  #Update subplots options inputs on selection change
-	observe({
-	  if(input$img_ch != '') { 
-      isolate({
-      updateTextInput(session,     'img_lab',     value = as.character( values$lables[input$img_ch] ))
-      updateNumericInput(session,  'img_prior',   value = as.numeric( values$priors[input$img_ch] ))
-      updateCheckboxInput(session, 'img_include', value = as.logical( values$include[input$img_ch] ))
-      updateNumericInput(session,  'img_o_min',   value = as.numeric( values$override_min[input$img_ch] ))
-      updateNumericInput(session,  'img_o_max',   value = as.numeric( values$override_max[input$img_ch] ))
-	   })
-	  }
-	})
-  
-  #Update subplots rective values on inputs change
-  observe({
-    input$img_lab; input$img_prior; input$img_include; input$img_o_min; input$img_o_max
-    isolate({
-      if(input$img_ch == '') return()
-      values$lables[input$img_ch] <- input$img_lab
-      values$priors[input$img_ch] <- input$img_prior
-      values$include[input$img_ch] <- input$img_include
-      values$override_min[input$img_ch] <- input$img_o_min
-      values$override_max[input$img_ch] <- input$img_o_max
-    })
-  })
-  
-  #Hint on Independent color scaling
-  observe({
-    if(!is.na(input$img_o_min) || !is.na(input$img_o_max) ) {
-      if( !input$indi ) session$sendCustomMessage("jsAlert", 'Select "Independent color scaling for heatmaps" on "Axis" tab to activate sub-plot overrides.')
-    }
-
-  })
-  
   #Server initiation actions
   observe({
   	session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = function () { $(document.body).addClass('disconnected'); alert('Connection to server lost!'); location.reload('true'); }")
@@ -614,6 +574,37 @@ shinyServer(function(input, output, clientData, session) {
     system('touch restart.txt')
     session$sendCustomMessage("jsExec", "location.reload(true)")
 
+  })
+
+  #Server  Query String action
+  observe({
+    query <- parseQueryString(clientData$url_search)
+    if(length(query$genome)){
+      #updateSelectInput(session, "file_genome", "Genmoe:", GENOMES, selected = query$genome)
+      #session$sendCustomMessage("jsAlert", sprintf('genome: [%s]', query$genome) )
+      session$sendCustomMessage("jsExec", sprintf("$('#file_genome').children().removeAttr('selected').filter('[value=%s]').attr('selected', 'selected')", query$genome))
+    }
+    
+    if(length(query$load)){
+      #session$sendCustomMessage("jsAlert", sprintf('loading file: [%s]', file.path('publicFiles', query$load)) )
+      values$grfile <- get(load( file.path('publicFiles', query$load) ))
+      #updateSelectInput(session, inputId='publicRdata', choices=LETTERS, label='zzz', selected='Z')
+      updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), query$load)
+      #session$sendCustomMessage("jsExec", sprintf("$('#publicRdata').val('%s').change()", query$load))
+    }
+    for(n in names(query)[!names(query) %in% c('load', 'select')] ){
+      session$sendInputMessage(n, list(value = query[[n]]) )
+      
+    }
+    if( is.character(query$select) ) {
+      #session$sendCustomMessage("jsAlert", sprintf('Selecting plots: [%s]', query$select) )
+      sel <- do.call( rbind, strsplit(strsplit(query$select, ';')[[1]], ',') )
+      class(sel) <- 'integer'
+      urlSetup$select <- sel
+      session$sendCustomMessage("jsExec", "$('#replot').click()")
+    }
+    #strsplit(strsplit("1,1;3,2", ';')[[1]], ',')
+    # paste(names(reactiveValuesToList(input)), reactiveValuesToList(input), sep = "=", collapse="&")
   })
 
 ##Turn off experimental

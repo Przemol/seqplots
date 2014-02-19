@@ -21,12 +21,33 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='') {
 					cat("<td>", names(grfile)[j], "</td>")
 					for (i in 1:length(grfile[[j]])) {
 						cat('<td>')
-						if ((i %in% checked[,1]) & (j %in% checked[,2]) ) {
-							cat('<input type="checkbox" name="plot_this" value="',toJSON(c(i,j)) ,'" checked />')
+						if ( any( apply(checked, 1, identical, c(i,j)) ) ) {
+							cat('<input type="checkbox" name="plot_this" value="[',i,',',j,']" checked />', sep='')
 						} else {
-							cat('<input type="checkbox" name="plot_this" value="',toJSON(c(i,j)) ,'" />')
+							cat('<input type="checkbox" name="plot_this" value="[',i,',',j,']" />', sep='')
 						}
-						if (CC) cat('<br /><input type="color" name="plot_col" id="col_',i,'x', j,'" value="',cltab[j,i] ,'" style="width:25px; display:none;" />', sep='')
+						if (CC) {
+             
+						  cat('<div class="div_separator div_setup"  style="display:none; min-width:90px;"><hr /></div>')
+              
+              cat('<div class="div_color div_setup"  style="display:none">
+                    <input type="color" name="plot_col" id="color_',i,'x', j,'" value="#FFFFFF" style="width:60px;" title="Set a label here." data-placement="left"/>  </div> ', sep='')
+              
+              cat('<div class="div_label div_setup"  style="display:none">
+                  <input type="text"   id="label_',i,'x', j,'" style="width:60px" placeholder="Label..." title="Set a label here." data-placement="left"/> </div> ', sep='')
+              
+              cat('<div class="div_prior div_setup" style="display:none">
+                  <input type="number" id="prior_',i,'x', j,'" style="width:60px" value=0 title="Set priority here." data-placement="left"/> </div> ', sep='')
+              
+              cat('<div class="div_inc div_setup"  style="display:none; min-width:91px">
+                  <select id="inc_',i,'x', j,'" style="width:85px" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select></div> ', sep='')
+              
+              cat('<div class="div_min div_max div_setup"   style="display:none; min-width:127px"">
+                  <input type="number"     id="min_',i,'x', j,'" style="width:40px" title="Heatmap MIN limit."/> - <input type="number"     id="max_',i,'x', j,'" style="width:40px" title="Heatmap MAX limit.."/> </div> ', sep='')
+
+              
+              
+						}
 						cat('</td>')
 					}	
 					cat("</tr>")

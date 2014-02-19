@@ -4,12 +4,11 @@ mcDoParallel <- quote({
     #common
     is.null(list(
       input$plot_this, input$xmin1, input$xmin2, input$xauto, input$title, input$xlabel, input$ylabel, input$scale_signal, input$legend,
-      input$legend_font_size, input$axis_font_size, input$labels_font_size, input$title_font_size, input$lnv, input$lnh, values$priors, values$lables
+      input$legend_font_size, input$axis_font_size, input$labels_font_size, input$title_font_size, input$lnv, input$lnh, values$priors, values$lables, reactiveValuesToList(subplotSetup)
     ))
     
     if (!input$img_heatmap) { 
       #colors
-      is.null( sapply( lapply(input$plot_this, function(x) fromJSON(x)), function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) ) )
       is.null(list(
         input$yauto, input$ymin1, input$ymin2, input$cust_col, input$ee,  input$lnh_pos,
         legend_pos=input$legend_pos, legend_ext_pos=input$legend_ext_pos, legend_ext=input$legend_ext
