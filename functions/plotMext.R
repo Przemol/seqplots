@@ -50,8 +50,17 @@ plotMext <- function(INPUTS, desc1="", y1=NULL, y2=NULL, x1=NULL, x2=NULL, type=
 #			legend("topright", legendText, col=cols, bg=rainbow(1, alpha=0),  bty="n", cex=cex.legend, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2), lwd=15, pch=0, lty=0)
 #		}
 #		abline( v=ln.v, h=ln.h, col="gray" )
-	
-	if (type == 'pdf') pdf(pdf.name, width = pdf.size.X , height = pdf.size.Y, onefile = FALSE, paper = "special") #, encoding = "TeXtext.enc")
+if (type == 'legend') {
+  legendText <- sapply(INPUTS, '[[', 'desc')
+  plot.new()
+  if(Leg) {
+    legend(legend_pos, legendText, col=cols, bg=rainbow(1, alpha=0),  bty="n", cex=cex.legend, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2), lwd=15, pch=0, lty=0)
+  }
+  if(EE && legend_ext) { 
+    legend(legend_ext_pos, c("Mean\n(solid line)","Standard error\n(dark filed)", "95% CI\n(light field)"), pch=c(-1, 0, 0),  title="Fields and lines legend", lwd=c(3,15,15), lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), bg=rainbow(1, alpha=0), bty="n", cex=cex.legend, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2)) 
+  }
+} else {
+  if (type == 'pdf') pdf(pdf.name, width = pdf.size.X , height = pdf.size.Y, onefile = FALSE, paper = "special") #, encoding = "TeXtext.enc")
 		par(mar=c(3.2+cex.lab, 3.2+cex.lab, 2+cex.main, 3))
 		for (i in 1:mm) {
 			INPUT <- INPUTS[[i]]
@@ -69,14 +78,9 @@ plotMext <- function(INPUTS, desc1="", y1=NULL, y2=NULL, x1=NULL, x2=NULL, type=
     }
 		abline( v=ln.v, h=ln.h, col="gray" )
 	if (type == 'pdf') dev.off()
+}
 	
-	if (type == 'legend') {
-		pdf(pdf.name, width = 10.0, height = 10.0, onefile = FALSE, paper = "special") #, encoding = "TeXtext.enc")
-		plot.new()
-		if(EE) { legend("topleft", c("Mean\n(solid line)","Standard error\n(dark filed)", "95% CI\n(light field)"), pch=c(-1, 0, 0),  title="Fields and lines legend", lwd=c(3,15,15), lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), bg=rainbow(1, alpha=0), bty="n", cex=1, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2)) }
-		legend("topright", legendText, col=cols, bg=rainbow(1, alpha=0),  bty="n", cex=1, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2), lwd=15, pch=0, lty=0)
-		dev.off()
-	}
+
 	
 	#if (pdf) {dev.off()}
 	
