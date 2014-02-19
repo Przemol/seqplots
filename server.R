@@ -401,11 +401,15 @@ shinyServer(function(input, output, clientData, session) {
 	#Clusters download handler
 	output$downloadClusters <- downloadHandler(
 	  filename = function() {
-	    paste('Clusters_', gsub(' ', '_', Sys.time()), '.txt', sep='')
+	    paste('Clusters_', gsub(' ', '_', Sys.time()), '.csv', sep='')
 	  },
 	  content = function( file ) {
-      if(!nchar(input$clusters)) stop('Plot heatmap with clusters first!')
-	    cat(fromJSON(input$clusters), sep='\n', file=file)
+	    if(!nchar(input$clusters)) stop('Plot heatmap with clusters first!')
+	    infile <- file.path( 'files', names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ) )
+      gr <- import(infile); elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
+	    gr$original_order <- 1:length(gr); gr$clusters <- fromJSON(input$clusters)
+	    write.csv(as.data.frame(gr), file=file, rwo.names = FALSE)
+	    #cat(fromJSON(input$clusters), sep='\n', file=file)
 	  }
 	)
 	
@@ -648,6 +652,7 @@ shinyServer(function(input, output, clientData, session) {
       session$sendCustomMessage("jsExec", "$('#replot').click()")
     }
     #strsplit(strsplit("1,1;3,2", ';')[[1]], ',')
+    # paste(names(reactiveValuesToList(input)), reactiveValuesToList(input), sep = "=", collapse="&")
   })
 
 ##Turn off experimental
