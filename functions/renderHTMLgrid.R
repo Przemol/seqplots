@@ -21,7 +21,7 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='') {
 					cat("<td>", names(grfile)[j], "</td>")
 					for (i in 1:length(grfile[[j]])) {
 						cat('<td>')
-						if ((i %in% checked[,1]) & (j %in% checked[,2]) ) {
+						if ( any( apply(checked, 1, identical, c(i,j)) ) ) {
 							cat('<input type="checkbox" name="plot_this" value="[',i,',',j,']" checked />', sep='')
 						} else {
 							cat('<input type="checkbox" name="plot_this" value="[',i,',',j,']" />', sep='')
