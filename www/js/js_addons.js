@@ -96,7 +96,7 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
                     "mData": null,
                     "bSortable": false,
                     "mRender": function ( data, type, row ) {
-                      return '<a class="btn btn-mini no_select" href="files/' + row[0] + '">'+'<i class="icon-download-alt icon-large no_select"></i></a>'
+                      return '<a class="btn btn-mini no_select" href="files/' + row[0] + '" target="_blank">'+'<i class="icon-download-alt icon-large no_select"></i></a>'
                     }
                   },
                   { "sTitle": '<i class="icon-trash icon-large""></i>',
