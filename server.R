@@ -552,57 +552,6 @@ shinyServer(function(input, output, clientData, session) {
 
 	})
   
-  #Set up subplots option engine on new plotset and show plotUI (checkboxes)
-	observe({
-	  if(!is.null(input$plot_this)) { 
-      isolate({
-	      pl <- lapply(lapply(input$plot_this, function(x) fromJSON(x)), function(x) values$grfile[[x[2]]][[x[1]]] )
-	      nam <- sapply(pl, '[[', 'desc')
-	      values$lables <- vector(mode='character', length=length(pl))
-	      values$priors <- vector(mode='integer', length=length(pl))
-	      values$include <- rep(TRUE, length(pl))
-	      values$override_min <- rep(NA, length(pl))
-	      values$override_max <- rep(NA, length(pl))
-	      names(values$lables) <- names(values$priors) <- names(values$include) <- names(values$override_min) <- names(values$override_max) <- nam
-	      updateSelectInput(session, inputId='img_ch', choices=nam)
-	      #outputOptions(output, "plotUI", suspendWhenHidden = FALSE)
-      })
-	  }
-	}, priority = 1)
-  
-  #Update subplots options inputs on selection change
-	observe({
-	  if(input$img_ch != '') { 
-      isolate({
-      updateTextInput(session,     'img_lab',     value = as.character( values$lables[input$img_ch] ))
-      updateNumericInput(session,  'img_prior',   value = as.numeric( values$priors[input$img_ch] ))
-      updateCheckboxInput(session, 'img_include', value = as.logical( values$include[input$img_ch] ))
-      updateNumericInput(session,  'img_o_min',   value = as.numeric( values$override_min[input$img_ch] ))
-      updateNumericInput(session,  'img_o_max',   value = as.numeric( values$override_max[input$img_ch] ))
-	   })
-	  }
-	})
-  
-  #Update subplots rective values on inputs change
-  observe({
-    input$img_lab; input$img_prior; input$img_include; input$img_o_min; input$img_o_max
-    isolate({
-      if(input$img_ch == '') return()
-      values$lables[input$img_ch] <- input$img_lab
-      values$priors[input$img_ch] <- input$img_prior
-      values$include[input$img_ch] <- input$img_include
-      values$override_min[input$img_ch] <- input$img_o_min
-      values$override_max[input$img_ch] <- input$img_o_max
-    })
-  })
-  
-  #Hint on Independent color scaling
-  observe({
-    if(!is.na(input$img_o_min) || !is.na(input$img_o_max) ) {
-      if( !input$indi ) session$sendCustomMessage("jsAlert", 'Select "Independent color scaling for heatmaps" on "Axis" tab to activate sub-plot overrides.')
-    }
-  })
-  
   #Server initiation actions
   observe({
   	session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = function () { $(document.body).addClass('disconnected'); alert('Connection to server lost!'); location.reload('true'); }")
@@ -627,6 +576,7 @@ shinyServer(function(input, output, clientData, session) {
 
   })
 
+  #Server  Query String action
   observe({
     query <- parseQueryString(clientData$url_search)
     if(length(query$genome)){
@@ -648,7 +598,9 @@ shinyServer(function(input, output, clientData, session) {
     }
     if( is.character(query$select) ) {
       #session$sendCustomMessage("jsAlert", sprintf('Selecting plots: [%s]', query$select) )
-      urlSetup$select <- do.call( rbind, strsplit(strsplit(query$select, ';')[[1]], ',') )
+      sel <- do.call( rbind, strsplit(strsplit(query$select, ';')[[1]], ',') )
+      class(sel) <- 'integer'
+      urlSetup$select <- sel
       session$sendCustomMessage("jsExec", "$('#replot').click()")
     }
     #strsplit(strsplit("1,1;3,2", ';')[[1]], ',')

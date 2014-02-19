@@ -254,12 +254,10 @@ shinyUI(
 								            div(class='span4',conditionalPanel( condition = "input.legend_ext == true", selectInput("legend_ext_pos", "-> position:", c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center"),  "topleft" )))
 								        ),
 												sliderInput("legend_font_size", "Legend font size:", 0.5, 10, 1.5, 0.5, ticks = TRUE, animate = TRUE)
-            
-										#)
 								),
 					#5) HEATMAP SPECIFIC OPTIONS
 								tabPanel(value = 'panel5', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
-									#conditionalPanel(condition = "output.showplot", 
+									#conditionalPanel(condition = "input.img_heatmap", 
 										
 									checkboxInput("heatmapzauto", "Set manual heatmap colors limits", FALSE),
 									conditionalPanel( condition = "input.heatmapzauto == true",
@@ -280,33 +278,12 @@ shinyUI(
 									                      div(class='span4', HTML('Mid: <input type="color" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
 									                      div(class='span4', HTML('Max: <input type="color" id="heat_csp_max" value="#00008B" style="width:40px;" title=""/>'))
 									                  )
-									)
-									
-				                               
-									
-										
-										
+									)	
 									#)
 								),
 					#6) Subplot options               
 						    tabPanel(value = 'panel6', title=tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Subplot options"), #"Subplots",
-                    
-						        checkboxGroupInput('subplot_options', 'Set sub-plot specific:', c('Colors'='color', 'Label'='label', 'Priority'='prior'), selected = NULL),
-                    tags$hr(),    
-                    
-                    
-						        selectInput(inputId='img_ch', label='Choose sub-plot:', ''),
-						        textInput(inputId='img_lab', label='Sub-plot label:', ''),
-						        numericInput(inputId='img_prior', label='Sub-plot priority:', 0),
-						        HTML('<br /><span class="label label-info " >Heatmap setup</span>'),
-						        div(class="alert alert-info text-center",
-						          checkboxInput("indi", "Independent color scaling for heatmaps", FALSE),
-						          checkboxInput(inputId='img_include', label='Include for sorting/clustering', TRUE),
-						          conditionalPanel(condition = "input.indi",
-						            numericInput(inputId='img_o_min', label='Sub-plot override min value:', NA),
-						            numericInput(inputId='img_o_max', label='Sub-plot override max value:', NA)
-						          )
-						        )
+						        checkboxGroupInput('subplot_options', 'Set sub-plot specific:', c('Colors'='color', 'Label'='label', 'Priority'='prior'), selected = NULL)
 						    ),
 					#7) BATCH
 						    tabPanel(tags$i(class="icon-gears icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations"), #"Batch", 
