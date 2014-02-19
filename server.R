@@ -625,12 +625,22 @@ shinyServer(function(input, output, clientData, session) {
 
   observe({
     query <- parseQueryString(clientData$url_search)
+    if(length(query$genome)){
+      #updateSelectInput(session, "file_genome", "Genmoe:", GENOMES, selected = query$genome)
+      #session$sendCustomMessage("jsAlert", sprintf('genome: [%s]', query$genome) )
+      session$sendCustomMessage("jsExec", sprintf("$('#file_genome').children().removeAttr('selected').filter('[value=%s]').attr('selected', 'selected')", query$genome))
+    }
+    
     if(length(query$load)){
       #session$sendCustomMessage("jsAlert", sprintf('loading file: [%s]', file.path('publicFiles', query$load)) )
       values$grfile <- get(load( file.path('publicFiles', query$load) ))
+      #updateSelectInput(session, inputId='publicRdata', choices=LETTERS, label='zzz', selected='Z')
+      updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), query$load)
+      #session$sendCustomMessage("jsExec", sprintf("$('#publicRdata').val('%s').change()", query$load))
     }
     for(n in names(query)[!names(query) %in% c('load', 'select')] ){
       session$sendInputMessage(n, list(value = query[[n]]) )
+      
     }
     if( is.character(query$select) ) {
       #session$sendCustomMessage("jsAlert", sprintf('Selecting plots: [%s]', query$select) )
