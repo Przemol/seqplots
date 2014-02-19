@@ -106,9 +106,11 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
   }
 }
 
-runGalaxy <- function(datafull, axhline=NULL, wigcount=4, titles=rep('', wigcount),	bins=1:(ncol(datafull)/wigcount), 
+###############################################################################
+
+heatmapPlotWrapper <- function(datafull, axhline=NULL, wigcount=4, titles=rep('', wigcount),	bins=1:(ncol(datafull)/wigcount), 
 		lfs=1.75, afs=1.5, xlabel='ylab', Leg=TRUE, autoscale=TRUE, lgfs=1.1, zmin=0, zmax=10, ln.v=TRUE, e=NULL, xlim=NULL, ylabel="", s = 0.01, indi=TRUE,
-    o_min=NA, o_max=NA) {
+    o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL) {
 	#datafull <- read.table(siteprof[1],sep=",",header=F)
 	
 	#lg <- !apply(is.na(datafull), 1, any)
@@ -123,8 +125,17 @@ runGalaxy <- function(datafull, axhline=NULL, wigcount=4, titles=rep('', wigcoun
 #	step=bin
 	
 	#axvline="True"
-	gcol <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
+  colvec[ grepl('#ffffff', colvec) ] <- NA
+  ncollevel = 64
+  if(length(colorspace)) {
+    gcol <- colorRampPalette(colorspace)
+  }else {
+    gcol <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
+  }
+  
 	
+  #gcol <- colorRampPalette(c("#053061","#2166AC","#4393C3","#92C5DE","#D1E5F0","#F7F7F7","#FDDBC7","#F4A582","#D6604D","#B2182B","#67001F"), bias=1)   #color list
+
 
 	min <- min(datafull, na.rm=TRUE)
 	max <- max(datafull, na.rm=TRUE)
@@ -133,8 +144,6 @@ runGalaxy <- function(datafull, axhline=NULL, wigcount=4, titles=rep('', wigcoun
 	
 
 	
-	# set color map
-	#ColorRamp <- colorRampPalette(c("#053061","#2166AC","#4393C3","#92C5DE","#D1E5F0","#F7F7F7","#FDDBC7","#F4A582","#D6604D","#B2182B","#67001F"), bias=1)(10000)   #color list
 
 	
   if (!indi) {
@@ -145,8 +154,8 @@ runGalaxy <- function(datafull, axhline=NULL, wigcount=4, titles=rep('', wigcoun
     } 
     par(oma = c(0, 0, 3, 0))
 	  layout(matrix(seq(wigcount+1), nrow=1, ncol=wigcount+1), widths=c(rep(12/wigcount,wigcount),1), heights=rep(1,wigcount+1))
-    ColorRamp <-gcol(10000)
-    ColorLevels <- seq(to=zmax,from=zmin, length=10000)   #number sequence
+    ColorRamp <-gcol(ncollevel)
+    ColorLevels <- seq(to=zmax,from=zmin, length=ncollevel)   #number sequence
   } else {
     #par(mar=c(2.5, 4, 6, 2.5))
     set.panel(1, wigcount)
@@ -168,7 +177,7 @@ runGalaxy <- function(datafull, axhline=NULL, wigcount=4, titles=rep('', wigcoun
     if( !indi ) {
       data[data<zmin] <- zmin
       data[data>zmax] <- zmax
-      ColorRamp_ex <- ColorRamp[round( (min(data, na.rm=TRUE)-zmin)*10000/(zmax-zmin) ) : round( (max(data, na.rm=TRUE)-zmin)*10000/(zmax-zmin) )]
+      ColorRamp_ex <- ColorRamp[round( (min(data, na.rm=TRUE)-zmin)*ncollevel/(zmax-zmin) ) : round( (max(data, na.rm=TRUE)-zmin)*ncollevel/(zmax-zmin) )]
       par(mar=c(5.1, 6, 4.1, 0))
       image(bins, 1:nrow(data), t(data), axes=TRUE, col=ColorRamp_ex, xlab=xlabel, ylab=ylabel, xlim=if (is.null(xlim)) range(bins) else xlim, add=FALSE, ylim=c(nrow(data),1),
             useRaster=raster, panel.first=rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col="lightgrey"))
@@ -186,10 +195,12 @@ runGalaxy <- function(datafull, axhline=NULL, wigcount=4, titles=rep('', wigcoun
       if( is.na(o_min[i]) ) keycolor_lim[1] <- zmin else keycolor_lim[1] <- o_min[i]
       if( is.na(o_max[i]) ) keycolor_lim[2] <- zmax else keycolor_lim[2] <- o_max[i]
       
+      col <- if( ifelse(is.character(colvec[i]), !is.na(colvec[i]), FALSE) ) colorRampPalette(c('white', colvec[i]))(ncollevel) else gcol(ncollevel)
+      
       par(cex=1, cex.main=lfs/1.4, cex.lab=lfs/1.2, cex.axis=afs/1.2)
       imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlabel, ylab=ylabel, 
               xlim=if (is.null(xlim)) range(bins) else xlim, 
-              zlim=keycolor_lim,
+              zlim=keycolor_lim, col=col,
               legend.width=1, horizontal=TRUE, useRaster=raster)
     }
 	
