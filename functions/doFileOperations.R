@@ -6,16 +6,21 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   # 		seqlevels(tss) <- chrnames[col]
   # 		return(tss)
   # 	}
-  testChromosomeNames <-  function(tss, gnm) {
+  testChromosomeNames <-  function(tss, gnm, ret=FALSE) {
     if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
       try( seqnameStyle(tss) <- seqnameStyle(gnm) )
+      if( !all(seqlevels(tss) %in% seqlevels(gnm)) & ret ) {
+        seqlevels(tss) <- as.character(as.roman( gsub('^chr', '', gsub('.*(M|m).*', 'M', seqlevels(tss)), ignore.case = TRUE) ))
+        try( seqnameStyle(tss) <- seqnameStyle(gnm) )
+      }
       if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) 
         stop('Chromosome names provided in the file does not match ones defined in reference genome. \nINPUT: [', 
              paste(seqlevels(tss)[!seqlevels(tss) %in% seqlevels(gnm)], collapse=', '), "]\nGENOME: [", paste(head(seqlevels(gnm), 5), collapse=', '), ', ...]', call. = FALSE) 
     }
+    if(ret) return(tss)
   }
   testFeatureFile <-  function(PATH, gnm){
-    tss <- try(import(file(PATH), asRangedData=FALSE), silent = TRUE)
+    tss <- try(import(file(PATH), asRangedData=FALSE, trackLine = FALSE), silent = TRUE)
     if (class(tss) == "try-error") {
       nfields <- count.fields(PATH, comment.char = '', skip = 1)
       problem <- which(nfields != median( head(nfields, 1000) ))+1
@@ -24,8 +29,6 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     testChromosomeNames(tss, gnm)
   }
 
-  
-  
   if ( dbGetQuery(con, paste0("SELECT count(*) FROM files WHERE name = '",basename(x),"'")) > 0 )
     stop('File already exists, change the name or remove old one.', call. = FALSE)
   
@@ -38,7 +41,6 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   
   #File does not exist
   if( !file.exists(x) ) stop('Cannot add, file not on the server!')
-  
   #import(text=grep('^#', readLines('sample.bed.gz'), invert = TRUE, value=TRUE), format='bed') 
   
   if( grepl('.(gff|GFF|gff.gz|GFF.gz)$', x) ) {
@@ -55,19 +57,16 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     message('BW file added', x)
     
   } else if( grepl('.(wig|WIG|wig.gz|WIG.gz)$', x) ){
-    pth <- gsub('.(wig|WIG|wig.gz|WIG.gz)$', '.bw', x) ;
+    pth <- gsub('.(wig|WIG|wig.gz|WIG.gz)$', '.bw', x);
     try_result <- try({ 
       #stop('test'); pth <- path(wigToBigWig(file.path('files', x), gnm)); 
       .Call(  get('BWGFile_fromWIG', environment(wigToBigWig)), x, seqlengths(gnm), pth )
     }) 
     if(is(try_result, 'try-error')) {
       try_result2 <<- try({	
-        import_file <- file(x)
-        wig <- import.wig(import_file, asRangedData=FALSE);
-        if( !all(seqlevels(wig) %in% seqlevels(gnm)) ) { 
-          seqnameStyle(wig) <- seqnameStyle(gnm)
-          if( !all(seqlevels(wig) %in% seqlevels(gnm)) ) stop('Chromosome names do not exist in selected genome!') 
-        }
+        wig <- import.wig(file(x), asRangedData=FALSE, trackLine = FALSE);
+        if( grepl('list', class(wig), ignore.case = TRUE) ) wig <- unlist(wig, use.names=FALSE)
+        wig <- testChromosomeNames(wig , gnm, ret=TRUE)
         seqlengths(wig) <- seqlengths(gnm)[seqlevels(wig)];
         export.bw(coverage(wig, weight='score'), pth);
       })
