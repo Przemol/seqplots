@@ -45,6 +45,10 @@
                     <i class="icon-ban-circle icon-white"></i>
                     <span>Cancel upload</span>
                 </button>
+                    <button class="btn btn-small defaults_btn" onClick="showDef(this)">
+                    <i class="icon-star icon-white"></i>
+                    <span>Set defaults...</span>
+                </button>
                 <!-- 
                 <button type="button" class="btn btn-danger delete" disabled>
                     <i class="icon-trash icon-white"></i>
@@ -69,6 +73,24 @@
         </div>
         <!-- The loading indicator is shown during file processing -->
         <div class="fileupload-loading"></div>
+        <div class="fileupload-defaults", style="display:none;">
+          <hr />  
+          <div class="row">
+            <div class="span2">
+              <div class="input-prepend"><button class="btn"><i class="icon-user"></i></button>
+									<input name="user" class="f1_user_default" type="text" placeholder="User..." style='width:100px'></div>
+            </div>
+            <div class="span2">
+              <div class="input-prepend"><button class="btn"><i class="icon-info-sign"></i></button>
+									<select name="genome" class='f1_genome_default' style='width:100px'></select></div>
+            </div>
+            <div class="span3">
+                   <button class="btn" onClick="submitDef(this)"><i class="icon-ok"></i><span> Submit</span></button>
+                   <button class="btn" onClick="$('.fileupload-defaults').hide()"><i class="icon-ban-circle"></i><span> Cancel</span></button>
+            </div>
+          </div>
+          <hr />  
+        </div>
         <br>
         <!-- The table listing the files available for upload/download -->
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
@@ -116,10 +138,13 @@
         <td class="preview"><span class="fade"></span></td>
         <td class="name" style="max-width:250px; word-break:break-all;" ><span>{%=file.name%}</span></td>
         <td class="size" style="width:100px;"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        
         <td class="user"><span>		<div class="input-prepend"><button class="btn" onclick=copyAnnotation(this)><i class="icon-user"></i></button>
-									<input required name="user" type="text" placeholder="User..." style='width:100px'></div>	</span></td>
+									<input required name="user" class="f1_user" type="text" placeholder="User..." style='width:100px'></div>	</span></td>
+                  
         <td class="genome"><span>	<div class="input-prepend"><button class="btn" onclick=copyGenome(this)><i class="icon-info-sign"></i></button>
-									<select required name="genome" class='f1_genome' placeholder="Genome..." style='width:100px'></div>	</span></td>
+									<select required name="genome" class='f1_genome' style='width:100px'></select></div>	</span></td>
+                  
         <td class="comments"><span>	<div class="input-prepend"><button class="btn" onclick=copyAnnotation(this)><i class="icon-pencil"></i></button>"> 
 									<input name="comments"  type="text" placeholder="Comments..." style='width:100px'></div>		</span></td>
         
