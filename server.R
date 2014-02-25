@@ -45,7 +45,7 @@ shinyServer(function(input, output, clientData, session) {
   sourceDir('functions')
   
   if( Sys.getenv('root') != '' ) setwd(Sys.getenv('root'))
-	addResourcePath(prefix='files', directoryPath='./files')
+	suppressMessages( addResourcePath(prefix='files', directoryPath='./files') )
 	cat3 <- function(x) { parallel:::sendMaster(c('calcMsg1', as.character(x))) }
 	cat4 <- function(x) { parallel:::sendMaster(c('calcMsg2', as.character(x))) }
   
@@ -167,7 +167,7 @@ shinyServer(function(input, output, clientData, session) {
 		}
 		#H[is.na(H)] <- 0
 		if(input$img_sort) { H <- H[order(rowMeans(Hclc, na.rm=TRUE), decreasing = TRUE),] }
-		if(input$img_clusters > 1) {
+		if(input$img_clusters > 1 & input$img_clstmethod == 'kmeans') {
 			Hcl <- Hclc; Hcl[is.na(Hcl)] <- 0
 			k<-kmeans(Hcl, input$img_clusters) #OPTIONAL: Change this line for differnt number of clusters
 			kcenter_sum <- apply(k$centers,1,sum)
@@ -407,8 +407,10 @@ shinyServer(function(input, output, clientData, session) {
 	    if(!nchar(input$clusters)) stop('Plot heatmap with clusters first!')
 	    infile <- file.path( 'files', names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ) )
       gr <- import(infile); elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
-	    gr$original_order <- 1:length(gr); gr$clusters <- fromJSON(input$clusters)
-	    write.csv(as.data.frame(gr), file=file, rwo.names = FALSE)
+	    colnames(elementMetadata(gr)) <- paste0('metadata_', colnames(elementMetadata(gr)))
+	    gr$original_order <- 1:length(gr); gr$ClusterID <- fromJSON(input$clusters)
+      out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
+	    write.csv(out, file=file, row.names = FALSE)
 	    #cat(fromJSON(input$clusters), sep='\n', file=file)
 	  }
 	)
@@ -561,7 +563,7 @@ shinyServer(function(input, output, clientData, session) {
     #sapply(ls(session$request), function(x) session$request[[x]])
   	#sapply(names(session$clientData), function(x) session$clientData[[x]])
   	#str(as.list(session$clientData))
-    message(Sys.time(), ' -> Running at ', session$request$HTTP_ORIGIN, session$clientData$url_hostname, ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']')
+    message(Sys.time(), ' -> Running at ', session$request$HTTP_ORIGIN, ', ', session$clientData$url_hostname, ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']')
   })
   session$onSessionEnded(function() { message(Sys.time(), ' -> Client connection closed', ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']' ) })
   
