@@ -55,9 +55,9 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 				  
 				  cat4("Processing matrix...")
 				  if (!ignore_strand){ 
-				    sum[as.character(strand(sel))=='-'] <- lapply(sum[as.character(strand(sel))=='-'], rev)
+				    sum[as.character(strand(gr))=='-'] <- lapply(sum[as.character(strand(gr))=='-'], rev)
 				  }
-				  M <- matrix(as.numeric(unlist(sum)), nrow=length(sel), byrow = TRUE)
+				  M <- matrix(as.numeric(unlist(sum)), nrow=length(gr), byrow = TRUE)
 				  
 				} else if ( class(trackfiles[[i]]) == 'list' ) {
 
@@ -67,6 +67,7 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 				  
 				  cat4("Searching for motif...")
 				  M <- getSF(GENOME, gr, pattern, seq_win, !add_heatmap, revcomp=revcomp)
+				  M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
 				  
 				  cat4("Binning the motif...")
 				  M <-  t(apply(M, 1, function(x) approx(x, n=ceiling(ncol(M)/bin))$y ))        

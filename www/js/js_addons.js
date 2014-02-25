@@ -259,11 +259,14 @@ $(function() {
   $('i[data-toggle=tooltip]').tooltip();
 	
 	$(document).keydown(function(e){
-    	if (e.keyCode == 13) { 
+    	if ( (e.keyCode == 13) || e.keyCode == 32 && (e.ctrlKey || e.metaKey) ) { 
        		$('#replot').click();
        			return false;
-    		} else if (e.keyCode == 116) { 
+    		} else if (e.keyCode == 82 && (e.ctrlKey || e.metaKey)) { 
        		$('#reactive').click();
+       			return false;
+    		} else if (e.keyCode == 72 && (e.ctrlKey || e.metaKey)) { 
+         	$('#img_heatmap').click();
        			return false;
     		}
 	});
