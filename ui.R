@@ -5,10 +5,14 @@
 # options(RCHART_LIB = 'nvd3')
 
 
+
 # Define UI
 shinyUI(
 		bootstrapPage(
-				
+      
+###############################################################################
+# Head      
+###############################################################################
 				tags$head(
 						# JS error message
 						singleton(tags$script('var error = false; window.onerror =  function() { if (!error) {alert("JavaScript error! Some elements might not work proprely. Please reload the page."); error=true;} }')),		
@@ -51,102 +55,32 @@ shinyUI(
 						# Title
 						tags$title('SeqPlots')
 				),
-				
-				#Page loading modal and mask, pops out just after page loads, removed after all JS loads, stays on JQuery error
-				div(HTML('<div id="load_modal" class="modal" data-backdrop="static" data-show="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-							<div class="modal-header">
-								<h3 id="myModalLabel">Loading...</h3>
-							</div>
-							<div class="modal-body">
-								<div class="progress progress-striped active">
-									<div class="bar" style="width: 100%;"></div>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<a href="." class="btn btn-primary">Reload</a>
-							</div>
-						</div>'), class='load_div'),
+###############################################################################
+# Modals      
+###############################################################################
+        #Page loading modal and mask, pops out just after page loads, removed after all JS loads, stays on JQuery error
+        includeHTML( file.path(Sys.getenv("web", '.'), 'ui/loadModal.html') ),     
 
-				#Calculation progress modal
-				div(id="progressModal", class="modal hide", 'data-backdrop'="false", 'data-keyboard'="false", tabindex=-1,
-					div(class="modal-header", tags$h3(id="progressModalLabel", 'Calculating...')),
-					div(class="modal-body", verbatimTextOutput("summary2"), verbatimTextOutput("summary3"), actionButton('cancel', 'Cancel'))
-				),
-				
+        #Calculation progress modal
+        div(id="progressModal", class="modal hide", 'data-backdrop'="false", 'data-keyboard'="false", tabindex=-1,
+            div(class="modal-header", tags$h3(id="progressModalLabel", 'Calculating...')),
+            div(class="modal-body", verbatimTextOutput("summary2"), verbatimTextOutput("summary3"), actionButton('cancel', 'Cancel'))
+        ),
+
+        ##File management modal
+        eval(parse( file.path(Sys.getenv("web", '.'), 'ui/FileManagementModal.R') )),
+
 				#Animated header
 				#tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">GFplots</a></h2>')), # v1.0b
 				tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">SeqPlots</a></h2>')), # v1.0b
 				
 				#Banner
-				if (Sys.getenv("SHINY_SERVER_VERSION") != '') {div(
-				  HTML('<div class="row" style="margin-left:0px;"><div style="width:318px" class="alert alert-info alert-block span4">
-  										<button type="button" class="close" data-dismiss="alert">&times;</button>
-  											<h4>Update!</h4>
-  											<b>NEW</b> SeqPlot for Mac: <strong><a href="http://ws190.gurdon.private.cam.ac.uk/SeqPlots_0.8.0b.dmg" target="_blank">SeqPlots_0.8.0b.dmg</a></strong><br />
-                        SeqPlots wiki <strong><a href="http://bitbucket.org/przemol/seqplots" target="_blank">HERE</a></strong><br />
-                        Report an error/issue <strong><a href="http://bitbucket.org/przemol/seqplots/issues/new"target="_blank">HERE</a></strong>
-									</div></div>')
-				  )} else {
-				    tags$span()
-				  },
-									
+        eval(parse( file.path(Sys.getenv("web", '.'), 'ui/banner.R') )),
+				
 			
-				
-				
-				#Dynamically injected scripts output
-				#uiOutput('scripts'),
-				
-				#File management modal
-				tagList(
-				  singleton(tags$head(tags$script(src = "js/modal_events.js"))),	
-				  div(id="myModal", class="modal container hide fade", tabindex="-1", role="dialog", 'aria-labelledby'="myModalLabel", 'aria-hidden'="true",
-				      div( class="modal-body",
-				           tabsetPanel(
-				             tabPanel("Tracks", 		div(class='fileMoodalInnerDiv', div("Loading...",id="tracktable")	)),
-				             tabPanel("Features", 	div(class='fileMoodalInnerDiv', div("Loading...",id="featuretable")	)),
-				             tabPanel("Sequence features",   div(class='row', div(class='span4', wellPanel(class='SFform', 
-				                                                       #selectInput("SFgenome", "Reference sequence (genmoe)", GENOMES),
-				                                                       textInput(inputId='SFpattern', label='DNA motif'),
-				                                                       numericInput(inputId='SFbin', label='Sliding window size in base pairs [bp]', value=200, min=10, step=10),
-				                                                       textInput(inputId='SFname', label='Display name'),
-				                                                       checkboxInput(inputId='SFadvanced', label="Plot heatmap or error estimates", value=TRUE),
-				                                                       checkboxInput(inputId='SFrevcomp', label="Match reverse complement as well", value=FALSE),
-                                                               actionButton('SFadd', 'Add'), actionButton('SFreset', 'Reset All'))),
-				                                                       div(class='span7', style='height:450px; overflow:auto;', 'Motifs to add:', verbatimTextOutput("SFsetup") )
-				                                                       
-				                                                       
-				             ))
-				           )
-				      ),
-				      div( class="modal-footer",
-				           div(id='modalToolbar', class='row-fluid',
-				               div(class="span2", 
-                          numericInput("BWbin", "Bin track @ [bp]: ", 10)
-				               ),
-				               div(class="span2", radioButtons('plot_type', 'Choose the plot type', c( 'Point Features', 'Midpoint Features', 'Anchored Features' ) ) ),
-				               div(class="span2", p("Additional options:"), 
-				                   #conditionalPanel( condition = "input.plot_type != 'Anchored Features'", 
-				                   checkboxInput("ignore_strand", "Ignore strand", FALSE),
-				                   #), 
-				                   checkboxInput("rm0", "Remove zeros", FALSE),
-				                   checkboxInput("add_heatmap", "Calculate Heatmap", TRUE)
-				               ),
-				               div(class="span1", style="text-align:right;", 'Plotting distances in [bp]:'),
-				               div(class="span1", numericInput("plot_upstream", "Upstream:", 1000)),
-				               div(class="span1" ,conditionalPanel( condition = "input.plot_type == 'Anchored Features'", id='anchoredHidabeDiv', numericInput("anchored_downstream", "Anchored:", 1000)) ),
-				               div(class="span1", numericInput("plot_downstream", "Downstream:", 1000))
-				           ),
-				           div( class="btn-toolbar",
-				                tags$button(tags$span(tags$i(class="icon-off"), "Close"),	class="btn", 'data-dismiss'="modal"),
-				                tags$button(tags$span(tags$i(class="icon-refresh icon-white"), 'Refresh'),  class="btn action-button btn-success", id="reloadgrid"),
-				                tags$button(tags$span(tags$i(class="icon-trash icon-white"), 'Remove selected files'), 	class='btn btn-danger', onClick='rmSelctedFiles()'),
-				                tags$button(tags$span(tags$i(class="icon-play icon-white"), 'Run calculation'), 			class='btn btn-primary', onClick='sendToCalc()'	)
-				           )
-				           
-				      )
-				  )
-				),
-				
+###############################################################################
+#Siadebar      
+###############################################################################
 				#Sidebar panel definitions
 				sidebarPanel(
 				  
@@ -162,21 +96,15 @@ shinyUI(
 						      downloadLink('downloadClusters', tags$span(tags$i(class="icon-sitemap icon-large")), class="btn btn-small btn-info") #'Clusters indicates'
 						    
 						  )),
-						    div(class="hidden", actionButton('plotHmap', 'Plot')),
-                div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
-						    div(class="img", imageOutput(outputId = "image", width = "1240px", height = "720px") ),
-								div(class='form-inline', 
-                    #checkboxInput("cust_col", "Colors"), HTML(' &#8226; '), 
-										checkboxInput("img_heatmap", "Heatmap"), 
-								    conditionalPanel(condition = "input.img_heatmap", style="display: inline; margin-top",           
-                      HTML(' &#8226; '),numericInput("img_clusters", "k =", 5, min=1), HTML(' &#8226; '),
-										  checkboxInput("img_sort", "Sort")
-								    )
-								)
+						    #div(class="hidden", actionButton('plotHmap', 'Plot')),
+                #div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
+						    div(class="img", imageOutput(outputId = "image", width = "1240px", height = "720px") )
+				
 						)
 					),
-					div(class='row-fluid', div(class='span6',conditionalPanel(condition = "!input.reactive", actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"), HTML('Replot [&crarr;]') )))),
-					    div(class='span6',checkboxInput("reactive", "Reactive plotting [F5]", FALSE)), tags$hr()
+					div(class='row-fluid', 
+              div(class='span5',conditionalPanel(condition = "!input.reactive", actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"), HTML('Replot [&crarr;]') )))),
+					    div(class='span7',checkboxInput("reactive", "Reactive plot [⌘/Ctrl+R]", FALSE)), tags$hr()
 					),
 					
 					tabsetPanel(id='ctltabs',
@@ -257,28 +185,43 @@ shinyUI(
 								),
 					#5) HEATMAP SPECIFIC OPTIONS
 								tabPanel(value = 'panel5', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
-									#conditionalPanel(condition = "input.img_heatmap", 
-										
-									checkboxInput("heatmapzauto", "Set manual heatmap colors limits", FALSE),
+			
+									checkboxInput("img_heatmap", "Preview heatmap [⌘/Ctrl + H]"), 
+									checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
+									div(class='row-fluid',
+									  div(class='span6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'do not cluster'='none'))),
+									  div(class='span6',   
+                        conditionalPanel( condition = "input.img_clstmethod == 'kmeans'", numericInput("img_clusters", "Number of clusters", 5, min=1))
+									  )
+									), tags$br(),
+                  
+									checkboxInput("indi", "Heatmaps have individual color keys", TRUE),
+									checkboxInput("heatmapzauto", "Set default color key limits", FALSE),
+									conditionalPanel( condition = "input.heatmapzauto == false",
+									  div(class='row-fluid',
+									                      div(class='span5', tags$br(), "Color key saturation:"),
+									                      div(class='span7', sliderInput("hsccoef", "Color key saturation:", 0, 0.1, 0.01, NULL, ticks = TRUE, animate = TRUE)									                      )
+									                  )                
+									   
+									),
 									conditionalPanel( condition = "input.heatmapzauto == true",
 									    p( numericInput("zmin1", "-> ", -1), numericInput("zmin2", "-", 10) )
 									),
-									conditionalPanel( condition = "input.heatmapzauto == false",
-									    sliderInput("hsccoef", "Heatmap color scaling coefficient:", 0, 0.1, 0.01, NULL, ticks = TRUE, animate = TRUE)
-									),
-									checkboxInput("indi", "Independent color scaling for heatmaps", FALSE),
-									checkboxInput('heat_include', 'Exclude specific heatmaps from sorting/clustering', FALSE),
 									conditionalPanel( condition = "input.indi == true",
-									    checkboxInput('heat_min_max', 'Override colors limits for specific heatmaps', FALSE)
+									                  checkboxInput('heat_min_max', 'Set individual color key limits', FALSE)
 									),
-									checkboxInput('heat_colorspace', 'Custom colorspace for heatmap', FALSE),
+									checkboxInput('heat_colorspace', 'Set default colorspace', FALSE),
 									conditionalPanel( condition = "input.heat_colorspace == true",
 									                  div(class='row-fluid', 
 									                      div(class='span4', HTML('Min: <input type="color" id="heat_csp_min" value="#FFFFFF" style="width:40px;" title=""/>')),
 									                      div(class='span4', HTML('Mid: <input type="color" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
 									                      div(class='span4', HTML('Max: <input type="color" id="heat_csp_max" value="#00008B" style="width:40px;" title=""/>'))
 									                  )
-									)	
+									),
+									checkboxInput('heat_include', 'Exclude individual heatmaps from sorting/clustering', FALSE)
+							
+					
+										
 									#)
 								),
 					#6) Subplot options               
@@ -317,14 +260,14 @@ shinyUI(
 					,singleton(tags$script(src = "upload/js/md5.js"))
 					,singleton(tags$script(src = "upload/js/main.js"))
 					,singleton(tags$link(rel="stylesheet", type="text/css", href="upload/css/jquery.fileupload-ui.css"))
-					,includeHTML('www/upload/upload.html'),
+					,includeHTML(file.path(Sys.getenv("web", '.'), 'www/upload/upload.html')),
           
 # 					tabsetPanel(
 # 					  tabPanel("Plots selection", 
 					           tags$br(),tags$br(),tags$br(),tags$br(),
 					           div(class="control-group", uiOutput("htmltab") )
 #             ),
-# 					  tabPanel("Interactive lineplot",
+# 					  tabPanel("Interactive lineplot", 
 #                      checkboxInput('interactiveLinePlot', 'Enable intercative plot', FALSE),
 #                      conditionalPanel(condition = "input.interactiveLinePlot", 
 #                         selectInput('chart1Type', label='Select type', choices=c('lineWithFocusChart','lineChart','stackedAreaChart','scatterChart', 'multiBarChart'), selected='lineWithFocusChart'),              
