@@ -254,7 +254,7 @@ $(function() {
 	$('#downloadLegend').tooltip({title:'Legend'});
 	$('#downloadClusters').tooltip({title:'Clusters indicates'});
 	$('#replot').tooltip({title:'Keyboard binding: [ENTER]'});
-	$('#reactive').tooltip({title:'Keyboard binding: [F5]'});
+	$('[for="reactive"]').tooltip({title:'Keyboard binding: [ctrl+R] or [cmd+R]'});
 	$('#spawn').addClass('btn-warning');
   $('i[data-toggle=tooltip]').tooltip();
 	

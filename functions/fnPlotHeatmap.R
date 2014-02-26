@@ -1,10 +1,13 @@
-# TODO: Add comment
-# 
-# Author: przemol
+###############################################################################
+# Wrapper function, plotting the heatmap
 ###############################################################################
 
-
 require(fields)
+
+# Modified image.plot function from "fields" package, the grey rectangle 
+# is used as background for heatmap, making NAs distinguishable from the data
+# rect(usr[1], usr[3], usr[2], usr[4], col="grey")
+###############################################################################
 imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE, 
                      legend.shrink = 0.9, legend.width = 1.2, legend.mar = ifelse(horizontal, 
                                                                                   3.1, 5.1), legend.lab = NULL, legend.line = 2, graphics.reset = FALSE, 
@@ -108,72 +111,43 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
 
 ###############################################################################
 
-heatmapPlotWrapper <- function(datafull, axhline=NULL, wigcount=4, titles=rep('', wigcount),	bins=1:(ncol(datafull)/wigcount), 
+heatmapPlotWrapper <- function(merged, axhline=NULL, nsubplot=4, titles=rep('', nsubplot),	bins=1:(ncol(merged)/nsubplot), 
 		lfs=1.75, afs=1.5, xlabel='ylab', Leg=TRUE, autoscale=TRUE, lgfs=1.1, zmin=0, zmax=10, ln.v=TRUE, e=NULL, xlim=NULL, ylabel="", s = 0.01, indi=TRUE,
     o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL) {
-	#datafull <- read.table(siteprof[1],sep=",",header=F)
-	
-	#lg <- !apply(is.na(datafull), 1, any)
-	#datafull <- datafull[lg,]
-#	wigcount=length(subset)
-	
-#	subtitle=titles
-	step_num <- ncol(datafull)/wigcount
+
+	step_num <- ncol(merged)/nsubplot
   raster <- length(unique(diff(bins)))==1
-#	upstream=x1
-#	downstream=x2
-#	step=bin
 	
-	#axvline="True"
+
   colvec[ grepl('#ffffff', colvec) ] <- NA
   ncollevel = 64
   if(length(colorspace)) {
     gcol <- colorRampPalette(colorspace)
   }else {
     gcol <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
+    #colorRampPalette(c("#053061","#2166AC","#4393C3","#92C5DE","#D1E5F0","#F7F7F7","#FDDBC7","#F4A582","#D6604D","#B2182B","#67001F"))     
   }
-  
-	
-  #gcol <- colorRampPalette(c("#053061","#2166AC","#4393C3","#92C5DE","#D1E5F0","#F7F7F7","#FDDBC7","#F4A582","#D6604D","#B2182B","#67001F"), bias=1)   #color list
+	min <- min(merged, na.rm=TRUE)
+	max <- max(merged, na.rm=TRUE)
 
-
-	min <- min(datafull, na.rm=TRUE)
-	max <- max(datafull, na.rm=TRUE)
-	
-
-	
-
-	
-
-	
   if (!indi) {
     if (autoscale) {
-      zlim <- quantile(datafull, c(s,1-s), na.rm=TRUE)
+      zlim <- quantile(merged, c(s,1-s), na.rm=TRUE)
       zmin<-zlim[1]
       zmax<-zlim[2]
     } 
     par(oma = c(0, 0, 3, 0))
-	  layout(matrix(seq(wigcount+1), nrow=1, ncol=wigcount+1), widths=c(rep(12/wigcount,wigcount),1), heights=rep(1,wigcount+1))
+	  layout(matrix(seq(nsubplot+1), nrow=1, ncol=nsubplot+1), widths=c(rep(12/nsubplot,nsubplot),1), heights=rep(1,nsubplot+1))
     ColorRamp <-gcol(ncollevel)
     ColorLevels <- seq(to=zmax,from=zmin, length=ncollevel)   #number sequence
   } else {
-    #par(mar=c(2.5, 4, 6, 2.5))
-    set.panel(1, wigcount)
+    set.panel(1, nsubplot)
   }
-
 	par(cex=1, cex.main=lfs/1.4, cex.lab=lfs/1.2, cex.axis=afs/1.2)
-	#
-	for (i in seq(wigcount)) {
-		# draw heatmap
-		data <- datafull[,seq((i-1)*step_num+1,i*step_num)]
-
-
-		
-		
-#		usr <- par('usr')
-#		image(bins, 1:nrow(data), matrix(0, length(bins), nrow(data)), axes=FALSE)
-#
-#		rect(usr[1], usr[3], usr[2], usr[4], col="grey")
+  
+	for (i in seq(nsubplot)) {
+		data <- merged[,seq((i-1)*step_num+1,i*step_num)]
+    
     if( !indi ) {
       data[data<zmin] <- zmin
       data[data>zmax] <- zmax
@@ -181,6 +155,7 @@ heatmapPlotWrapper <- function(datafull, axhline=NULL, wigcount=4, titles=rep(''
       par(mar=c(5.1, 6, 4.1, 0))
       image(bins, 1:nrow(data), t(data), axes=TRUE, col=ColorRamp_ex, xlab=xlabel, ylab=ylabel, xlim=if (is.null(xlim)) range(bins) else xlim, add=FALSE, ylim=c(nrow(data),1),
             useRaster=raster, panel.first=rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col="lightgrey"))
+      
     } else {
       if (autoscale) {
         zlim <- quantile(data, c(s,1-s), na.rm=TRUE)
@@ -199,28 +174,13 @@ heatmapPlotWrapper <- function(datafull, axhline=NULL, wigcount=4, titles=rep(''
       
       par(cex=1, cex.main=lfs/1.4, cex.lab=lfs/1.2, cex.axis=afs/1.2)
       imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlabel, ylab=ylabel, 
-              xlim=if (is.null(xlim)) range(bins) else xlim, 
+              xlim=if (is.null(xlim)) range(bins) else xlim,  ylim=c(nrow(data),1),
               zlim=keycolor_lim, col=col,
               legend.width=1, horizontal=TRUE, useRaster=raster)
+      
     }
-	
-		#if (subtitle==True){
-			title(main=titles[i],cex=2)
-		#}
-#		sepxy=((downstream+upstream)/step)%/%5*step
-#		sepy=floor(ymax/5/10^floor(log10(ymax/5)))*10^floor(log10(ymax/5)) #the three 5 this line is var before.
-#		if ((upstream+downstream)/step>=5){
-#			axis(1,at=(seq(from=-(upstream%/%sepxy*sepxy),to=downstream,by=sepxy)+round(upstream/step)*step)/step+0.5,seq(from=-(upstream%/%sepxy*sepxy),to=downstream,by=sepxy))
-#		} else {
-#			axis(1,at=seq(6)-0.5,seq(-round(upstream/step)*step,by=step,length=6))
-#		}
-#		
-#		if (i==1){
-#			axis(2,at=seq(from=0,to=ymax,by=sepy),seq(from=0,to=ymax,by=sepy))
-#		}
-		box()
+		title(main=titles[i],cex=2); box()
 		if (!is.null(axhline)){
-			#draw abline
 			hi = 0
 			for (i in axhline){
 				hi = hi+i
@@ -232,14 +192,12 @@ heatmapPlotWrapper <- function(datafull, axhline=NULL, wigcount=4, titles=rep(''
 		}
 	}
 	
-	#draw legend
+	#draw legend/color key for multiple heatmaps
 	if(Leg & !indi) {
 		par(mar=c(6.1,3,4.1,2), cex=1.2, cex.axis=lgfs/1.2)
 		image(1, ColorLevels,matrix(data=ColorLevels, ncol=length(ColorLevels),nrow=1),col=ColorRamp, xlab="", ylab="", xaxt="n", yaxt="n")
 		axis(2,seq(zmin,zmax,length.out=10), format(seq(zmin,zmax,length.out=10), digits=2) )
 		box()
 	}
-	#mtext("test_m", side = 3, line = 1, outer = TRUE, cex = 3)
-	
 	layout(1)
 }
