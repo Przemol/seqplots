@@ -40,8 +40,14 @@
 }
 
 #img_clusters {
-		width: 30px;
+		width: 50px;
 }
+
+#img_clstmethod {
+  	width: 128px;
+}
+
+
 
 .fileMoodalInnerDiv {
 	height: 455px; 
@@ -119,6 +125,9 @@ div.tab-content {
 input#filter_all {
 	width: 200px;
 	margin-right: 10px;
+}
+label[for="hsccoef"] {
+    display: none;;
 }
 
 input#BWbin {

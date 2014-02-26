@@ -1,4 +1,29 @@
-# Function to process extrack genomic signal from trackfiles and/or motif data, calculate statistics and present the data in nested list format.
+#' Process genomic signal
+#'
+#' This function extracts and processes genomic signal from trackfiles and/or 
+#' motif data, calculates statistics and presents the data in nested list format.
+#' \code{\link{transform}} but for reordering a data frame by its columns.
+#' This saves a lot of typing!
+#'
+#' @param trackfiles list or vector of track paths (BigWig) and/or motif 
+#' setup structers (as \code{\link{list}})
+#' @param filelist vector of feature file paths (BED or GFF)
+#' @param bin binning window size in base pairs, default 1L
+#' @param rm0 remove 0 from mean/median calculation, default FALSE
+#' @param x1 upsterem distance in base pairs, default 500L
+#' @param x2 downsteram distance in base pairs, default 2000L
+#' @param xm anchored distance in base pairs, default 1000L
+#' @param type the type of the calculation, default, 'Point Features'
+#' @param add_heatmap return the heatmap data,  default FALSE
+#' @param cat3 function, that sends 1st level info to web interface
+#' @param cat4 function, that sends 2nd level info to web interface
+#' @param con connection to SQlite database storing genome information for files
+#' @return nested list: OUT[[FEATURE]][[TRACK/MOTIF]][[VALUE]]
+#' @examples
+#' procQuick(c('track1.bw', 'track2.bw'), c('peaks.bed', 'TSS.gff'))
+
+# Function to process genomic signal from trackfiles and/or motif data, 
+# calculate statistics and present the data in nested list format.
 ###############################################################################
 
 procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FALSE, x1=500, x2=2000, xm=1000, type='Point Features', 
@@ -31,22 +56,17 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 			  track <- BigWigFile(file.path('files', trackfiles[[i]]))
 			  if(remap_chr) { seqnameStyle(gr) <- seqnameStyle(track) }
       
-		  } else if ( class(trackfiles[[i]]) == 'list' ) {
-        
-		    #GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-		    #names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())  
+		  } else if ( class(trackfiles[[i]]) == 'list' ) {  
 		    pattern <- trackfiles[[i]]$pattern
-		    # genome  <- trackfiles[[i]]$genome
 		    seq_win <- trackfiles[[i]]$window
 		    pnam    <- trackfiles[[i]]$name
 		    revcomp <- trackfiles[[i]]$revcomp
 		    if(remap_chr) { seqnameStyle(gr) <- seqnameStyle(GENOME) }
-		        
+  
 		  }
 			
 			if ( (type == 'Point Features') | (type == 'Midpoint Features') ) {
 				
-        
         all_ind  <- seq(-x1, x2, by=as.numeric(bin) )
         
 				if( class(trackfiles[[i]]) == 'character' ) {
@@ -55,9 +75,9 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 				  
 				  cat4("Processing matrix...")
 				  if (!ignore_strand){ 
-				    sum[as.character(strand(sel))=='-'] <- lapply(sum[as.character(strand(sel))=='-'], rev)
+				    sum[as.character(strand(gr))=='-'] <- lapply(sum[as.character(strand(gr))=='-'], rev)
 				  }
-				  M <- matrix(as.numeric(unlist(sum)), nrow=length(sel), byrow = TRUE)
+				  M <- matrix(as.numeric(unlist(sum)), nrow=length(gr), byrow = TRUE)
 				  
 				} else if ( class(trackfiles[[i]]) == 'list' ) {
 
@@ -67,6 +87,7 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 				  
 				  cat4("Searching for motif...")
 				  M <- getSF(GENOME, gr, pattern, seq_win, !add_heatmap, revcomp=revcomp)
+				  M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
 				  
 				  cat4("Binning the motif...")
 				  M <-  t(apply(M, 1, function(x) approx(x, n=ceiling(ncol(M)/bin))$y ))        
@@ -103,8 +124,8 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 			cat4("Calculeating means/stderr/95%CIs...")
 			if (rm0) M[M==0] <- NA
 			means 	<- colMeans(M, na.rm=TRUE) 
-			stderror<- apply(M, 2, function (n) {sd(n, na.rm=T) / sqrt(length(n[!is.na(n)]))})
-			conint  <- apply(M, 2, function (n) {qt(0.975, length(n[!is.na(n)])) * sd(n, na.rm=T) / sqrt(length(n[!is.na(n)]))})
+			stderror<- apply(M, 2, function (n) {sd(n, na.rm=T) / sqrt( sum(!is.na(n)) )})
+			conint  <- apply(M, 2, function (n) {qt(0.975, sum(!is.na(n)) ) * sd(n, na.rm=T) / sqrt( sum(!is.na(n)) )})
 			
 			cat4("Exporting results...")
 			proc[[i]] <- list(means=means, stderror=stderror, conint=conint, all_ind=all_ind, e=if (type == 'Anchored Features') xm else NULL,

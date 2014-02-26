@@ -180,21 +180,6 @@ rmSelctedFiles = function() {
 	}	else { alert("Select >=1 track(s) or >=1 feature(s)!") }
 }
 
-//File upload progress bar logic
-//window.setTimeout( function() {
-//	//console.log('1st level');
-//		$('input[type=file]').change(function() {
-//			//console.log('2nd level');
-//			if( $('input[type=file]').val() != '' ) { $('#fileprogressdiv').show(1000); }
-//			$('input[type=file]').data().currentUploader.onProgress = $.throttle( 1000, function(file, completed) { 
-//				console.log(file +': '+ Math.round(completed*100) + '%');
-//				$('.bar').width( Math.round(completed*100) + '%' );
-//				
-//			})
-//		});
-//}, 1000);
-
-
 $(function() {
   $("#myModal").on("shown", function(e) { 
     if($.fn.dataTable.fnTables().length > 0) {
@@ -207,63 +192,24 @@ $(function() {
     e.preventDefault();
   });
   
-  /*$('#myModal').find('a[data-toggle="tab"]').on("shown", function(e) { 
-    act =e.target;
-    if($.fn.dataTable.fnTables().length > 0) {
-      $.each($.fn.dataTable.fnTables(), function(i, v) { $(v).dataTable().fnAdjustColumnSizing(); } )
-    }
-  })*/
-  
-	/*$('#old_style_switch').on('switch-change', function (e, data) {
-	    if(data.value) {
-	    	$('#oldff').show(1000)
-	    	if ( $('#file_genome').val() == '' ) {
-	    		$('#file_genome').val('test').change();
-	    		$('#file_genome').val('').change();
-	    	}
-	    } else {
-	    	$('#oldff').hide(1000)
-	    }
-	    
-	});*/
-	
-/*	$('#fileFormClearBtn').click(function () {
-		//$(this).slideUp();
-		$('#file_type').val('none').change(); 
-		$('#file_genome').val('').change();
-		$('#file_user').val('').change();
-		$('#file_comment').val('').change();
-		$('#file_comment_skip').removeAttr('checked').change();
-		$('#files').replaceWith( $('#files').clone( true ) );
-		$('#files').change();
-	});
-	$('#ctltabs li:eq(2) a').on('shown', function (e) {
-		$('#yauto').change();
-	});
-	$('#ctltabs li:eq(2) a').class='disabled';
-	*/
-  
-	/*$('#upload').on("click", function() { 
-		alert("Please locate R file choose prompt.");
-		$('#fileprogressdiv').show(500);
-		$('#fileprogressdiv div div').width('100%');
-		})
-	*/
-	$('#anchoredHidabeDiv').hide(); 
+	$('#anchoredHidabeDiv').hide();
 	
 	$('#downloadLegend').tooltip({title:'Legend'});
 	$('#downloadClusters').tooltip({title:'Clusters indicates'});
 	$('#replot').tooltip({title:'Keyboard binding: [ENTER]'});
-	$('#reactive').tooltip({title:'Keyboard binding: [F5]'});
+	$('[for="reactive"]').tooltip({title:'Keyboard binding: [ctrl+R] or [cmd+R]'});
 	$('#spawn').addClass('btn-warning');
   $('i[data-toggle=tooltip]').tooltip();
 	
 	$(document).keydown(function(e){
-    	if (e.keyCode == 13) { 
+    	if ( (e.keyCode == 13) || e.keyCode == 32 && (e.ctrlKey || e.metaKey) ) { 
        		$('#replot').click();
        			return false;
-    		} else if (e.keyCode == 116) { 
+    		} else if (e.keyCode == 82 && (e.ctrlKey || e.metaKey)) { 
        		$('#reactive').click();
+       			return false;
+    		} else if (e.keyCode == 72 && (e.ctrlKey || e.metaKey)) { 
+         	$('#img_heatmap').click();
        			return false;
     		}
 	});
@@ -272,21 +218,12 @@ $(function() {
     var i = $(this).index()+1;
     $('#plotTable tr > :nth-child('+i+') input[type=checkbox]').prop('checked', !$('#plotTable tr > :nth-child('+i+') input[type=checkbox]').prop('checked'));
   });
+
+  function closeEditorWarning() { 
+    if ( (Shiny.shinyapp.$socket.readyState == 1) && !($.cookie('warn')=='false') ) {
+      return "If you leave unsaved changes will be lost."  
+    }
+  } 
+  window.onbeforeunload = closeEditorWarning;
   	
 });
-
-
-
-//$(function() {
-//	$('#myModal').on('shown', function () { 
-//		$('#publicRdata').val('none').change(); 
-//		$('#plot_type').change(); 
-//	})
-//});
-
-
-
- 
- 
-
-

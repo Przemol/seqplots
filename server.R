@@ -45,7 +45,7 @@ shinyServer(function(input, output, clientData, session) {
   sourceDir('functions')
   
   if( Sys.getenv('root') != '' ) setwd(Sys.getenv('root'))
-	addResourcePath(prefix='files', directoryPath='./files')
+	suppressMessages( addResourcePath(prefix='files', directoryPath='./files') )
 	cat3 <- function(x) { parallel:::sendMaster(c('calcMsg1', as.character(x))) }
 	cat4 <- function(x) { parallel:::sendMaster(c('calcMsg2', as.character(x))) }
   
@@ -119,9 +119,9 @@ shinyServer(function(input, output, clientData, session) {
   #Lineplot plotting function
 	plotLineplot <- function(pl, title=input$title, type='dev') {
     
-    ord <- if( length(subplotSetup$prior) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
+    ord <- if( length(subplotSetup$prior) & ('prior' %in% input$subplot_options) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
 	  pl <- pl[ ord ]
-    if( length(subplotSetup$label) ) {
+    if( length(subplotSetup$label) & ('label' %in% input$subplot_options) ) {
 	    pl <- Map(function(x, y) {if(nchar(y)) x[['desc']]<-y; return(x)}, pl, subplotSetup$label[ ord ])
     }
 	  
@@ -138,7 +138,9 @@ shinyServer(function(input, output, clientData, session) {
              x2=if(!input$xauto) NULL else input$xmin2, 
              y1=if(!input$yauto) NULL else input$ymin1, 
              y2=if(!input$yauto) NULL else input$ymin2,
-	           title=title, Xtitle = input$xlabel, Ytitle = input$ylabel, colvec = subplotSetup$color[ord], plotScale = plotScale, EE = input$ee, Leg = input$legend,
+	           title=title, Xtitle = input$xlabel, Ytitle = input$ylabel, 
+             colvec = if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL, 
+             plotScale = plotScale, EE = input$ee, Leg = input$legend,
 	           cex.axis = input$axis_font_size, cex.lab = input$labels_font_size, cex.main = input$title_font_size, cex.legend = input$legend_font_size, 
 	           ln.v=input$lnv, ln.h=if(input$lnh) input$lnh_pos else NULL, 
 	           legend_pos=input$legend_pos, legend_ext_pos=input$legend_ext_pos, legend_ext=input$legend_ext, type=type)  
@@ -148,13 +150,13 @@ shinyServer(function(input, output, clientData, session) {
 	plotHeatmap <- function(pl, title=input$title) {
 		if( length(pl) > 10 ) stop('Heatmap plotting: Select less than 10 checkboxes!')
 		if( is.null(pl[[1]]$heatmap) ) stop('Heatmap plotting: No heatmap data avilabe! Re-run with "Calculate Heatmap" option selected.')
-		if( length(subplotSetup$inc) ) {
+		if( length(subplotSetup$inc) & input$heat_include ) {
 		  Hclc <- do.call(cbind, lapply(pl[ as.logical(subplotSetup$inc) ], '[[', 'heatmap'))
 		} else {
 		  Hclc <- do.call(cbind, lapply(pl, '[[', 'heatmap'))
 		}
     
-		ord <- if( length(subplotSetup$prior) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
+		ord <- if( length(subplotSetup$prior) & ('prior' %in% input$subplot_options) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
 		pl <- pl[ ord ]
 		H <- do.call(cbind, lapply(pl, '[[', 'heatmap'))
     
@@ -167,7 +169,7 @@ shinyServer(function(input, output, clientData, session) {
 		}
 		#H[is.na(H)] <- 0
 		if(input$img_sort) { H <- H[order(rowMeans(Hclc, na.rm=TRUE), decreasing = TRUE),] }
-		if(input$img_clusters > 1) {
+		if(input$img_clusters > 1 & input$img_clstmethod == 'kmeans') {
 			Hcl <- Hclc; Hcl[is.na(Hcl)] <- 0
 			k<-kmeans(Hcl, input$img_clusters) #OPTIONAL: Change this line for differnt number of clusters
 			kcenter_sum <- apply(k$centers,1,sum)
@@ -185,15 +187,15 @@ shinyServer(function(input, output, clientData, session) {
 		  clusts <- NULL
 		}
 		lab <- sapply(pl, '[[', 'desc')
-    if( length(subplotSetup$label) ) {
+    if( length(subplotSetup$label) & ('label' %in% input$subplot_options) ) {
       new_lab <- subplotSetup$label[ord]
       lab[new_lab!=''] <- new_lab[new_lab!='']
     }
 
-    o_min <- if( length(subplotSetup$min) ) as.numeric( subplotSetup$min[ord] ) else rep(NA, length(pl))
-    o_max <- if( length(subplotSetup$max) ) as.numeric( subplotSetup$max[ord] ) else rep(NA, length(pl))
+    o_min <- if( length(subplotSetup$min) & input$heat_min_max ) as.numeric( subplotSetup$min[ord] ) else rep(NA, length(pl))
+    o_max <- if( length(subplotSetup$max) & input$heat_min_max ) as.numeric( subplotSetup$max[ord] ) else rep(NA, length(pl))
     
-		heatmapPlotWrapper( H, clusts, wigcount=length(pl), 
+		heatmapPlotWrapper( H, clusts, nsubplot=length(pl), 
 		           bins=pl[[1]]$all_ind, 
                titles=lab, e=pl[[1]]$e, 
                xlim=if(!input$xauto) NULL else c(input$xmin1, input$xmin2), 
@@ -211,7 +213,7 @@ shinyServer(function(input, output, clientData, session) {
                s=input$hsccoef,
                o_min=o_min, 
                o_max=o_max,
-               colvec=subplotSetup$color[ord],
+               colvec=if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL,
 		           colorspace=if(input$heat_colorspace) c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max) else NULL)
 		par(cex=input$title_font_size)
 		title(input$title, outer = TRUE)
@@ -407,8 +409,10 @@ shinyServer(function(input, output, clientData, session) {
 	    if(!nchar(input$clusters)) stop('Plot heatmap with clusters first!')
 	    infile <- file.path( 'files', names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ) )
       gr <- import(infile); elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
-	    gr$original_order <- 1:length(gr); gr$clusters <- fromJSON(input$clusters)
-	    write.csv(as.data.frame(gr), file=file, rwo.names = FALSE)
+	    colnames(elementMetadata(gr)) <- paste0('metadata_', colnames(elementMetadata(gr)))
+	    gr$original_order <- 1:length(gr); gr$ClusterID <- fromJSON(input$clusters)
+      out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
+	    write.csv(out, file=file, row.names = FALSE)
 	    #cat(fromJSON(input$clusters), sep='\n', file=file)
 	  }
 	)
@@ -554,14 +558,14 @@ shinyServer(function(input, output, clientData, session) {
   
   #Server initiation actions
   observe({
-  	session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = function () { $(document.body).addClass('disconnected'); alert('Connection to server lost!'); location.reload('true'); }")
-    session$sendCustomMessage("jsExec", "$('.load_div').fadeOut(100);")
+  	session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = function () { $(document.body).addClass('disconnected'); alert('Connection to server lost!'); }")
+    session$sendCustomMessage("jsExec", "$('.load_div').fadeOut(1000);")
     session$sendCustomMessage("jsExec", "animateTitle();")
     #Session elem:  "clientData","input","isClosed","onFlush","onFlushed","onSessionEnded","output","request","sendCustomMessage","sendInputMessage" 
     #sapply(ls(session$request), function(x) session$request[[x]])
   	#sapply(names(session$clientData), function(x) session$clientData[[x]])
   	#str(as.list(session$clientData))
-    message(Sys.time(), ' -> Running at ', session$request$HTTP_ORIGIN, session$clientData$url_hostname, ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']')
+    message(Sys.time(), ' -> Running at ', session$request$HTTP_ORIGIN, ', ', session$clientData$url_hostname, ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']')
   })
   session$onSessionEnded(function() { message(Sys.time(), ' -> Client connection closed', ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']' ) })
   
@@ -592,7 +596,7 @@ shinyServer(function(input, output, clientData, session) {
       updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), query$load)
       #session$sendCustomMessage("jsExec", sprintf("$('#publicRdata').val('%s').change()", query$load))
     }
-    for(n in names(query)[!names(query) %in% c('load', 'select')] ){
+    for(n in names(query)[!names(query) %in% c('load', 'select', 'genome')] ){
       session$sendInputMessage(n, list(value = query[[n]]) )
       
     }
@@ -601,6 +605,7 @@ shinyServer(function(input, output, clientData, session) {
       sel <- do.call( rbind, strsplit(strsplit(query$select, ';')[[1]], ',') )
       class(sel) <- 'integer'
       urlSetup$select <- sel
+      #jqcmd <- sprintf("$( '%s' ).click()", paste0('input[value="[', strsplit(query$select, ';')[[1]], ']"]', collapse=',') )
       session$sendCustomMessage("jsExec", "$('#replot').click()")
     }
     #strsplit(strsplit("1,1;3,2", ';')[[1]], ',')

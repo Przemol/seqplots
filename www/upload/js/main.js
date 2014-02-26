@@ -136,7 +136,9 @@ $(function () {
     });
   
   $('#fileupload').bind('fileuploadadded', function (e, data) {
-	  $('.f1_genome').empty().append( $('#file_genome option').clone() );
+	  var mod = $('.f1_genome').filter(':empty').append( $('#file_genome option').clone() );
+    mod.children().removeAttr('selected').filter('[value='+ $.cookie('genome') +']').attr('selected', 'selected');
+    $('.f1_user').filter(function(){ return($(this).val() == '') }).val( $.cookie('user') );
   })
   
     $('#fileupload').bind('fileuploadadd', function (e, data) {
@@ -167,4 +169,19 @@ function copyGenome(e) {
 	var name = $(e).parent().children('select').prop('name');
 	var value = $(e).parent().children('select').val();
 	$("select[name='"+name+"']").val(value);
+}
+
+function showDef(e) {
+  $('.fileupload-defaults').show();
+  var mod = $('.f1_genome_default').append( $('#file_genome option').clone() );
+  mod.children().removeAttr('selected').filter('[value='+ $.cookie('genome') +']').attr('selected', 'selected');
+  $('.f1_user_default').val( $.cookie('user') );
+  $('#f1_warn_default').attr('checked', !($.cookie('warn')=='false'));
+}
+
+function submitDef(e) {
+  $.cookie('genome',$('.f1_genome_default').val( ) );
+  $.cookie('user',  $('.f1_user_default'  ).val( ) );
+  $.cookie('warn',  $('#f1_warn_default'  ).attr('checked')=="checked" );
+  $('.fileupload-defaults').hide();
 }
