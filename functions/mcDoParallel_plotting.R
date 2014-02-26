@@ -4,19 +4,20 @@ mcDoParallel <- quote({
     #common
     is.null(list(
       input$plot_this, input$xmin1, input$xmin2, input$xauto, input$title, input$xlabel, input$ylabel, input$scale_signal, input$legend,
-      input$legend_font_size, input$axis_font_size, input$labels_font_size, input$title_font_size, input$lnv, input$lnh, values$priors, values$lables, reactiveValuesToList(subplotSetup)
+      input$legend_font_size, input$axis_font_size, input$labels_font_size, input$title_font_size, input$lnv, input$lnh, values$priors, values$lables, 
+      reactiveValuesToList(subplotSetup), input$cust_col, input$subplot_options
     ))
     
     if (!input$img_heatmap) { 
-      #colors
       is.null(list(
-        input$yauto, input$ymin1, input$ymin2, input$cust_col, input$ee,  input$lnh_pos,
+        input$yauto, input$ymin1, input$ymin2, input$ee,  input$lnh_pos,
         legend_pos=input$legend_pos, legend_ext_pos=input$legend_ext_pos, legend_ext=input$legend_ext
       ))
     } else {
       is.null(list(
         input$heatmapzauto, input$zmin1, input$zmin2, values$override_max, values$override_max, input$img_clusters, input$img_sort,
-        input$lnv, indi=input$indi, s=input$hsccoef
+        input$lnv, indi=input$indi, input$hsccoef, input$img_clstmethod, input$heat_colorspace, input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max,
+        input$heat_include, input$heat_min_max
       ))
     }
   } else {
