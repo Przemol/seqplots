@@ -18,7 +18,7 @@ shinyUI(
 						singleton(tags$script('var error = false; window.onerror =  function() { if (!error) {alert("JavaScript error! Some elements might not work proprely. Please reload the page."); error=true;} }')),		
 						
             # JS protect against unintended exit
-						singleton(tags$script('function closeEditorWarning(){ return "If you leave unsaved changes will be lost." }; window.onbeforeunload = closeEditorWarning;')),
+						singleton(tags$script('function closeEditorWarning(){ if (Shiny.shinyapp.$socket.readyState == 1) return "If you leave unsaved changes will be lost." }; window.onbeforeunload = closeEditorWarning;')),
 						
             # JS alert handle
 						#singleton(tags$script('Shiny.addCustomMessageHandler("jsAlert", function(message) {alert(JSON.stringify(message));});')),
@@ -104,7 +104,7 @@ shinyUI(
 					),
 					div(class='row-fluid', 
               div(class='span5',conditionalPanel(condition = "!input.reactive", actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"), HTML('Replot [&crarr;]') )))),
-					    div(class='span7',checkboxInput("reactive", "Reactive plot [⌘/Ctrl+R]", FALSE)), tags$hr()
+					    div(class='span7',checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE)), tags$hr()
 					),
 					
 					tabsetPanel(id='ctltabs',
@@ -186,7 +186,7 @@ shinyUI(
 					#5) HEATMAP SPECIFIC OPTIONS
 								tabPanel(value = 'panel5', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
 			
-									checkboxInput("img_heatmap", "Preview heatmap [⌘/Ctrl + H]"), 
+									checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]"), 
 									checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
 									div(class='row-fluid',
 									  div(class='span6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'do not cluster'='none'))),
