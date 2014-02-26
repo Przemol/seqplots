@@ -1,3 +1,21 @@
+SeqPlots v0.8.1b
+--------------------------------------------------------------------------------------------------------------
+GENERAL:
+* GUI redesign: plot matrix incorporates sub-plot/heatmap specific controls,
+all heatmap options gathered in single tab
+* warning before closing/refreshing a webpage with active session
+* cookie based default options: user, genome and deactivate page exit warning
+* heat-map clusters provided as cluster report - a CSV file containing original features, annotations 
+and cluster information, see more:https://bitbucket.org/przemol/seqplots/wiki/Heatmaps#markdown-header-cluster-report
+* Wiggle files processing: correct for multiple header definitions and roman/arabic chromosome names correction 
+* Optimised keyboard shortcuts: plot - RETUTRN or ctrl/cmd+SPACE, switch heatmap - ctrl/cmd+H,
+switch reactive plotting - ctrl/cmd+R
+* minor speed improvement
+
+BUGFIX:
+* Motif density plots and heatmaps: flip rows on (-) strand
+
+
 SeqPlots v0.8.0b
 --------------------------------------------------------------------------------------------------------------
 GENERAL:
