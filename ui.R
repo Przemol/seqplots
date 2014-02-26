@@ -17,9 +17,6 @@ shinyUI(
 						# JS error message
 						singleton(tags$script('var error = false; window.onerror =  function() { if (!error) {alert("JavaScript error! Some elements might not work proprely. Please reload the page."); error=true;} }')),		
 						
-            # JS protect against unintended exit
-						singleton(tags$script('function closeEditorWarning(){ if (Shiny.shinyapp.$socket.readyState == 1) return "If you leave unsaved changes will be lost." }; window.onbeforeunload = closeEditorWarning;')),
-						
             # JS alert handle
 						#singleton(tags$script('Shiny.addCustomMessageHandler("jsAlert", function(message) {alert(JSON.stringify(message));});')),
 						singleton(tags$script('Shiny.addCustomMessageHandler("jsAlert", function(message) {alert(message);});')),
