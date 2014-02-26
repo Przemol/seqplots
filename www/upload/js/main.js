@@ -176,10 +176,12 @@ function showDef(e) {
   var mod = $('.f1_genome_default').append( $('#file_genome option').clone() );
   mod.children().removeAttr('selected').filter('[value='+ $.cookie('genome') +']').attr('selected', 'selected');
   $('.f1_user_default').val( $.cookie('user') );
+  $('#f1_warn_default').attr('checked', !($.cookie('warn')=='false'));
 }
 
 function submitDef(e) {
   $.cookie('genome',$('.f1_genome_default').val( ) );
   $.cookie('user',  $('.f1_user_default'  ).val( ) );
+  $.cookie('warn',  $('#f1_warn_default'  ).attr('checked')=="checked" );
   $('.fileupload-defaults').hide();
 }
