@@ -47,6 +47,7 @@ shinyUI(
 						singleton(tags$script(src = "js/TableTools.min.js")),
 						singleton(tags$script(src = "js/dataTables.scroller.min.js")),
 						singleton(tags$script(src = "js/jquery.cookie.js")),
+						singleton(tags$script(src = "color/jscolor.js")),
 						
 						
 						# Title
@@ -100,13 +101,13 @@ shinyUI(
 						)
 					),
 					div(class='row-fluid', 
-              div(class='span5',conditionalPanel(condition = "!input.reactive", actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"), HTML('Replot [&crarr;]') )))),
+              div(class='span5',conditionalPanel(condition = "!input.reactive", actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"), HTML('<b>PLOT</b> [&crarr;]') )))),
 					    div(class='span7',checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE)), tags$hr()
 					),
 					
 					tabsetPanel(id='ctltabs',
 					#1) NEW PLOT SET PANEL
-								tabPanel(value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plotset/Upload new files") #, "New"
+								tabPanel(value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plotset/Upload files") #, "New"
 										,h5('Upload files:')
 										,helpText( "This panel is used to add track (BigWig, Wiggle or BedGraph) and feature (GFF and BED) files to file collection.
 												  	Please provide your user ID (initials, eg JS fot John Smith) and genome specify version.
@@ -161,8 +162,8 @@ shinyUI(
 										)
 									#)
 								),
-					  #4) Legands, guiding lines, and data scaling
-								tabPanel(value = 'panel4', title=tags$i(class="icon-tags icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Legands, guiding lines, and data scaling"),# "Setup", 
+					  #4) Legends, guide lines, and data scaling
+								tabPanel(value = 'panel4', title=tags$i(class="icon-tags icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Legends, guide lines, and data scaling"),# "Setup", 
 												selectInput('scale_signal', 'Transform signal:', c( 'Do not transform', 'Log2 transform')), #, 'Z-score transform')),
 												checkboxInput("lnv", "Show vertical guiding line", TRUE),
 								        div(class='row-fluid',  
@@ -180,8 +181,12 @@ shinyUI(
 								        ),
 												sliderInput("legend_font_size", "Legend font size:", 0.5, 10, 1.5, 0.5, ticks = TRUE, animate = TRUE)
 								),
-					#5) HEATMAP SPECIFIC OPTIONS
-								tabPanel(value = 'panel5', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
+					#5) Subplot options/Labels and colours               
+					tabPanel(value = 'panel5', title=tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Labels and colours"), #"Subplots",
+					         checkboxGroupInput('subplot_options', 'Set sub-plot specific:', c('Colors'='color', 'Label'='label', 'Priority/Order'='prior'), selected = NULL)
+					),
+					#6) HEATMAP SPECIFIC OPTIONS
+								tabPanel(value = 'panel6', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
 			
 									checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]"), 
 									checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
@@ -190,7 +195,9 @@ shinyUI(
 									  div(class='span6',   
                         conditionalPanel( condition = "input.img_clstmethod == 'kmeans'", numericInput("img_clusters", "Number of clusters", 5, min=1))
 									  )
-									), tags$br(),
+									), 
+									checkboxInput('heat_include', 'Exclude individual heatmaps from sorting/clustering', FALSE),
+                  tags$br(),
                   
 									checkboxInput("indi", "Heatmaps have individual color keys", TRUE),
 									checkboxInput("heatmapzauto", "Set default color key limits", FALSE),
@@ -210,23 +217,16 @@ shinyUI(
 									checkboxInput('heat_colorspace', 'Set default colorspace', FALSE),
 									conditionalPanel( condition = "input.heat_colorspace == true",
 									                  div(class='row-fluid', 
-									                      div(class='span4', HTML('Min: <input type="color" id="heat_csp_min" value="#FFFFFF" style="width:40px;" title=""/>')),
-									                      div(class='span4', HTML('Mid: <input type="color" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
-									                      div(class='span4', HTML('Max: <input type="color" id="heat_csp_max" value="#00008B" style="width:40px;" title=""/>'))
+									                      div(class='span4', HTML('Min: <input type="color" class="color {hash:true}" ="heat_csp_min" value="#FFFFFF" style="width:40px;" title=""/>')),
+									                      div(class='span4', HTML('Mid: <input type="color" class="color {hash:true}" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
+									                      div(class='span4', HTML('Max: <input type="color" class="color {hash:true}" id="heat_csp_max" value="#00008B" style="width:40px;" title=""/>'))
 									                  )
-									),
-									checkboxInput('heat_include', 'Exclude individual heatmaps from sorting/clustering', FALSE)
-							
-					
-										
-									#)
+									)
+									
 								),
-					#6) Subplot options               
-						    tabPanel(value = 'panel6', title=tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Subplot options"), #"Subplots",
-						        checkboxGroupInput('subplot_options', 'Set sub-plot specific:', c('Colors'='color', 'Label'='label', 'Priority'='prior'), selected = NULL)
-						    ),
+		
 					#7) BATCH
-						    tabPanel(tags$i(class="icon-gears icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations"), #"Batch", 
+						    tabPanel(tags$i(class="icon-gears icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations and setup"), #"Batch", 
 						            
 						      div(class='form-inline', 
 						        numericInput("pdf_x_size", "PDF output size:", 16) ,  
@@ -240,7 +240,9 @@ shinyUI(
                     selectInput('batch_what', 'Plot', c('lineplots', 'heatmaps') ),  
                     selectInput('batch_how', 'by', c('rows', 'columns', 'single') )                                
 						      ),
-						      downloadLink('downloadBatchColLineplot', tags$span(tags$i(class="icon-align-justify icon-rotate-90"), tags$i(class="icon-double-angle-right icon-large"),  tags$i(class="icon-picture icon-large icon-white"), 'Get PDF'),   class="btn btn-small btn-success")  
+						      downloadLink('downloadBatchColLineplot', tags$span(tags$i(class="icon-align-justify icon-rotate-90"), tags$i(class="icon-double-angle-right icon-large"),  tags$i(class="icon-picture icon-large icon-white"), 'Get PDF'),   class="btn btn-small btn-success"),
+                  tags$hr(),
+						      checkboxInput('setup_multithread', 'Use multithreading for calculations', (Sys.getenv("SHINY_SERVER_VERSION") != ''))
 						                     
 						    )
 
