@@ -210,6 +210,7 @@ $(function() {
        			return false;
     		} else if (e.keyCode == 72 && (e.ctrlKey || e.metaKey)) { 
          	$('#img_heatmap').click();
+          $('#replot').click();
        			return false;
     		}
 	});

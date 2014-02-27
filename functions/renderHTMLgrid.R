@@ -31,13 +31,13 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='') {
 						  cat('<div class="div_separator div_setup"  style="display:none; min-width:90px;"><hr /></div>')
               
               cat('<div class="div_color div_setup"  style="display:none">
-                    <input type="color" name="plot_col" id="color_',i,'x', j,'" value="#FFFFFF" style="width:60px;" title="Set a color here." data-placement="left"/>  </div> ', sep='')
+                    <input type="color" name="plot_col" id="color_',i,'x', j,'" class="color {hash:true}", value="#FFFFFF" style="width:60px;" title="Set a color here." data-placement="left"/>  </div> ', sep='')
               
               cat('<div class="div_label div_setup"  style="display:none">
                   <input type="text"   id="label_',i,'x', j,'" style="width:60px" placeholder="Label..." title="Set a label here." data-placement="left"/> </div> ', sep='')
               
               cat('<div class="div_prior div_setup" style="display:none">
-                  <input type="number" id="prior_',i,'x', j,'" style="width:60px" value=0 title="Set priority here. Higher priority will be plotted first." data-placement="left"/> </div> ', sep='')
+                  <input type="number" id="prior_',i,'x', j,'" style="width:60px" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> </div> ', sep='')
               
               cat('<div class="div_inc div_setup"  style="display:none; min-width:91px">
                   <select id="inc_',i,'x', j,'" style="width:85px" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select></div> ', sep='')
@@ -54,6 +54,7 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='') {
 				}
 				cat('</tbody>')
 				cat('</table>')
+        cat('<script> if( !Modernizr.inputtypes.color ) { jscolor.bind() } </script>')
 			})
 	return(HTML(html.text))
 }
