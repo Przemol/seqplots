@@ -20,7 +20,7 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     if(ret) return(tss)
   }
   testFeatureFile <-  function(PATH, gnm){
-    tss <- try(import(file(PATH), asRangedData=FALSE, trackLine = FALSE), silent = TRUE)
+    tss <- try(import( file(PATH) ), silent = FALSE)
     if (class(tss) == "try-error") {
       nfields <- count.fields(PATH, comment.char = '', skip = 1)
       problem <- which(nfields != median( head(nfields, 1000) ))+1
