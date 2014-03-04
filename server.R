@@ -409,7 +409,7 @@ shinyServer(function(input, output, clientData, session) {
 	    if(!nchar(input$clusters)) stop('Plot heatmap with clusters first!')
 	    infile <- file.path( 'files', names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ) )
       gr <- import(infile); elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
-	    if( colnames(elementMetadata(gr) ) { colnames(elementMetadata(gr)) <- paste0('metadata_', colnames(elementMetadata(gr))) }
+	    if( colnames(elementMetadata(gr)) ) { colnames(elementMetadata(gr)) <- paste0('metadata_', colnames(elementMetadata(gr))) }
 	    gr$original_order <- 1:length(gr); gr$ClusterID <- fromJSON(input$clusters)
       out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
 	    write.csv(out, file=file, row.names = FALSE)
