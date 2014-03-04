@@ -156,7 +156,6 @@ sendToCalc = function() {
   Shiny.shinyapp.sendInput({"f_features":f_sel});
 	Shiny.shinyapp.sendInput({"TR_calculate":new Date().getTime()}); 
 	//Shiny.shinyapp.sendInput({"TR_calculate":null});
-	$('#publicRdata').val(' ');
 	$("#myModal").modal("hide"); 
 	$("#progressModal").modal("show");
 

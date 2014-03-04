@@ -3,6 +3,8 @@ mcCalcStart <- quote({
   if( is.null(input$TR_calculate) )  return()
   
   values$calcID <- input$TR_calculate
+  updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
+  values$grfile <- NULL
   
   ok_msg <- div(style='margin-top:10px;', id=as.character(input$TR_calculate), class="alert alert-success", 
                 HTML('<button type="button" class="close" data-dismiss="alert">x</button><strong>Calculation complete!</strong> You can plot or save the results in public files.')
