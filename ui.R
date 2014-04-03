@@ -113,7 +113,7 @@ shinyUI(
 												  	Please provide your user ID (initials, eg JS fot John Smith) and genome specify version.
 													You can drag-and-drop the files to browser window. Comments are optional.") # TIP: You can add multiple files at once.
 		  								,HTML('<a href="#fileUploadModal" role="button" class="btn btn-success" data-toggle="modal"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</a>')
-                      ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES, selected = 'Celegans.UCSC.ce10')) #This should stay for clonning, unless I can figure out something better using JS
+                      ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES, selected = 'Celegans.UCSC.ce10', selectize = FALSE)) #This should stay for clonning, unless I can figure out something better using JS
                     ,tags$hr()
                     
 										,h5('Create new plot array:')

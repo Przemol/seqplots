@@ -64,7 +64,7 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     }) 
     if(is(try_result, 'try-error')) {
       try_result2 <<- try({	
-        wig <- import.wig(file(x), asRangedData=FALSE, trackLine = FALSE);
+        wig <- import.wig(file(x));
         if( grepl('list', class(wig), ignore.case = TRUE) ) wig <- unlist(wig, use.names=FALSE)
         wig <- testChromosomeNames(wig , gnm, ret=TRUE)
         seqlengths(wig) <- seqlengths(gnm)[seqlevels(wig)];
