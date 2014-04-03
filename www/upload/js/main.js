@@ -28,6 +28,10 @@ $(function () {
       multipart: false,
       sequentialUploads: true,
     	acceptFileTypes: '/(\.|\/)(gff|bw|wig.gz|wig|bed|gff.gz|bed.gz)$/i',
+      uploadTemplateId: null,
+      downloadTemplateId: null,
+      uploadTemplate: tmplUP('template-upload'),
+      downloadTemplate: tmplUP('template-download'),
     	submit: function (e, data) {
     		//var input = $('#input');
     		//data.formData = {example: input.val()};
