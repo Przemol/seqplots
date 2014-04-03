@@ -25,12 +25,7 @@ mcDoParallel <- quote({
   }
   if( is.null(isolate(input$plot_this)) ) return()
   
-  
-  if(is.null(isolate(values$proc))) {
-    n<<-0
-    session$sendCustomMessage("jsExec", "$('#progressModal').modal('show');")
-    
-    values$proc <- parallel::mcparallel({
+  do <- quote({ 
       out <- list()
       a <- tempfile(pattern = "sessionID_", tmpdir = 'tmp', fileext = '.png')
       # Generate the PNG
@@ -53,31 +48,56 @@ mcDoParallel <- quote({
       out$url <- a
       
       class(out) <- 'ans'; out 
-      
+  })
+  
+  
+  if( .Platform$OS.type == 'windows' | input$setup_multithread == FALSE) {
+    isolate({
+      values$calcMsg1 <- 'Single process plotting...'; values$calcMsg2 <- '-'
+      session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary2').text('Plotting in single process...').parent().find('button').prop('disabled', true);")
+      out <- eval( do )
+      values$im <- as.character(out$url)
+      session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide').find('#summary2').text('').parent().find('button').prop('disabled', false);")
     })
-    values$calcMsg1 <- 'Plotting'; values$calcMsg2 <- '.'
     
-    invalidateLater(100, session)
-  } else if ( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
-    res <- parallel::mccollect(isolate(values$proc), wait=FALSE)[[1]]
-    if( class(res) == 'character' ) {
+  } else {
+    
+    if(is.null(isolate(values$proc))) {
+      n<<-0
+      session$sendCustomMessage("jsExec", "$('#progressModal').modal('show');")
+      
+      values$proc <- parallel::mcparallel(do)
+      
+      values$calcMsg1 <- 'Plotting'; values$calcMsg2 <- '.'
+      
       invalidateLater(100, session)
-      values[[ res[1] ]] <- res[2]  
-    } else {
-      if(class(res) == 'try-error' ) {
-        parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
-        session$sendCustomMessage("jsAlert", res); session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
-      } else if ( is.null(res) ) {
-        parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
-        session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
+    } else if ( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
+      res <- parallel::mccollect(isolate(values$proc), wait=FALSE)[[1]]
+      if( class(res) == 'character' ) {
+        invalidateLater(100, session)
+        values[[ res[1] ]] <- res[2]  
       } else {
-        parallel::mccollect( isolate(values$proc) )
-        values$proc <- NULL 
-        session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
-        values$im <- as.character(res$url)
-        if( !is.null(res$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
-        #values$plotHistory <- res$plot
+        if(class(res) == 'try-error' ) {
+          parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
+          session$sendCustomMessage("jsAlert", res); session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
+        } else if ( is.null(res) ) {
+          parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
+          session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
+        } else {
+          parallel::mccollect( isolate(values$proc) )
+          values$proc <- NULL 
+          session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
+          values$im <- as.character(res$url)
+          if( !is.null(res$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
+          #values$plotHistory <- res$plot
+        }
       }
-    }
-  } else {   n<<-n+1; if(!n%%10) values$calcMsg2 <- paste0(isolate(values$calcMsg2), '.'); invalidateLater(100, session); }
+    } else {   n<<-n+1; if(!n%%10) values$calcMsg2 <- paste0(isolate(values$calcMsg2), '.'); invalidateLater(100, session); }
+    
+  }
+  
+  
+  
+  
+  
 })
