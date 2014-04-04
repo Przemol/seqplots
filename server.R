@@ -47,8 +47,6 @@ shinyServer(function(input, output, clientData, session) {
   
   if( Sys.getenv('root') != '' ) setwd(Sys.getenv('root'))
 	suppressMessages( addResourcePath(prefix='files', directoryPath='./files') )
-	cat3 <- function(x) { parallel:::sendMaster(c('calcMsg1', as.character(x))) }
-	cat4 <- function(x) { parallel:::sendMaster(c('calcMsg2', as.character(x))) }
   
 	#Debug code: Testing eval statement
 	output$summary <- renderPrint({
@@ -58,7 +56,7 @@ shinyServer(function(input, output, clientData, session) {
 	#Reactive values definition
   subplotSetup <- reactiveValues( )
   urlSetup <- reactiveValues( )
-	values <- reactiveValues( grfile=NULL, calcID=NULL, calcMsg1=NULL, calcMsg2=NULL, plotMsg=NULL, refFileGrids=NULL, proc=NULL, im=NULL, clusters=NULL, SFsetup=list(), plotHistory=list() )
+	values <- reactiveValues( grfile=NULL, calcID=NULL, plotMsg=NULL, refFileGrids=NULL, proc=NULL, im=NULL, clusters=NULL, SFsetup=list(), plotHistory=list() )
 	
   #Add [S]equence [F]eature setup and reset observers
   observe({
@@ -90,8 +88,6 @@ shinyServer(function(input, output, clientData, session) {
   observe( mcDoParallel, quoted = TRUE, label = 'Plotting')
   
   #Multicore calculations text outputs and cancel logic
-  output$summary2 <- renderPrint({ cat(values$calcMsg1) })
-  output$summary3 <- renderPrint({ cat(values$calcMsg2) })
   observe({
     if(input$cancel==0) return()
     parallel:::mckill( isolate(values$proc), signal = 9L )
