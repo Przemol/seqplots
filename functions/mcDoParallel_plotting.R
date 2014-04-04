@@ -1,5 +1,37 @@
 mcDoParallel <- quote({
   
+  mceval <- function(do, do.iter=NULL, do.final=NULL) {
+
+    if(is.null(isolate(values$proc))) {
+      values$proc <- parallel::mcparallel(do)
+      invalidateLater(100, session)
+      
+    } else if ( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
+      res <- parallel::mccollect(isolate(values$proc), wait=FALSE)[[1]]
+      
+        if(class(res) == 'try-error' ) {
+          parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
+          session$sendCustomMessage("jsAlert", res); session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
+          
+        } else if ( is.null(res) ) {
+          parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
+          session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
+          
+        } else {
+          parallel::mccollect( isolate(values$proc) )
+          values$proc <- NULL 
+          session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide').find('#summary2').text('')")      
+          eval( do.final )
+    
+        }
+      
+    } else { 
+      eval( do.iter ) 
+      invalidateLater(100, session); 
+    }  
+  }
+  
+  
   if( (input$reactive) ) {
     #common
     is.null(list(
@@ -26,6 +58,7 @@ mcDoParallel <- quote({
   if( is.null(isolate(input$plot_this)) ) return()
   
   do <- quote({ 
+      session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary2').text('Plotting...').parent().find('#summary3').text('')")
       out <- list()
       a <- tempfile(pattern = "sessionID_", tmpdir = 'tmp', fileext = '.png')
       # Generate the PNG
@@ -51,10 +84,9 @@ mcDoParallel <- quote({
   })
   
   
-  if( .Platform$OS.type == 'windows' | input$setup_multithread == FALSE) {
+  if( .Platform$OS.type == 'windows' | isolate(input$setup_multithread) == FALSE) {
     isolate({
-      values$calcMsg1 <- 'Single process plotting...'; values$calcMsg2 <- '-'
-      session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary2').text('Plotting in single process...').parent().find('button').prop('disabled', true);")
+      session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary3').text('Single process plotting.').parent().find('button').prop('disabled', true);")
       out <- eval( do )
       values$im <- as.character(out$url)
       session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide').find('#summary2').text('').parent().find('button').prop('disabled', false);")
@@ -62,38 +94,47 @@ mcDoParallel <- quote({
     
   } else {
     
-    if(is.null(isolate(values$proc))) {
-      n<<-0
-      session$sendCustomMessage("jsExec", "$('#progressModal').modal('show');")
-      
-      values$proc <- parallel::mcparallel(do)
-      
-      values$calcMsg1 <- 'Plotting'; values$calcMsg2 <- '.'
-      
-      invalidateLater(100, session)
-    } else if ( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
-      res <- parallel::mccollect(isolate(values$proc), wait=FALSE)[[1]]
-      if( class(res) == 'character' ) {
-        invalidateLater(100, session)
-        values[[ res[1] ]] <- res[2]  
-      } else {
-        if(class(res) == 'try-error' ) {
-          parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
-          session$sendCustomMessage("jsAlert", res); session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
-        } else if ( is.null(res) ) {
-          parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
-          session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
-        } else {
-          parallel::mccollect( isolate(values$proc) )
-          values$proc <- NULL 
-          session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
-          values$im <- as.character(res$url)
-          if( !is.null(res$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
-          #values$plotHistory <- res$plot
-        }
-      }
-    } else {   n<<-n+1; if(!n%%10) values$calcMsg2 <- paste0(isolate(values$calcMsg2), '.'); invalidateLater(100, session); }
+    mceval(do, 
+      quote({ 
+        session$sendCustomMessage("jsExec", "$('#summary3').text( $('#summary3').text().length < 50 ? $('#summary3').text()+'.' : '.' )") 
+      }),
+      quote({ 
+        values$im <- as.character(res$url)
+        if( !is.null(res$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
+      })
+    )
     
+#     if(is.null(isolate(values$proc))) {
+#       values$proc <- parallel::mcparallel(do)
+#       invalidateLater(100, session)
+#       
+#     } else if ( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
+#       res <- parallel::mccollect(isolate(values$proc), wait=FALSE)[[1]]
+#       
+#       if( class(res) == 'character' ) {
+#         invalidateLater(100, session)
+#         values[[ res[1] ]] <- res[2] 
+#         stop(res)
+#         
+#       } else {
+#         if(class(res) == 'try-error' ) {
+#           parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
+#           session$sendCustomMessage("jsAlert", res); session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
+#         } else if ( is.null(res) ) {
+#           parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
+#           session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
+#         } else {
+#           parallel::mccollect( isolate(values$proc) )
+#           values$proc <- NULL 
+#           session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide').find('#summary2').text('')")
+#           
+#           values$im <- as.character(res$url)
+#           if( !is.null(res$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
+#           #values$plotHistory <- res$plot
+#         }
+#       }
+#     } else { session$sendCustomMessage("jsExec", "$('#summary3').text( $('#summary3').text().length < 50 ? $('#summary3').text()+'.' : '.' )"); invalidateLater(100, session); }
+#     
   }
   
   
@@ -101,3 +142,8 @@ mcDoParallel <- quote({
   
   
 })
+
+
+
+
+
