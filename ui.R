@@ -134,10 +134,12 @@ shinyUI(
 					#2) SAVE/LOAD PLOT SET PANEL
 								tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
                     selectInput('publicRdata', 'Load public file:', ' ', ' '),
-										conditionalPanel("input.publicRdata !== ' '", actionButton('RdataRemoveButton', 'Remove this dataset') ),
-										tags$hr(),
+										conditionalPanel("input.publicRdata !== ' '", 
+                                     actionButton('RdataRemoveButton', 'Remove dataset', icon=icon('trash-o')) ,
+										                 downloadButton('RdataDoenloadButton', 'Download dataset') 
+                    ), tags$hr(),
 										textInput('RdataSaveName', 'Save current plot set as:', ''), 
-										conditionalPanel("input.RdataSaveName !== ''", actionButton('RdataSaveButton', 'Save') ) 
+										conditionalPanel("input.RdataSaveName !== ''", actionButton('RdataSaveButton', 'Save', icon=icon('save')) ) 
 								),
 					#3) TITLES AND AXIS PANEL
 								tabPanel(value = 'panel3', title=tags$i(class="icon-font icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Title and axis"), #"Axis", 
@@ -191,9 +193,15 @@ shinyUI(
 									checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]"), 
 									checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
 									div(class='row-fluid',
-									  div(class='span6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'do not cluster'='none'))),
+									  div(class='span6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'Hierarchical'='hclust', 'SuperSOM'='ssom', 'do not cluster'='none'))),
 									  div(class='span6',   
-                        conditionalPanel( condition = "input.img_clstmethod == 'kmeans'", numericInput("img_clusters", "Number of clusters", 5, min=1))
+                        conditionalPanel( condition = "input.img_clstmethod != 'none' && input.img_clstmethod != 'ssom'", numericInput("img_clusters", "Number of clusters", 5, min=1)),
+									      conditionalPanel( condition = "input.img_clstmethod == 'ssom'", 
+									                        div(class='row-fluid',
+									                            div(class='span1'), div(class='span3', numericInput("img_ssomt1", "topo_x", 2, min=1) ),
+									                            div(class='span2'), div(class='span3', numericInput("img_ssomt2", "topo_y", 2, min=1) )
+                                          )
+                        )
 									  )
 									), 
 									checkboxInput('heat_include', 'Exclude individual heatmaps from sorting/clustering', FALSE),
@@ -247,7 +255,7 @@ shinyUI(
 						    )
 
 						),
-				    div(class='hidden', textInput('clusters', 'Clusters'))
+				    div( class='hidden', textInput('clusters', 'Clusters'), textInput('sortingord', 'Sorting'), textInput('finalord', 'Sorting') )
 				),
 				mainPanel(
 					uiOutput('reactiveScripts')
