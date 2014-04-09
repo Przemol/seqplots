@@ -54,7 +54,10 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='') {
 				}
 				cat('</tbody>')
 				cat('</table>')
-        cat('<script> if( !Modernizr.inputtypes.color ) { jscolor.bind() } </script>')
+        #cat('<script> if( !Modernizr.inputtypes.color ) { jscolor.bind() } </script>')
+				cat('<script>')
+				  cat(readLines(file.path(Sys.getenv("web", '.'), 'www/js/afterHTMLgridrender.js'), warn = FALSE, encoding = "UTF-8"))
+				cat('</script>')
 			})
 	return(HTML(html.text))
 }

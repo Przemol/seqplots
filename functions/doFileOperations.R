@@ -75,7 +75,7 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     
     file.remove( x )
     x <- pth; type <- 'track'; file_type <- 'Wiggle';
-    if( !all(seqlevels(BigWigFile(x)) %in% seqlevels(gnm)) ) { stop('Unknown chr names in Wiggle file, use UCSC compatible!') }
+    if( !all(seqlevels(BigWigFile(x)) %in% seqlevels(gnm)) ) { stop('Unknown chr names in Wiggle file, use UCSC compatible!', call. = FALSE) }
     message('WIG file added', x)
     
   } else {

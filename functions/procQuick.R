@@ -74,9 +74,7 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 				  sum <- summary(track, gr, type='mean', size=length(all_ind))					
 				  
 				  cat4("Processing matrix...")
-				  if (!ignore_strand){ 
-				    sum[as.character(strand(gr))=='-'] <- lapply(sum[as.character(strand(gr))=='-'], rev)
-				  }
+				  if (!ignore_strand) sum[as.character(strand(gr))=='-'] <- lapply(sum[as.character(strand(gr))=='-'], rev)
 				  M <- matrix(as.numeric(unlist(sum)), nrow=length(gr), byrow = TRUE)
 				  
 				} else if ( class(trackfiles[[i]]) == 'list' ) {
@@ -87,7 +85,7 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 				  
 				  cat4("Searching for motif...")
 				  M <- getSF(GENOME, gr, pattern, seq_win, !add_heatmap, revcomp=revcomp)
-				  M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
+				  if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
 				  
 				  cat4("Binning the motif...")
 				  M <-  t(apply(M, 1, function(x) approx(x, n=ceiling(ncol(M)/bin))$y ))        
@@ -95,30 +93,66 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 				}
 			
 			} else if (type == 'Anchored Features') {
-				
-				#left
-				cat4("Processing upsterem...")
-				left_ind <- seq(-x1, -1, by=bin)		
-				sum.left <- summary(track, flank(sel, x1, start=TRUE), type='mean', size=length(left_ind))
-				if (!ignore_strand) sum.left[as.character(strand(sel))=='-'] <- lapply(sum.left[as.character(strand(sel))=='-'], rev)
-				M.left <- matrix(as.numeric(unlist( sum.left )), nrow=length(sel), byrow = TRUE)
-				
-				#middle
-				cat4("Processing middle...")
-				mid_ind <- seq(0, xm, by=bin)			
-				sum.middle <- summary(track, sel, type='mean', size=length(mid_ind))
-				if (!ignore_strand) sum.middle [as.character(strand(sel))=='-'] <- lapply(sum.middle[as.character(strand(sel))=='-'], rev)
-				M.middle <- matrix(as.numeric(unlist( sum.middle )), nrow=length(sel), byrow = TRUE)
-				
-				#right
-				cat4("Processing downsteream...")
-				right_ind <- seq(xm+1, xm+x2, by=bin)	
-				sum.right <- summary(track, flank(sel, x2, start=FALSE), type='mean', size=length(right_ind))
-				if (!ignore_strand) sum.right[as.character(strand(sel))=='-'] <- lapply(sum.right[as.character(strand(sel))=='-'], rev)
-				M.right <- matrix(as.numeric(unlist( sum.right )), nrow=length(sel), byrow = TRUE)
-				
-				M <- cbind(M.left, M.middle, M.right)
-				all_ind <- c(left_ind, mid_ind, right_ind)
+			  if( class(trackfiles[[i]]) == 'character' ) {
+  				#left
+  				cat4("Processing upsterem...")
+  				left_ind <- seq(-x1, -1, by=bin)		
+  				sum.left <- summary(track, flank(sel, x1, start=TRUE), type='mean', size=length(left_ind))
+  				if (!ignore_strand) sum.left[as.character(strand(sel))=='-'] <- lapply(sum.left[as.character(strand(sel))=='-'], rev)
+  				M.left <- matrix(as.numeric(unlist( sum.left )), nrow=length(sel), byrow = TRUE)
+  				
+  				#middle
+  				cat4("Processing middle...")
+  				mid_ind <- seq(0, xm, by=bin)			
+  				sum.middle <- summary(track, sel, type='mean', size=length(mid_ind))
+  				if (!ignore_strand) sum.middle [as.character(strand(sel))=='-'] <- lapply(sum.middle[as.character(strand(sel))=='-'], rev)
+  				M.middle <- matrix(as.numeric(unlist( sum.middle )), nrow=length(sel), byrow = TRUE)
+  				
+  				#right
+  				cat4("Processing downsteream...")
+  				right_ind <- seq(xm+1, xm+x2, by=bin)	
+  				sum.right <- summary(track, flank(sel, x2, start=FALSE), type='mean', size=length(right_ind))
+  				if (!ignore_strand) sum.right[as.character(strand(sel))=='-'] <- lapply(sum.right[as.character(strand(sel))=='-'], rev)
+  				M.right <- matrix(as.numeric(unlist( sum.right )), nrow=length(sel), byrow = TRUE)
+  				
+  				M <- cbind(M.left, M.middle, M.right)
+  				all_ind <- c(left_ind, mid_ind, right_ind)
+			  } else if ( class(trackfiles[[i]]) == 'list' ) {
+          
+        #HEATMAP  
+			  #stop('NotYetImplemented!', )
+			    #LEFT
+			    cat4(paste0("Processing upsterem ", pattern, " motif..."))
+			    left_ind <- seq(-x1, -1, by=bin)
+          
+			    gr <- flank(sel, x1, start=TRUE); seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
+			    M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
+			    if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
+			    M.left <-  t(apply(M, 1, function(x) approx(x, n=length(left_ind))$y ))
+			 
+			    #middle
+			    cat4(paste0("Processing middle ", pattern, " motif..."))
+			    mid_ind <- seq(0, xm, by=bin)
+          
+			    gr <- sel; seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];		
+			    M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
+			    if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
+			    M.middle <-  t(apply(M, 1, function(x) approx(x, n=length(mid_ind))$y ))
+          
+			    #right
+			    cat4(paste0("Processing downsteream ", pattern, " motif..."))
+			    right_ind <- seq(xm+1, xm+x2, by=bin)	
+          
+			    gr <- flank(sel, x1, start=FALSE); seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
+			    M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
+			    if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
+			    M.right <-  t(apply(M, 1, function(x) approx(x, n=length(right_ind))$y ))
+          
+          #FIN
+			    M <- cbind(M.left, M.middle, M.right)
+			    all_ind <- c(left_ind, mid_ind, right_ind)      
+			    
+			  }
 			}
 			
 			cat4("Calculeating means/stderr/95%CIs...")
