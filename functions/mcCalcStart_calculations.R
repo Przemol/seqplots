@@ -6,10 +6,6 @@ mcCalcStart <- quote({
   updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
   values$grfile <- NULL
   
-  ok_msg <- div(style='margin-top:10px;', id=as.character(input$TR_calculate), class="alert alert-success", 
-                HTML('<button type="button" class="close" data-dismiss="alert">x</button><strong>Calculation complete!</strong> You can plot or save the results in public files.')
-  ) 
-  
   do <- quote({
     session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary2').text('Initializing...').parent().find('#summary3').text('')")
     cat3 <- function(x) { session$sendCustomMessage("jsExec", sprintf("$('#summary2').text('%s')", x)) }
@@ -33,37 +29,45 @@ mcCalcStart <- quote({
     
   } else {
     
-    if (is.null(isolate(values$proc))) {
-      values$proc <- parallel::mcparallel(do)
-      invalidateLater(100, session)
-      
-    } else if ( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
-      res <- parallel::mccollect(isolate(values$proc), wait=FALSE)[[1]]
-      
-      if( class(res) == 'character' ) {
-        invalidateLater(100, session)
-        values[[ res[1] ]] <- res[2]  
-        stop(res)
-        
-      } else {
-        if(class(res) == 'try-error' ) {
-          parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
-          session$sendCustomMessage("jsAlert", res); session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
-        } else if ( is.null(res) ) {
-          parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
-          session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
-        } else {
-          parallel::mccollect( isolate(values$proc) )
-          values$proc <- NULL
-          session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide').find('#summary2').text('')")
-          
-          values$grfile <- res
-          session$sendCustomMessage("jsAlert", "Job done!")
-          values$plotMsg <- ok_msg
-        }
-      }
-      
-    } else { invalidateLater(100, session); }
+    mceval(do, NULL,
+           quote({ 
+             values$grfile <- res
+             session$sendCustomMessage("jsAlert", "Job done!")
+             values$plotMsg <- div(style='margin-top:10px;', id=as.character(input$TR_calculate), class="alert alert-success", 
+                                   HTML('<button type="button" class="close" data-dismiss="alert">x</button><strong>Calculation complete!</strong> You can plot or save the results in public files.')
+             ) 
+           }),
+    )
+    
+#     if (is.null(isolate(values$proc))) {
+#       values$proc <- parallel::mcparallel(do)
+#       invalidateLater(100, session)
+#       
+#     } else if ( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
+#       res <- parallel::mccollect(isolate(values$proc), wait=FALSE)[[1]]
+#       
+#       if( class(res) == 'character' ) {
+#         invalidateLater(100, session)
+#         values[[ res[1] ]] <- res[2]  
+#         stop(res)
+#         
+#       } else {
+#         if(class(res) == 'try-error' ) {
+#           parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
+#           session$sendCustomMessage("jsAlert", res); session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide');")
+#         } else if ( is.null(res) ) {
+#           parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
+#           session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
+#         } else {
+#           parallel::mccollect( isolate(values$proc) )
+#           values$proc <- NULL
+#           session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide').find('#summary2').text('')")
+#           
+#     
+#         }
+#       }
+#       
+#     } else { invalidateLater(100, session); }
     
   }
 })

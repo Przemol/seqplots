@@ -29,7 +29,7 @@ plotMext <- function(INPUTS, desc1="", y1=NULL, y2=NULL, x1=NULL, x2=NULL, type=
 	
 	if ( !is.null(colvec) ) {
 		
-		colvec[ grepl('#ffffff', colvec) ] <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow(mm-8))[ grepl('#ffffff', colvec) ]
+		colvec[ grepl('#ffffff', colvec, ignore.case = TRUE) ] <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow(mm-8))[ grepl('#ffffff', colvec, ignore.case = TRUE) ]
 		cols <- colvec
 	} else {
 		cols <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow(mm-8))
