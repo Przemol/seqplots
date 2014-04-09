@@ -1,3 +1,19 @@
+SeqPlots v0.8.2b
+--------------------------------------------------------------------------------------------------------------
+FEATURES:
+* Hierarchical and super self-organizing network clustering added for heatmaps
+* Anchored motif plots
+* The row order of the heatmap is exported along with cluster report
+
+GENERAL:
+* JS color picker added for browsers, that do not support <select type="color"> i.e. Firefox (checked with modernizr.js library)
+* Single process mode and Microsoft Windows compatibility (running without fork parallelization)
+* Shiny 0.9.1 compatibility
+* Saved datasets can be downloaded for local usage
+* Clicking row or column name in plot grid toggles the checkboxes
+* Minor GUI changes
+
+
 SeqPlots v0.8.1b
 --------------------------------------------------------------------------------------------------------------
 GENERAL:
