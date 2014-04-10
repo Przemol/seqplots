@@ -1,2 +1,2 @@
 exportPattern("^[[:alpha:]]+")
-useDynLib(GFplots, .registration = TRUE)
+useDynLib(seqplots, .registration = TRUE)

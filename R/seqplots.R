@@ -2,7 +2,7 @@ seqplots <- function(root = file.path(path.expand("~"), "GFplots_data"), debug =
   
   message('Starting...')
   oldwd <- getwd()
-  Sys.setenv(root=root, web=system.file('shiny', package='SeqPlots'))
+  Sys.setenv(root=root, web=system.file('seqplots', package='seqplots'))
   
   suppressPackageStartupMessages( require(RSQLite) )
   suppressPackageStartupMessages( require(shiny) )
