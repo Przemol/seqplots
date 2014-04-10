@@ -1,2 +1,2 @@
 rm -Rf seqplots
-git clone git@bitbucket.org:przemol/seqplots.git
+git clone -b dev git@bitbucket.org:przemol/seqplots.git
