@@ -1,0 +1,16 @@
+ZLIB_CFLAGS+=$(shell echo 'zlibbioc::pkgconfig("PKG_CFLAGS")'|\
+    "${R_HOME}/bin/R" --vanilla --slave)
+PKG_LIBS+=$(shell echo 'zlibbioc::pkgconfig("PKG_LIBS_shared")' |\
+    "${R_HOME}/bin/R" --vanilla --slave)
+
+PKG_LIBS+=-lws2_32
+include Makevars.common
+OBJECTS = $(PKG_OBJECTS) $(UCSC_OBJECTS:%=ucsc/%)
+
+all: $(SHLIB)
+
+clean:
+	rm -f $(OBJECTS)
+
+%.o: %.c
+	$(CC) $(ZLIB_CFLAGS) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -c $< -o $@

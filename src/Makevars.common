@@ -1,0 +1,12 @@
+PKG_OBJECTS = \
+  IRanges_stubs.o R_init_GFplots.o bigWig.o handlers.o
+  
+UCSC_OBJECTS = \
+  bPlusTree.o bbiRead.o bbiWrite.o bwgCreate.o bwgQuery.o \
+  cirTree.o common.o dnaseq.o dnautil.o errabort.o hash.o linefile.o localmem.o\
+  sqlNum.o zlibFace.o dystring.o hmmstats.o obscure.o pipeline.o \
+  rangeTree.o rbTree.o memalloc.o dlist.o udc.o net.o bits.o twoBit.o \
+  _cheapcgi.o internet.o https.o base64.o verbose.o os.o wildcmp.o _portimpl.o
+
+PKG_CFLAGS = -g
+PKG_LIBS += -pthread
