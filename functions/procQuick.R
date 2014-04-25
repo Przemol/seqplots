@@ -49,22 +49,23 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
       
 			if (ignore_strand)                strand(sel) <- '*'
 			if( type == 'Midpoint Features' ) sel <- resize(sel, 1, fix='center')
-			gr <- GenomicRanges::promoters(sel, x1, x2)
       
-      if( class(trackfiles[[i]]) == 'character' ) {
+			if( class(trackfiles[[i]]) == 'character' ) {
 			  cat4("Loading track...")
 			  track <- BigWigFile(file.path('files', trackfiles[[i]]))
-			  if(remap_chr) { seqnameStyle(gr) <- seqnameStyle(track) }
+			  if(remap_chr) { seqnameStyle(sel) <- seqnameStyle(track) }
+			  
+			} else if ( class(trackfiles[[i]]) == 'list' ) {  
+			  pattern <- trackfiles[[i]]$pattern
+			  seq_win <- trackfiles[[i]]$window
+			  pnam    <- trackfiles[[i]]$name
+			  revcomp <- trackfiles[[i]]$revcomp
+			  if(remap_chr) { seqnameStyle(sel) <- seqnameStyle(GENOME) }
+			  
+			}
       
-		  } else if ( class(trackfiles[[i]]) == 'list' ) {  
-		    pattern <- trackfiles[[i]]$pattern
-		    seq_win <- trackfiles[[i]]$window
-		    pnam    <- trackfiles[[i]]$name
-		    revcomp <- trackfiles[[i]]$revcomp
-		    if(remap_chr) { seqnameStyle(gr) <- seqnameStyle(GENOME) }
-  
-		  }
-			
+			gr <- GenomicRanges::promoters(sel, x1, x2)
+      
 			if ( (type == 'Point Features') | (type == 'Midpoint Features') ) {
 				
         all_ind  <- seq(-x1, x2, by=as.numeric(bin) )
