@@ -26,7 +26,7 @@ plotHeatmap <- function(pl, title=input$title) {
   }
   
   finalOrd <- 1:nrow(H)
-  
+  rownames(H) <- 1:nrow(H)
   #Sorting
   if(input$img_sort) { 
     sorting_order <- order(rowMeans(Hclc, na.rm=TRUE), decreasing = TRUE) 
@@ -34,6 +34,7 @@ plotHeatmap <- function(pl, title=input$title) {
     Hclc <- Hclc[sorting_order,]
     session$sendCustomMessage("jsExec", paste0("$('#sortingord').val('",toJSON(sorting_order),"').change()"))
   } else {
+    sorting_order <- 1:nrow(H)
     session$sendCustomMessage("jsExec", "$('#sortingord').val('').change()")
   }
   
@@ -47,7 +48,7 @@ plotHeatmap <- function(pl, title=input$title) {
     
     H <- H[cls_order,]; finalOrd <- finalOrd[cls_order]
     clusts <- k$size
-    session$sendCustomMessage("jsExec", paste0("$('#clusters').val('",toJSON(classes),"').change()"))
+    session$sendCustomMessage("jsExec", paste0("$('#clusters').val('",toJSON(classes[order(sorting_order)]),"').change()"))
     
   } else if(input$img_clstmethod == 'hclust') {
     
@@ -82,6 +83,7 @@ plotHeatmap <- function(pl, title=input$title) {
     clusts <- NULL
     session$sendCustomMessage("jsExec", "$('#clusters').val('').change()")
   }
+  
   
   session$sendCustomMessage("jsExec", paste0("$('#finalord').val('",toJSON(finalOrd),"').change()"))
   

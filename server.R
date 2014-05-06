@@ -314,11 +314,13 @@ shinyServer(function(input, output, clientData, session) {
       if( nchar(input$clusters) ) 
         gr$ClusterID <- fromJSON(input$clusters)
 	    if( nchar(input$sortingord) ) 
-        gr$SortingOrder <- fromJSON(input$sortingord)
+        gr$SortingOrder <- order(fromJSON(input$sortingord))
       
-      gr$FinalOrder <- fromJSON(input$finalord)
+      gr$FinalOrder <- order(fromJSON(input$finalord))
       
       out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
+	    out <- out[fromJSON(input$finalord),]
+      browser()
 	    write.csv(out, file=file, row.names = FALSE)
 	    #cat(fromJSON(input$clusters), sep='\n', file=file)
 	  }
