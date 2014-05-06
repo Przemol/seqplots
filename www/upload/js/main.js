@@ -20,6 +20,8 @@ $(function () {
 //		url = 'http://ja-mac1.gurdon.cam.ac.uk/gfuploads';
 //	}
 	 
+   (window.File && window.FileReader && window.FileList && window.Blob) ? console.log('File API: OK') : alert('The File APIs are not fully supported in this browser. Please update your browser or chack \nhttp://caniuse.com/fileapi \nfor  supported browser list.');
+   
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
     	//url: url,
