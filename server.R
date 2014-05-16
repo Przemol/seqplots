@@ -320,7 +320,7 @@ shinyServer(function(input, output, clientData, session) {
       
       out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
 	    out <- out[fromJSON(input$finalord),]
-      browser()
+      
 	    write.csv(out, file=file, row.names = FALSE)
 	    #cat(fromJSON(input$clusters), sep='\n', file=file)
 	  }
