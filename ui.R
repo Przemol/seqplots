@@ -237,8 +237,8 @@ shinyUI(
 						    tabPanel(tags$i(class="icon-gears icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations and setup"), #"Batch", 
 						            
 						      div(class='form-inline', 
-						        numericInput("pdf_x_size", "PDF output size:", 16) ,  
-						        numericInput("pdf_y_size", "x", 10) 
+						        numericInput("pdf_x_size", "PDF output size: ", 16) ,  
+						        numericInput("pdf_y_size", " x ", 10) 
 						      ),      
                   tags$hr(),     
 						      checkboxInput('recordHistory', 'Record plot history', FALSE),      
@@ -248,6 +248,11 @@ shinyUI(
                     selectInput('batch_what', 'Plot', c('lineplots', 'heatmaps') ),  
                     selectInput('batch_how', 'by', c('rows', 'columns', 'single') )                                
 						      ),
+						      div(class='form-inline', 
+						          numericInput("grid_x_size", "Multi-plot grid: ", 1) ,  
+						          numericInput("grid_y_size", " x ", 1) 
+						      ), 
+                  textInput('multi_name_flt', 'Filter names'),
 						      downloadLink('downloadBatchColLineplot', tags$span(tags$i(class="icon-align-justify icon-rotate-90"), tags$i(class="icon-double-angle-right icon-large"),  tags$i(class="icon-picture icon-large icon-white"), 'Get PDF'),   class="btn btn-small btn-success"),
                   tags$hr(),
 						      #checkboxInput('setup_multithread', 'Use multithreading for calculations', (Sys.getenv("SHINY_SERVER_VERSION") != ''))

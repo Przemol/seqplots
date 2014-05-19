@@ -35,8 +35,12 @@
   height: 17px;
 }
 
-#title, #xlabel, #ylabel, #pdf_x_size, #pdf_y_size {
+#title, #xlabel, #ylabel {
 		width: 85px;
+}
+
+#pdf_x_size, #pdf_y_size, #grid_x_size, #grid_y_size {
+  	width: 50px;
 }
 
 #img_clusters {

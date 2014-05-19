@@ -195,14 +195,15 @@ shinyServer(function(input, output, clientData, session) {
       paste('Batch_', gsub(' ', '_', Sys.time()), '.pdf', sep='')
     },
     content = function(file) {
-      pdf(file, width = 16.0, height = 10.0, onefile = TRUE) #, encoding = "TeXtext.enc")
+      pdf(file, width = input$pdf_x_size, height = input$pdf_y_size, onefile = TRUE) #, encoding = "TeXtext.enc")
+      par(mfrow=c(input$grid_x_size,input$grid_y_size))
       nc <- length(values$grfile[[1]]) 
       nr <- length(values$grfile)
       if(input$batch_how=="rows") {
         for(n in 1:nc) {
           pl <- lapply(1:nr, function(x) values$grfile[[x]][[n]] )
           t1 <- sapply(pl, '[[', 'desc') 
-          title <- gsub('_ce10', '', unique( Map('[[', strsplit(t1, '\n@'), 1) ))
+          title <- gsub(input$multi_name_flt, '', unique( Map('[[', strsplit(t1, '\n@'), 1) ))
           if (input$batch_what == "lineplots") {
             plotLineplot(pl, title=title) 
           } else {
@@ -213,7 +214,7 @@ shinyServer(function(input, output, clientData, session) {
         for(n in 1:nr) {
           pl <- lapply(1:nc, function(x) values$grfile[[n]][[x]] )
           t1 <- sapply(pl, '[[', 'desc') 
-          title <- gsub('_ce10', '', unique( Map('[[', strsplit(t1, '\n@'), 1) ))
+          title <- gsub(input$multi_name_flt, '', unique( Map('[[', strsplit(t1, '\n@'), 2) ))
           if (input$batch_what == "lineplots") {
             plotLineplot(pl, title=title) 
           } else {
