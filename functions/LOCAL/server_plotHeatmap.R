@@ -96,7 +96,7 @@ plotHeatmap <- function(pl, title=input$title) {
   o_min <- if( length(subplotSetup$min) & input$heat_min_max ) as.numeric( subplotSetup$min[ord] ) else rep(NA, length(pl))
   o_max <- if( length(subplotSetup$max) & input$heat_min_max ) as.numeric( subplotSetup$max[ord] ) else rep(NA, length(pl))
   
-  heatmapPlotWrapper( H, clusts, nsubplot=length(pl), 
+  heatmapPlotWrapper( H, clusts, NP=length(pl), 
                       bins=pl[[1]]$all_ind, 
                       titles=lab, e=pl[[1]]$e, 
                       xlim=if(!input$xauto) NULL else c(input$xmin1, input$xmin2), 
