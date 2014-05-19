@@ -111,11 +111,12 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
 
 ###############################################################################
 
-heatmapPlotWrapper <- function(MAT, axhline=NULL, NP=4, titles=rep('', NP),	bins=1:(ncol(MAT)/NP), 
+heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),	bins=1:(ncol(MAT[[1]])/length(MAT)), 
 		lfs=1.75, afs=1.5, xlabel='xlab', Leg=TRUE, autoscale=TRUE, lgfs=1.1, zmin=0, zmax=10, ln.v=TRUE, e=NULL, xlim=NULL, ylabel="", s = 0.01, indi=TRUE,
     o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL) {
-
-	step_num <- ncol(MAT) / NP
+  
+  datapoints <- unlist(MAT)
+  NP=length(MAT)
   raster <- length(unique(diff(bins)))==1
 	
   colvec[ grepl('#ffffff', colvec) ] <- NA
@@ -126,12 +127,12 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, NP=4, titles=rep('', NP),	bins
     gcol <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
     #colorRampPalette(c("#053061","#2166AC","#4393C3","#92C5DE","#D1E5F0","#F7F7F7","#FDDBC7","#F4A582","#D6604D","#B2182B","#67001F"))     
   }
-	min <- min(MAT, na.rm=TRUE)
-	max <- max(MAT, na.rm=TRUE)
+	min <- min(datapoints, na.rm=TRUE)
+	max <- max(datapoints, na.rm=TRUE) 
 
   if (!indi) {
     if (autoscale) {
-      zlim <- quantile(MAT, c(s,1-s), na.rm=TRUE)
+      zlim <- quantile(datapoints, c(s,1-s), na.rm=TRUE)
       zmin<-zlim[1]
       zmax<-zlim[2]
     } 
@@ -145,7 +146,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, NP=4, titles=rep('', NP),	bins
 	par(cex=1, cex.main=lfs/1.4, cex.lab=lfs/1.2, cex.axis=afs/1.2)
   
 	for (i in seq(NP)) {
-		data <- MAT[,seq((i-1)*step_num+1,i*step_num)]
+		data <- MAT[[i]]
     
     if( !indi ) {
       data[data<zmin] <- zmin
