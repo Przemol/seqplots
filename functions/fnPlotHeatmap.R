@@ -111,14 +111,13 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
 
 ###############################################################################
 
-heatmapPlotWrapper <- function(merged, axhline=NULL, nsubplot=4, titles=rep('', nsubplot),	bins=1:(ncol(merged)/nsubplot), 
-		lfs=1.75, afs=1.5, xlabel='ylab', Leg=TRUE, autoscale=TRUE, lgfs=1.1, zmin=0, zmax=10, ln.v=TRUE, e=NULL, xlim=NULL, ylabel="", s = 0.01, indi=TRUE,
+heatmapPlotWrapper <- function(MAT, axhline=NULL, NP=4, titles=rep('', NP),	bins=1:(ncol(MAT)/NP), 
+		lfs=1.75, afs=1.5, xlabel='xlab', Leg=TRUE, autoscale=TRUE, lgfs=1.1, zmin=0, zmax=10, ln.v=TRUE, e=NULL, xlim=NULL, ylabel="", s = 0.01, indi=TRUE,
     o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL) {
 
-	step_num <- ncol(merged)/nsubplot
+	step_num <- ncol(MAT) / NP
   raster <- length(unique(diff(bins)))==1
 	
-
   colvec[ grepl('#ffffff', colvec) ] <- NA
   ncollevel = 64
   if(length(colorspace)) {
@@ -127,26 +126,26 @@ heatmapPlotWrapper <- function(merged, axhline=NULL, nsubplot=4, titles=rep('', 
     gcol <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
     #colorRampPalette(c("#053061","#2166AC","#4393C3","#92C5DE","#D1E5F0","#F7F7F7","#FDDBC7","#F4A582","#D6604D","#B2182B","#67001F"))     
   }
-	min <- min(merged, na.rm=TRUE)
-	max <- max(merged, na.rm=TRUE)
+	min <- min(MAT, na.rm=TRUE)
+	max <- max(MAT, na.rm=TRUE)
 
   if (!indi) {
     if (autoscale) {
-      zlim <- quantile(merged, c(s,1-s), na.rm=TRUE)
+      zlim <- quantile(MAT, c(s,1-s), na.rm=TRUE)
       zmin<-zlim[1]
       zmax<-zlim[2]
     } 
     par(oma = c(0, 0, 3, 0))
-	  layout(matrix(seq(nsubplot+1), nrow=1, ncol=nsubplot+1), widths=c(rep(12/nsubplot,nsubplot),1), heights=rep(1,nsubplot+1))
+	  layout(matrix(seq(NP+1), nrow=1, ncol=NP+1), widths=c(rep(12/NP,NP),1), heights=rep(1,NP+1))
     ColorRamp <-gcol(ncollevel)
     ColorLevels <- seq(to=zmax,from=zmin, length=ncollevel)   #number sequence
   } else {
-    set.panel(1, nsubplot)
+    set.panel(1, NP)
   }
 	par(cex=1, cex.main=lfs/1.4, cex.lab=lfs/1.2, cex.axis=afs/1.2)
   
-	for (i in seq(nsubplot)) {
-		data <- merged[,seq((i-1)*step_num+1,i*step_num)]
+	for (i in seq(NP)) {
+		data <- MAT[,seq((i-1)*step_num+1,i*step_num)]
     
     if( !indi ) {
       data[data<zmin] <- zmin
