@@ -45,11 +45,11 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 	for (j in filelist)	{
 		cat(n, ") Processing TSS file: ", basename(j), "\n", sep="")
 		
-		sel <- import(file(file.path('files',j)), asRangedData=FALSE)
+		  file_con <- file(file.path('files',j)); sel <- import(file_con , asRangedData=FALSE); close(file_con)
 		  genome_ind <- dbGetQuery(con, paste0("SELECT genome FROM files WHERE name = '", j, "'"))
 		  pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))
 		  require(pkg, character.only = TRUE); GENOME <- get(pkg)
-		  remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(supportedSeqnameStyles())
+		  remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(genomeStyles())
 		
 		proc <- list()
 		for(i in 1:length(trackfiles) ) {
@@ -63,14 +63,14 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 			if( class(trackfiles[[i]]) == 'character' ) {
 			  #cat4("Loading track...")
 			  track <- BigWigFile(file.path('files', trackfiles[[i]]))
-			  if(remap_chr) { seqnameStyle(sel) <- seqnameStyle(track) }
+			  if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track) }
 			  
 			} else if ( class(trackfiles[[i]]) == 'list' ) {  
 			  pattern <- trackfiles[[i]]$pattern
 			  seq_win <- trackfiles[[i]]$window
 			  pnam    <- trackfiles[[i]]$name
 			  revcomp <- trackfiles[[i]]$revcomp
-			  if(remap_chr) { seqnameStyle(sel) <- seqnameStyle(GENOME) }
+			  if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(GENOME) }
 			  
 			}
       
