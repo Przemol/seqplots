@@ -1,4 +1,4 @@
 
 .onLoad <- function(libname, pkgname) {
-	message('Loaded OK')
+	message('SeqPlots loaded')
 }
