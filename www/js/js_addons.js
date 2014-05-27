@@ -20,7 +20,7 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
 				"aaSorting": [[ 1, "desc" ]],
         "oTableTools": {
 			     "sRowSelect": "multi",
-               "fnPreRowSelect": function ( e, nodes ) {
+           "fnPreRowSelect": function ( e, nodes ) {
                 if(!e) return true;
                 if ( e.target.className.indexOf('no_select') != -1 ) {
                     return false;
@@ -28,29 +28,26 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
                 return true;
             },
            "fnRowSelected": function ( node, oConfig, nRow ) {
-                         jQuery(node).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check icon-spin" );
-                        //var a = TableTools.fnGetInstance( 'example' ).fnGetSelectedData();
-                        //var sel = [];
-                        //for(var i=0; i< a.length; i++) {
-                        //    sel.push(a[i][0]);
-                        //}
-                        //alert( JSON.stringify(sel) );
-                        //Shiny.shinyapp.sendInput({"f_tracks":sel});
-                    },
+              jQuery(node).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check icon-spin" );
+            },
             "fnRowDeselected": function ( node ) {
               jQuery(node).find(".select_indicator").removeClass( "icon-check icon-spin" ).addClass( "icon-check-empty" );
             },
 			     "aButtons": [ 
              {"sExtends": "text", "sButtonText": "Select filtered", "fnClick": function ( node, conf ) {
-               var zz = this.s.dt.oInstance.$('tr', {"filter":"applied"});
-               if ( zz.length < 100 ) {
-                 this.fnSelect( zz )
-               } else {
-                 alert('Select less than 100 rows!')
-               }
+               //var zz = this.s.dt.oInstance.$('tr', {"filter":"applied"});
+               //if ( zz.length < 100 ) {
+                 this.fnSelectAll( true )
+                 alert('Total selections:'+ this.fnGetSelectedData().length +' rows!')
+               //} else {
+                 //alert('Select less than 100 rows!')
+               //}
                
                //.s.dt.oInstance
                //TableTools.fnGetInstance( 'dttracktable'   ).fnSelect( $('#dttracktable tbody tr') ) 
+               
+               //console.log( this.fnGetSelectedData().length );
+               //$(z.dom.container).children().last().text('0 selected');
                } }, "select_none" ]
 		    },
 				"aoColumns": [
