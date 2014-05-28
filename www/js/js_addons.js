@@ -1,19 +1,27 @@
 Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
-    //$('#tracktable').width(1155); 
     $('#'+message.id).width(1170);
     var html = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed table-inside-modal" id="dt'+message.id+'"><tfoot><tr> <td></td> <th>-</th><th>-</th><th>-</th><th>-</th> <td></td><td></td><td></td><td></td><td></td> </tr></tfoot></table>'
     $('#'+message.id).html(html);
     var example = $('#dt'+message.id).dataTable( {
         "aaData": message.tab,
-    		//"bPaginate": true,
-        //"iDisplayLength" : 100,
-        //"bScrollInfinite": true,
-  	    //"bScrollCollapse": true,
-				"sScrollY": "350px",
-				//"sPaginationType": "bootstrap",
-				"sDom": 'TfirtS',
+        /* 
+        // Scroll enabled
+        "sDom": 'TfirtS',
+        "sScrollY": "350px",				
   	    "bDeferRender": true,
-        //"bAutoWidth": false,
+        */
+        
+        //Paginate enabled 
+        "sScrollY": "330px",
+        "iDisplayLength" : 10,
+        "sPaginationType": "bootstrap",
+        "sDom": 'Tfritlp<"#selectionsInfo_'+message.id+'.selectionsInfo">',
+        "bDeferRender": false,
+        "pagingType": "full_numbers",
+        "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        
+        
+    	  //Setup options
 				"oLanguage": {
 					"sLengthMenu": "_MENU_ records per page"
 				},
@@ -29,32 +37,22 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
             },
            "fnRowSelected": function ( node, oConfig, nRow ) {
               jQuery(node).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check icon-spin" );
+              $('#selectionsInfo_'+message.id).html('Selected '+ this.fnGetSelectedData().length +' entries');
             },
             "fnRowDeselected": function ( node ) {
               jQuery(node).find(".select_indicator").removeClass( "icon-check icon-spin" ).addClass( "icon-check-empty" );
+               $('#selectionsInfo_'+message.id).html('Selected '+ this.fnGetSelectedData().length +' entries');
             },
 			     "aButtons": [ 
              {"sExtends": "text", "sButtonText": "Select filtered", "fnClick": function ( node, conf ) {
-               //var zz = this.s.dt.oInstance.$('tr', {"filter":"applied"});
-               //if ( zz.length < 100 ) {
                  this.fnSelectAll( true )
-                 alert('Total selections:'+ this.fnGetSelectedData().length +' rows!')
-               //} else {
-                 //alert('Select less than 100 rows!')
-               //}
-               
-               //.s.dt.oInstance
-               //TableTools.fnGetInstance( 'dttracktable'   ).fnSelect( $('#dttracktable tbody tr') ) 
-               
-               //console.log( this.fnGetSelectedData().length );
-               //$(z.dom.container).children().last().text('0 selected');
+                 alert('Total selections: '+ this.fnGetSelectedData().length +' rows!')
                } }, "select_none" ]
 		    },
 				"aoColumns": [
 									{ "sTitle": '<i class="icon-file-alt"></i> File name',
                     "mRender": function ( data, type, row ) {
                       var short = data.length>60 ? data.substr(0,37)+'[...]'+data.substr(data.length-20,data.length) : data;
-                      //return '<a href="files/' + data + '" class="no_select">'+ short +'</a>';
                       if( data.length>60 ) { return '<abbr title="'+data+'">'+short+'</abbr>' } else { return short }
                     }
   								},
@@ -121,13 +119,8 @@ animateTitle = function() {
 		'-moz-animation-delay': Math.random()*5+'s',
 		'-ms-animation-delay': Math.random()*5+'s',
 		'animation-delay': Math.random()*5+'s',
-		//"background-color": '#'+Math.floor(Math.random()*16777215).toString(16), 
 		'color': '#'+Math.floor(Math.random()*16777215).toString(16)		 
 	}) });
-//	$.each($('.letter-container h2 a span'), function(index, value) { $(this).css('-moz-animation-delay', Math.random()*3) });
-//	$.each($('.letter-container h2 a span'), function(index, value) { $(this).css('-ms-animation-delay', Math.random()*3) });
-//	$.each($('.letter-container h2 a span'), function(index, value) { $(this).css('animation-delay', Math.random()*3) });
-//	$.each($('.letter-container h2 a span'), function(index, value) { $(this).css('color', '#'+Math.floor(Math.random()*16777215).toString(16)) });
 	$('.letter-container h2 a span').hover( function () { $(this).css("color", '#'+Math.floor(Math.random()*16777215).toString(16) ); });
 }
 
@@ -152,7 +145,6 @@ sendToCalc = function() {
   Shiny.shinyapp.sendInput({"f_tracks":t_sel});
   Shiny.shinyapp.sendInput({"f_features":f_sel});
 	Shiny.shinyapp.sendInput({"TR_calculate":new Date().getTime()}); 
-	//Shiny.shinyapp.sendInput({"TR_calculate":null});
 	$("#myModal").modal("hide"); 
 	$("#progressModal").modal("show");
 
