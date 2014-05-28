@@ -2,6 +2,12 @@
   margin-top: 10px;
 }
 
+.selectionsInfo {
+  display: inline;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
 #lnh_pos {
   width: 80px;
 }
