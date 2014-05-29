@@ -27,28 +27,37 @@ shinyUI(
 						# JS exec handle
 						singleton(tags$script('Shiny.addCustomMessageHandler("jsAssign", function(message) {M = message;});')),
             
-						# CSS impprt
+						# CSS impprt						
+            # singleton(tags$link(rel="stylesheet", type="text/css", href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css")),
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/style.css")),
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/DT_bootstrap.css")),
-						singleton(tags$link(rel="stylesheet", type="text/css", href="css/TableTools.css")),
+						#singleton(tags$link(rel="stylesheet", type="text/css", href="http://cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/2/dataTables.bootstrap.css")),
+						singleton(tags$link(rel="stylesheet", type="text/css", href="css/TableTools.css")),	
+            #singleton(tags$link(rel="stylesheet", type="text/css", href="http://cdn.datatables.net/tabletools/2.2.1/css/dataTables.tableTools.css")),
+
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/font-awesome.min.css")),
 						
-						
 						# JS import
-						singleton(tags$script(src = "js/color.js")),
+						## miscellaneous libraries
 						singleton(tags$script(src = "js/jquery.ba-throttle-debounce.js")),
 						singleton(tags$script(src = "js/jquery.lettering.js")),
-						singleton(tags$script(src = "js/jquery.dataTables.js")),
-						singleton(tags$script(src = "js/DT_bootstrap.js")),
-						singleton(tags$script(src = "js/DT_filter.js")),
-						singleton(tags$script(src = "js/js_addons.js")),
-						singleton(tags$script(src = "js/load_finished.js")),
 						singleton(tags$script(src = "js/tmpl.min.js")),
-						singleton(tags$script(src = "js/TableTools.min.js")),
-						singleton(tags$script(src = "js/dataTables.scroller.min.js")),
 						singleton(tags$script(src = "js/jquery.cookie.js")),
 						singleton(tags$script(src = "color/jscolor.js")),
+						## DataTable libraries
+						#singleton(tags$script(src = "js/jquery.dataTables.js")),
+						singleton(tags$script(src = "js/DataTables/jquery.dataTables.js")),
+						singleton(tags$script(src = "js/DataTables/DT_bootstrap.js")),
+						#singleton(tags$script(src = "http://cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/3/dataTables.bootstrap.js")),
+						#singleton(tags$script(src = "js/TableTools.min.js")),
+						singleton(tags$script(src = "js/DataTables/dataTables.tableTools.min.js")),
+						singleton(tags$script(src = "js/DataTables/DT_filter.js")),
 						
+						#singleton(tags$script(src = "js/dataTables.scroller.min.js")),
+						## My scripts
+						singleton(tags$script(src = "js/color.js")),
+						singleton(tags$script(src = "js/js_addons.js")),
+						singleton(tags$script(src = "js/load_finished.js")),
 						
 						# Title
 						tags$title('SeqPlots')
@@ -266,8 +275,8 @@ shinyUI(
 				    div( class='hidden', textInput('clusters', 'Clusters'), textInput('sortingord', 'Sorting'), textInput('finalord', 'Sorting') )
 				),
 				mainPanel(
-					uiOutput('reactiveScripts')
-					,singleton(tags$script(src = "upload/js/vendor/jquery.ui.widget.js"))
+					#uiOutput('reactiveScripts')
+					 singleton(tags$script(src = "upload/js/vendor/jquery.ui.widget.js"))
 					,singleton(tags$script(src = "upload/js/jquery.iframe-transport.js"))
 					,singleton(tags$script(src = "upload/js/jquery.fileupload.js"))		
 					,singleton(tags$script(src = "upload/js/jquery.fileupload-fp.js"))
