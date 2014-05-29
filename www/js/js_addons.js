@@ -36,11 +36,11 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
                 return true;
             },
            "fnRowSelected": function ( node, oConfig, nRow ) {
-              jQuery(node).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check icon-spin" );
+              jQuery(node).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );
               $('#selectionsInfo_'+message.id).html('Selected '+ this.fnGetSelectedData().length +' entries');
             },
             "fnRowDeselected": function ( node ) {
-              jQuery(node).find(".select_indicator").removeClass( "icon-check icon-spin" ).addClass( "icon-check-empty" );
+              jQuery(node).find(".select_indicator").removeClass( "icon-check" ).addClass( "icon-check-empty" );
                $('#selectionsInfo_'+message.id).html('Selected '+ this.fnGetSelectedData().length +' entries');
             },
 			     "aButtons": [ 
