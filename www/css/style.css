@@ -66,14 +66,9 @@
 	overflow: visible;
 }
 .fileMoodalInnerDiv select {
-	height: 100%; 
+	/* height: 100%; */ 
 }
-.fileMoodalInnerDiv .dataTables_paginate {
-	height: 20px; 
-}
-.fileMoodalInnerDiv .dataTables_paginate a {
-	line-height: 28px; 
-}
+
 
 .load_div {
 	background: grey;
