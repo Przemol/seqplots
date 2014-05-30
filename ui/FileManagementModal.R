@@ -1,7 +1,7 @@
 #File management modal
 tagList(
   singleton(tags$head(tags$script(src = "js/modal_events.js"))),	
-  div(id="myModal", class="modal container hide fade", tabindex="-1", role="dialog", 'aria-labelledby'="myModalLabel", 'aria-hidden'="true",
+  div(id="myModal", class="modal hide fade", tabindex="-1", role="dialog", style="width:1200px; margin-left: -600px",
       div( class="modal-body",
            tabsetPanel(
              tabPanel("Tracks", 		div(class='fileMoodalInnerDiv', div("Loading...",id="tracktable")	)),
