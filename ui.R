@@ -78,7 +78,6 @@ shinyUI(
         eval(parse( file.path(Sys.getenv("web", '.'), 'ui/FileManagementModal.R') )),
 
 				#Animated header
-				#tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">GFplots</a></h2>')), # v1.0b
 				tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">SeqPlots</a></h2>')), # v1.0b
 				
 				#Banner
