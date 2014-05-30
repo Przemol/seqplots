@@ -16,7 +16,7 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
         "iDisplayLength" : 10,
         "sPaginationType": "bootstrap",
         //"sDom": 'Tfritlp<"#selectionsInfo_'+message.id+'.selectionsInfo">',
-        "sDom": "<'row-fluid'<'span5'i><'#selectionsInfo_"+message.id+".selectionsInfo span2'><'span5'Tf>>rtlp",
+        "sDom": "<'row-fluid'<'span5'i><'#selectionsInfo_"+message.id+".selectionsInfo span1'><'span6'Tf>>rtlp",
         "bDeferRender": false,
         "pagingType": "full_numbers",
         "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -38,11 +38,11 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
             },
            "fnRowSelected": function ( node, oConfig, nRow ) {
               jQuery(node).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );
-              $('#selectionsInfo_'+message.id).html('Selected '+ this.fnGetSelectedData().length +' entries');
+              $('#selectionsInfo_'+message.id).html(this.fnGetSelectedData().length +' selected');
             },
             "fnRowDeselected": function ( node ) {
               jQuery(node).find(".select_indicator").removeClass( "icon-check" ).addClass( "icon-check-empty" );
-               $('#selectionsInfo_'+message.id).html('Selected '+ this.fnGetSelectedData().length +' entries');
+               $('#selectionsInfo_'+message.id).html(this.fnGetSelectedData().length +' selected');
             },
 			     "aButtons": [ 
              {"sExtends": "text", "sButtonText": "Select filtered", "fnClick": function ( node, conf ) {

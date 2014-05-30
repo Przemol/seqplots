@@ -89,7 +89,9 @@
 #myModal {
   width:1200px; 
   text-align: left; 
-  top: 255px; 
+  top: 10px; 
+/*left: 10px; 
+  margin-left: 0px; */
   margin-left: -600px;
 }
 
