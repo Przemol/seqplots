@@ -195,7 +195,7 @@ shinyServer(function(input, output, clientData, session) {
       paste('Batch_', gsub(' ', '_', Sys.time()), '.pdf', sep='')
     },
     content = function(file) {
-      pdf(file, width = input$pdf_x_size, height = input$pdf_y_size, onefile = TRUE) #, encoding = "TeXtext.enc")
+      pdf(file, width = input$pdf_x_size, height = input$pdf_y_size, onefile = TRUE, paper=input$paper) #, encoding = "TeXtext.enc")
       par(mfrow=c(input$grid_x_size,input$grid_y_size))
       nc <- length(values$grfile[[1]]) 
       nr <- length(values$grfile)
@@ -277,7 +277,7 @@ shinyServer(function(input, output, clientData, session) {
 		content = function( file ) {			
 		  co <- lapply(input$plot_this, function(x) fromJSON(x))
 		  pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
-		  pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size))
+		  pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size), paper=input$paper)
 		    plotLineplot(pl=pl)		
 		  dev.off()
 		  #Sys.sleep(1)
@@ -294,7 +294,7 @@ shinyServer(function(input, output, clientData, session) {
 				co <- lapply(input$plot_this, function(x) fromJSON(x))
 				pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
 				#jpeg(file, width = as.integer(input$pdf_x_size)*80, height = as.integer(input$pdf_y_size)*80)
-				pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size))
+				pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size), paper=input$paper)
 					plotHeatmap(pl=pl)				
 				dev.off()
 			}

@@ -106,27 +106,27 @@ shinyUI(
                 #div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
 						    div(class="img", imageOutput(outputId = "image", width = "1240px", height = "720px") )
 				
-						)
+						),
+						conditionalPanel(condition = "!input.reactive", div(class='row-fluid',
+						                                                    div(class='span2', 'Preview '),
+						                                                    div(class='span4', tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-picture"), 'Line plot' ))),
+						                                                    div(class='span4', tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-th"), 'Heatmap' ))), 
+						                                                    div(class='span2', actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"), HTML('') ))),tags$hr()
+						))
 					),
-					div(class='row-fluid', 
-              div(class='span5',conditionalPanel(condition = "!input.reactive", actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"), HTML('<b>PLOT</b> [&crarr;]') )))),
-					    div(class='span7',checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE)), tags$hr()
-					),
+			
 					
 					tabsetPanel(id='ctltabs',
 					#1) NEW PLOT SET PANEL
 								tabPanel(value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plotset/Upload files") #, "New"
 										,h5('Upload files:')
-										,helpText( "This panel is used to add track (BigWig, Wiggle or BedGraph) and feature (GFF and BED) files to file collection.
-												  	Please provide your user ID (initials, eg JS fot John Smith) and genome specify version.
-													You can drag-and-drop the files to browser window. Comments are optional.") # TIP: You can add multiple files at once.
+										,helpText( "Add signal tracks (bigWig, wig or bedGraph) and feature files (GFF and BED) to the file collection.") # TIP: You can add multiple files at once.
 		  								,HTML('<a href="#fileUploadModal" role="button" class="btn btn-success" data-toggle="modal"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</a>')
                       ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES, selected = 'ce10', selectize = FALSE)) #This should stay for clonning, unless I can figure out something better using JS
                     ,tags$hr()
                     
 										,h5('Create new plot array:')
-										,helpText( "This panel allows to calculate new plot array. Each track will be summarized using each feature file.
-													Subsequently the plot arry will be shown to indicate which pairs should be plotted.")
+										,helpText( "Choose signal tracks and feature files from the collection to use for calculating average plots and heat maps.")
 										,a(href="#myModal", role="button", class="btn btn-primary", 'data-toggle'="modal", tags$i(class="icon-magic icon-large icon-white"), "New plot set")
 										,uiOutput('plot_message')
 										,if (Sys.getenv("SHINY_SERVER_VERSION") != '') {div(
@@ -139,19 +139,10 @@ shinyUI(
                       						tags$br()
 								    	}
 								),
-					#2) SAVE/LOAD PLOT SET PANEL
-								tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
-                    selectInput('publicRdata', 'Load public file:', ' ', ' '),
-										conditionalPanel("input.publicRdata !== ' '", 
-                                     actionButton('RdataRemoveButton', 'Remove dataset', icon=icon('trash-o')) ,
-										                 downloadButton('RdataDoenloadButton', 'Download dataset') 
-                    ), tags$hr(),
-										textInput('RdataSaveName', 'Save current plot set as:', ''), 
-										conditionalPanel("input.RdataSaveName !== ''", actionButton('RdataSaveButton', 'Save', icon=icon('save')) ) 
-								),
 					#3) TITLES AND AXIS PANEL
 								tabPanel(value = 'panel3', title=tags$i(class="icon-font icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Title and axis"), #"Axis", 
-                         #conditionalPanel(condition = "output.showplot", 										
+                         #conditionalPanel(condition = "output.showplot", 	
+								    h5(tags$u('Title and axis')),
 										div(class='row-fluid', 
 												div(class='span4', textInput("title", "Title:", ""),         
                             sliderInput("title_font_size", "Title font size:",   0.5, 10, 2.0, 0.5, ticks = TRUE, animate = TRUE) ),
@@ -240,18 +231,33 @@ shinyUI(
 									)
 									
 								),
-		
+					#6) SAVE/LOAD PLOT SET PANEL
+					      tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
+					         selectInput('publicRdata', 'Load saved plot set:', ' ', ' '),
+					         conditionalPanel("input.publicRdata !== ' '", 
+					                          actionButton('RdataRemoveButton', 'Remove dataset', icon=icon('trash-o')) ,
+					                          downloadButton('RdataDoenloadButton', 'Download dataset') 
+					         ), tags$hr(),
+					         textInput('RdataSaveName', 'Save current plot set', ''), 
+					         conditionalPanel("input.RdataSaveName !== ''", actionButton('RdataSaveButton', 'Save', icon=icon('save')) ) 
+					      ),
 					#7) BATCH
-						    tabPanel(tags$i(class="icon-gears icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations and setup"), #"Batch", 
-						            
-						      div(class='form-inline', 
-						        numericInput("pdf_x_size", "PDF output size: ", 16) ,  
+						    tabPanel(tags$i(class="icon-gears icon-blcak icon-large", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations and setup"), #"Batch", 
+						      h5('Output PDF paper type or size [inches]:'), 
+						      div(class='row-fluid', 
+						          div(class='span8',  selectInput('paper', '', choices=c('A4 rotated'="a4r", 'User defined'="special", 'Legal rotated'="USr", 'A4'="a4", 'Letter'="letter", 'Legal'="US", 'Executive'="executive") ))
+						      ),
+						      conditionalPanel( condition = 'input.paper == "special"', div(class='form-inline', 
+						        numericInput("pdf_x_size", "", 16) ,  
 						        numericInput("pdf_y_size", " x ", 10) 
-						      ),      
-                  tags$hr(),     
-						      checkboxInput('recordHistory', 'Record plot history', FALSE),      
-						      downloadLink('downloadHistory',   tags$span(tags$i(class="icon-time icon-large"), 'Get plot history'),   class="btn btn-small btn-success"),
+						      )),      
                   tags$hr(),
+						      conditionalPanel( condition = 'false',
+						        checkboxInput('recordHistory', 'Record plot history', FALSE),      
+						        downloadLink('downloadHistory',   tags$span(tags$i(class="icon-time icon-large"), 'Get plot history'),   class="btn btn-small btn-success"),
+                    tags$hr()
+						      ),
+						      h5('Batch operations:'),   
 						      div(class='form-inline', 
                     selectInput('batch_what', 'Plot', c('lineplots', 'heatmaps') ),  
                     selectInput('batch_how', 'by', c('rows', 'columns', 'single') )                                
@@ -260,17 +266,21 @@ shinyUI(
 						          numericInput("grid_x_size", "Multi-plot grid: ", 1) ,  
 						          numericInput("grid_y_size", " x ", 1) 
 						      ), 
-                  textInput('multi_name_flt', 'Filter names'),
+						      div(class='form-inline', textInput('multi_name_flt', 'Filter names') ),
 						      downloadLink('downloadBatchColLineplot', tags$span(tags$i(class="icon-align-justify icon-rotate-90"), tags$i(class="icon-double-angle-right icon-large"),  tags$i(class="icon-picture icon-large icon-white"), 'Get PDF'),   class="btn btn-small btn-success"),
                   tags$hr(),
 						      #checkboxInput('setup_multithread', 'Use multithreading for calculations', (Sys.getenv("SHINY_SERVER_VERSION") != ''))
+                  h5('Advanced options:'),
+						      checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE),
 						      conditionalPanel( condition = tolower(as.character(Sys.getenv("SHINY_SERVER_VERSION") == '')),
 						        checkboxInput('setup_multithread', 'Use multithreading for calculations', .Platform$OS.type != 'windows')
 						      )
+						      
 						                     
 						    )
 
 						),
+					  
 				    div( class='hidden', textInput('clusters', 'Clusters'), textInput('sortingord', 'Sorting'), textInput('finalord', 'Sorting') )
 				),
 				mainPanel(
