@@ -6,12 +6,11 @@
 
 suppressPackageStartupMessages({
   require(parallel)
-  library(shiny)
-  library(rtracklayer)
+  require(shiny)
   require(RJSONIO)
   require(RSQLite)
+  require(rtracklayer)
   require(BSgenome)
-  require(seqnames.db)
   require(kohonen)
 })
 
