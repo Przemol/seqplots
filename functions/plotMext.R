@@ -49,7 +49,7 @@ plotMext <- function(INPUTS, desc1="", y1=NULL, y2=NULL, x1=NULL, x2=NULL, type=
       legend(legend_pos, legendText, col=cols, bg=rainbow(1, alpha=0),  bty="n", cex=cex.legend, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2), lwd=15, pch=0, lty=0)
     }
     if(EE && legend_ext) { 
-      legend(legend_ext_pos, c("Mean\n(solid line)","Standard error\n(dark filed)", "95% CI\n(light field)"), pch=c(-1, 0, 0),  title="Fields and lines legend", lwd=c(3,15,15), lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), bg=rainbow(1, alpha=0), bty="n", cex=cex.legend, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2)) 
+      legend(legend_ext_pos, c("Mean\n(solid line)","Standard error\n(dark area)", "95% CI\n(light area)"), pch=c(-1, 0, 0), lwd=c(3,15,15), lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), bg=rainbow(1, alpha=0), bty="n", cex=cex.legend, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2)) 
     }
   } else {
     if (type == 'pdf') pdf(pdf.name, width = pdf.size.X , height = pdf.size.Y, onefile = FALSE, paper = "special") #, encoding = "TeXtext.enc")
@@ -66,7 +66,7 @@ plotMext <- function(INPUTS, desc1="", y1=NULL, y2=NULL, x1=NULL, x2=NULL, type=
   			legend(legend_pos, legendText, col=cols, bg=rainbow(1, alpha=0),  bty="n", cex=cex.legend, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2), lwd=15, pch=0, lty=0)
   		}
       if(EE && legend_ext) { 
-        legend(legend_ext_pos, c("Mean\n(solid line)","Standard error\n(dark filed)", "95% CI\n(light field)"), pch=c(-1, 0, 0),  title="Fields and lines legend", lwd=c(3,15,15), lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), bg=rainbow(1, alpha=0), bty="n", cex=cex.legend, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2)) 
+        legend(legend_ext_pos, c("Mean\n(solid line)", "Standard error\n(dark area)", "95% CI\n(light area)"), pch=c(-1, 0, 0), lwd=c(3,15,15), lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), bg=rainbow(1, alpha=0), bty="n", cex=cex.legend, y.intersp=2, inset=0.0, seg.len=2, title.adj=c(2, 2)) 
       }
   		abline( v=ln.v, h=ln.h, col="gray" )
   	if (type == 'pdf') dev.off()
