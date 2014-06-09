@@ -104,21 +104,22 @@ shinyUI(
 						  )),
 						    #div(class="hidden", actionButton('plotHmap', 'Plot')),
                 #div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
-						    div(class="img", imageOutput(outputId = "image", width = "1240px", height = "720px") )
+						    div(class="img", imageOutput(outputId = "image", width = "1169px", height = "782px") )
 				
 						),
 						conditionalPanel(condition = "!input.reactive", div(class='row-fluid',
 						                                                    div(class='span2', 'Preview '),
-						                                                    div(class='span4', tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-picture"), 'Line plot' ))),
-						                                                    div(class='span4', tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-th"), 'Heatmap' ))), 
-						                                                    div(class='span2', actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"), HTML('') ))),tags$hr()
+						                                                    div(class='span4', tags$a(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-picture"), 'Line plot' ))),
+						                                                    div(class='span4', tags$a(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-th"), 'Heatmap' ))), 
+						                                                    div(class='span2', actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large")) )),
+                                                                tags$hr()
 						))
 					),
 			
 					
 					tabsetPanel(id='ctltabs',
 					#1) NEW PLOT SET PANEL
-								tabPanel(value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plotset/Upload files") #, "New"
+								tabPanel(value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plot set/Upload files") #, "New"
 										,h5('Upload files:')
 										,helpText( "Add signal tracks (bigWig, wig or bedGraph) and feature files (GFF and BED) to the file collection.") # TIP: You can add multiple files at once.
 		  								,HTML('<a href="#fileUploadModal" role="button" class="btn btn-success" data-toggle="modal"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</a>')
@@ -145,11 +146,11 @@ shinyUI(
 								    h5(tags$u('Title and axis')),
 										div(class='row-fluid', 
 												div(class='span4', textInput("title", "Title:", ""),         
-                            sliderInput("title_font_size", "Title font size:",   0.5, 10, 2.0, 0.5, ticks = TRUE, animate = TRUE) ),
+                            sliderInput("title_font_size", "Title font size:",   0, 72, 20, 0.5, ticks = TRUE) ),
 												div(class='span4', textInput("xlabel", "X-axis label:", ""), 
-                            sliderInput("labels_font_size", "Labels font size:", 0.5, 10, 2.0, 0.5, ticks = TRUE, animate = TRUE) ),
+                            sliderInput("labels_font_size", "Labels font size:", 0, 72, 16, 0.5, ticks = TRUE) ),
 												div(class='span4', textInput("ylabel", "Y-axis label:", ""), 
-                            sliderInput("axis_font_size", "Axis font size:",     0.5, 10, 2.0, 0.5, ticks = TRUE, animate = TRUE) )
+                            sliderInput("axis_font_size", "Axis font size:",     0, 72, 12, 0.5, ticks = TRUE) )
 										),
 										#uiOutput("plotUI"),
                     tags$hr(),
@@ -163,28 +164,29 @@ shinyUI(
 										)
 									#)
 								),
-					  #4) Legends, guide lines, and data scaling
-								tabPanel(value = 'panel4', title=tags$i(class="icon-tags icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Legends, guide lines, and data scaling"),# "Setup", 
+					  #4) Guide lines, and data scaling
+								tabPanel(value = 'panel4', title=tags$i(class="icon-tags icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Guide lines and data scaling"),# "Setup", 
 												selectInput('scale_signal', 'Transform signal:', c( 'Do not transform', 'Log2 transform')), #, 'Z-score transform')),
-												checkboxInput("lnv", "Show vertical guiding line", TRUE),
+												checkboxInput("lnv", "Show vertical guide line", TRUE),
 								        div(class='row-fluid',  
-								            div(class='span8',checkboxInput("lnh", "Show horizontal guiding line", FALSE)),
+								            div(class='span8',checkboxInput("lnh", "Show horizontal guide line", FALSE)),
 								            div(class='span4',conditionalPanel( condition = "input.lnh == true",numericInput("lnh_pos", "-> position:", 0)))
                         ),
-												checkboxInput("ee", "Show error estimates", TRUE),
-								        div(class='row-fluid',  
-								            div(class='span8',checkboxInput("legend", "Show plot legend", TRUE)),
-								            div(class='span4',conditionalPanel( condition = "input.legend == true", selectInput("legend_pos", "-> position:", c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center"), 'topright' )))
-                        ),
-								        div(class='row-fluid', 
-								            div(class='span8',checkboxInput("legend_ext", "Show error estimate legend", FALSE)),
-								            div(class='span4',conditionalPanel( condition = "input.legend_ext == true", selectInput("legend_ext_pos", "-> position:", c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center"),  "topleft" )))
-								        ),
-												sliderInput("legend_font_size", "Legend font size:", 0.5, 10, 1.5, 0.5, ticks = TRUE, animate = TRUE)
+												checkboxInput("ee", "Show error estimates", TRUE)
 								),
 					#5) Subplot options/Labels and colours               
-					tabPanel(value = 'panel5', title=tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Labels and colours"), #"Subplots",
-					         checkboxGroupInput('subplot_options', 'Set sub-plot specific:', c('Colors'='color', 'Label'='label', 'Priority/Order'='prior'), selected = NULL)
+					tabPanel(value = 'panel5', title=tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Keys, labels and colors"), #"Subplots",
+					         checkboxGroupInput('subplot_options', 'Set sub-plot specific:', c('Colors'='color', 'Label'='label', 'Priority/Order'='prior'), selected = NULL),
+					         tags$hr(),
+                   div(class='row-fluid',  
+					             div(class='span8',checkboxInput("legend", "Show plot key", TRUE)),
+					             div(class='span4',conditionalPanel( condition = "input.legend == true", selectInput("legend_pos", "-> position:", c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center"), 'topright' )))
+					         ),
+					         div(class='row-fluid', 
+					             div(class='span8',checkboxInput("legend_ext", "Show error estimate key", FALSE)),
+					             div(class='span4',conditionalPanel( condition = "input.legend_ext == true", selectInput("legend_ext_pos", "-> position:", c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center"),  "topleft" )))
+					         ),
+					         sliderInput("legend_font_size", "Legend font size:", 0, 72, 12, 0.5, ticks = TRUE)
 					),
 					#6) HEATMAP SPECIFIC OPTIONS
 								tabPanel(value = 'panel6', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
@@ -203,15 +205,15 @@ shinyUI(
                         )
 									  )
 									), 
-									checkboxInput('heat_include', 'Exclude individual heatmaps from sorting/clustering', FALSE),
+									checkboxInput('heat_include', 'Choose individual heatmaps for sorting/clustering', FALSE),
                   tags$br(),
                   
 									checkboxInput("indi", "Heatmaps have individual color keys", TRUE),
 									checkboxInput("heatmapzauto", "Set default color key limits", FALSE),
 									conditionalPanel( condition = "input.heatmapzauto == false",
 									  div(class='row-fluid',
-									                      div(class='span5', tags$br(), "Color key saturation:"),
-									                      div(class='span7', sliderInput("hsccoef", "Color key saturation:", 0, 0.1, 0.01, NULL, ticks = TRUE, animate = TRUE)									                      )
+									                      div(class='span5', tags$br(), "Color key scaling:"),
+									                      div(class='span7', sliderInput("hsccoef", "Color key saturation:", 0, 0.1, 0.01, 0.001, ticks = TRUE)									                      )
 									                  )                
 									   
 									),
@@ -238,7 +240,7 @@ shinyUI(
 					                          actionButton('RdataRemoveButton', 'Remove dataset', icon=icon('trash-o')) ,
 					                          downloadButton('RdataDoenloadButton', 'Download dataset') 
 					         ), tags$hr(),
-					         textInput('RdataSaveName', 'Save current plot set', ''), 
+					         textInput('RdataSaveName', 'Save current plot set:', ''), 
 					         conditionalPanel("input.RdataSaveName !== ''", actionButton('RdataSaveButton', 'Save', icon=icon('save')) ) 
 					      ),
 					#7) BATCH
@@ -260,7 +262,7 @@ shinyUI(
 						      h5('Batch operations:'),   
 						      div(class='form-inline', 
                     selectInput('batch_what', 'Plot', c('lineplots', 'heatmaps') ),  
-                    selectInput('batch_how', 'by', c('rows', 'columns', 'single') )                                
+                    selectInput('batch_how', 'by', c('single', 'rows', 'columns') )                                
 						      ),
 						      div(class='form-inline', 
 						          numericInput("grid_x_size", "Multi-plot grid: ", 1) ,  

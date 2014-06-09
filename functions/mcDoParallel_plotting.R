@@ -30,7 +30,7 @@ mcDoParallel <- quote({
       out <- list()
       a <- tempfile(pattern = "sessionID_", tmpdir = 'tmp', fileext = '.png')
       # Generate the PNG
-      png(a, width=1240, height=720)
+      png(a, height = 210, width = 297, units='mm', res=100, pointsize = 12)
       
       co <- lapply(input$plot_this, function(x) fromJSON(x))
       pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
