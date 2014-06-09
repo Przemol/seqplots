@@ -122,21 +122,25 @@ shinyServer(function(input, output, clientData, session) {
 	  if(is.null(values$im)) return(list(src = '',contentType = 'image/png',alt = "No image to plot just yet"))
 	  list(src = values$im,
 	       contentType = 'image/png',
-	       width = 1240,
-	       height = 720,
+	       width = 1169,
+	       height = 782,
 	       alt = "This is alternate text")
-	}, deleteFile = FALSE)
+	}, deleteFile = TRUE)
   
 	#renderin data dependant plot controles
   #outputOptions(output, "plotUI", suspendWhenHidden = FALSE)
 	observe({
 				 if(!is.null(values$grfile)) {
 				   
-				   rn <- range(values$grfile[[1]][[1]]$all_ind)
+				   rn  <- range( values$grfile[[1]][[1]]$all_ind )
+				   rnY <- extendrange( sapply( unlist(values$grfile, recursive=FALSE, use.names=FALSE), '[[', 'means'), f=.1 )
+           
 				   updateNumericInput(session, 'xmin1', value = rn[1], min = rn[1], max = rn[2], step = 1L)
 				   updateNumericInput(session, 'xmin2', value = rn[2], min = rn[1], max = rn[2], step = 1L)
-				   #updateNumericInput(session, 'xmin1', value = 100, min = 1, max = 200, step = 1L)
-					 #rn <- range(values$grfile[[1]][[1]]$all_ind)
+           
+				   updateNumericInput(session, 'ymin1', value = rnY[1], step = 1L)
+				   updateNumericInput(session, 'ymin2', value = rnY[2], step = 1L)
+           
 					 #sliderInput('xlim', 'X-axis limits:', min=rn[1], max=rn[2], value=c(rn[1], rn[2]), step=1)
 				 }
 	})
@@ -152,7 +156,7 @@ shinyServer(function(input, output, clientData, session) {
 		content = function(file) {
 			co <- lapply(input$plot_this, function(x) fromJSON(x))
 			pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
-			pdf(file, width = 10.0, height = 10.0, onefile = FALSE, paper = "special")
+			pdf(file, width = 10.0, height = 10.0, onefile = FALSE, paper = input$paper)
 			  plotLineplot(pl=pl, type='legend')
 			dev.off()
 		},
@@ -195,25 +199,32 @@ shinyServer(function(input, output, clientData, session) {
     },
     content = function(file) {
       pdf(file, width = input$pdf_x_size, height = input$pdf_y_size, onefile = TRUE, paper=input$paper) #, encoding = "TeXtext.enc")
-      par(mfrow=c(input$grid_x_size,input$grid_y_size))
+      par(mfrow=c(input$grid_y_size, input$grid_x_size))
       nc <- length(values$grfile[[1]]) 
       nr <- length(values$grfile)
-      if(input$batch_how=="rows") {
+      if(input$batch_how=="columns") {
         for(n in 1:nc) {
           pl <- lapply(1:nr, function(x) values$grfile[[x]][[n]] )
           t1 <- sapply(pl, '[[', 'desc') 
-          title <- gsub(input$multi_name_flt, '', unique( Map('[[', strsplit(t1, '\n@'), 1) ))
+          
+          title <- input[[paste0('label_',n,'x',1)]]
+          if(!nchar(title)) title <- gsub(input$multi_name_flt, '', unique( Map('[[', strsplit(t1, '\n@'), 1) ))
+          
+          
           if (input$batch_what == "lineplots") {
             plotLineplot(pl, title=title) 
           } else {
             plotHeatmap(pl, title=title) 
           } 
         }
-      } else if(input$batch_how=="columns") {
+      } else if(input$batch_how=="rows") {
         for(n in 1:nr) {
           pl <- lapply(1:nc, function(x) values$grfile[[n]][[x]] )
           t1 <- sapply(pl, '[[', 'desc') 
-          title <- gsub(input$multi_name_flt, '', unique( Map('[[', strsplit(t1, '\n@'), 2) ))
+          
+          title <- input[[paste0('label_',1,'x',n)]]
+          if(!nchar(title)) title <- gsub(input$multi_name_flt, '', unique( Map('[[', strsplit(t1, '\n@'), 2) ))
+          
           if (input$batch_what == "lineplots") {
             plotLineplot(pl, title=title) 
           } else {
@@ -224,11 +235,12 @@ shinyServer(function(input, output, clientData, session) {
         for(n in 1:nr) {
           for(m in 1:nc) {
             pl <- list(values$grfile[[n]][[m]])
-            title <- '' #pl$desc
+            title <- input[[paste0('label_',m,'x',n)]]
+            if(!nchar(title)) title <- pl[[1]]$desc
             if (input$batch_what == "lineplots") {
-              plotLineplot(pl, title=title) 
+              plotLineplot(pl, title=title, legend=FALSE) 
             } else {
-              plotHeatmap(pl, title=title) 
+              plotHeatmap(pl, title=title, legend=FALSE) 
             } 
           }  
         }
@@ -237,36 +249,6 @@ shinyServer(function(input, output, clientData, session) {
     },
     contentType = 'application/pdf'
   )
-	
-# 	#main PDF plotting function
-# 	plot.pdf <- function(ff='res/out3.pdf') { 
-# 		co <- lapply(input$plot_this, function(x) fromJSON(x))
-# 		pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
-# 		
-# 		if (input$cust_col) {
-# 			cltab <- sapply( co, function(x) eval(substitute(input$b, list(b = paste0('col_',x[1],'x', x[2]) ))) )
-# 		} else {
-# 			cltab <- NULL
-# 		}
-# 		
-# 		if ( input$scale_signal == "Do not transform" ) {
-# 			plotScale <-  'linear'
-# 		} else if ( input$scale_signal ==  "Log2 transform" ) {
-# 			plotScale <-  'log2'
-# 		} else if ( input$scale_signal == "Z-score transform" ) {
-# 			plotScale <-  'zscore'
-# 		}
-# 		
-# 		message('Plotting pdf...')
-# 		pdf(ff, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size))
-# 		plotMext(pl, x1=input$xlim[1], x2=input$xlim[2], y1=if(input$yauto) NULL else input$ymin1, y2=if(input$yauto) NULL else input$ymin2,
-# 				title=input$title, Xtitle = input$xlabel, Ytitle = input$ylabel, colvec = cltab, plotScale = plotScale, EE = input$ee, Leg = input$legend,
-# 				cex.axis = input$axis_font_size, cex.lab = input$labels_font_size, cex.main = input$title_font_size, cex.legend = input$legend_font_size, 
-# 				ln.v=input$lnv, ln.h=if(input$lnh) input$lnh_pos else NULL)
-# 		dev.off()
-# 		Sys.sleep(1)
-# 		message('done.')
-# 	}
 	
 	#Lineplot PDF download handler
 	output$downloadPlot <- downloadHandler(
@@ -292,7 +274,6 @@ shinyServer(function(input, output, clientData, session) {
 			content = function( file ) {
 				co <- lapply(input$plot_this, function(x) fromJSON(x))
 				pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
-				#jpeg(file, width = as.integer(input$pdf_x_size)*80, height = as.integer(input$pdf_y_size)*80)
 				pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size), paper=input$paper)
 					plotHeatmap(pl=pl)				
 				dev.off()
@@ -368,7 +349,7 @@ shinyServer(function(input, output, clientData, session) {
 	})
 	
   #Get the list of save datasets
-  updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
+  updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' ')
   
 	#Save dataset file logic
 	observe({
@@ -383,7 +364,7 @@ shinyServer(function(input, output, clientData, session) {
 					
 			message(paste('File saved: ',input$RdataSaveName))
 			session$sendCustomMessage("jsAlert", sprintf("File saved: %s", paste0(input$RdataSaveName, '.Rdata')) )
-			updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
+			updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' ')
 		})
 	})
 	
@@ -394,7 +375,7 @@ shinyServer(function(input, output, clientData, session) {
 			file.remove( file.path('publicFiles', input$publicRdata) )
 			message(paste('File removed: ',input$publicRdata))
 			session$sendCustomMessage("jsAlert", sprintf("File removed: %s", input$publicRdata) )
-			updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
+			updateSelectInput(session, 'publicRdata',choices = c( ' ', dir('publicFiles')), selected =  ' ')
 		})
 	})
   
@@ -510,8 +491,7 @@ shinyServer(function(input, output, clientData, session) {
     if(length(query$load)){
       #session$sendCustomMessage("jsAlert", sprintf('loading file: [%s]', file.path('publicFiles', query$load)) )
       values$grfile <- get(load( file.path('publicFiles', query$load) ))
-      #updateSelectInput(session, inputId='publicRdata', choices=LETTERS, label='zzz', selected='Z')
-      updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), query$load)
+      updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  query$load)
       #session$sendCustomMessage("jsExec", sprintf("$('#publicRdata').val('%s').change()", query$load))
     }
     for(n in names(query)[!names(query) %in% c('load', 'select', 'genome')] ){
