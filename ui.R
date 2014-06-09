@@ -146,11 +146,11 @@ shinyUI(
 								    h5(tags$u('Title and axis')),
 										div(class='row-fluid', 
 												div(class='span4', textInput("title", "Title:", ""),         
-                            sliderInput("title_font_size", "Title font size:",   0, 72, 20, 0.5, ticks = TRUE) ),
+                            sliderInput("title_font_size", "Title font size:",   1, 48, 20, 1) ),
 												div(class='span4', textInput("xlabel", "X-axis label:", ""), 
-                            sliderInput("labels_font_size", "Labels font size:", 0, 72, 16, 0.5, ticks = TRUE) ),
+                            sliderInput("labels_font_size", "Labels font size:", 1, 48, 16, 1) ),
 												div(class='span4', textInput("ylabel", "Y-axis label:", ""), 
-                            sliderInput("axis_font_size", "Axis font size:",     0, 72, 12, 0.5, ticks = TRUE) )
+                            sliderInput("axis_font_size", "Axis font size:",     1, 48, 14, 1) )
 										),
 										#uiOutput("plotUI"),
                     tags$hr(),
@@ -186,7 +186,7 @@ shinyUI(
 					             div(class='span8',checkboxInput("legend_ext", "Show error estimate key", FALSE)),
 					             div(class='span4',conditionalPanel( condition = "input.legend_ext == true", selectInput("legend_ext_pos", "-> position:", c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center"),  "topleft" )))
 					         ),
-					         sliderInput("legend_font_size", "Legend font size:", 0, 72, 12, 0.5, ticks = TRUE)
+					         sliderInput("legend_font_size", "Legend font size:", 1, 48, 12, 1, ticks = TRUE)
 					),
 					#6) HEATMAP SPECIFIC OPTIONS
 								tabPanel(value = 'panel6', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
