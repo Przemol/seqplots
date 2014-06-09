@@ -1,5 +1,5 @@
 #Heatmap plotting function
-plotHeatmap <- function(pl, title=input$title) {
+plotHeatmap <- function(pl, title=input$title, legend=TRUE) {
   if( length(pl) > 10 ) 
     stop('Heatmap plotting: Select less than 10 checkboxes!', call.=FALSE)
   if( is.null(pl[[1]]$heatmap) ) 
@@ -101,7 +101,7 @@ plotHeatmap <- function(pl, title=input$title) {
   
   heatmapPlotWrapper( HLST, clusts, 
                       bins=pl[[1]]$all_ind, 
-                      titles=lab, e=pl[[1]]$e, 
+                      titles=if(legend) lab else NULL, e=pl[[1]]$e, 
                       xlim=if(!input$xauto) NULL else c(input$xmin1, input$xmin2), 
                       ylabel=input$ylabel,
                       lfs=input$labels_font_size, 
@@ -119,6 +119,5 @@ plotHeatmap <- function(pl, title=input$title) {
                       o_max=o_max,
                       colvec=if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL,
                       colorspace=if(input$heat_colorspace) c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max) else NULL)
-  par(cex=input$title_font_size)
-  title(input$title, outer = TRUE)
+  title(title, outer = FALSE, cex.main=input$title_font_size/12)
 }
