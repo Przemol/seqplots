@@ -1,5 +1,8 @@
 #Heatmap plotting function
 plotHeatmap <- function(pl, title=input$title, legend=TRUE) {
+  
+  if(input$pty) par(pty='s')
+  
   if( length(pl) > 10 ) 
     stop('Heatmap plotting: Select less than 10 checkboxes!', call.=FALSE)
   if( is.null(pl[[1]]$heatmap) ) 

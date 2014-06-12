@@ -200,6 +200,7 @@ shinyServer(function(input, output, clientData, session) {
     content = function(file) {
       pdf(file, width = input$pdf_x_size, height = input$pdf_y_size, onefile = TRUE, paper=input$paper) #, encoding = "TeXtext.enc")
       par(mfrow=c(input$grid_y_size, input$grid_x_size))
+      if(input$pty_batch) par(pty='s')
       nc <- length(values$grfile[[1]]) 
       nr <- length(values$grfile)
       if(input$batch_how=="columns") {

@@ -1,6 +1,8 @@
 #Lineplot plotting function
 plotLineplot <- function(pl, title=input$title, type='dev', legend=TRUE) {
   
+  if(input$pty) par(pty='s')
+  
   ord <- if( length(subplotSetup$prior) & ('prior' %in% input$subplot_options) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
   pl <- pl[ ord ]
   if( length(subplotSetup$label) & ('label' %in% input$subplot_options) ) {
