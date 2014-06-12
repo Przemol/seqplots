@@ -245,14 +245,15 @@ shinyUI(
 					      ),
 					#7) BATCH
 						    tabPanel(tags$i(class="icon-gears icon-blcak icon-large", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations and setup"), #"Batch", 
-						      h5('Output PDF paper type or size [inches]:'), 
+						      
+                  h5('Output PDF paper type or size [inches]:'), 
 						      div(class='row-fluid', 
 						          div(class='span8',  selectInput('paper', '', choices=c('A4 rotated'="a4r", 'User defined'="special", 'Legal rotated'="USr", 'A4'="a4", 'Letter'="letter", 'Legal'="US", 'Executive'="executive") ))
 						      ),
 						      conditionalPanel( condition = 'input.paper == "special"', div(class='form-inline', 
 						        numericInput("pdf_x_size", "", 16) ,  
 						        numericInput("pdf_y_size", " x ", 10) 
-						      )),      
+						      )),
                   tags$hr(),
 						      conditionalPanel( condition = 'false',
 						        checkboxInput('recordHistory', 'Record plot history', FALSE),      
@@ -273,6 +274,8 @@ shinyUI(
                   tags$hr(),
 						      #checkboxInput('setup_multithread', 'Use multithreading for calculations', (Sys.getenv("SHINY_SERVER_VERSION") != ''))
                   h5('Advanced options:'),
+						      checkboxInput('pty_batch', 'Keep 1:1 aspect ratio in batch mode', TRUE),
+						      checkboxInput('pty', 'Always keep 1:1 aspect ratio', FALSE),
 						      checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE),
 						      conditionalPanel( condition = tolower(as.character(Sys.getenv("SHINY_SERVER_VERSION") == '')),
 						        checkboxInput('setup_multithread', 'Use multithreading for calculations', .Platform$OS.type != 'windows')
