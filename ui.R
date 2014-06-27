@@ -248,11 +248,11 @@ shinyUI(
 						      
                   h5('Output PDF paper type or size [inches]:'), 
 						      div(class='row-fluid', 
-						          div(class='span8',  selectInput('paper', '', choices=c('A4 rotated'="a4r", 'User defined'="special", 'Legal rotated'="USr", 'A4'="a4", 'Letter'="letter", 'Legal'="US", 'Executive'="executive") ))
+						          div(class='span8',  selectInput('paper', '', choices=c('A4 rotated'="a4r", 'Custom size...'="special", 'Legal rotated'="USr", 'A4'="a4", 'Letter'="letter", 'Legal'="US", 'Executive'="executive") ))
 						      ),
 						      conditionalPanel( condition = 'input.paper == "special"', div(class='form-inline', 
 						        numericInput("pdf_x_size", "", 16) ,  
-						        numericInput("pdf_y_size", " x ", 10) 
+						        numericInput("pdf_y_size", "[in] x ", 10) , '[in]'
 						      )),
                   tags$hr(),
 						      conditionalPanel( condition = 'false',
