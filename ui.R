@@ -4,7 +4,11 @@
 # require(rCharts)
 # options(RCHART_LIB = 'nvd3')
 
-
+hlp <- function(target, top=-10) {
+  return(tags$a(class='pull-right', href=paste0("help/help.html#", target), target="_blank", 
+    tags$i(class="icon-question-sign icon-2x", style=sprintf('color:orange; margin-right:5px; position: relative; top: %ipx;', top))
+  ))
+}
 
 # Define UI
 shinyUI(
@@ -78,10 +82,11 @@ shinyUI(
         eval(parse( file.path(Sys.getenv("web", '.'), 'ui/FileManagementModal.R') )),
 
 				#Animated header
-				tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">SeqPlots</a></h2>')), # v1.0b
+				tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="help/help.html" target="_blank">SeqPlots</a></h2>')),
+    
 				
 				#Banner
-        eval(parse( file.path(Sys.getenv("web", '.'), 'ui/banner.R') )),
+        #eval(parse( file.path(Sys.getenv("web", '.'), 'ui/banner.R') )),
 				
 			
 ###############################################################################
@@ -102,6 +107,7 @@ shinyUI(
 						      downloadLink('downloadClusters', tags$span(tags$i(class="icon-sitemap icon-large")), class="btn btn-small btn-info") #'Clusters indicates'
 						    
 						  )),
+						  hlp("Plotting", top=0),
 						    #div(class="hidden", actionButton('plotHmap', 'Plot')),
                 #div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
 						    div(class="img", imageOutput(outputId = "image", width = "1169px", height = "782px") )
@@ -120,30 +126,32 @@ shinyUI(
 					tabsetPanel(id='ctltabs',
 					#1) NEW PLOT SET PANEL
 								tabPanel(value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plot set/Upload files") #, "New"
-										,h5('Upload files:')
+										,h5('Upload files:', hlp("Addingandmanagingfiles"))
 										,helpText( "Add signal tracks (bigWig, wig or bedGraph) and feature files (GFF and BED) to the file collection.") # TIP: You can add multiple files at once.
 		  								,HTML('<a href="#fileUploadModal" role="button" class="btn btn-success" data-toggle="modal"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</a>')
                       ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES, selected = 'ce10', selectize = FALSE)) #This should stay for clonning, unless I can figure out something better using JS
                     ,tags$hr()
                     
-										,h5('Create new plot array:')
+										,h5('Create new plot array:', hlp("Runningtheplot-setjobs"))
 										,helpText( "Choose signal tracks and feature files from the collection to use for calculating average plots and heat maps.")
 										,a(href="#myModal", role="button", class="btn btn-primary", 'data-toggle'="modal", tags$i(class="icon-magic icon-large icon-white"), "New plot set")
 										,uiOutput('plot_message')
 										,if (Sys.getenv("SHINY_SERVER_VERSION") != '') {div(
-											tags$hr(), h5('Soft restart the server session'),
+											tags$hr(), h5('Soft restart the server session', hlp("Advancedoptions")),
 											helpText( "The button will perform soft reset of the server. 
 													This means a new session will be created for you and other active users will use their existing session(s) until they close the web browser.
 													Use this option if you experience performance issues or errors."),
                       						actionButton('spawn', tags$span(tags$i(class="icon-bolt icon-large"), HTML('Restart server!') ))
-								    	)} else {
-                      						tags$br()
-								    	}
+								    	)},
+										tags$br(),
+										tags$a(class='', href=paste0("help/help.html"), target="_blank", 'Read SeqPlots documentation'),
+                    ' or press ', tags$i(class="icon-question-sign icon-large", style='color:orange'), ' button to get help on specific controls.'
+										
 								),
 					#3) TITLES AND AXIS PANEL
 								tabPanel(value = 'panel3', title=tags$i(class="icon-font icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Title and axis"), #"Axis", 
                          #conditionalPanel(condition = "output.showplot", 	
-								    h5(tags$u('Title and axis')),
+								    h5(tags$u('Title and axis'), hlp("Titlesandaxispanel")),
 										div(class='row-fluid', 
 												div(class='span4', textInput("title", "Title:", ""),         
                             sliderInput("title_font_size", "Title font size:",   1, 48, 20, 1) ),
@@ -166,7 +174,8 @@ shinyUI(
 								),
 					  #4) Guide lines, and data scaling
 								tabPanel(value = 'panel4', title=tags$i(class="icon-tags icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Guide lines and data scaling"),# "Setup", 
-												selectInput('scale_signal', 'Transform signal:', c( 'Do not transform', 'Log2 transform')), #, 'Z-score transform')),
+								         h5(tags$u('Guide lines and data scaling'), hlp("Guidelinesanddatascaling")),
+                         selectInput('scale_signal', 'Transform signal:', c( 'Do not transform', 'Log2 transform')), #, 'Z-score transform')),
 												checkboxInput("lnv", "Show vertical guide line", TRUE),
 								        div(class='row-fluid',  
 								            div(class='span8',checkboxInput("lnh", "Show horizontal guide line", FALSE)),
@@ -176,7 +185,8 @@ shinyUI(
 								),
 					#5) Subplot options/Labels and colours               
 					tabPanel(value = 'panel5', title=tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Keys, labels and colors"), #"Subplots",
-					         checkboxGroupInput('subplot_options', 'Set sub-plot specific:', c('Colors'='color', 'Label'='label', 'Priority/Order'='prior'), selected = NULL),
+					         h5(tags$u('Keys, labels and colors'), hlp("Keys,labelsandcolorspanel")),
+                   checkboxGroupInput('subplot_options', 'Set sub-plot specific:', c('Colors'='color', 'Label'='label', 'Priority/Order'='prior'), selected = NULL),
 					         tags$hr(),
                    div(class='row-fluid',  
 					             div(class='span8',checkboxInput("legend", "Show plot key", TRUE)),
@@ -190,7 +200,7 @@ shinyUI(
 					),
 					#6) HEATMAP SPECIFIC OPTIONS
 								tabPanel(value = 'panel6', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
-			
+								  h5(tags$u('Heatmap setup'), hlp("Heatmapsetuptab")),
 									checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]"), 
 									checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
 									div(class='row-fluid',
@@ -235,7 +245,8 @@ shinyUI(
 								),
 					#6) SAVE/LOAD PLOT SET PANEL
 					      tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
-					         selectInput('publicRdata', 'Load saved plot set:', ' ', ' '),
+					         h5(tags$u('Load or save plotset'), hlp("loadmanagesavedplotset")),
+                   selectInput('publicRdata', 'Load saved plot set:', ' ', ' '),
 					         conditionalPanel("input.publicRdata !== ' '", 
 					                          actionButton('RdataRemoveButton', 'Remove dataset', icon=icon('trash-o')) ,
 					                          downloadButton('RdataDoenloadButton', 'Download dataset') 
@@ -246,7 +257,7 @@ shinyUI(
 					#7) BATCH
 						    tabPanel(tags$i(class="icon-gears icon-blcak icon-large", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations and setup"), #"Batch", 
 						      
-                  h5('Output PDF paper type or size [inches]:'), 
+                  h5('Output PDF paper type or size [inches]:', hlp("PDFoutputsize")), 
 						      div(class='row-fluid', 
 						          div(class='span8',  selectInput('paper', '', choices=c('A4 rotated'="a4r", 'Custom size...'="special", 'Legal rotated'="USr", 'A4'="a4", 'Letter'="letter", 'Legal'="US", 'Executive'="executive") ))
 						      ),
@@ -260,7 +271,7 @@ shinyUI(
 						        downloadLink('downloadHistory',   tags$span(tags$i(class="icon-time icon-large"), 'Get plot history'),   class="btn btn-small btn-success"),
                     tags$hr()
 						      ),
-						      h5('Batch operations:'),   
+						      h5('Batch operations:', hlp("Batchoperations")),   
 						      div(class='form-inline', 
                     selectInput('batch_what', 'Plot', c('lineplots', 'heatmaps') ),  
                     selectInput('batch_how', 'by', c('single', 'rows', 'columns') )                                
@@ -273,7 +284,7 @@ shinyUI(
 						      downloadLink('downloadBatchColLineplot', tags$span(tags$i(class="icon-align-justify icon-rotate-90"), tags$i(class="icon-double-angle-right icon-large"),  tags$i(class="icon-picture icon-large icon-white"), 'Get PDF'),   class="btn btn-small btn-success"),
                   tags$hr(),
 						      #checkboxInput('setup_multithread', 'Use multithreading for calculations', (Sys.getenv("SHINY_SERVER_VERSION") != ''))
-                  h5('Advanced options:'),
+                  h5('Advanced options:', hlp("Advancedoptions")),
 						      checkboxInput('pty_batch', 'Keep 1:1 aspect ratio in batch mode', TRUE),
 						      checkboxInput('pty', 'Always keep 1:1 aspect ratio', FALSE),
 						      checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE),
