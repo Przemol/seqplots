@@ -55,11 +55,14 @@ mcDoParallel <- quote({
   if( .Platform$OS.type == 'windows' | isolate(input$setup_multithread) == FALSE) {
     isolate({
       session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary3').text('Single process plotting.').parent().find('button').prop('disabled', true);")
-      out <- eval( do )
-      values$im <- as.character(out$url)
+      out <- try( eval( do ) )
       session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide').find('#summary2').text('').parent().find('button').prop('disabled', false);")
     })
-    
+    if (class(out) == "try-error") {
+      session$sendCustomMessage( "jsAlert", paste('ERROR:', attr(out, 'condition')$message) ) 
+    } else {
+      values$im <-  as.character(out$url) 
+    }
   } else {
     
     mceval(do, 

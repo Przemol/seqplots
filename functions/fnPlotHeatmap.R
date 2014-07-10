@@ -124,7 +124,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),	b
   NP=length(MAT)
   raster <- length(unique(diff(bins)))==1
 	
-  colvec[ grepl('#ffffff', colvec) ] <- NA
+  #colvec[ grepl('#ffffff', colvec) ] <- NA
   ncollevel = 64
   if(length(colorspace)) {
     gcol <- colorRampPalette(colorspace)
@@ -186,7 +186,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),	b
               legend.width=1, horizontal=TRUE, useRaster=raster)
       
     }
-		title( main=titles[i] ); box()
+		title( main=titles[i]); box()
 		if (!is.null(axhline)){
 			hi = 0
 			for (i in axhline){
