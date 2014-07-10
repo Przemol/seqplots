@@ -44,7 +44,7 @@ if(Sys.getenv('root') !='') {
 shinyServer(function(input, output, clientData, session) {
 	
   #Test if png is working, require x11 addon on newer Mac OS X if necessary
-  png(); plot(1); dev.off()
+  png(tempfile()); plot(1); dev.off()
   
   #Reactive values definition
   subplotSetup <- reactiveValues( )
