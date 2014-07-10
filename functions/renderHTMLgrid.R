@@ -6,8 +6,10 @@
 
 renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='') {
 	
-	cltab <- suppressWarnings(matrix(rgb(t(col2rgb(colors()[grep("dark",colors())])) , maxColorValue=255), length(grfile), length(grfile[[1]])))
-	html.text <- capture.output( {
+	#cltab <- suppressWarnings(matrix(rgb(t(col2rgb(colors()[grep("dark",colors())])) , maxColorValue=255), length(grfile), length(grfile[[1]])))
+	cls <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow((length(grfile)*length(grfile[[1]]))-8))
+	cltab <-matrix( rgb(t(col2rgb(cls)), maxColorValue=255), length(grfile), length(grfile[[1]]) )
+  html.text <- capture.output( {
 				cat('<table id="plotTable" class="',addcls,'" style="margin-left: auto; margin-right: auto; text-align: center;">')
 				cat('<thead>')
 				cat('<tr><th><b>Features:</b></th><th><span><span><span>')
@@ -31,7 +33,7 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='') {
 						  cat('<div class="div_separator div_setup"  style="display:none; min-width:90px;"><hr /></div>')
               
               cat('<div class="div_color div_setup"  style="display:none">
-                    <input type="color" name="plot_col" id="color_',i,'x', j,'" class="color {hash:true}", value="#FFFFFF" style="width:60px;" title="Set a color here." data-placement="left"/>  </div> ', sep='')
+                    <input type="color" name="plot_col" id="color_',i,'x', j,'" class="color {hash:true}", value="',cltab[i,j],'" style="width:60px;" title="Set a color here." data-placement="left"/>  </div> ', sep='')
               
               cat('<div class="div_label div_setup"  style="display:none">
                   <input type="text"   id="label_',i,'x', j,'" style="width:60px" placeholder="Label..." title="Set a label here." data-placement="left"/> </div> ', sep='')

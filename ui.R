@@ -236,7 +236,7 @@ shinyUI(
 									checkboxInput('heat_colorspace', 'Set default colorspace', FALSE),
 									conditionalPanel( condition = "input.heat_colorspace == true",
 									                  div(class='row-fluid', 
-									                      div(class='span4', HTML('Min: <input type="color" class="color {hash:true}" ="heat_csp_min" value="#FFFFFF" style="width:40px;" title=""/>')),
+									                      div(class='span4', HTML('Min: <input type="color" class="color {hash:true}" id="heat_csp_min" value="#FFFFFF" style="width:40px;" title=""/>')),
 									                      div(class='span4', HTML('Mid: <input type="color" class="color {hash:true}" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
 									                      div(class='span4', HTML('Max: <input type="color" class="color {hash:true}" id="heat_csp_max" value="#00008B" style="width:40px;" title=""/>'))
 									                  )
@@ -245,7 +245,7 @@ shinyUI(
 								),
 					#6) SAVE/LOAD PLOT SET PANEL
 					      tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
-					         h5(tags$u('Load or save plotset'), hlp("loadmanagesavedplotset")),
+					         h5(tags$u('Load or save plotset'), hlp("Savingandloadingplotsets")),
                    selectInput('publicRdata', 'Load saved plot set:', ' ', ' '),
 					         conditionalPanel("input.publicRdata !== ' '", 
 					                          actionButton('RdataRemoveButton', 'Remove dataset', icon=icon('trash-o')) ,

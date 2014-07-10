@@ -102,6 +102,8 @@ plotHeatmap <- function(pl, title=input$title, legend=TRUE) {
   o_min <- if( length(subplotSetup$min) & input$heat_min_max ) as.numeric( subplotSetup$min[ord] ) else rep(NA, length(pl))
   o_max <- if( length(subplotSetup$max) & input$heat_min_max ) as.numeric( subplotSetup$max[ord] ) else rep(NA, length(pl))
   
+  if( nchar(title) > 0 ) par(oma=c(0,0,(input$title_font_size/12)+1,0) )
+  
   heatmapPlotWrapper( HLST, clusts, 
                       bins=pl[[1]]$all_ind, 
                       titles=if(legend) lab else NULL, e=pl[[1]]$e, 
@@ -122,5 +124,5 @@ plotHeatmap <- function(pl, title=input$title, legend=TRUE) {
                       o_max=o_max,
                       colvec=if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL,
                       colorspace=if(input$heat_colorspace) c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max) else NULL)
-  title(title, outer = FALSE, cex.main=input$title_font_size/12)
+  title(title, outer = TRUE, cex.main=input$title_font_size/12)
 }

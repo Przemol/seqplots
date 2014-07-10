@@ -22,9 +22,12 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   testFeatureFile <-  function(PATH, gnm){
     tss <- try(import( file(PATH) ), silent = FALSE)
     if (class(tss) == "try-error") {
-      nfields <- count.fields(PATH, comment.char = '', skip = 1)
-      problem <- which(nfields != median( head(nfields, 1000) ))+1
-      stop('Problem with line ', problem, ': "', readLines(PATH, n=problem)[problem], '" [',attr(tss, 'condition')$message,']', call. = FALSE)
+    try({   nfields <- count.fields(PATH, comment.char = '', skip = 1)
+            problem <- which(nfields != median( head(nfields, 1000) ))+1
+    })
+    err <- paste('ERROR:', attr(tss, 'condition')$message)
+    if(is.integer(problem)) problem <- paste(err, '\n Possible problem with line ', problem, ': "\n', readLines(PATH, n=problem)[problem], '.')
+    stop(err, call. = FALSE)
     }
     testChromosomeNames(tss, gnm)
   }

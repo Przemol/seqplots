@@ -23,9 +23,12 @@ mcCalcStart <- quote({
     
     isolate({
       session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary2').text('Calculating plot set single process...').parent().find('button').prop('disabled', true);") 
-      values$grfile <- eval( do )
+      values$grfile <- try( eval( do ) )
       session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide').find('#summary2').text('').parent().find('button').prop('disabled', false);")
     })
+    if (class(values$grfile) == "try-error") {
+      session$sendCustomMessage( "jsAlert", paste('ERROR:', attr(values$grfile, 'condition')$message) ) 
+    }
     
   } else {
     
