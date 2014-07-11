@@ -8,7 +8,7 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='') {
 	
 	#cltab <- suppressWarnings(matrix(rgb(t(col2rgb(colors()[grep("dark",colors())])) , maxColorValue=255), length(grfile), length(grfile[[1]])))
 	cls <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow((length(grfile)*length(grfile[[1]]))-8))
-	cltab <-matrix( rgb(t(col2rgb(cls)), maxColorValue=255), length(grfile), length(grfile[[1]]) )
+	cltab <-matrix( rgb(t(col2rgb(cls)), maxColorValue=255), length(grfile[[1]]), length(grfile)  )
   html.text <- capture.output( {
 				cat('<table id="plotTable" class="',addcls,'" style="margin-left: auto; margin-right: auto; text-align: center;">')
 				cat('<thead>')
