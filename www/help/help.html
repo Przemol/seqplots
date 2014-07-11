@@ -1450,9 +1450,10 @@ Explanations
 
 <div class="navbar navbar-fixed-top" style="display:none;" id="top">
   <div class="navbar-inner">
-    <a class="brand" href="#" style="margin-left: 48px; padding-bottom: 0px; color:white">
+    <a class="brand" href="#" style="margin-left: 50px; padding-bottom: 0px;">
       <img src="img/icos.png" style="position: absolute; left:25px; top:-8px;"> SeqPlots help
     </a>
+
     <ul class="nav">
       <li><a href="SeqPlots.pdf">PDF documentation</a></li>
       <li><a href="http://bitbucket.org/przemol/seqplots/wiki/Home">Project home</a></li>
@@ -1460,6 +1461,25 @@ Explanations
       <li><a href="http://bitbucket.org/przemol/seqplots/issues/new">Report an issue</a></li>
       <li><a href="http://bitbucket.org/przemol/seqplots/downloads">Downloads</a></li>
       <li><a href="http://bitbucket.org/przemol/seqplots/src">Source code</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select theme<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li class="nav-header">Themes</li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">amelia</a></li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">cerulean</a></li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">journal</a></li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">readable</a></li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">simplex</a></li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">slate</a></li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">spacelab</a></li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">spruce</a></li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">superhero</a></li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">united</a></li>
+          <li class="divider"></li>
+          <li class="nav-header">Classsic</li>
+          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">bootstrap</a></li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>
@@ -1480,6 +1500,7 @@ Explanations
 <script src="jquery.min.js"></script>
 <script src="jquery-ui.min.js"></script>
 <script src="jquery.tocify.min.js"></script>
+<script src="bootstrap.min.js"></script>
 
 <script>
   $(function() {
