@@ -192,9 +192,10 @@ $(function() {
   $('i[data-toggle=tooltip]').tooltip();
 	
 	$(document).keydown(function(e){
-    	if ( (e.keyCode == 13) || e.keyCode == 32 && (e.ctrlKey || e.metaKey) ) { 
+    	if ( (e.keyCode == 13) || e.keyCode == 32 && (e.ctrlKey || e.metaKey) ) {
+        if( $(e.target).prop('id') == "debug_cmd" ) return
        		$('#replot').click();
-       			return false;
+       			return true;
     		} else if (e.keyCode == 82 && (e.ctrlKey || e.metaKey)) { 
        		$('#reactive').click();
        			return false;

@@ -2,6 +2,7 @@
 # 
 # Author: PS
 #For local testes: Sys.setenv(root=file.path(path.expand("~"), "GFplots_data"), web=getwd()); require(shiny); runApp()
+#session$registerDataObj('im', file.path(Sys.getenv("web", '.'), 'www/help/help.html'), function(data, req) { shiny:::httpResponse(content=readChar(data, file.info(data)$size)) })
 ###############################################################################
 
 suppressPackageStartupMessages({
@@ -62,9 +63,12 @@ shinyServer(function(input, output, clientData, session) {
 	suppressMessages( addResourcePath(prefix='files', directoryPath='./files') )
   
 	#Debug code: Testing eval statement
-	output$summary <- renderPrint({
-				eval(parse(text=input$caption))
-			})
+  if( Sys.getenv("seqplots_debug", FALSE) ) {
+	  output$debug_out <- renderPrint({
+	    if(input$debug_submit==0) return()
+	    isolate( eval(parse(text=input$debug_cmd)) )
+	  })
+  }
 	
   #Add [S]equence [F]eature setup and reset observers
   observe({
