@@ -325,21 +325,14 @@ shinyUI(
 #                      )
 #             )
 # 					)
-          
-					
-					
-			
-					#Debug code
-          #,div(HTML(' <input type="text" id="prr" style="width:40px" placeholder="Prior" value=0 /> '), class="zezol", title='Something')
-					,div( tags$hr(),textInput("caption", "EVAL!:", ""),
-					      textInput("tt1", "tt1", ""),
-					      
-                verbatimTextOutput("summary"), actionButton('ab1', 'Test'),
 
-                
-          class='hidden', id='debug')
-#					,verbatimTextOutput("timer")
-#					actionButton('parast', 'PS'), ,
-#					fileInput('file1', 'Choose File')
+					#Debug code
+					,if( Sys.getenv("seqplots_debug", FALSE) ) {
+              div( class='', id='debug', tags$hr(),
+					    'Evaluate: ', tags$br(), tags$textarea(id='debug_cmd', rows=4, style='width:88%'),
+					    actionButton('debug_submit', 'Submit'), verbatimTextOutput("debug_out")
+            )
+					}
 				)
-		))
+  )
+)
