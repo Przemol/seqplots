@@ -191,6 +191,8 @@ $(function() {
 	$('#spawn').addClass('btn-warning');
   $('i[data-toggle=tooltip]').tooltip();
 	
+  $('#stopapp').addClass('btn-warning').click( function(event) {  event.preventDefault(); });
+  
 	$(document).keydown(function(e){
     	if ( (e.keyCode == 13) || e.keyCode == 32 && (e.ctrlKey || e.metaKey) ) {
         if( $(e.target).prop('id') == "debug_cmd" ) return
