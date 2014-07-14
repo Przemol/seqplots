@@ -33,7 +33,7 @@ sourceDir <- function(path, ...) {
 }
 
 sqlite <- dbDriver("SQLite")
-if(Sys.getenv('root') !='') {
+if( Sys.getenv('root') != '' ) {
   con <- dbConnect(sqlite, dbname = file.path(Sys.getenv('root'),'files.sqlite'))
 } else if( file.exists('server_config.R')  ) {
   source('server_config.R')

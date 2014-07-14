@@ -1,3 +1,18 @@
+SeqPlots v0.9.2 RC
+--------------------------------------------------------------------------------------------------------------
+GENERAL:
+* use Cairo package for plotting, X11 installation no longer required
+* colors in plot grid are initiated automatically (same color palette as for auto-generated average plots), white color is allowed
+* more informative error messages during file upload
+* documentation is integrated with SeqPlots GUI help
+* Web GUI debug console added
+
+BUGFIX:
+* fixed errors reporting in singe core/Windows mode
+* the custom color gradient controls for hetmap (three color pickers) work correctly now
+* heatmap main title no longer overlaps with sub-plot labels
+
+
 SeqPlots v0.9.1 RC
 --------------------------------------------------------------------------------------------------------------
 GENERAL:
