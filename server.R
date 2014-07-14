@@ -487,6 +487,13 @@ shinyServer(function(input, output, clientData, session) {
     session$sendCustomMessage("jsExec", "location.reload(true)")
 
   })
+  
+  #Exit button logic
+  observe({
+    if(input$stopapp==0) return()
+    stopApp(returnValue = 'Stopped by user!' )
+    session$sendCustomMessage("jsExec", "window.onbeforeunload = function(){}; window.close();")
+  })
 
   #Server  Query String action
   observe({

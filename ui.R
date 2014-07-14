@@ -142,6 +142,9 @@ shinyUI(
 													This means a new session will be created for you and other active users will use their existing session(s) until they close the web browser.
 													Use this option if you experience performance issues or errors."),
                       						actionButton('spawn', tags$span(tags$i(class="icon-bolt icon-large"), HTML('Restart server!') ))
+								    	)} else {div(
+								    	  tags$hr(), helpText( "This button will stop and exit the SeqPlots web interface."), 
+								    	  actionButton('stopapp', tags$span(tags$i(class="icon-bolt icon-large"), HTML('Exit SeqPlots') ))
 								    	)},
 										tags$br(),
 										tags$a(class='', href=paste0("help/help.html"), target="_blank", 'Read SeqPlots documentation'),
