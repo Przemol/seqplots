@@ -2,6 +2,12 @@
   margin-top: 10px;
 }
 
+.selectionsInfo {
+  display: inline;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
 #lnh_pos {
   width: 80px;
 }
@@ -35,8 +41,12 @@
   height: 17px;
 }
 
-#title, #xlabel, #ylabel, #pdf_x_size, #pdf_y_size {
+#title, #xlabel, #ylabel {
 		width: 85px;
+}
+
+#pdf_x_size, #pdf_y_size, #grid_x_size, #grid_y_size {
+  	width: 50px;
 }
 
 #img_clusters {
@@ -56,14 +66,9 @@
 	overflow: visible;
 }
 .fileMoodalInnerDiv select {
-	height: 100%; 
+	/* height: 100%; */ 
 }
-.fileMoodalInnerDiv .dataTables_paginate {
-	height: 20px; 
-}
-.fileMoodalInnerDiv .dataTables_paginate a {
-	line-height: 28px; 
-}
+
 
 .load_div {
 	background: grey;
@@ -84,7 +89,9 @@
 #myModal {
   width:1200px; 
   text-align: left; 
-  top: 255px; 
+  top: 10px; 
+/*left: 10px; 
+  margin-left: 0px; */
   margin-left: -600px;
 }
 
@@ -146,7 +153,7 @@ p > label {
 	display: inline;
 }
 div.img {
-      height: 200px;
+      height: 235px;
 }
 
 div.img > div > img { 

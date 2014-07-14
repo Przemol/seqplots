@@ -1,5 +1,7 @@
 #Lineplot plotting function
-plotLineplot <- function(pl, title=input$title, type='dev') {
+plotLineplot <- function(pl, title=input$title, type='dev', legend=TRUE) {
+  
+  if(input$pty) par(pty='s')
   
   ord <- if( length(subplotSetup$prior) & ('prior' %in% input$subplot_options) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
   pl <- pl[ ord ]
@@ -22,7 +24,7 @@ plotLineplot <- function(pl, title=input$title, type='dev') {
            y2=if(!input$yauto) NULL else input$ymin2,
            title=title, Xtitle = input$xlabel, Ytitle = input$ylabel, 
            colvec = if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL, 
-           plotScale = plotScale, EE = input$ee, Leg = input$legend,
+           plotScale = plotScale, EE = input$ee, Leg = input$legend & legend,
            cex.axis = input$axis_font_size, cex.lab = input$labels_font_size, cex.main = input$title_font_size, cex.legend = input$legend_font_size, 
            ln.v=input$lnv, ln.h=if(input$lnh) input$lnh_pos else NULL, 
            legend_pos=input$legend_pos, legend_ext_pos=input$legend_ext_pos, legend_ext=input$legend_ext, type=type)  

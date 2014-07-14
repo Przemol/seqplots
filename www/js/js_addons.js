@@ -1,26 +1,35 @@
 Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
-    //$('#tracktable').width(1155); 
     $('#'+message.id).width(1170);
     var html = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed table-inside-modal" id="dt'+message.id+'"><tfoot><tr> <td></td> <th>-</th><th>-</th><th>-</th><th>-</th> <td></td><td></td><td></td><td></td><td></td> </tr></tfoot></table>'
     $('#'+message.id).html(html);
     var example = $('#dt'+message.id).dataTable( {
         "aaData": message.tab,
-    		//"bPaginate": true,
-        //"iDisplayLength" : 100,
-        //"bScrollInfinite": true,
-  	    //"bScrollCollapse": true,
-				"sScrollY": "350px",
-				//"sPaginationType": "bootstrap",
-				"sDom": 'TfirtS',
+        /* 
+        // Scroll enabled
+        "sDom": 'TfirtS',
+        "sScrollY": "350px",				
   	    "bDeferRender": true,
-        //"bAutoWidth": false,
+        */
+        
+        //Paginate enabled 
+        "sScrollY": "330px",
+        "iDisplayLength" : 10,
+        "sPaginationType": "bootstrap",
+        //"sDom": 'Tfritlp<"#selectionsInfo_'+message.id+'.selectionsInfo">',
+        "sDom": "<'row-fluid'<'span5'i><'#selectionsInfo_"+message.id+".selectionsInfo span1'><'span6'Tf>>rtlp",
+        "bDeferRender": false,
+        "pagingType": "full_numbers",
+        "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        
+        
+    	  //Setup options
 				"oLanguage": {
 					"sLengthMenu": "_MENU_ records per page"
 				},
 				"aaSorting": [[ 1, "desc" ]],
         "oTableTools": {
 			     "sRowSelect": "multi",
-               "fnPreRowSelect": function ( e, nodes ) {
+           "fnPreRowSelect": function ( e, nodes ) {
                 if(!e) return true;
                 if ( e.target.className.indexOf('no_select') != -1 ) {
                     return false;
@@ -28,36 +37,23 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
                 return true;
             },
            "fnRowSelected": function ( node, oConfig, nRow ) {
-                         jQuery(node).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check icon-spin" );
-                        //var a = TableTools.fnGetInstance( 'example' ).fnGetSelectedData();
-                        //var sel = [];
-                        //for(var i=0; i< a.length; i++) {
-                        //    sel.push(a[i][0]);
-                        //}
-                        //alert( JSON.stringify(sel) );
-                        //Shiny.shinyapp.sendInput({"f_tracks":sel});
-                    },
+              jQuery(node).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );
+              $('#selectionsInfo_'+message.id).html(this.fnGetSelectedData().length +' selected');
+            },
             "fnRowDeselected": function ( node ) {
-              jQuery(node).find(".select_indicator").removeClass( "icon-check icon-spin" ).addClass( "icon-check-empty" );
+              jQuery(node).find(".select_indicator").removeClass( "icon-check" ).addClass( "icon-check-empty" );
+               $('#selectionsInfo_'+message.id).html(this.fnGetSelectedData().length +' selected');
             },
 			     "aButtons": [ 
              {"sExtends": "text", "sButtonText": "Select filtered", "fnClick": function ( node, conf ) {
-               var zz = this.s.dt.oInstance.$('tr', {"filter":"applied"});
-               if ( zz.length < 100 ) {
-                 this.fnSelect( zz )
-               } else {
-                 alert('Select less than 100 rows!')
-               }
-               
-               //.s.dt.oInstance
-               //TableTools.fnGetInstance( 'dttracktable'   ).fnSelect( $('#dttracktable tbody tr') ) 
+                 this.fnSelectAll( true )
+                 alert('Total selections: '+ this.fnGetSelectedData().length +' rows!')
                } }, "select_none" ]
 		    },
 				"aoColumns": [
 									{ "sTitle": '<i class="icon-file-alt"></i> File name',
                     "mRender": function ( data, type, row ) {
                       var short = data.length>60 ? data.substr(0,37)+'[...]'+data.substr(data.length-20,data.length) : data;
-                      //return '<a href="files/' + data + '" class="no_select">'+ short +'</a>';
                       if( data.length>60 ) { return '<abbr title="'+data+'">'+short+'</abbr>' } else { return short }
                     }
   								},
@@ -124,13 +120,8 @@ animateTitle = function() {
 		'-moz-animation-delay': Math.random()*5+'s',
 		'-ms-animation-delay': Math.random()*5+'s',
 		'animation-delay': Math.random()*5+'s',
-		//"background-color": '#'+Math.floor(Math.random()*16777215).toString(16), 
 		'color': '#'+Math.floor(Math.random()*16777215).toString(16)		 
 	}) });
-//	$.each($('.letter-container h2 a span'), function(index, value) { $(this).css('-moz-animation-delay', Math.random()*3) });
-//	$.each($('.letter-container h2 a span'), function(index, value) { $(this).css('-ms-animation-delay', Math.random()*3) });
-//	$.each($('.letter-container h2 a span'), function(index, value) { $(this).css('animation-delay', Math.random()*3) });
-//	$.each($('.letter-container h2 a span'), function(index, value) { $(this).css('color', '#'+Math.floor(Math.random()*16777215).toString(16)) });
 	$('.letter-container h2 a span').hover( function () { $(this).css("color", '#'+Math.floor(Math.random()*16777215).toString(16) ); });
 }
 
@@ -155,7 +146,6 @@ sendToCalc = function() {
   Shiny.shinyapp.sendInput({"f_tracks":t_sel});
   Shiny.shinyapp.sendInput({"f_features":f_sel});
 	Shiny.shinyapp.sendInput({"TR_calculate":new Date().getTime()}); 
-	//Shiny.shinyapp.sendInput({"TR_calculate":null});
 	$("#myModal").modal("hide"); 
 	$("#progressModal").modal("show");
 
@@ -197,13 +187,15 @@ $(function() {
 	$('#downloadClusters').tooltip({title:'Clusters indicates'});
 	$('#replot').tooltip({title:'Keyboard binding: [ENTER]'});
 	$('[for="reactive"]').tooltip({title:'Keyboard binding: [ctrl+R] or [cmd+R]'});
+  $('#hsccoef').parents('.row-fluid').tooltip({title:'0.01 (default on slider) calculates color key limits using data range from 1-99 percentile.  0.1 uses data range from 10-90 percentile.', placement:"right"});
 	$('#spawn').addClass('btn-warning');
   $('i[data-toggle=tooltip]').tooltip();
 	
 	$(document).keydown(function(e){
-    	if ( (e.keyCode == 13) || e.keyCode == 32 && (e.ctrlKey || e.metaKey) ) { 
+    	if ( (e.keyCode == 13) || e.keyCode == 32 && (e.ctrlKey || e.metaKey) ) {
+        if( $(e.target).prop('id') == "debug_cmd" ) return
        		$('#replot').click();
-       			return false;
+       			return true;
     		} else if (e.keyCode == 82 && (e.ctrlKey || e.metaKey)) { 
        		$('#reactive').click();
        			return false;

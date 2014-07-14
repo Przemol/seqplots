@@ -4,7 +4,11 @@ mceval <- function(do, do.iter=NULL, do.final=NULL, ...) {
     values$proc <- parallel::mcparallel(do)
     invalidateLater(100, session)
     
-  } else if ( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
+  } else if ( is.null(parallel:::selectChildren(isolate(values$proc))) ) {
+    parallel::mccollect( isolate(values$proc) ); values$proc <- NULL 
+    session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide'); alert('Job canceled.');")
+    
+  } else if( parallel:::selectChildren(isolate(values$proc)) == parallel:::processID(isolate(values$proc)) ) {
     res <- parallel::mccollect(isolate(values$proc), wait=FALSE)[[1]]
     
     if(class(res) == 'try-error' ) {
@@ -26,5 +30,6 @@ mceval <- function(do, do.iter=NULL, do.final=NULL, ...) {
   } else { 
     if(!is.null(do.iter)) eval( do.iter ) 
     invalidateLater(100, session); 
+    
   }  
 }

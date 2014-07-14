@@ -30,7 +30,7 @@ mcDoParallel <- quote({
       out <- list()
       a <- tempfile(pattern = "sessionID_", tmpdir = 'tmp', fileext = '.png')
       # Generate the PNG
-      png(a, width=1240, height=720)
+      png(a, height = 210, width = 297, units='mm', res=100, pointsize = 12)
       
       co <- lapply(input$plot_this, function(x) fromJSON(x))
       pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
@@ -55,11 +55,14 @@ mcDoParallel <- quote({
   if( .Platform$OS.type == 'windows' | isolate(input$setup_multithread) == FALSE) {
     isolate({
       session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary3').text('Single process plotting.').parent().find('button').prop('disabled', true);")
-      out <- eval( do )
-      values$im <- as.character(out$url)
+      out <- try( eval( do ) )
       session$sendCustomMessage("jsExec", "$('#progressModal').modal('hide').find('#summary2').text('').parent().find('button').prop('disabled', false);")
     })
-    
+    if (class(out) == "try-error") {
+      session$sendCustomMessage( "jsAlert", paste('ERROR:', attr(out, 'condition')$message) ) 
+    } else {
+      values$im <-  as.character(out$url) 
+    }
   } else {
     
     mceval(do, 

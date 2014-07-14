@@ -1,3 +1,50 @@
+SeqPlots v0.9.2 RC
+--------------------------------------------------------------------------------------------------------------
+GENERAL:
+* use Cairo package for plotting, X11 installation no longer required
+* colors in plot grid are initiated automatically (same color palette as for auto-generated average plots), white color is allowed
+* more informative error messages during file upload
+* documentation is integrated with SeqPlots GUI help
+* Web GUI debug console added
+
+BUGFIX:
+* fixed errors reporting in singe core/Windows mode
+* the custom color gradient controls for hetmap (three color pickers) work correctly now
+* heatmap main title no longer overlaps with sub-plot labels
+
+
+SeqPlots v0.9.1 RC
+--------------------------------------------------------------------------------------------------------------
+GENERAL:
+* inputs and features sorted alphabetically
+* DataTables v1.10.0 with pagination, selection number indicator and infinite row selections
+* buttons for heatmap and lineplots, PDF default sizes, 
+* changes in GUI layout
+* default PDF output paper size set to A4 horizontal, 
+* Font sizes are in points
+* preview is compatible with A4 PDF output (at 100 DPI)
+* color key for heatmap are always generated using image.plot function that provides better labeling
+* batch plots do not override individual labels if set
+* option to keep 1:1 aspect ratio (default for batch plots)
+* miscellaneous options renamed for clarity
+
+
+SeqPlots v0.9.0 RC
+--------------------------------------------------------------------------------------------------------------
+FEATURES:
+* Multi-plot grid option in batch mode - many line plots on single page
+
+GENERAL:
+* R 3.1 and BioC 2.14 compatibility
+* faster BigWig signal retrieval, no need for modified rtracklayer C code in the package
+* warning message if JS File API is not supported (old browsers)
+* improved the performance of heatmap plotting by using list of matrices instead concatenated matrix
+
+BUGFIX:
+* application start properly without any BSGenome genomic packages installed
+* cluster report - the final order agrees with cluster indicates
+
+
 SeqPlots v0.8.2b
 --------------------------------------------------------------------------------------------------------------
 FEATURES:
