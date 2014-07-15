@@ -1,32 +1,44 @@
 Package: seqplots
 Maintainer: Przemyslaw Stempor <ps562@cam.ac.uk>
 Author: Przemyslaw Stempor
-Version: 0.9.1
+Version: 0.9.2
 License: BSD
-Title: SeqPlots: The interactive tool for visualizing track signal and sequence motif density along genomic features using average plots and heatmaps.
-Description: The SeqPlots is universal, web browser based tool for plotting average track signal (e.g. reads coverage) and sequence motif density over user specified genomic features. The data are visualized on linear plot, with error estimates as fields, or as series of heatmaps that can be sorted and clustered. The dual-purpose implementation allows running the software locally on desktop or deploying it on server. The unique features of our software are collaboration and data sharing capabilities, as well as ability to store pre-calculated result matrixes, that combine many sequencing experiments and in-silico generated tracks with multiple different features. These binaries can be further used to generate new combination plots on fly, run automated batch operations or share with colleagues, who can adjust their plotting parameters without loading actual tracks and recalculating numeric values.
-Imports: XML (>= 1.98-0), BiocGenerics (>= 0.1.0), IRanges (>=
- 1.15.37), GenomicRanges, Biostrings (>= 2.25.6), BSgenome (>=
- 1.23.1), zlibbioc, RCurl (>= 1.4-2), Rsamtools (>= 1.7.3)
+Title: SeqPlots: The interactive tool for visualizing track signal and sequence
+    motif density along genomic features using average plots and heatmaps.
+Description: The SeqPlots is universal, web browser based tool for plotting
+    average track signal (e.g. reads coverage) and sequence motif density over
+    user specified genomic features. The data are visualized on linear plot,
+    with error estimates as fields, or as series of heatmaps that can be sorted
+    and clustered. The dual-purpose implementation allows running the software
+    locally on desktop or deploying it on server. The unique features of our
+    software are collaboration and data sharing capabilities, as well as
+    ability to store pre-calculated result matrixes, that combine many
+    sequencing experiments and in-silico generated tracks with multiple
+    different features. These binaries can be further used to generate new
+    combination plots on fly, run automated batch operations or share with
+    colleagues, who can adjust their plotting parameters without loading actual
+    tracks and recalculating numeric values.
+Imports:
+    shiny,
+    DBI,
+    RSQLite,
+    RJSONIO,
+    GenomicRanges,
+    rtracklayer,
+    BSgenome,
+    methods,
+    plotrix,
+    fields,
+    spam,
+    grid,
+    kohonen,
+    Cairo,
+    parallel
 Type: Package
 Date: 2014-4-10
-Depends: 
- R (>= 3.1.0),
- methods,
- GenomicRanges,
- shiny,
- plotrix,
- DBI,
- RSQLite,
- RJSONIO,
- IRanges,
- GenomicRanges,
- rtracklayer,
- fields,
- spam,
- grid,
- BSgenome,
- kohonen
+Depends:
+    R (>= 3.1.0)
 LinkingTo: IRanges, rtracklayer
 LazyLoad: yes
-Suggests: testthat
+Suggests:
+    testthat
