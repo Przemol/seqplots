@@ -6,6 +6,7 @@ GENERAL:
 * more informative error messages during file upload
 * documentation is integrated with SeqPlots GUI help
 * Web GUI debug console added
+* Exit button, that closes web interface and background R process
 
 BUGFIX:
 * fixed errors reporting in singe core/Windows mode
