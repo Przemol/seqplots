@@ -82,8 +82,7 @@ shinyUI(
         eval(parse( file.path(Sys.getenv("web", '.'), 'ui/FileManagementModal.R') )),
 
 				#Animated header
-				tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="help/help.html" target="_blank">SeqPlots</a></h2>')),
-    
+				tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">SeqPlots</a></h2>')),
 				
 				#Banner
         #eval(parse( file.path(Sys.getenv("web", '.'), 'ui/banner.R') )),
@@ -139,15 +138,15 @@ shinyUI(
 										,if (Sys.getenv("SHINY_SERVER_VERSION") != '') {div(
 											tags$hr(), h5('Soft restart the server session', hlp("Advancedoptions")),
 											helpText( "The button will perform soft reset of the server. 
-													This means a new session will be created for you and other active users will use their existing session(s) until they close the web browser.
-													Use this option if you experience performance issues or errors."),
-                      						actionButton('spawn', tags$span(tags$i(class="icon-bolt icon-large"), HTML('Restart server!') ))
+												This means a new session will be created for you and other active users will use their existing session(s) until they close the web browser.
+												Use this option if you experience performance issues or errors."),
+                      	actionButton('spawn', tags$span(tags$i(class="icon-bolt icon-large"), HTML('Restart server!') ))
 								    	)} else {div(
-								    	  tags$hr(), helpText( "This button will stop and exit the SeqPlots web interface."), 
-								    	  actionButton('stopapp', tags$span(tags$i(class="icon-bolt icon-large"), HTML('Exit SeqPlots') ))
+								    	  tags$hr(), helpText( "Stop and exit the web interface:"),
+								    	  actionButton('stopapp', tags$span(tags$i(class="icon-off icon-large"), HTML('Exit SeqPlots') ))
 								    	)},
-										tags$br(),
-										tags$a(class='', href=paste0("help/help.html"), target="_blank", 'Read SeqPlots documentation'),
+										tags$hr(),
+										tags$a(class='', tags$span(class="label label-success", 'Help'), href=paste0("help/help.html"), target="_blank", 'Read SeqPlots documentation'),
                     ' or press ', tags$i(class="icon-question-sign icon-large", style='color:orange'), 
                     ' button to get help on specific controls. Also available as ', tags$a(class='', href=paste0("help/SeqPlots.pdf"), target="_blank", 'print ready PDF file.')
 										

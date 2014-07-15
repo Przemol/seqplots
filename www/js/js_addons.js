@@ -191,7 +191,7 @@ $(function() {
 	$('#spawn').addClass('btn-warning');
   $('i[data-toggle=tooltip]').tooltip();
 	
-  $('#stopapp').addClass('btn-warning').click( function(event) {  event.preventDefault(); });
+  $('#stopapp').addClass('btn-warning');
   
 	$(document).keydown(function(e){
     	if ( (e.keyCode == 13) || e.keyCode == 32 && (e.ctrlKey || e.metaKey) ) {

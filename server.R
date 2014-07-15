@@ -480,7 +480,8 @@ shinyServer(function(input, output, clientData, session) {
   #Server reset action
   observe({
   	if( Sys.getenv("SHINY_SERVER_VERSION") == '') return()
-    if(input$spawn==0) return()
+  	if( is.null(input$spawn) ) return()
+    if( input$spawn==0 ) return()
     session$sendCustomMessage("jsAlert", 'Spawning new server session, it may take awhile.')
   	if( Sys.getenv('web') != '' ) setwd(Sys.getenv('web'))
     system('touch restart.txt')
@@ -490,9 +491,15 @@ shinyServer(function(input, output, clientData, session) {
   
   #Exit button logic
   observe({
-    if(input$stopapp==0) return()
-    stopApp(returnValue = 'Stopped by user!' )
-    session$sendCustomMessage("jsExec", "window.onbeforeunload = function(){}; window.close();")
+    if( Sys.getenv("SHINY_SERVER_VERSION") != '') return()
+    if( is.null(input$stopapp) ) return()
+    if( input$stopapp==0 ) return()
+    if( is.null( input$exitconfirmed )) {
+      session$sendCustomMessage("jsExec", 'confirm("Are you sure you want to exit!?") ? Shiny.shinyapp.sendInput({"exitconfirmed":true}) : console.log("Exit canceled")')
+    } else { 
+      session$sendCustomMessage("jsExec", "window.onbeforeunload = function(){}; window.open('','_self').close();")
+      stopApp(returnValue = 'Stopped by user!' )
+    }
   })
 
   #Server  Query String action
