@@ -27,8 +27,14 @@
 #' }
 #' 
 #' @keywords CHiP-seq genomics plotting sequencing
-#' @examples example(seqplots)
 #' 
-#' @importFrom  rtracklayer import export BigWigFile summary
-#' @exportPattern ^[[:alpha:]]+
+#' @import DBI RSQLite parallel RJSONIO Cairo
+#' @import grid methods
+#' @import BSgenome GenomicRanges rtracklayer
+#' @importFrom fields image.plot
+#' @importFrom kohonen supersom
+#' @importFrom plotrix dispersion
+#' @importFrom shiny runApp
 NULL
+
+#@importFrom rtracklayer import export BigWigFile summary SeqinfoForBSGenome wigToBigWig

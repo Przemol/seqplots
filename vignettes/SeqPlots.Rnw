@@ -1,0 +1,2017 @@
+%\VignetteIndexEntry{SeqPlots vignette}
+
+\documentclass[]{article}
+
+<<style-Sweave, eval=TRUE, echo=FALSE, results=tex>>=
+BiocStyle::latex()
+@
+
+\usepackage{float}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\hypersetup{
+            pdfauthor={Przemyslaw Stempor},
+            pdftitle={SeqPlots - the vignette}
+}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+\title{SeqPlots - the user guide}
+\author{Przemyslaw Stempor}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\maketitle
+
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\section{Welcome to \textbf{SeqPlots}}\label{welcome-to-seqplots}
+
+\begin{quote}
+An interactive tool for visualizing track signals and sequence motif
+densities along genomic features using average plots and heatmaps.
+\end{quote}
+
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/01_01.png}
+\caption{Examples of Seq Plots interfce and outputs}
+\end{figure}
+
+\subsection{Summary}\label{summary}
+
+SeqPlots is a web browser tool for plotting average track signals
+(e.g.~read coverage) and sequence motif densities over user specified
+genomic features. The data can be visualized in linear plots with error
+estimates or as series of heatmaps that can be sorted and clustered. The
+software can be run locally on a desktop or deployed on a server and
+allows easy data sharing. SeqPlots pre-calculates and stores binary
+result matrices, allowing rapid plot generation. Plots can also be run
+in batch.
+
+\subsection{Availability}\label{availability}
+
+Standalone versions of SeqPlots are available as a Mac OS X (10.6 or
+higher) app bundle combing R, all required packages and
+scripts({[}subproject home{]}) or as an R package ({[}subproject
+home{]}). SeqPlots can also be deployed on a server using free and open
+sourced (GPL licensed) Shiny Server
+(https://github.com/rstudio/shiny-server), making it available for
+multiple clients. For the server version, clone this repo to Shiny
+Server application directory and set up data location:
+\texttt{git clone https://przemol@bitbucket.org/przemol/seqplots.git}.
+
+\subsection{Key features}\label{key-features}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Easy to use web interface (R or shell expertise not required)
+\item
+  Web server or desktop versions
+\item
+  Generates publication quality plots out of the box
+\item
+  Plots average signals or heatmaps
+\item
+  Accepts Wiggle, BedGraph, BigWiggle, and GFF and BED formats
+\item
+  Calculates motif density from reference genome packages
+\item
+  Tracks and features are searchable and old calculations stored
+\item
+  Converts tracks to binary BigWiggle format for rapid data extraction
+  and efficient storage
+\item
+  Implemented using Shiny R framework providing internet browser
+  reactive GUI and session based connectivity (websocets)
+\end{itemize}
+
+\subsection{Issues and bugs}\label{issues-and-bugs}
+
+Please visit \href{../issues}{\textbf{issues tracker}} to view currently
+know issue. To report new issue/bug/feature request please click
+\href{../issues/new}{\textbf{here}}. If issue is connected to file
+upload please attach the file in the form.
+
+\subsection{Source code}\label{source-code}
+
+If you require code repository access, please request by email. The code
+will become public upon release. This repository contains only Shiny
+framework server code {[}R{]} and client browser code/libraries
+{[}HTML5, CSS3 and JavaScript{]}. There are two derivative projects for
+desktop end users:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \href{https://bitbucket.org/przemol/seqplots_osxapp}{SeqPlots OSX App}
+\item
+  \href{}{SeqPlots Bioconductor R package}
+\end{itemize}
+
+\subsection{References}\label{references}
+
+\begin{center}\rule{3in}{0.4pt}\end{center}
+
+\section{Quick start guide}\label{quick-start-guide}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Start the SeqPlots. Refer to installation guides for platform specific
+  information. After successful initiation the web interface should
+  automatically open in your default web browser. If you are web server
+  user just navigate your browser to server address.
+
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_01.png}
+  \caption{The SeqPlots interface in web browser}
+  \end{figure}
+\item
+  Upload some feature (BED or GFF) and track (BigWig or WIG) files. They
+  can be gzip compressed (e.g.~file1.bed.gz). Press green ``Add
+  files\ldots{}'' button or just drag and drop files into the window.
+  The ready to upload files will show up in upload window, where you
+  select user name, reference genome and optionally add some comments.
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_02.png}
+  \caption{File upload panel}
+  \end{figure}
+  \end{quote}
+\item
+  When all is done press blue ``Start upload'' button. After upload and
+  processing is done the green ``SUCCESS'' label should show. It means
+  that file is on the registered and ready to use. Occasionally the file
+  might be mot formatted properly or chromosome names might not agree
+  with reference genome. In such case a verbose error will window
+  appears and file as labeled as ``ERROR''. For further information
+  please refer to \href{Errors\%20explained}{\textbf{errors chapter}}.
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_03.png}
+  \caption{File upload progress infoermation}
+  \end{figure}
+  \end{quote}
+\item
+  Dismiss upload window and press blue ``New plot set'' button on side
+  panel. This will bring up file management window. In file management
+  window select ant least one file from ``Features'' tab and either one
+  or more file from ``Tracks'' file or sequence motif(s). The sequence
+  motifs and tracks can be processed and plotted together.
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_04.png}
+  \caption{File management panel}
+  \end{figure}
+  \end{quote}
+\item
+  When you decided which files/motifs to plot it is time to set up the
+  processing options. You can find these in the button of plotting
+  window. For first plot you should do just fine with default options,
+  to learn more check
+  \href{Running\%20the\%20plot-set\%20jobs}{\textbf{this}} section.
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_05.png}
+  \caption{Plot set calculation options}
+  \end{figure}
+  \end{quote}
+\item
+  After options are set up press blue ``Run calculation'' button. This
+  will dismiss the file management modal and show processing window.
+  Here you can observe the progress of the task and optionally cancel it
+  if no longer required (or you forgot to add some very important file
+  to the plot-set).
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_06.png}
+  \caption{Plot set calculation progress window}
+  \end{figure}
+  \end{quote}
+\item
+  After some time the calculation will finish (fingers crossed, without
+  the error) and you will be able to see plot set array. In here you can
+  choose which feature-track or feature-motif pairs to plot. Choose one
+  or more checkboxes and press grey ``Replot'' button (or RETURN from
+  your keyboard). You can also check ``Reactive plotting'' checkbook
+  just next to it - it will automatically apply changes to plots as soon
+  you make them.
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_07.png}
+  \caption{The plot selection grid}
+  \end{figure}
+  \end{quote}
+\item
+  Congratulation! Your First plot is complete, you can see the preview
+  of it on the side panel.
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_08.png}
+  \caption{The plot preview panel}
+  \end{figure}
+  \end{quote}
+\item
+  You are able to set up labels, titles, font sizes, legends and may
+  more on side panel tabs, take a look at
+  \href{Viewing\%20and\%20manipulating\%20plots}{\textbf{this}} chapter.
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_09.png}
+  \caption{Plot settings tabs}
+  \end{figure}
+  \end{quote}
+\item
+  By clicking the plot preview you can enlarge it for better view. When
+  everything is ready you can get the plot as PDF bt clicking green
+  ``Line plot'' button just on the top of side panel.
+
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_10.png}
+  \caption{Average plot example}
+  \end{figure}
+\item
+  You can also visualize the signal as a heatmap. Please note that
+  heatmap plotting is possible only for single feature file or files
+  containing exactly the same number of genomic ranges (which will
+  become the rows of heat map). For heatmap you can choose to sort
+  and/or cluster it using k-means. To learn more about heatmaps click
+  (\textbf{here}).
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_11.png}
+  \caption{Heatmap settings tab}
+  \end{figure}
+  \end{quote}
+\item
+  Similarly to line plot you can grab the heatmap PDF using `Heatmap'
+  button just on the top of side panel. Just attached to it, there is
+  small button allowing you to get cluster definitions.
+
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/02_12.png}
+  \caption{Heatmap example}
+  \end{figure}
+\end{enumerate}
+
+\section{Installation: R package}\label{installation-r-package}
+
+\begin{quote}
+R package is the best way to use SeqPlots on desktop computers when
+operating system is Windows or Linux. It is also the recommended method
+for R users Mac OS X.
+\end{quote}
+
+\textbf{System requirements:}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  R 3.1 or higher
+\end{itemize}
+
+\subsection{Installation}\label{installation}
+
+To install SeqPlots package, start R and enter:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{source}\NormalTok{(}\StringTok{"http://bioconductor.org/biocLite.R"}\NormalTok{)}
+\KeywordTok{biocLite}\NormalTok{(}\StringTok{"SeqPlots"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+To install SeqPlots development package, start R and enter:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{install.packages}\NormalTok{(}\StringTok{'devtools'}\NormalTok{)}
+\NormalTok{devtools::}\KeywordTok{install_bitbucket}\NormalTok{(}\DataTypeTok{repo=}\StringTok{'SeqPlots_Rpackage'}\NormalTok{, }\DataTypeTok{username=}\StringTok{'przemol'}\NormalTok{, }
+\DataTypeTok{auth_user=}\KeywordTok{readline}\NormalTok{(}\StringTok{'User?> '}\NormalTok{), }\DataTypeTok{password=}\KeywordTok{readline}\NormalTok{(}\StringTok{'Password?> '}\NormalTok{), }\DataTypeTok{dependencies=}\StringTok{"Depends"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Usage}\label{usage}
+
+From R prompt run:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(seqplots)}
+\KeywordTok{seqplots}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+After a successful initiation the user interface will be opened in your
+default web browser. For further usage please refer to
+\href{Quick\%20start}{quick start guide} or specific chapters of
+\href{..}{documentation}.
+
+The \texttt{seqplots} function accepts ``root'' argument, which allows
+to change the data location folder (by default your home directory will
+be used), e.g.:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{seqplots}\NormalTok{(}\DataTypeTok{root=}\StringTok{'/path/to/data/location'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Additional genome
+packages}\label{additional-genome-packages}
+
+Genomic packages can be installed using standard bioconductor installer
+(Internet connection required). For example, to instal human reference
+genome (hg19):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{source}\NormalTok{(}\StringTok{"http://bioconductor.org/biocLite.R"}\NormalTok{)}
+\KeywordTok{biocLite}\NormalTok{(}\StringTok{"BSgenome.Hsapiens.UCSC.hg19"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Corresponding genome packages are required before uploading the files
+for plotting. Full list of supported genomes is avilable here:
+http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
+
+\section{Installation: Deployment on the
+server}\label{installation-deployment-on-the-server}
+
+\begin{quote}
+The server version is designed to be used by advanced users, who would
+like to provide shared SeqPlots service to a group of people.
+\end{quote}
+
+\textbf{System requirements:}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  R 3.1 or higher
+\item
+  Shiny Server 1.0 or higher
+\end{itemize}
+
+\subsection{Installation}\label{installation-1}
+
+1. Install and configure the Shiny Server by following the instructions
+on https://github.com/rstudio/shiny-server
+
+2. Install SeqPlots R package and dependences by following the
+instruction \href{Installation\%20-\%20R\%20package}{here}
+
+3. Copy SeqPlots files to Shiny Server application folder:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cp} \NormalTok{-r }\OtherTok{$(}\KeywordTok{Rscript} \NormalTok{-e }\StringTok{"cat(system.file('seqplots', package='seqplots'))"}\OtherTok{)} \NormalTok{/srv/shiny-server/}
+\end{Highlighting}
+\end{Shaded}
+
+4. Set up SeqPlots \textbf{data location} by running from R:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{seqplots}\NormalTok{(}\DataTypeTok{root=}\StringTok{'/path/to/data/location'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+5. Edit first line of \texttt{/srv/shiny-server/shiny/server\_config.R},
+so the environment variable \texttt{root} matches the \textbf{data
+location}; for example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{Sys.setenv}\NormalTok{(}\StringTok{'root'}\NormalTok{=}\StringTok{'/var/shiny-server/DATA'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Usage}\label{usage-1}
+
+After successful installation the SeqPlost web GUI will be available at
+\texttt{your\_server\_name:3838/seqplots/}.
+
+For further usage please refer to \href{Quick\%20start}{quick start
+guide} or specific chapters of \href{..}{documentation}.
+
+\subsubsection{Additional genome
+packages}\label{additional-genome-packages-1}
+
+Genomic packages can be installed using standard bioconductor installer
+(Internet connection required). For example, to instal human reference
+genome (hg19):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{source}\NormalTok{(}\StringTok{"http://bioconductor.org/biocLite.R"}\NormalTok{)}
+\KeywordTok{biocLite}\NormalTok{(}\StringTok{"BSgenome.Hsapiens.UCSC.hg19"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Corresponding genome packages are required before uploading the files
+for plotting. Full list of supported genomes is avilable here:
+http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
+
+\subsection{Alternative installation}\label{alternative-installation}
+
+SeqPlots can be directly cloned into Shiny Server application folder
+from git repository by using
+\texttt{git clone https://przemol@bitbucket.org/przemol/seqplots.git}.
+The data location can be set up with following R code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{root <-}\StringTok{ }\ErrorTok{/}\NormalTok{data/location}
+\KeywordTok{dir.create}\NormalTok{(root)}
+\KeywordTok{setwd}\NormalTok{(root)}
+\KeywordTok{require}\NormalTok{(RSQLite)}
+\NormalTok{sqlite <-}\StringTok{ }\KeywordTok{dbDriver}\NormalTok{(}\StringTok{"SQLite"}\NormalTok{)}
+\NormalTok{con <-}\StringTok{ }\KeywordTok{dbConnect}\NormalTok{(sqlite, }\DataTypeTok{dbname =} \StringTok{"files.sqlite"}\NormalTok{)}
+\KeywordTok{dbGetQuery}\NormalTok{(con, }\StringTok{"CREATE TABLE files (id INTEGER PRIMARY KEY ASC, name TEXT UNIQUE, }
+\StringTok{  ctime TEXT, type TEXT, format TEXT, genome TEXT, user TEXT, comment TEXT)"}\NormalTok{)}
+\NormalTok{if (!}\KeywordTok{dbListTables}\NormalTok{(con) ==}\StringTok{ "files"}\NormalTok{) }
+    \KeywordTok{warning}\NormalTok{(}\StringTok{"Database not created!"}\NormalTok{)}
+\KeywordTok{dbDisconnect}\NormalTok{(con)}
+\NormalTok{if (!}\KeywordTok{all}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"removedFiles"}\NormalTok{, }\StringTok{"files"}\NormalTok{, }\StringTok{"publicFiles"}\NormalTok{, }\StringTok{"tmp"}\NormalTok{), dir.create))) }
+    \KeywordTok{warning}\NormalTok{(}\StringTok{"Folders not created!"}\NormalTok{)}
+\KeywordTok{message}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{Data loaction: "}\NormalTok{, root)}
+\end{Highlighting}
+\end{Shaded}
+
+The following dependencies must be installed in R:
+
+\begin{verbatim}
+              package  version
+1              shiny   0.10.0
+2             fields      7.1
+3           parallel    3.1.0
+4          multicore      0.2
+5           BSgenome   1.32.0
+6      GenomicRanges   1.16.3
+7            plotrix    3.5-7
+8        rtracklayer   1.24.2
+9            RJSONIO  1.2-0.2
+10           RSQLite   0.11.4
+11           kohonen   2.0.14
+12             Cairo    1.5-5
+13            digest    0.6.4
+14           methods    3.1.0
+15             tools    3.1.0
+16             utils    3.1.0
+17            httpuv    1.3.0
+18           caTools     1.17
+19            xtable    1.7-3
+20         htmltools    0.2.4
+21            bitops    1.0-6
+22              Rcpp   0.11.2
+23              spam   0.41-0
+24              maps    2.3-7
+25              grid    3.1.0
+26         grDevices    3.1.0
+27      BiocGenerics   0.10.0
+28           IRanges   1.22.9
+29        Biostrings   2.32.0
+30           XVector    0.4.0
+31         Rsamtools   1.16.1
+32          graphics    3.1.0
+33             stats    3.1.0
+34          zlibbioc   1.10.0
+35      GenomeInfoDb    1.0.2
+36            stats4    3.1.0
+37               XML 3.98-1.1
+38             RCurl 1.95-4.1
+39 GenomicAlignments    1.0.1
+40      BiocParallel    0.6.1
+41           foreach    1.4.2
+42         BatchJobs      1.2
+43            BBmisc      1.7
+44               DBI    0.2-7
+45         sendmailR    1.1-2
+46              brew    1.0-6
+47              plyr    1.8.1
+48           stringr    0.6.2
+49              fail      1.2
+50         checkmate      1.0
+51         codetools    0.2-8
+52         iterators    1.0.7
+53         base64enc    0.1-1
+54             class   7.3-10
+55              MASS   7.3-33
+\end{verbatim}
+
+\section{Adding and managing files}\label{adding-and-managing-files}
+
+\subsection{Supported file formats}\label{supported-file-formats}
+
+Tracks:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  BigWig (.bw) - http://genome.ucsc.edu/FAQ/FAQformat.html\#format6.1
+\item
+  Wiggle (.wig) - http://genome.ucsc.edu/goldenPath/help/wiggle.html
+\item
+  BedGraph (.bdg) - http://genome.ucsc.edu/goldenPath/help/bedgraph.html
+\end{itemize}
+
+Features:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  BED - http://genome.ucsc.edu/FAQ/FAQformat.html\#format1
+\item
+  GFF - http://genome.ucsc.edu/FAQ/FAQformat.html\#format3
+\item
+  GTF (with .gff extension) -
+  http://genome.ucsc.edu/FAQ/FAQformat.html\#format4
+\end{itemize}
+
+Files must be formatted according to UCSC guidelines. All widely used
+chromosome names conventions are accepted, e.g.~for human files either
+`chr1' or `1' can be used, however these conventions should not be mixed
+within single files.
+
+\subsection{Adding files}\label{adding-files}
+
+Pressing the \texttt{Add files} button brings up the \textbf{file upload
+panel}.
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/05_01.png}
+\caption{File upload panel}
+\end{figure}
+\end{quote}
+
+You can drag and drop files here or press the \texttt{Add files...}
+button to opens a file selection menu. Before starting the upload the
+following mandatory information must be provided about each file:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  User ID
+\item
+  Reference genome - drop-down menu containing reference genome package
+  currently installed in R
+\end{itemize}
+
+Comments are optional.
+
+The contents of the a text field can be copied to all files by clicking
+the icon at the left of the field. The default values can be set using
+\texttt{Set defaults...} button. Default values are stored using the
+browser cookies, and the settings will be remembered across different
+sessions as long as the same web browser is used. File extensions that
+are not supported will raise an error.
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/05_02.png}
+\caption{File upload panel with 4 files selected}
+\end{figure}
+\end{quote}
+
+Individual files can be uploaded by pressing `start' next to the file
+name or all files can be uploaded at once by pressing the
+\texttt{Start upload} button at the top of \textbf{file upload panel}.
+
+During the upload process a progress bar is displayed. After upload
+SeqPlots gives a message that upload was successful or or gives an error
+message. Common errors are misformatted file formats or chromosome names
+do not matched the reference genome. For more information please refer
+to \href{Errors\%20explained}{errors documantation}
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/05_03.png}
+\caption{A feedback on successfully upload files}
+\end{figure}
+\end{quote}
+
+To dismiss the upload window, click on \texttt{X} or outside the window.
+
+\subsection{Downloading and removing
+files}\label{downloading-and-removing-files}
+
+Clicking the \texttt{New plot set} button brings up the \textbf{file
+collection window}. The primary function of this window is to choose
+signal tracks and feature files to use for calculating the plots.
+However, it also provides basic file management capabilities.
+Information on files can be reviewed and files can be downloaded or
+deleted. Fields can be searched, filtered and sorted by any column. The
+red \texttt{x} button on the right site of file table removes a single
+file from the collection, while \texttt{Remove selected files} button
+will erase all selected files.
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/05_04.png}
+\caption{The file collection window}
+\end{figure}
+\end{quote}
+
+\section{Running the plot-set jobs}\label{running-the-plot-set-jobs}
+
+The \textbf{file collection modal} allows choosing signal tracks and
+feature files from the collection to calculate average plots and heat
+maps. Press \texttt{New plot set} button to bring it up. If you wish tu
+upload more files please refer to
+\href{Adding\%20and\%20managing\%20files}{adding new files
+documantation}.This window have three tabs:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{Tracks} gather signal files, that is Wiggle, BigWiggle and
+  BedGraph
+\item
+  \texttt{Features} gather genomic feature files, that is BED, GFF and
+  GTF
+\item
+  \texttt{Sequence features} allows to set up the sequence motif density
+  track
+\end{itemize}
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/06/06_01.png}
+\caption{The file collection modal}
+\end{figure}
+\end{quote}
+
+\subsection{Selecting files}\label{selecting-files}
+
+Both \texttt{Tracks} and \texttt{Features} tabs allow to review all the
+information about files, filter them and sort by any column. The
+``Search:'' dialog allows to quickly filter the files by any field,
+while dropdowns below the file grid allow for more advanced filtering on
+specific columns.
+
+Files are selected by clicking on file name, or any other part of the
+row beside \texttt{Show comment} and \texttt{Download} or
+\texttt{Remove} buttons. Chosen files are highlighted in light blue.
+Clicking the file name again will cancel the selection. At least one
+signal track or motif and one feature file must be selected before
+starting the calculation.
+
+\subsection{Setting up plot options}\label{setting-up-plot-options}
+
+The set of options controlling the plot settings is available below the
+file grid/motif option:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{\texttt{Bin track @ {[}bp{]}:}} - this numeric input
+  determines the resolution of data acquisition; the default value 10
+  means that 10bp intervals within the plotting range will be summarized
+  by calculating the mean. Higher values increases the speed of
+  calculation and produces smoother plots. See the
+  \href{Terms}{explanations}.
+\item
+  \textbf{\texttt{Choose the plot type}} - this radio box determines the
+  mode of plots
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    \emph{\texttt{Point Features}} - plot a range around feature start
+    or end depending on it's directionality, see
+    \href{Terms}{explanations}
+  \item
+    \emph{\texttt{Midpoint Features}} - calculates the middle point of
+    the feature and plot a range around it
+  \item
+    \emph{\texttt{Anchored Features}} - scale the features to given
+    pseudo-length and plots the range upstream of the beginning and
+    downstream of the end
+  \end{itemize}
+\item
+  \textbf{\texttt{Ignore strand}} - the directionality (strand) will be
+  ignored, that its \texttt{+}, \texttt{-} and \texttt{*} ranges will be
+  centered on start and plotted in the same direction
+\item
+  \textbf{\texttt{Ignore zeros}} - the signal values equal to 0 in the
+  track will be ignored, that is will be excluded from mean and errors
+  calculation
+\item
+  \textbf{\texttt{Calculate heatmap}} - this checkbox determines if heat
+  map matrix should be saved; uncheck it will speed up calculation
+  calculation, but only average plots will be feasible in this plot set.
+\item
+  \textbf{\texttt{Plotting distances in {[}bp{]}}} - the distances in to
+  be plotted:
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    \emph{\texttt{Upsteram}} - the plotting distance in base pairs
+    upstream to the feature
+  \item
+    \emph{\texttt{Anchored}} - the pseudo-length, to which the features
+    will be extended or shrunk using linear approximation (only for
+    anchored plots)
+  \item
+    \emph{\texttt{Downstream}} - the plotting distance in base pairs
+    downstream to the feature
+  \end{itemize}
+\end{enumerate}
+
+\subsection{Plotting sequence motif
+density}\label{plotting-sequence-motif-density}
+
+\texttt{Sequence features} tab allows to calculate and plot the motif
+density around genomic features using the reference sequence package.
+Motif plots can be mixed with track files' signal plots. The following
+options can be set here:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{\texttt{DNA motif}} - the DNA motif
+\item
+  \textbf{\texttt{Sliding window size in base pairs {[}bp{]}}} - the
+  size of the sliding window for motif calculation. The value (number of
+  matching motifs within the window) is reported in the middle of the
+  window, e.g.~if window is set to 200bp, DNA motif is ``GC'' and there
+  are 8 CpGs in first 200 bp of the chromosome the value 8 will be
+  reported at 100th bp.
+\item
+  \textbf{\texttt{Display name}} - The name of the motif that will be
+  shown in key and heatmap labels. Leave blank to use \texttt{DNA motif}
+  value.
+\item
+  \textbf{\texttt{Plot heatmap or error estimates}} - this checkbox
+  determines if heatmap matrix and error estimates should be calculated.
+  If unchecked much faster algorithm will be used for motif density
+  calculation, but only the average plot without the error estimates
+  will be available.
+\item
+  \textbf{\texttt{Match reverse complement as well}} - determined if
+  reverse complement motif should be reported as well. For example the
+  TATA motif will report both TATA and ATAT with this option selected.
+\end{enumerate}
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/06/06_02.png}
+\caption{Sequence motifs selection tab}
+\end{figure}
+\end{quote}
+
+Clicking \texttt{Add} button adds the motif to plot set, while
+\texttt{Reset All} clears the motif selection. On the right side from
+motif setting panel is the list summary of included motifs.
+
+\subsection{Starting the plot set
+calculation}\label{starting-the-plot-set-calculation}
+
+The option are executed by pressing \texttt{Run calculation} button.
+This dismisses the \textbf{file collection modal} and brings up the
+calculation dialog, which shows the progress. On Linux and Mac OS X
+(systems supporting fork based parallelization) the calculation can be
+stopped using the \texttt{Cancel} button - this will bring back all
+settings in \textbf{file collection modal}.
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/06/06_03.png}
+\caption{The calculation progress dialog}
+\end{figure}
+\end{quote}
+
+After the successful execution the \textbf{plot array} will appear. In
+case of error the informative error pop-up will explain the problem.
+Please reffer to error section for further information.
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/06/06_04.png}
+\caption{The plot array}
+\end{figure}
+\end{quote}
+
+\section{Plotting}\label{plotting}
+
+\begin{quote}
+This section focuses on average (line) plots and options common between
+these and heatmaps. For heatmap options please refer to heatmps
+documentation.
+\end{quote}
+
+\subsection{Previewing plot}\label{previewing-plot}
+
+After calculating or loading plot set select the pairs of features and
+tracks/motifs using \textbf{plot array} checkboxes. Clicking on the
+column name (tracks/motifs) toggles the whole column selection,
+Similarly clicking on row name (features) toggles the whole row
+selection. Clicking on top-left most cell of \textbf{plot array} toggles
+the selection of whole array.
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/07_01.png}
+\caption{Plot preview plus \texttt{Line plot}, \texttt{Heatmap} and
+\texttt{refresh} buttons}
+\end{figure}
+\end{quote}
+
+If at least one pair on \textbf{plot array} is selected pressing
+\texttt{Line plot} button produces average plot preview and
+\texttt{Heatmap} button the heatmap preview. Finally, pressing
+\texttt{refresh} button or {[}RETURN{]} key from keyboard applies the
+new selection and options. These operations are done automatically in
+\href{AdvancedOptions}{reactive mode}.
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/07_02.png}
+\caption{The tab selection area - icons represnts seven panels}
+\end{figure}
+\end{quote}
+
+Below the plotting buttons are seven panels. On application start the
+first panel responsible for bringing file upload, management and plot
+set calculation modals is active. The further three panels hold common
+plot settings.
+
+\subsection{Titles and axis panel}\label{titles-and-axis-panel}
+
+This panel groups settings influencing the plot main title, axis labels,
+various font sizes plus vertical and horizontal plot limits.
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{Title} - The main title of the plot, shown in top-center part
+  of the figure; default empty
+\item
+  \texttt{X-axis label} - Label shown below horizontal axis; default
+  empty
+\item
+  \texttt{Y-axis label} - Label shown below vertical axis; default empty
+\item
+  \texttt{Title font size} - Font size of the title in points (point =
+  \textasciitilde{}1/72 an inch for standard A4 output); default 20
+  points
+\item
+  \texttt{Labels font size} - Font size of axis labels in points;
+  default 16 points
+\item
+  \texttt{Axis font size} - Controls axis ticks font size, that is size
+  of the numbers indicating position in base pairs on X-axis and means
+  signal value on X-axis; default 14 points
+\item
+  \texttt{Set X-axis limits} - Set hard plotting limits for X-axis;
+  default values are whole range chosen during plot set calculation
+\item
+  \texttt{Set Y-axis limits} - Set hard plotting limits for Y-axis;
+  default values are a range between lowest and highest mean signal
+  extended by error estimate
+\end{itemize}
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/07_03.png}
+\caption{The view on titles and axis panel}
+\end{figure}
+\end{quote}
+
+\subsection{Guide lines and data
+scaling}\label{guide-lines-and-data-scaling}
+
+Controls in this panel controls the display of guide lines and error
+estimates, and allows to log scale the signal prior to plotting.
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{Transform signal} - if set to \emph{\texttt{Log2 transform}}
+  performs log2 transformation of the signal prior to plotting; default
+  setting is \emph{\texttt{Do not transform}}
+\item
+  \texttt{Show vertical guide line} - show the vertical line at point 0
+  - beginning of the feature or midpoint and end of the pseudo-length
+  scaled features (only for anchored plots); turn on by default
+\item
+  \texttt{Show horizontal guide line} - show the horizontal line at user
+  determined height; turn off by default
+\item
+  \texttt{Show error estimates} - show error standard error and 95\%
+  confidence interval as fields, if turned off only the line
+  representing the mean signal is shown; turn on by default
+\end{itemize}
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/07_04.png}
+\caption{The view on guide lines and data scaling}
+\end{figure}
+\end{quote}
+
+\subsection{Keys, labels and colors
+panel}\label{keys-labels-and-colors-panel}
+
+This panel groups two types of controls. \texttt{Colors}, \texttt{Label}
+and \texttt{Priority/Order} are a checkboxes revealing further controls
+on \textbf{plot set grid}, specific for a feature-track pair or
+sub-heatmap. \texttt{Show plot key}, \texttt{Show error estimate key}
+and \texttt{Legend font size} re global controls specific for average
+plots. Inputs on \textbf{plot set grid} do not have specific labels, but
+the tooltip explaining their meaning is shown on mouse cursor hover.
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{Colors} - checkboxes revealing a color picker on \textbf{plot
+  set grid}. This input allows to control the colors of specific
+  feature-track pair average plots or sub-heatmaps. In browser
+  supporting the color picker `e.g Chrome' the system dialog will show
+  up. In other browsers (e.g.~Firefox) the javaScript color picker will
+  be initialized.
+\item
+  \texttt{Label} - checkboxes revealing a label text input \textbf{plot
+  set grid}. This controls the names shown on the \textbf{key} with
+  average plots or the heatmap top labels.
+\item
+  \texttt{Priority/Order} - checkboxes revealing numeric input on
+  \textbf{plot set grid}. These number determine the order of average
+  plots and hetamaps. Feature-track pair with the highest priority will
+  be listed on the top of \textbf{key} for average plots and left-most
+  for heatmaps.
+\item
+  \texttt{Show plot key} - shows the key giving the color to
+  feature-track pair label mapping. If turned on the additional
+  drop-down allows to choose the position on the plot, top-right by
+  default
+\item
+  \texttt{Show error estimate key} - shows the key gexplaining the
+  meaning of error fields. If turnedon the additional drop-down allows
+  to choose the position on the plot, top-left by default
+\item
+  \texttt{Legend font size} - set the size of font used to plot the
+  keys; 12 default
+\end{itemize}
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/07_05_06.png}
+\caption{The view on keys, labels and colors panel (left). Color picker,
+label text input and Priority/Order checkboxes reviled on plot set grid
+(right).}
+\end{figure}
+\end{quote}
+
+\section{Plotting and adjusting
+heatmaps}\label{plotting-and-adjusting-heatmaps}
+
+Heatmaps can be more informative comparing to average plots. If the
+variability in signal along given genomic feature comes from different
+biological classes the average plot might not be sufficient for proper
+examination of the signal or even misleading. SeqPlots implements
+heatmap plotting in similar way to Galaxy, plotting track-feature pairs
+as sub-heatmaps horizontally aligned on single figure. All sub-heatmaps
+must have the same number of data rows, hence in single plot mode
+simultaneous plotting is possible only on single feature or features
+containing exact same number of ranges. The heatmaps can be sorted and
+clustered by k-means, hierarchical clustering and super self organising
+maps (SupreSOM).
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/08_01.png}
+\caption{An example of heatmap plot}
+\end{figure}
+\end{quote}
+
+\subsection{Heatmap setup tab}\label{heatmap-setup-tab}
+
+This tab groups heatmap specific options, that allows to manipulate
+various data processing and graphical options.
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/08_02.png}
+\caption{The view on Heatmap setup tab (left). Color picker, Label text
+input, Priority/Order checkboxes, Choose individual heatmaps for
+sorting/clustering control and Set individual color key limits numric
+inputs reviled on plot set grid (right).}
+\end{figure}
+\end{quote}
+
+\begin{itemize}
+\item
+  \textbf{\texttt{Preview heatmap}} - this checkbox indicates whether
+  the preview of average plot or heatmap will be produced, its state is
+  linked to \texttt{Line plot} and \texttt{Heatmap} buttons above the
+  option tabs. It can be toggled from keyboard by using Ctrl/Cmd+H key
+  combination
+\item
+  \textbf{\texttt{Sort heatmap rows by mean signal}} - sorts the heatmap
+  rows based on the mean value of each row across all sub-heatmps. The
+  highest values on top. Turned off by default.
+\item
+  \textbf{\texttt{Clustering algorithm}} - determines which clustering
+  algorithm (k-means, hierarchical or SupreSOM) will be used to produce
+  the clusters or turns of the clustering while
+  \emph{\texttt{do not cluster}} is selected. K-means by default.
+\item
+  \textbf{\texttt{Choose individual heatmaps for sorting/clustering}} -
+  similarly to \texttt{Colors}, \texttt{Label} and
+  \texttt{Priority/Order}, which also works for heatmaps, this checkbox
+  reveals new control on on \textbf{plot set grid} that determines if
+  given sub-heatmap should be included in plotting and/or clustering.
+  The excluded sub-plots will be plotted and clustered/ordered along
+  with other sub-heatmaps, but their values would not influence the
+  clustering/sorting. By default all sub-heatmaps are included.
+  Following example shows hierarchical clustering on both heatmaps
+  included (left) and second heatmap excluded (right):
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/08_03.png}
+  \caption{\texttt{Choose individual heatmaps for sorting/clustering}
+  usage example: hierarchical clustering on both heatmaps included
+  (left) and second heatmap excluded (right)}
+  \end{figure}
+  \end{quote}
+\item
+  \textbf{\texttt{Heatmaps have individual color keys}} - this option
+  determines if each sub-heatmap should have separate color key (plotted
+  below the heatmap) or single, common key should be calculated for all
+  sub-plots (plotted rightmost). By default all sub-heatmap have its own
+  color keys. The example below show the difference between separate
+  (left) and common (right) color keys:
+
+  \begin{quote}
+  \begin{figure}[H]
+  \centering
+  \includegraphics{../inst/seqplots/www/help/img/08_04.png}
+  \caption{\texttt{Heatmaps have individual color keys} usage example:
+  separate (left) and common (right) color keys}
+  \end{figure}
+  \end{quote}
+\item
+  \textbf{\texttt{Set default color key limits}} - this option
+  determines the limits in mapping the numerical values to the colors.
+  The range of generated is dependent on these options. Values smaller
+  and lower than given limits will not produce further increase of
+  heatmap color range, but will be plotted in the same color as closest
+  limit value. If this checkbox is not selected, these values are
+  auro-generated using \textbf{\texttt{Color key scaling}} parameter. If
+  it is of two numerical fields are shown to hard set the limits.
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    \textbf{\texttt{Color key scaling}} - this slider influence how
+    color key limits are generated. For example, 0.01 (default value)
+    calculates limits using data range from 1-99 percentile of available
+    data points. 0.1 uses data range from 10-90 percentile. The general
+    formula for limit is: {[}quantile(data, \texttt{Color key scaling});
+    quantile(data, 1-\texttt{Color key scaling}){]}
+  \item
+    \textbf{\texttt{min}} and \textbf{\texttt{max}} numeric inputs - in
+    opposite to auto generating color key limits they can be directly
+    given as numeric values
+  \end{itemize}
+\item
+  \textbf{\texttt{Set individual color key limits}} - this option is
+  similar to manual set up of color key limits, but allows to set up
+  different values for individual sub-heatmaps. When this checkbox is
+  selected \textbf{\texttt{min}} and \textbf{\texttt{max}} numeric
+  inputs are revealed on \textbf{plot set grid}
+\item
+  \textbf{\texttt{Set default colorspace}} - When this option is
+  selected three color pickers are being shown. This allows to set up
+  custom color mappings for heatmaps. The following example below shows
+  standard jet colors (left), default blue color mapping after selecting
+  the checkbox (middle) and custom color selection (right):
+\end{itemize}
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/08_05.png}
+\caption{\texttt{Set default colorspace} usage example: standard jet
+colors (left), default blue color mapping after selecting the checkbox
+(middle) and custom color selection (right)}
+\end{figure}
+\end{quote}
+
+\subsection{Other options controlling heatmap
+appearance}\label{other-options-controlling-heatmap-appearance}
+
+Many options from other tabs influence heatmap output. Here we provide
+the list of these inputs, please refer to
+\href{Viewing\%20and\%20manipulating\%20plots}{``Viewing and
+manipulating plots''} for further reference.
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{Titles and axis panel}
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    \texttt{X-axis label} - Label shown below horizontal axis, drawn
+    separately for each sub-heatmap; default empty
+  \item
+    \texttt{Y-axis label} - Label shown next to vertical axis, drawn
+    separately for each sub-heatmap; default empty
+  \item
+    \texttt{Labels font size} - Font size for axis labels and main
+    labels of sub-heatmaps; default 16 points
+  \item
+    \texttt{Axis font size} - Controls axis ticks font size; default 14
+    points
+  \item
+    \texttt{Set X-axis limits} - Set hard plotting limits for X-axis;
+    default values are whole range chosen during plot set calculation
+  \end{itemize}
+\item
+  \textbf{Guide lines and data scaling panel}
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    \texttt{Transform signal} - if set to \emph{\texttt{Log2 transform}}
+    performs log2 transformation of the signal prior to plotting;
+    default setting is \emph{\texttt{Do not transform}}
+  \item
+    \texttt{Show vertical guide line} - show the vertical line at point
+    0 - beginning of the feature or midpoint and end of the
+    pseudo-length scaled features (only for anchored plots); turn on by
+    default
+  \end{itemize}
+\item
+  \textbf{Keys, labels and colors panel}
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    \texttt{Colors} - for hetmaps this input allows to control the color
+    mapping of specific sub-heatmaps. The map allways start with white
+    (for low color key limit) and finishes with selected color (for high
+    color key limit).
+  \item
+    \texttt{Label} - allows to set up custom sub-heatmap top labels
+  \item
+    \texttt{Priority/Order} - The feature-track pairs with the highest
+    priority will be plotted as left-most sub-heatmaps.
+  \item
+    \texttt{Legend font size} - control the font size of common color
+    key, inactive if heatmaps have individual color keys; 12 default
+  \end{itemize}
+\end{itemize}
+
+\section{Output files and batch
+operations}\label{output-files-and-batch-operations}
+
+Plots can be downladed as portable document files (PDFs) by clicking
+\texttt{Line plot} or \texttt{Heatmap} buttons in ``Download:'' section
+of \textbf{tool panel} (above the plot preview).
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/09_01.png}
+\caption{Download:" section of tool panel with \texttt{Line plot} and
+\texttt{Heatmap} buttons}
+\end{figure}
+\end{quote}
+
+Small buttons next to \texttt{Line plot} and \texttt{Heatmap} produce
+additional output files:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{i} button next to \texttt{Line plot} downloads the PDF
+  containing average plot keys
+\item
+  \texttt{cluster diagram} button next to \texttt{Heatmap} downloads a
+  cluster report giving cluster assignments for each feature as a comma
+  separated value (CSV) spreadsheet.
+\end{itemize}
+
+The cluster report contains following columns:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{chromosome} - the name of chromosome, contig or scaffold
+\item
+  \texttt{start} - start of the feature (1 based chromosomal coordinate)
+\item
+  \texttt{end} - end of the feature (1 based chromosomal coordinate)\\
+\item
+  \texttt{width} - width of the feature in base pairs
+\item
+  \texttt{strand} - strand of the feature
+\item
+  \texttt{metadata\_...} - the annotation columns driven from original
+  GFF/BED e.g.~gene name, score, group
+\item
+  \texttt{originalOrder} - number of feature (row) in GFF/BED, can be
+  used to restore original order after sorting on cluster ID
+\item
+  \texttt{ClusterID} - the numeric ID of the cluster, topmost cluster on
+  heatmap annotated with 1, and the bottom cluster with k, where k
+  equals to number of clusters selected, exported only if clustering is
+  enabled
+\item
+  \texttt{SortingOrder} - the order imposed on heatmap by sorting by
+  mean row(s) values, exported only if sorting is enabled
+\item
+  \texttt{FinalOrder} - the final order of heatmap's rows, this can be
+  influenced by sorting and clustering; 1 indicates topmost row
+\end{itemize}
+
+Sample report: \footnotesize
+
+\begin{verbatim}
+chromosome  start   end     width   strand  metadata_group  originalOrder   ClusterID   SortingOrder    FinalOrder
+chrI        9065087 9070286 5200    +       g1              1               1           3               3
+chrI        5171285 5175522 4238    -       g1              2               3           50              43
+chrI        9616508 9618109 1602    -       g1              3               3           13              43
+chrI        3608395 3611844 3450    +       g1              4               3           11              12
+\end{verbatim}
+
+\normalsize
+
+Table view: \scriptsize
+
+\begin{longtable}[c]{@{}llllllllll@{}}
+\toprule\addlinespace
+chromosome & start & end & width & strand & metadata\_group &
+originalOrder & ClusterID & SortingOrder & FinalOrder
+\\\addlinespace
+\midrule\endhead
+chrI & 9065087 & 9070286 & 5200 & + & g1 & 1 & 1 & 3 & 3
+\\\addlinespace
+chrI & 5171285 & 5175522 & 4238 & - & g1 & 2 & 3 & 50 & 43
+\\\addlinespace
+chrI & 9616508 & 9618109 & 1602 & - & g1 & 3 & 3 & 13 & 43
+\\\addlinespace
+chrI & 3608395 & 3611844 & 3450 & + & g1 & 4 & 3 & 11 & 12
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+\normalsize
+
+\subsection{PDF output size}\label{pdf-output-size}
+
+The last tab (\texttt{Batch operation and setup}) on the \textbf{tool
+panel} includes batch operations and various other settings including
+PDF output size. By default the output PDF will be A4 landscape. This
+can be changed using the drop-down list to following settings:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{user defined} - this option reveals two numeric inputs that
+  allows to set output PDF width and height. The values must be given in
+  inches.
+\item
+  \texttt{Legal rotated} - US Legal landscape: 14" by 8.5"
+\item
+  \texttt{A4} - A4 portrait: - 8.27" × 11.69"
+\item
+  \texttt{Letter} - US Letter portrait: 8.5" × 11"
+\item
+  \texttt{Legal} - US Legal portrait: 8.5" × 14"
+\item
+  \texttt{Executive} - a.k.a Monarch paper: 7.25 × 10.5"
+\end{itemize}
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/09_02.png}
+\caption{The view on top part of batch operation and setup panel}
+\end{figure}
+\end{quote}
+
+\subsection{Batch operations}\label{batch-operations}
+
+Controls to plot multiple plots at once are located on the
+\texttt{Batch operation and setup} tab, just below PDF paper options. It
+is possible to output the plots to multipage PDF, plot an array of plots
+on a single page (for average plots) or mix these options together.
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/09_03.png}
+\caption{The view on bottom part of batch operation and setup panel}
+\end{figure}
+\end{quote}
+
+The first drop-down controls the type of the plot - either average or
+heatmap. The second drop down determines the strategy to traverse the
+\textbf{plot grid}. The options include:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{single} - every single feature-track pair will be plotted on
+  separate plot
+\item
+  \texttt{rows} - the \textbf{plot grid} will be traversed by rows,
+  which means one plot that contains all tracks per feature will be
+  prepared
+\item
+  \texttt{columns} - the \textbf{plot grid} will be traversed by
+  columns, which means one plot that contains all features per tracks
+  will be prepared
+\end{itemize}
+
+The \texttt{multi plot grid} option controls how many plots will be
+placed on each page of the PDF output, e.g.~1x1 means one plot per one
+page, while 3x4 means 3 columns and 4 rows of plots. If number of plots
+exceeds the number of slots on page the new page will be added to the
+PDF.
+
+\texttt{Filter names} will apply a filter to plot titles, which are
+based on on uploaded file names. For example, if you uploaded 100 files
+starting with a prefix of ``my\_experiment\_'', you can remove this
+fragment from each plot title and/or heatmap caption by putting this
+string in \texttt{Filter names}.
+
+Finally, pressing \texttt{Get PDF} produces the final output file.
+Please see example below:
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/09_04.png}
+\caption{Batch plot usage example - multiple average plots aranged in
+6x2 plot grid}
+\end{figure}
+\end{quote}
+
+\section{Saving and loading plot
+sets}\label{saving-and-loading-plot-sets}
+
+SeqPlots allows to save the plot sets as binary R files. This allows to
+quickly load pre-calculated set for replotting. Furthermore, the saved
+plot sets can be shared with other SePlots users.
+
+\subsection{Load or save plotset}\label{load-or-save-plotset}
+
+Following controls are available on ``Load or save plotset'' panel:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{\texttt{Load saved plot set}} - this drop-down list allows to
+  select a plotset. Once the Rdata binary file is selected the
+  \textbf{plot grid} will be shown instantaneously. Selecting the file
+  reveals two additional buttons:
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    \textbf{\texttt{Remove dataset}} - this button deletes the selected
+    saved plot set from user data.
+  \item
+    \textbf{\texttt{Download plotset}} - this button saves a copy of the
+    plotset in selected location.
+  \end{itemize}
+\item
+  \textbf{\texttt{Save current plot set}} - this control allows to save
+  the current plot set. Once the desired name of the file is put to the
+  text input the \texttt{Save} button will appear. You can use it after
+  calculating the plot set. It is also possible to save a copy of loaded
+  plot sets. The plot set binary files can be renamed simply by loading
+  them, saving a copy and deleting original source file.
+\end{itemize}
+
+All saved dataset can be found in \texttt{data location}/publicFiles.
+Any SeqPlots Rdata binaries put in the folder will become available for
+loading in \textbf{\texttt{Load saved plot set}} control.
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/10_00.png}
+\caption{The view on the ``Load or save plotset'' panel}
+\end{figure}
+\end{quote}
+
+\subsection{Plot set files structure}\label{plot-set-files-structure}
+
+The plot sets files can be also directly loaded in R. This allows
+further processing and customization of the plots. Data structure is a
+nested list, which elements be accessed by \texttt{{[}{[}} R operator.
+The nesting goes as follow:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{\texttt{feature}} - R list
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    \textbf{\texttt{track}} - R list
+
+    \begin{itemize}
+    \itemsep1pt\parskip0pt\parsep0pt
+    \item
+      \texttt{means} - numeric vector giving mean signal value for each
+      (binned) genomic position
+    \item
+      \texttt{stderror} - numeric vector giving standard error for each
+      (binned) genomic position
+    \item
+      \texttt{conint} - numeric vector giving 95\% confidence interval
+      for each (binned) genomic position
+    \item
+      \texttt{all\_ind} - numeric vector giving the genomic position in
+      base pairs
+    \item
+      \texttt{e} - character string giveing numeric vector giving the
+      indicates of anchored distance, NULL for point features plots
+    \item
+      \texttt{desc} - auto generated title of the plot
+    \item
+      \texttt{heatmap} - numeric matrix, (binned) signal values for each
+      genomic position (columns) and each feature (rows)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+The example structure:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{List of }\DecValTok{2}
+ \NormalTok{$}\StringTok{ }\NormalTok{HTZ1_Differential_genes_TOP100_v2.gff:List of }\DecValTok{2}
+  \NormalTok{..$}\StringTok{ }\NormalTok{HTZ1_JA00001_IL1andIL2_F_N2_L3_NORM_linear_1bp_IL010andIL009_averaged.bw    :List of }\DecValTok{7}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{means   :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{2.52} \FloatTok{2.52} \FloatTok{2.52} \FloatTok{2.53} \FloatTok{2.54} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{stderror:}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{0.114} \FloatTok{0.112} \FloatTok{0.111} \FloatTok{0.11} \FloatTok{0.109} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{conint  :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{0.226} \FloatTok{0.223} \FloatTok{0.221} \FloatTok{0.218} \FloatTok{0.217} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{all_ind :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] -}\DecValTok{1000} \NormalTok{-}\DecValTok{995} \NormalTok{-}\DecValTok{990} \NormalTok{-}\DecValTok{985} \NormalTok{-}\DecValTok{980} \NormalTok{-}\DecValTok{975} \NormalTok{-}\DecValTok{970} \NormalTok{-}\DecValTok{965} \NormalTok{-}\DecValTok{960} \NormalTok{-}\DecValTok{955} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{e       :}\StringTok{ }\OtherTok{NULL}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{desc    :}\StringTok{ }\NormalTok{chr }\StringTok{"HTZ1_JA00001_IL1andIL2...}\CharTok{\textbackslash{}n}\StringTok{@HTZ1_Differential_genes_TOP100_v2"}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{heatmap :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{2.36} \FloatTok{5.25} \FloatTok{2.2} \FloatTok{3.48} \FloatTok{4.32} \NormalTok{...}
+  \NormalTok{..$}\StringTok{ }\NormalTok{HTZ1_JA00001_IL3andIIL5_F_lin35_L3_NORM_linear_1bp_IL008andIL011_averaged.bw:List of }\DecValTok{7}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{means   :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{2.36} \FloatTok{2.35} \FloatTok{2.35} \FloatTok{2.36} \FloatTok{2.38} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{stderror:}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{0.126} \FloatTok{0.125} \FloatTok{0.125} \FloatTok{0.126} \FloatTok{0.125} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{conint  :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{0.249} \FloatTok{0.249} \FloatTok{0.247} \FloatTok{0.251} \FloatTok{0.249} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{all_ind :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] -}\DecValTok{1000} \NormalTok{-}\DecValTok{995} \NormalTok{-}\DecValTok{990} \NormalTok{-}\DecValTok{985} \NormalTok{-}\DecValTok{980} \NormalTok{-}\DecValTok{975} \NormalTok{-}\DecValTok{970} \NormalTok{-}\DecValTok{965} \NormalTok{-}\DecValTok{960} \NormalTok{-}\DecValTok{955} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{e       :}\StringTok{ }\OtherTok{NULL}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{desc    :}\StringTok{ }\NormalTok{chr }\StringTok{"HTZ1_JA00001_IL3andIIL5...}\CharTok{\textbackslash{}n}\StringTok{@HTZ1_Differential_genes_TOP100_v2"}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{heatmap :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{2.61} \FloatTok{3.17} \FloatTok{1.42} \FloatTok{2.46} \FloatTok{4.26} \NormalTok{...}
+ \NormalTok{$}\StringTok{ }\NormalTok{HTZ1_Differential_genes_BOTTOM100.gff:List of }\DecValTok{2}
+  \NormalTok{..$}\StringTok{ }\NormalTok{HTZ1_JA00001_IL1andIL2_F_N2_L3_NORM_linear_1bp_IL010andIL009_averaged.bw    :List of }\DecValTok{7}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{means   :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{1.57} \FloatTok{1.57} \FloatTok{1.58} \FloatTok{1.6} \FloatTok{1.62} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{stderror:}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{0.0996} \FloatTok{0.0985} \FloatTok{0.1003} \FloatTok{0.1022} \FloatTok{0.1018} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{conint  :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{0.198} \FloatTok{0.195} \FloatTok{0.199} \FloatTok{0.203} \FloatTok{0.202} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{all_ind :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] -}\DecValTok{1000} \NormalTok{-}\DecValTok{995} \NormalTok{-}\DecValTok{990} \NormalTok{-}\DecValTok{985} \NormalTok{-}\DecValTok{980} \NormalTok{-}\DecValTok{975} \NormalTok{-}\DecValTok{970} \NormalTok{-}\DecValTok{965} \NormalTok{-}\DecValTok{960} \NormalTok{-}\DecValTok{955} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{e       :}\StringTok{ }\OtherTok{NULL}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{desc    :}\StringTok{ }\NormalTok{chr }\StringTok{"HTZ1_JA00001_IL1andIL2...n@HTZ1_Differential_genes_BOTTOM100"}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{heatmap :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{1.64} \FloatTok{1.37} \FloatTok{1.61} \FloatTok{1.77} \FloatTok{1.86} \NormalTok{...}
+  \NormalTok{..$}\StringTok{ }\NormalTok{HTZ1_JA00001_IL3andIIL5_F_lin35_L3_NORM_linear_1bp_IL008andIL011_averaged.bw:List of }\DecValTok{7}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{means   :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{1.94} \FloatTok{1.94} \FloatTok{1.95} \FloatTok{1.96} \FloatTok{1.97} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{stderror:}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{0.123} \FloatTok{0.123} \FloatTok{0.124} \FloatTok{0.126} \FloatTok{0.128} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{conint  :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{0.244} \FloatTok{0.245} \FloatTok{0.246} \FloatTok{0.251} \FloatTok{0.253} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{all_ind :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] -}\DecValTok{1000} \NormalTok{-}\DecValTok{995} \NormalTok{-}\DecValTok{990} \NormalTok{-}\DecValTok{985} \NormalTok{-}\DecValTok{980} \NormalTok{-}\DecValTok{975} \NormalTok{-}\DecValTok{970} \NormalTok{-}\DecValTok{965} \NormalTok{-}\DecValTok{960} \NormalTok{-}\DecValTok{955} \NormalTok{...}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{e       :}\StringTok{ }\OtherTok{NULL}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{desc    :}\StringTok{ }\NormalTok{chr }\StringTok{"HTZ1_JA00001_IL3andIIL5...}\CharTok{\textbackslash{}n}\StringTok{@HTZ1_Differential_genes_BOTTOM100"}
+  \NormalTok{.. ..$}\StringTok{ }\NormalTok{heatmap :}\StringTok{ }\NormalTok{num [}\DecValTok{1}\NormalTok{:}\DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{:}\DecValTok{501}\NormalTok{] }\FloatTok{1.61} \FloatTok{1.37} \FloatTok{1.29} \FloatTok{3.04} \FloatTok{3.77} \NormalTok{...}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Advanced options}\label{advanced-options}
+
+Some additional SeqPlots options can be located at very bottom of
+\texttt{Bach operation and setup} tab:
+
+\begin{quote}
+\begin{figure}[H]
+\centering
+\includegraphics{../inst/seqplots/www/help/img/10_01.png}
+\caption{The view on `Advanced options' section of the batch operation
+and setup panel}
+\end{figure}
+\end{quote}
+
+\begin{itemize}
+\item
+  \texttt{Keep 1:1 aspect ratio in batch mode} - This option guarantee
+  that the ratio between X- and Y-axis height will be 1, hence the
+  produced plots will be rectangular in batch mode. This prevent
+  stretching the plots while fitting the single row or column to one
+  page. Turned on by default.
+\item
+  \texttt{Always keep 1:1 aspect ratio} - This checkbox extends previous
+  behaviours on single plots - the figures always will be rectangular,
+  no matter the paper size. Turned off by default.
+\item
+  \texttt{Reactive plotting} - While this checkbox is selected, all
+  plotting operation ar executed on fly. That means changing the font
+  size, title caption, etc. will execute the plotting routine and
+  changes will be visible on preview. \texttt{Reactive plotting} might
+  be useful for exploratory data analysis using plots. However, it is
+  not recommended while working with big heatmap plots. Touleble from
+  keyboard by pressing {[}ctrl/cmd+R{]}. Turned off by default.
+\item
+  \texttt{Use multithreading for calculations} - This option is
+  available only on desktop instances of SeqPlots under Mac OS X and
+  Linux. While turned off R will not fork the child processes for
+  plotting and plot set calculations. It is useful for debugging, since
+  in single process mode all warning/errors will be directly printed to
+  R console. Also might increase the performance for plotting small
+  average plots. Turned off by default.
+\end{itemize}
+
+\section{Error messages}\label{error-messages}
+
+\subsection{Adding the files:}\label{adding-the-files}
+
+\begin{verbatim}
+Problem with line N: "line_text" [internal_error]
+\end{verbatim}
+
+\begin{quote}
+The import of feature file (GFF or BED) was not successful due to
+mis-formatted file.
+\end{quote}
+
+\begin{center}\rule{3in}{0.4pt}\end{center}
+
+\begin{verbatim}
+Chromosome names provided in the file does not match ones defined in reference genome. 
+INPUT: [chr3R, chr2L, chr2R, chr3L] 
+GENOME: [chrI, chrII, chrIII, chrIV, chrV, ...]
+\end{verbatim}
+
+\begin{quote}
+There are unexpected chromosome names in input file. Following genomes:
+\emph{Arabidopsis thaliana, Caenorhabditis elegans,
+Cyanidioschyzon\_merolae, Drosophila melanogaster, Homo sapiens, Oryza
+sativa, Populus trichocarpa, Saccharomyces cerevisiae and Zea mays}
+support chromosome names remapping between different naming conventions,
+including: AGPv2, ASM9120v1, Ensembl, JGI2\_0, MSU6, NCBI, TAIR10 and
+UCSC. If you see above error in one of these genomes there are still
+unexpected names after the correction. The problematic chromosome names
+are given in the error message. Remove GFF/BED lines corresponding to
+them or upgrade the genome to one containing proper naming.
+Alternatively set genome to NA.
+\end{quote}
+
+\begin{center}\rule{3in}{0.4pt}\end{center}
+
+\begin{verbatim}
+File already exists, change the name or remove old one.
+\end{verbatim}
+
+\begin{quote}
+File named like this already exists in the database, it is impossible to
+have two files sharing same filename.
+\end{quote}
+
+\begin{center}\rule{3in}{0.4pt}\end{center}
+
+\begin{verbatim}
+ERROR: solving row 300: negative widths are not allowed
+\end{verbatim}
+
+\begin{quote}
+The the row 300 have end coordinate smaller than beginning, hence the
+width in negative. To fix it the start and stop indicates should be
+swapped. This error often happens when negative strand (-) ranges are
+misformatted.
+\end{quote}
+
+\begin{center}\rule{3in}{0.4pt}\end{center}
+
+\section{Version History}\label{version-history}
+
+\subsection{SeqPlots v0.9.1 RC}\label{seqplots-v0.9.1-rc}
+
+\subparagraph{GENERAL:}\label{general}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  inputs and features sorted alphabetically
+\item
+  DataTables v1.10.0 with pagination, selection number indicator and
+  infinite row selections
+\item
+  buttons for heatmap and lineplots, PDF default sizes,
+\item
+  changes in GUI layout
+\item
+  default PDF output paper size set to A4 horizontal,
+\item
+  Font sizes are in points
+\item
+  preview is compatible with A4 PDF output (at 100 DPI)
+\item
+  color key for heatmap are always generated using image.plot function
+  that provides better labeling
+\item
+  batch plots do not override individual labels if set
+\item
+  option to keep 1:1 aspect ratio (default for batch plots)
+\item
+  miscellaneous options renamed for clarity
+\end{itemize}
+
+\subsection{SeqPlots v0.9.0 RC}\label{seqplots-v0.9.0-rc}
+
+\subparagraph{FEATURES:}\label{features}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Multi-plot grid option in batch mode - many line plots on single page
+\end{itemize}
+
+\subparagraph{GENERAL:}\label{general-1}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  R 3.1 and BioC 2.14 compatibility
+\item
+  faster BigWig signal retrieval, no need for modified rtracklayer C
+  code in the package
+\item
+  warning message if JS File API is not supported (old browsers)
+\item
+  improved the performance of heatmap plotting by using list of matrices
+  instead concatenated matrix
+\end{itemize}
+
+\subparagraph{BUGFIX:}\label{bugfix}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  application start properly without any BSGenome genomic packages
+  installed
+\item
+  cluster report - the final order agrees with cluster indicates
+\end{itemize}
+
+\subsection{SeqPlots v0.8.2b}\label{seqplots-v0.8.2b}
+
+\subparagraph{FEATURES:}\label{features-1}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Hierarchical and super self-organizing network clustering added for
+  heatmaps
+\item
+  Anchored motif plots
+\item
+  The row order of the heatmap is exported along with cluster report
+\end{itemize}
+
+\subparagraph{GENERAL:}\label{general-2}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  JS color picker added for browsers, that do not support i.e.~Firefox
+  (checked with modernizr.js library)
+\item
+  Single process mode and Microsoft Windows compatibility (running
+  without fork parallelization)
+\item
+  Shiny 0.9.1 compatibility
+\item
+  Saved datasets can be downloaded for local usage
+\item
+  Clicking row or column name in plot grid toggles the checkboxes
+\item
+  Minor GUI changes
+\end{itemize}
+
+\subsection{SeqPlots v0.8.1b}\label{seqplots-v0.8.1b}
+
+\subparagraph{GENERAL:}\label{general-3}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  GUI redesign: plot matrix incorporates sub-plot/heatmap specific
+  controls, all heatmap options gathered in single tab
+\item
+  warning before closing/refreshing a webpage with active session
+\item
+  cookie based default options: user, genome and deactivate page exit
+  warning
+\item
+  heat-map clusters provided as cluster report - a CSV file containing
+  original features, annotations and cluster information, see more:
+  https://bitbucket.org/przemol/seqplots/wiki/Heatmaps\#markdown-header-cluster-report
+\item
+  Wiggle files processing: correct for multiple header definitions and
+  roman/arabic chromosome names correction
+\item
+  Optimised keyboard shortcuts: plot - RETUTRN or ctrl/cmd+SPACE, switch
+  heatmap - ctrl/cmd+H, switch reactive plotting - ctrl/cmd+R
+\item
+  minor speed improvement
+\end{itemize}
+
+\subparagraph{BUGFIX:}\label{bugfix-1}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Motif density plots and heatmaps: flip rows on (-) strand
+\end{itemize}
+
+\subsection{SeqPlots v0.8.0b}\label{seqplots-v0.8.0b}
+
+\subparagraph{GENERAL:}\label{general-4}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  GUI redesign, option partitioned to more tabs
+\item
+  preview plot is zoomed on click rather than on mouse hover
+\item
+  possibility to remove multiple files
+\item
+  comments visible as popup in file managmed window
+\item
+  all chromosome naming conventions (most notably chrX/X and variants of
+  chrM/M/MtDNA/MT etc.) are accepted
+  (http://www.bioconductor.org/packages/release/data/annotation/html/seqnames.db.html)
+\item
+  incoming featurefiles (GFF and BED) are not processed, just chacked
+  for errors
+\item
+  explicit error handling for incoming flies, the line with problem or
+  unexpected chromosome(s) are indentified to the user
+\item
+  motif density tracks can be binned (defoult at 10bp)
+\item
+  tracks amd motif densities cna be mixed together in plots
+\end{itemize}
+
+\subparagraph{SERVER:}\label{server}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  server\_config.R added - a configuration file that allows to set up
+  server varaiables, e.g.~the user data location
+\end{itemize}
+
+\subparagraph{MAC OS X APP:}\label{mac-os-x-app}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  interface to insrall new genomes from Bioconductor and local resources
+  (R BSgemome format:
+  http://www.bioconductor.org/packages/release/bioc/html/BSgenome.html)
+\item
+  option to set up data location
+\end{itemize}
+
+\subsection{SeqPlots v0.7.0a}\label{seqplots-v0.7.0a}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  SeqPlots for Mac OS X relesed - an user frienddly wrapper app
+  containig R, packages and SeqPlots coede
+\item
+  heatmap plotting added
+\item
+  motif denstty plotting added for lineplot and heatmap
+\item
+  minior interface redesign
+\item
+  reactive interface can be turn off for plottting, user plots on demend
+\item
+  adding files from jQuery File Upload
+  (http://blueimp.github.io/jQuery-File-Upload/) is handled directly by
+  R eliminating additional node.js server application and making proper
+  file handling for desktop version
+\item
+  computationally expensive operations (calculating plot matrix and
+  plotting) are handeled by new R process (parallel R library) - many
+  proces can run simmutainously in same Shiny instance, user can get
+  fedback from the calcualtion can be cancelled
+\end{itemize}
+
+\subsection{SeqPlots v0.6.0a}\label{seqplots-v0.6.0a}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Shiny (https://github.com/rstudio/shiny) used as R web fraimwork,
+  support for Rserver/EXT JS version dropped
+\item
+  support for 145 genomes from UCSC database (via user provideing valid
+  genome symbol)
+\item
+  new reactive user interface
+\item
+  new plot type: midpoint features - it calculates the middle of given
+  features and centres the summary on it
+\item
+  the option to ignore the strand (plot always in the same direction)
+\item
+  the option to remove the zeros (0 value of score in Wiggle track) from
+  mean and error estimate calculations
+\item
+  the support for BED feature files (in addition to GFF, Wiggle (all
+  variants), BigWiggle)
+\item
+  automatic chromosome name correction for C. elegans genomes (I
+  =\textgreater{} chrI, MtDNA =\textgreater{} chrM, etc.)
+\item
+  accepts wiggle with overlapping ranges (e.g.~microarray experiments
+  processed using MA2C)
+\item
+  basic user management for uploaded files
+\item
+  option to download the features and track files directly from
+  application
+\end{itemize}
+
+\subsection{SeqPlots v0.1.0a -
+v0.5.0a}\label{seqplots-v0.1.0a---v0.5.0a}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Initial test and alpha releases
+\end{itemize}
+
+\section{Explanations}\label{explanations}
+
+\begin{center}\rule{3in}{0.4pt}\end{center}
+
+\begin{itemize}
+\item
+  ``\textbf{feature}'' - a genomic interval defined by
+  \textbf{chromosome} name, \textbf{start} and \textbf{end} positions
+  and the \textbf{directionality} (strand). The end must always be a
+  bigger number than start, so the width of the range is not negative.
+  Start and end means here the numeric start of the interval and should
+  not be confused with TSS and TTS.
+
+  For example, in BED format this information is stored in following
+  text tab delimited format:
+  \texttt{chr7    127471196  127472363  .  .  +}
+
+  \begin{center}\rule{3in}{0.4pt}\end{center}
+\item
+  ``\textbf{directionality}'' - the strand of genomic feature,
+  determining if the plotting range should be anchored around the star
+  or and, and the direction in which signal is being processed to create
+  the average track or heatmap. Unknown directionality is marked by
+  \texttt{*} and treated as \texttt{+} for calculations.
+
+  \begin{center}\rule{3in}{0.4pt}\end{center}
+\item
+  ``\textbf{track}'' - the file assigning the continuous signal (score)
+  to genomic locations across the chromosomes. The signal usually comes
+  from sequencing experiments, like ChIP-seq, RNA-seq, DNase-seq,
+  MNase-seq, or from computational tools, for example nucleosome
+  occupancy prediction, CpG density.
+
+  For example, in BedGraph format this information is stored in
+  following text tab delimited format:
+  \texttt{chr19 49302300 49302600 -0.75}
+
+  \begin{center}\rule{3in}{0.4pt}\end{center}
+\item
+  ``\textbf{reference genome package}'' - the R BSgemome package
+  containing the full reference sequence for given species. It is also
+  used to provide universal chromosome names and chromosome lengths taht
+  are used as plotting boundaries.
+
+  \begin{center}\rule{3in}{0.4pt}\end{center}
+\item
+  ``\textbf{reads coverage}'' - The basic way to calculate the signal
+  from sequencing based assays. The numeric representation shows how
+  much reads was aligned to given genomic location. This can be a proxy
+  to protein-DNA binding (ChIP-seq) or the expression (RNA-seq). Can be
+  calculated using BedTools:
+  http://bedtools.readthedocs.org/en/latest/content/tools/genomecov.html
+  Also known as \texttt{pileups}.
+
+  \begin{center}\rule{3in}{0.4pt}\end{center}
+\end{itemize}
+
+\end{document}

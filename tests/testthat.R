@@ -1,4 +1,4 @@
-library(testthat)
-library(seqplots)
+#library(testthat)
+#library(seqplots)
 
-test_check("seqplots")
+#test_check("seqplots")

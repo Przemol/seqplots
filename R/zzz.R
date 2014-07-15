@@ -1,4 +1,3 @@
-
-.onLoad <- function(libname, pkgname) {
-	message('SeqPlots loaded')
+.onAttach <- function(libname, pkgname) {
+  packageStartupMessage('SeqPlots loaded')
 }

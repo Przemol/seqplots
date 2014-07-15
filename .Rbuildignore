@@ -1,3 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 update.sh$
+^\.travis\.yml$
+.git
+inst/seqplots/.git

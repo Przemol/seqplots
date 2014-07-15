@@ -10,6 +10,10 @@ run(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FALSE)
 
 \item{debug}{run the SeqPlots in debyug mode, i.e. with web interface R console}
 }
+\value{
+Normally returns nothing (NULL), returns an error if one accrued.
+Usage messages are shown in R console.
+}
 \description{
 This function is called to initaite SeqPlots and call web browser graphical user interface.
 }
@@ -17,7 +21,9 @@ This function is called to initaite SeqPlots and call web browser graphical user
 The default home dir is ~/SeqPlots data
 }
 \examples{
+\dontrun{
 run()
+}
 }
 \author{
 Przemyslaw Stempor

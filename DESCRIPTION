@@ -18,6 +18,8 @@ Description: The SeqPlots is universal, web browser based tool for plotting
     combination plots on fly, run automated batch operations or share with
     colleagues, who can adjust their plotting parameters without loading actual
     tracks and recalculating numeric values.
+Depends:
+    R (>= 3.1.0)
 Imports:
     shiny,
     DBI,
@@ -29,16 +31,13 @@ Imports:
     methods,
     plotrix,
     fields,
-    spam,
     grid,
     kohonen,
     Cairo,
     parallel
 Type: Package
 Date: 2014-4-10
-Depends:
-    R (>= 3.1.0)
-LinkingTo: IRanges, rtracklayer
 LazyLoad: yes
 Suggests:
-    testthat
+    testthat,
+    BiocStyle

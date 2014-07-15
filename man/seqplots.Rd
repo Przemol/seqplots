@@ -24,9 +24,6 @@ generation. Plots can also be run in batch.
  LazyLoad: \tab yes\cr
 }
 }
-\examples{
-example(seqplots)
-}
 \author{
 Przemyslaw Stempor
 }
