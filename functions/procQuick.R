@@ -19,8 +19,11 @@
 #' @param cat4 function, that sends 2nd level info to web interface
 #' @param con connection to SQlite database storing genome information for files
 #' @return nested list: OUT[[FEATURE]][[TRACK/MOTIF]][[VALUE]]
+#' 
 #' @examples
+#' \dontrun{
 #' procQuick(c('track1.bw', 'track2.bw'), c('peaks.bed', 'TSS.gff'))
+#' }
 
 # Function to process genomic signal from trackfiles and/or motif data, 
 # calculate statistics and present the data in nested list format.
