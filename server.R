@@ -5,22 +5,10 @@
 #session$registerDataObj('im', file.path(Sys.getenv("web", '.'), 'www/help/help.html'), function(data, req) { shiny:::httpResponse(content=readChar(data, file.info(data)$size)) })
 ###############################################################################
 
-suppressPackageStartupMessages({
-  require(parallel)
-  require(shiny)
-  require(RJSONIO)
-  require(RSQLite)
-  require(rtracklayer)
-  require(BSgenome)
-  require(kohonen)
-  require(Cairo)
-})
-
 #options("xtable.sanitize.text.function" = identity)
 options("shiny.maxRequestSize" = -1)
 options("bitmapType" = "cairo")
 #options(shiny.reactlog = FALSE)
-
 
 ##Turn off experimental
 #require(rCharts)

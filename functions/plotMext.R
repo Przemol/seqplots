@@ -3,7 +3,6 @@
 # Author: przemol
 ###############################################################################
 
-require(plotrix)
 plotMext <- function(INPUTS, desc1="", y1=NULL, y2=NULL, x1=NULL, x2=NULL, type='dev', title="", Xtitle='TSS', Ytitle='Signal', plotScale='linear', EE=TRUE, Leg=1, 
 		cex.axis=1.5, cex.lab=1.25, cex.main=2, cex.legend=1.20, pdf.size.X=16, pdf.size.Y=10, ln.v=FALSE, ln.h=1, colvec=NULL, pdf.name='out.pdf', 
     legend_pos='topright', legend_ext_pos="topleft", legend_ext=FALSE, poinsize=12) {

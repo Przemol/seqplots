@@ -2,7 +2,6 @@
 # Wrapper function, plotting the heatmap
 ###############################################################################
 
-require(fields)
 
 # Modified image.plot function from "fields" package, the grey rectangle 
 # is used as background for heatmap, making NAs distinguishable from the data
