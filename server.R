@@ -1,7 +1,7 @@
 # SeqPlots server file - initial cleaning
 # 
 # Author: PS
-#For local testes: Sys.setenv(root=file.path(path.expand("~"), "GFplots_data"), web=getwd()); require(shiny); runApp()
+#For local testes: Sys.setenv(root=file.path(path.expand("~"), "SeqPlots_data"), web=getwd()); require(shiny); runApp()
 #session$registerDataObj('im', file.path(Sys.getenv("web", '.'), 'www/help/help.html'), function(data, req) { shiny:::httpResponse(content=readChar(data, file.info(data)$size)) })
 ###############################################################################
 
@@ -20,7 +20,7 @@ sourceDir <- function(path, ...) {
   }
 }
 
-sqlite <- dbDriver("SQLite")
+sqlite <- RSQLite::SQLite()
 if( Sys.getenv('root') != '' ) {
   con <- dbConnect(sqlite, dbname = file.path(Sys.getenv('root'),'files.sqlite'))
 } else if( file.exists('server_config.R')  ) {
