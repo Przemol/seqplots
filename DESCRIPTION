@@ -38,7 +38,7 @@ Imports:
 Type: Package
 Date: 2014-4-10
 LazyLoad: yes
-VignetteBuilder: Sweave
+VignetteBuilder: utils
 Suggests:
     testthat,
     BiocStyle
