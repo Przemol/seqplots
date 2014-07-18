@@ -8,6 +8,8 @@
 #' @param tracks list or vector of track paths (BigWig) and/or motif 
 #' setup structers (as \code{\link{list}})
 #' @param features vector of feature file paths (BED or GFF)
+#' @param refgenome the UCSC cole of refference genome, e.g. 'hg19' hor 
+#' Homo sapiens
 #' @param bin binning window size in base pairs, default 1L
 #' @param rm0 remove 0 from mean/median calculation, default FALSE
 #' @param x1 upsterem distance in base pairs, default 500L
@@ -15,8 +17,10 @@
 #' @param xm anchored distance in base pairs, default 1000L
 #' @param type the type of the calculation, default, 'Point Features'
 #' @param add_heatmap return the heatmap data,  default FALSE
-#' @param cat3 function, that sends 1st level info to web interface
-#' @param cat4 function, that sends 2nd level info to web interface
+#' @param cat3 function, that sends 1st level info to web interface, handeld by 
+#' "message" in console mode
+#' @param cat4 function, that sends 2nd level info to web interface, handeld by 
+#' "message" in console mode
 #' @param con connection to SQlite database storing genome information for files
 #' @return nested list: OUT[[FEATURE]][[TRACK/MOTIF]][[VALUE]]
 #' 
@@ -31,11 +35,12 @@
 # calculate statistics and present the data in nested list format.
 ###############################################################################
 
-getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, ignore_strand=FALSE, x1=2000L, x2=2000L, xm=1000L, type='pf', 
-                      add_heatmap=TRUE, cat3=message, cat4=message, con=NULL) {
-    n <- 1
-    k <- 1
-    TSS <- list()
+getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, 
+    ignore_strand=FALSE, x1=2000L, x2=2000L, xm=1000L, type='pf', 
+    add_heatmap=TRUE, cat3=message, cat4=message, con=NULL) {
+    
+    n <- 1; k <- 1;
+    TSS <- list(length(features))
     GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
     if( length(GENOMES) ) 
         names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
@@ -51,9 +56,8 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, ign
     }
     
     for (j in features)	{
-        #cat(n, ") Processing TSS file: ", basename(j), "\n", sep="")
         
-        file_con <- file( normalizePath(j) ); sel <- import(file_con , asRangedData=FALSE); close(file_con)
+        file_con <- file( normalizePath(j) ); sel <- rtracklayer::import(file_con , asRangedData=FALSE); close(file_con)
         genome_ind <- refgenome
         pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))
         require(pkg, character.only = TRUE); GENOME <- get(pkg)
@@ -62,14 +66,12 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, ign
         proc <- list()
         for(i in 1:length(tracks) ) {
             
-            cat("\tProcessing track/motif: ", tracks[[i]][[1]], "\n")
             cat3(paste('Processing:', basename(j), '@', tracks[[i]][[1]], '[', k, '/',length(features)*length(tracks), ']'))
             
             if (ignore_strand)                strand(sel) <- '*'
             if( type == 'mf' ) sel <- resize(sel, 1, fix='center')
             
             if( class(tracks[[i]]) == 'character' ) {
-                #cat4("Loading track...")
                 track <- BigWigFile( normalizePath(tracks[[i]]) )
                 if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track) }
                 
@@ -90,7 +92,6 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, ign
                 all_ind  <- seq(-x1, x2, by=as.numeric(bin) )
                 
                 if( class(tracks[[i]]) == 'character' ) {
-                    #cat4("Processing BW...")
                     M <- extarct_matrix(track, gr, length(all_ind), ignore_strand)
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
@@ -111,17 +112,14 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, ign
             } else if (type == 'af') {
                 if( class(tracks[[i]]) == 'character' ) {
                     #left
-                    #cat4("Processing anchored ...")
                     left_ind <- seq(-x1, -1, by=bin)
                     M.left <- extarct_matrix(track, flank(sel, x1, start=TRUE), length(left_ind), ignore_strand)
                     
                     #middle
-                    #cat4("Processing middle...")
                     mid_ind <- seq(0, xm, by=bin)			
                     M.middle <- extarct_matrix(track, sel, length(mid_ind), ignore_strand)
                     
                     #right
-                    #cat4("Processing downsteream...")
                     right_ind <- seq(xm+1, xm+x2, by=bin)	
                     M.right <- extarct_matrix(track, flank(sel, x2, start=FALSE), length(right_ind), ignore_strand)
                     

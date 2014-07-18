@@ -1,7 +1,9 @@
 
 
 require(methods)
-#dd <- get(load('tests/0001_heatTest1_2x2.Rdata'))
+# dd <- get(load('tests/0001_heatTest1_2x2.Rdata'))
+# z=PlotSetArray(data=dd)
+# PlotSetArray(data=dd)$getPairs(list(c( 'HTZ1_Differential_genes_TOP100_v2', 'HTZ1_JA00001_IL1andIL2_F_N2_L3_NORM_linear_1bp_IL010andIL009_averaged' )))
 
 PlotSetPair <- setRefClass("PlotSetPair", fields = list( data = "list", annotations = "list")  )
 
@@ -11,11 +13,12 @@ PlotSetList <- setRefClass("PlotSetList", fields = list( data = "list", annotati
 PlotSetList$methods( npaires = function() 
     length(data) )
 PlotSetList$methods( show = function() 
-    cat( 'PlotSetList with', npaires(), 'feature/tracks pairs.' ) )
+    cat( 'PlotSetList with', npaires(), 'feature/tracks pairs.\n' ) )
 #PlotSetList$methods( plotAverage = source('../inst/seqplots/functions/plotMext.R', local = TRUE)$value )
 PlotSetList$methods( get = function(i) PlotSetList(data=data[i]) )
 PlotSetList$methods( plot = function(what='a', ...) {
-  if (what=="a") plotAverage(data, ...) else if (what=="h") plotHeatmap(data, ...) else stop('Unknown type of the plot!')
+  if (what=="a") plotAverage(data, ...) else if (what=="h") plotHeatmap(data, ...) 
+  else message('Unknown type of the plot, use what="a" for average plot and what="h" for heatmap')
 })
 
 
@@ -32,24 +35,23 @@ PlotSetArray$methods( pairind = function()
     as.list(data.frame(t(expand.grid(1:nfeatures(), 1:ntracks())))) )
 PlotSetArray$methods( unlist = function() 
     PlotSetList(data=lapply(pairind(), function(x) data[[x[2]]][[x[1]]] )) )
-PlotSetArray$methods( pairs = function() as.data.frame(t(as.data.frame( 
-    sapply(pairind(), function(x) c(x[1]*(x[2]-1)+x[2], x[1], x[2], 
-    gsub('\n@', ' *AND* ', data[[x[2]]][[x[1]]]$desc))), 
+PlotSetArray$methods( summary = function() as.data.frame(t(as.data.frame( 
+    sapply(pairind(), function(x) c(x[1]*(x[2]-1)+x[2], x[2], x[1], 
+    gsub('\n@', ' @ ', data[[x[2]]][[x[1]]]$desc))), 
     row.names=c('ID', 'FeatureID', 'TrackID', 'Pair name') ))) ) 
 PlotSetArray$methods( show = function() cat( 'PlotSetArray with', nfeatures(), 
-    'feature(s) and', ntracks(), 'tracks.' ) )
-PlotSetArray$methods( show = function() cat( 'PlotSetArray with', nfeatures(), 
-                                             'feature(s) and', ntracks(), 'tracks.' ) )
+    'feature(s) and', ntracks(), 'tracks.\n' ) )
 PlotSetArray$methods( getByID = function(i) unlist()$get(i) )
 PlotSetArray$methods( get = function(i, j) PlotSetList( data=list(data[[i]][[j]]) ) )
+PlotSetArray$methods( getPairs = function(i) PlotSetList(data=lapply( i, function(x) data[[x[2]]][[x[1]]] )) )
 PlotSetArray$methods( plot = function(...) unlist()$plot(...) )
 
 
 setGeneric('pairs')
 setGeneric('plot')
 setMethod(unlist, c("PlotSetArray"), function(x) x$unlist() )
-setMethod(plot,   c("PlotSetArray"), function(x) x$plot() )
-setMethod(pairs,  c("PlotSetArray"), function(x) x$pairs() )
+setMethod(plot,   c("PlotSetArray"), function(x, ...) x$plot(...) )
+#setMethod(pairs,  c("PlotSetArray"), function(x) x$pairs() )
 
 
 PlotSetArray$methods( getRow = function(i) data[as.integer(i)] )
@@ -92,8 +94,6 @@ setMethod("[", c("PlotSetArray", "ANY", "ANY", "ANY"), function(x, i, j, ..., dr
 # track <- setClass("track",
 #                   slots = c(x="numeric", y="numeric"))
 
-# getPlotSetArray(features ='/Users/przemol/SeqPlots_data/files/HTZ1_Differential_genes_TOP100_v2.gff', 
-#                 tracks ='/Users/przemol/SeqPlots_data/files/worm_pileup_unique.bw',
-#                 refgenome='ce10')
+# getPlotSetArray(features ='/Users/przemol/SeqPlots_data/files/HTZ1_Differential_genes_TOP100_v2.gff', tracks ='/Users/przemol/SeqPlots_data/files/worm_pileup_unique.bw',refgenome='ce10')
 
 # z<- getPlotSetArray(features ='tests/PooledCapTSS_ce.gff', tracks ='tests/cpg_200bp_ce10.bw',refgenome='ce10')

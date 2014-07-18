@@ -1,4 +1,3 @@
-plotAverageInt <- source('../inst/seqplots/functions/plotMext.R', local = TRUE)$value
 plotAverage = function(plotme, keepratio=FALSE, ord=NULL, labels=NULL, ...) {
   
   if(keepratio) par(pty='s')
@@ -7,6 +6,6 @@ plotAverage = function(plotme, keepratio=FALSE, ord=NULL, labels=NULL, ...) {
     plotme <- Map(function(x, y) {if(!is.na(y)) x[['desc']]<-y; return(x)}, data, labels)
   }
   if( length(ord) ) { plotme <- plotme[ ord ] }
-  plotAverageInt(plotme, ...) 
+  .plotMext(plotme, ...) 
   
 }

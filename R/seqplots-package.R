@@ -31,10 +31,12 @@
 #' @import DBI RSQLite parallel RJSONIO Cairo
 #' @import grid methods
 #' @import BSgenome GenomicRanges rtracklayer
-#' @importFrom fields image.plot set.panel
+#' @importMethodsFrom rtracklayer import
+#' @importFrom fields image.plot set.panel imageplot.info imageplot.setup tim.colors poly.image
 #' @importFrom kohonen supersom
 #' @importFrom plotrix dispersion
 #' @importFrom shiny runApp
+#' @exportPattern ^[^\\.]
 NULL
 
 #@importFrom rtracklayer import export BigWigFile summary SeqinfoForBSGenome wigToBigWig

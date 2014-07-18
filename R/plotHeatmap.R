@@ -1,4 +1,4 @@
-#' Plot heatmap with optional
+#' Plot heatmap with optional clustering
 #'
 #' This function extracts and processes genomic signal from tracks and/or 
 #' motif data, calculates statistics and presents the data in nested list format.
@@ -22,9 +22,6 @@
 #' 
 #' @export
 #' 
-
-
-heatmapPlotWrapper <- source('../inst/seqplots/functions/fnPlotHeatmap.R', local = TRUE)$value
 
 plotHeatmap <- function(pl, title="", labels=NA, legend=TRUE, keepratio=FALSE, 
     ord=1:length(pl), scale_signal="no", sortrows=FALSE, clusters=5L,
@@ -111,7 +108,7 @@ plotHeatmap <- function(pl, title="", labels=NA, legend=TRUE, keepratio=FALSE,
   
   if( nchar(title) > 0 ) par(oma=c(0,0,(title_font_size/12)+1,0) )
   
-  heatmapPlotWrapper( HLST, clusts, 
+  .heatmapPlotWrapper( HLST, clusts, 
                       bins=pl[[1]]$all_ind, 
                       titles=lab, e=pl[[1]]$e, ...)
   title(title, outer = TRUE, cex.main=title_font_size/12)
