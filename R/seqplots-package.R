@@ -31,7 +31,7 @@
 #' @import DBI RSQLite parallel RJSONIO Cairo
 #' @import grid methods
 #' @import BSgenome GenomicRanges rtracklayer
-#' @importFrom fields image.plot
+#' @importFrom fields image.plot set.panel
 #' @importFrom kohonen supersom
 #' @importFrom plotrix dispersion
 #' @importFrom shiny runApp

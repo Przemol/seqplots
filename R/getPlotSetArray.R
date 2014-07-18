@@ -20,6 +20,8 @@
 #' @param con connection to SQlite database storing genome information for files
 #' @return nested list: OUT[[FEATURE]][[TRACK/MOTIF]][[VALUE]]
 #' 
+#' @export
+#' 
 #' @examples
 #' \dontrun{
 #' procQuick(c('track1.bw', 'track2.bw'), c('peaks.bed', 'TSS.gff'))
