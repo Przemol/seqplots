@@ -204,7 +204,7 @@ shinyUI(
 					#6) HEATMAP SPECIFIC OPTIONS
 								tabPanel(value = 'panel6', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
 								  h5(tags$u('Heatmap setup'), hlp("Heatmapsetuptab")),
-									checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]"), 
+								  div( class='hidden', checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]") ), 
 									checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
 									div(class='row-fluid',
 									  div(class='span6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'Hierarchical'='hclust', 'SuperSOM'='ssom', 'do not cluster'='none'))),

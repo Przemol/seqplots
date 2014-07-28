@@ -6,6 +6,12 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   # 		seqlevels(tss) <- chrnames[col]
   # 		return(tss)
   # 	}
+  
+  normalizeName <- function(x) {
+    newname <- file.path(dirname(x), gsub("[^[:alnum:]\\.\\-]", "_", basename(x)))
+    if( file.rename(x, newname) ) return(newname) else stop('File cannot be renamed.', call. = FALSE)
+  }
+  
   testChromosomeNames <-  function(tss, gnm, ret=FALSE) {
     if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
       try( seqnameStyle(tss) <- seqnameStyle(gnm) )
@@ -44,6 +50,7 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   
   #File does not exist
   if( !file.exists(x) ) stop('Cannot add, file not on the server!')
+  x <- normalizeName(x)
   #import(text=grep('^#', readLines('sample.bed.gz'), invert = TRUE, value=TRUE), format='bed') 
   
   if( grepl('.(gff|GFF|gff.gz|GFF.gz)$', x) ) {

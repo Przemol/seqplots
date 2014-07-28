@@ -185,7 +185,7 @@ $(function() {
 	
 	$('#downloadLegend').tooltip({title:'Legend'});
 	$('#downloadClusters').tooltip({title:'Clusters indicates'});
-	$('#replot').tooltip({title:'Keyboard binding: [ENTER]'});
+	$('#replot').tooltip({title:'Refresh the plot and applying new settings. Keyboard binding: [ENTER]'});
 	$('[for="reactive"]').tooltip({title:'Keyboard binding: [ctrl+R] or [cmd+R]'});
   $('#hsccoef').parents('.row-fluid').tooltip({title:'0.01 (default on slider) calculates color key limits using data range from 1-99 percentile.  0.1 uses data range from 10-90 percentile.', placement:"right"});
 	$('#spawn').addClass('btn-warning');
