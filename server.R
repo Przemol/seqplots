@@ -319,7 +319,7 @@ shinyServer(function(input, output, clientData, session) {
 	#Adding a file to the server
 	observe({			
 		if( is.null(input$TR_addFile) ) return()
-    warning('Processing file: ', input$TR_addFile$name, input$TR_addFile$jobID)
+    message('Processing file: ', input$TR_addFile$name, ' [', input$TR_addFile$jobID, ']')
 		isolate({
 		  tryCatch({
   				x <- input$TR_addFile$jobID
