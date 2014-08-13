@@ -1,7 +1,7 @@
 Package: seqplots
 Maintainer: Przemyslaw Stempor <ps562@cam.ac.uk>
 Author: Przemyslaw Stempor
-Version: 0.9.2
+Version: 0.9.2.99
 License: BSD
 Title: SeqPlots: The interactive tool for visualizing track signal and sequence
     motif density along genomic features using average plots and heatmaps.

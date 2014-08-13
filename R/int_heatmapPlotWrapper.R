@@ -41,7 +41,7 @@
         ColorRamp <-gcol(ncollevel)
         ColorLevels <- seq(to=zmax,from=zmin, length=ncollevel)   #number sequence
     } else {
-        set.panel(1, NP)
+        invisible(capture.output( set.panel(1, NP) ))
     }
     
     

@@ -28,7 +28,7 @@
 #' 
 #' @examples
 #' \dontrun{
-#' procQuick(c('track1.bw', 'track2.bw'), c('peaks.bed', 'TSS.gff'))
+#' getPlotSetArray(c('track1.bw', 'track2.bw'), c('peaks.bed', 'TSS.gff'))
 #' }
 
 # Function to process genomic signal from tracks and/or motif data, 
@@ -38,6 +38,8 @@
 getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, 
     ignore_strand=FALSE, x1=2000L, x2=2000L, xm=1000L, type='pf', 
     add_heatmap=TRUE, cat3=message, cat4=message, con=NULL) {
+    
+    if( class(tracks) == "MotifSetup" ) tracks <- tracks$data
     
     n <- 1; k <- 1;
     TSS <- list(length(features))

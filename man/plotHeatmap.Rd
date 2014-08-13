@@ -39,9 +39,6 @@ setup structers (as \code{\link{list}})}
 nested list: OUT[[FEATURE]][[TRACK/MOTIF]][[VALUE]]
 }
 \description{
-This function extracts and processes genomic signal from tracks and/or
-motif data, calculates statistics and presents the data in nested list format.
-\code{\link{transform}} but for reordering a data frame by its columns.
-This saves a lot of typing!
+This function plots the heatmap from plot array.
 }
 

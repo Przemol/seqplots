@@ -50,7 +50,7 @@ This saves a lot of typing!
 }
 \examples{
 \dontrun{
-procQuick(c('track1.bw', 'track2.bw'), c('peaks.bed', 'TSS.gff'))
+getPlotSetArray(c('track1.bw', 'track2.bw'), c('peaks.bed', 'TSS.gff'))
 }
 }
 
