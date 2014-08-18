@@ -1,6 +1,6 @@
 # SeqPlots server file - initial cleaning
 # 
-# Author: PS
+# Author: Przemyslaw Stempor
 #For local testes: Sys.setenv(root=file.path(path.expand("~"), "SeqPlots_data"), web=getwd()); require(shiny); runApp()
 #session$registerDataObj('im', file.path(Sys.getenv("web", '.'), 'www/help/help.html'), function(data, req) { shiny:::httpResponse(content=readChar(data, file.info(data)$size)) })
 ###############################################################################
