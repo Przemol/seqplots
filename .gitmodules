@@ -1,0 +1,3 @@
+[submodule "inst/seqplots"]
+	path = inst/seqplots
+	url = git@github.com:Przemol/seqplots_core.git
