@@ -1,14 +1,19 @@
-
-
-require(methods)
 # dd <- get(load('tests/0001_heatTest1_2x2.Rdata'))
 # z=PlotSetArray(data=dd)
 # PlotSetArray(data=dd)$getPairs(list(c( 'HTZ1_Differential_genes_TOP100_v2', 'HTZ1_JA00001_IL1andIL2_F_N2_L3_NORM_linear_1bp_IL010andIL009_averaged' )))
 
+#' PlotSetPair Reference Class
+#'
+#' @field data a list holding the plot data
+#' @field annotations list of annotations
+#' 
 PlotSetPair <- setRefClass("PlotSetPair", fields = list( data = "list", annotations = "list")  )
 
-#S5 class definition
-message(getwd())
+#' PlotSetList Reference Class
+#'
+#' @field data a nested list holding the data
+#' @field annotations list of annotations
+#' 
 PlotSetList <- setRefClass("PlotSetList", fields = list( data = "list", annotations = "list")  )
 PlotSetList$methods( npaires = function() 
     length(data) )
@@ -21,7 +26,11 @@ PlotSetList$methods( plot = function(what='a', ...) {
   else message('Unknown type of the plot, use what="a" for average plot and what="h" for heatmap')
 })
 
-
+#' PlotSetArray Reference Class
+#'
+#' @field data a nested list holding the data
+#' @field annotations list of annotations
+#' 
 PlotSetArray <- setRefClass("PlotSetArray", fields = list( data = "list", annotations = "list")  )
 PlotSetArray$methods( nfeatures = function() 
     length(data) )

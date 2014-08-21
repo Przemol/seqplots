@@ -21,14 +21,17 @@ Description: The SeqPlots is universal, web browser based tool for plotting
 Depends:
     R (>= 3.1.0)
 Imports:
+    methods,
+    IRanges,
+    BSgenome,
+    digest,
+    rtracklayer,
+    GenomicRanges,
+    Biostrings,
     shiny,
     DBI,
     RSQLite,
     RJSONIO,
-    GenomicRanges,
-    rtracklayer,
-    BSgenome,
-    methods,
     plotrix,
     fields,
     grid,
