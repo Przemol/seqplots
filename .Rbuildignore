@@ -3,4 +3,9 @@
 update.sh$
 ^\.travis\.yml$
 .git
-inst/seqplots/.git
+inst/seqplots/\.gitignore
+inst/seqplots/README\.md
+inst/seqplots/NEWS
+\.gitignore
+\.Rhistory
+\.README.md
