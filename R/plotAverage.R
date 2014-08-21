@@ -8,4 +8,5 @@ plotAverage = function(plotme, keepratio=FALSE, ord=NULL, labels=NULL, ...) {
   if( length(ord) ) { plotme <- plotme[ ord ] }
   .plotMext(plotme, ...) 
  par(opar)
+ return(NULL)
 }

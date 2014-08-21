@@ -59,11 +59,14 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
     
     for (j in features)	{
         
-        file_con <- file( normalizePath(j) ); sel <- rtracklayer::import(file_con , asRangedData=FALSE); close(file_con)
+        #Set up genome package
         genome_ind <- refgenome
         pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))
-        require(pkg, character.only = TRUE); GENOME <- get(pkg)
+        suppressPackageStartupMessages(library(pkg, character.only = TRUE, quietly=TRUE)); GENOME <- get(pkg)
         remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(genomeStyles())
+        
+        #Get features to plot
+        file_con <- file( normalizePath(j) ); sel <- rtracklayer::import(file_con , asRangedData=FALSE); close(file_con)
         
         proc <- list()
         for(i in 1:length(tracks) ) {

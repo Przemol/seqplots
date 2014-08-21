@@ -72,7 +72,7 @@
             if( is.na(o_min[i]) ) keycolor_lim[1] <- zmin else keycolor_lim[1] <- o_min[i]
             if( is.na(o_max[i]) ) keycolor_lim[2] <- zmax else keycolor_lim[2] <- o_max[i]
             
-            col <- if( ifelse(is.character(colvec[i]), !is.na(colvec[i]), FALSE) ) colorRampPalette(c('white', colvec[i]))(ncollevel) else gcol(ncollevel)
+            col <- if( is.character(colvec[i]) ) colorRampPalette(c('white', colvec[i]))(ncollevel) else gcol(ncollevel)
             
             #par(cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs)
             .imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlabel, ylab=ylabel, 

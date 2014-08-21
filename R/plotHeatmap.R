@@ -28,11 +28,9 @@ plotHeatmap <- function(pl, title="", labels=NA, legend=TRUE, keepratio=FALSE,
   if(keepratio) par(pty='s')
   
   if( is.null(pl[[1]]$heatmap) ) 
-    stop('Heatmap plotting: No heatmap data avilabe! Re-run with 
-        "Calculate Heatmap" option selected.', call.=FALSE)
+    stop('Heatmap plotting: No heatmap data avilabe! Re-run with "Calculate Heatmap" option selected.', call.=FALSE)
   if(length(unique(sapply(pl, function(x) nrow(x[['heatmap']])))) != 1) 
-    stop('Heatmap plotting: All plots must have equal number of features. Do 
-         not plot heatmaps on multiple GFF/BED.', call.=FALSE)
+    stop('Heatmap plotting: All plots must have equal number of features. Do not plot heatmaps on multiple GFF/BED.', call.=FALSE)
   
   #Heatmap data aquizition (as list of matrixes)
   HLST <- lapply(pl, '[[', 'heatmap')[ ord ]  

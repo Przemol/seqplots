@@ -31,11 +31,12 @@
 #' @import digest rtracklayer GenomicRanges BSgenome Biostrings IRanges methods
 #' @import DBI RSQLite parallel RJSONIO Cairo
 #' @import grid methods
-#' @import BiocGenerics
 #' @importFrom fields image.plot set.panel imageplot.info imageplot.setup tim.colors poly.image
 #' @importFrom kohonen supersom
 #' @importFrom plotrix dispersion
 #' @importFrom shiny runApp
 NULL
 
+#importClassesFrom does not work with 
+#@importClassesFrom BiocGenerics connection file url gzfile bzfile unz pipe sockconn terminal textConnection gzcon characterORconnection
 #@importFrom rtracklayer import export BigWigFile summary SeqinfoForBSGenome wigToBigWig
