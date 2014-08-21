@@ -26,7 +26,7 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     if(ret) return(tss)
   }
   testFeatureFile <-  function(PATH, gnm){
-    fcon <- file(PATH); tss <- try(import( fcon ), silent = FALSE); close(fcon);
+    fcon <- file(PATH); tss <- try( rtracklayer::import( fcon ), silent = FALSE ); close(fcon);
     if (class(tss) == "try-error") {
     try({   nfields <- count.fields(PATH, comment.char = '', skip = 1)
             problem <- which(nfields != median( head(nfields, 1000) ))+1
@@ -51,7 +51,6 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   #File does not exist
   if( !file.exists(x) ) stop('Cannot add, file not on the server!')
   x <- normalizeName(x)
-  #import(text=grep('^#', readLines('sample.bed.gz'), invert = TRUE, value=TRUE), format='bed') 
   
   if( grepl('.(gff|GFF|gff.gz|GFF.gz)$', x) ) {
     type <- 'feature'; file_type <- 'GFF';
@@ -73,7 +72,7 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     }) 
     if(is(try_result, 'try-error')) {
       try_result2 <<- try({	
-        fcon=file(x); wig <- import.wig( fcon ); close(fcon);
+        fcon=file(x); wig <- rtracklayer::import.wig( fcon ); close(fcon);
         if( grepl('list', class(wig), ignore.case = TRUE) ) wig <- unlist(wig, use.names=FALSE)
         wig <- testChromosomeNames(wig , gnm, ret=TRUE)
         seqlengths(wig) <- seqlengths(gnm)[seqlevels(wig)];

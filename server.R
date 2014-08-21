@@ -285,7 +285,8 @@ shinyServer(function(input, output, clientData, session) {
 	  content = function( file ) {
 	    if(!nchar(input$clusters) & !nchar(input$sortingord)) stop('Plot heatmap with clusters or ordering first!')
 	    infile <- file.path( 'files', names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ) )
-      gr <- import(file(infile)); elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
+        fcon <- file(infile); gr <- rtracklayer::import( fcon ); close(fcon);
+        elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
 	    if( length(colnames(elementMetadata(gr))) ) { colnames(elementMetadata(gr)) <- paste0('metadata_', colnames(elementMetadata(gr))) }
 	    
       gr$OriginalOrder <- 1:length(gr); 
