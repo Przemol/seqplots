@@ -9,5 +9,6 @@ SeqPlots
 
 ## Installation
 ```{r}
-devtools::install_github('przemol/seqplots', auth_token='5dc47e7bc3b49c07961d7528a796b8d5818451d4')
+devtools::install_github('przemol/seqplots', 
+  auth_token='5dc47e7bc3b49c07961d7528a796b8d5818451d4')
 ```
