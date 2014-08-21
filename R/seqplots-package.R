@@ -35,7 +35,7 @@
 #' @importFrom kohonen supersom
 #' @importFrom plotrix dispersion
 #' @importFrom shiny runApp
-#' @importClassesFrom rtracklayer file
+#' @importClassesFrom BiocGenerics file
 NULL
 
 #@importFrom rtracklayer import export BigWigFile summary SeqinfoForBSGenome wigToBigWig
