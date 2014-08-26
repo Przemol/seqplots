@@ -15,10 +15,14 @@ PlotSetPair <- setRefClass("PlotSetPair", fields = list( data = "list", annotati
 #' @field annotations list of annotations
 #' 
 PlotSetList <- setRefClass("PlotSetList", fields = list( data = "list", annotations = "list")  )
-PlotSetList$methods( npaires = function() 
-    length(data) )
-PlotSetList$methods( show = function() 
-    cat( 'PlotSetList with', npaires(), 'feature/tracks pairs.\n' ) )
+PlotSetList$methods( npaires = function() length(data) )
+PlotSetList$methods( info = function() as.data.frame(t(as.data.frame( 
+    sapply(1:length(data), function(x) c(x, gsub('\n@', ' @ ', data[[x]]$desc))), 
+    row.names=c('ID', 'Pair name') ))) ) 
+PlotSetList$methods( show = function() {
+    cat( 'PlotSetList with', npaires(), 'feature/tracks pairs.\nContain:\n' ) 
+    print(info()); return(NULL);
+})
 #PlotSetList$methods( plotAverage = source('../inst/seqplots/functions/plotMext.R', local = TRUE)$value )
 PlotSetList$methods( get = function(i) PlotSetList(data=data[i]) )
 PlotSetList$methods( plot = function(what='a', ...) {
@@ -40,17 +44,21 @@ PlotSetArray$methods( pairind = function()
     as.list(data.frame(t(expand.grid(1:nfeatures(), 1:ntracks())))) )
 PlotSetArray$methods( unlist = function() 
     PlotSetList(data=lapply(pairind(), function(x) data[[x[1]]][[x[2]]] )) )
-
 PlotSetArray$methods( info = function() as.data.frame(t(as.data.frame( 
     sapply(pairind(), function(x) c(x[1], x[2], 
     gsub('\n@', ' @ ', data[[x[1]]][[x[2]]]$desc))), 
     row.names=c('FeatureID', 'TrackID', 'Pair name') ))) ) 
 PlotSetArray$methods( show = function() {
     cat( 'PlotSetArray with', nfeatures(), 'feature(s) and', ntracks(), 'tracks.\nContain:\n' )
-    print(info())
+    print(info()); return(NULL);
 })
+
+
+PlotSetArray$methods( as.array = function(x, ...) { do.call(rbind, worm$data) })
+
 PlotSetArray$methods( getByID = function(i) unlist()$get(i) )
-PlotSetArray$methods( get = function(i, j) PlotSetList( data=list(data[[i]][[j]]) ) )
+PlotSetArray$methods( get = function(i, j) PlotSetArray( data=lapply( worm$data[i], '[', j) ) )
+
 PlotSetArray$methods( getPairs = function(i) PlotSetList(data=lapply( i, function(x) data[[x[2]]][[x[1]]] )) )
 PlotSetArray$methods( plot = function(...) unlist()$plot(...) )
 
@@ -74,8 +82,19 @@ PlotSetArray$methods( subset = function(i, j) data[[as.integer(i)]][[as.integer(
 
 
 #Set method forgeneric functions
-setMethod("[", c("PlotSetArray", "ANY", "missing", "ANY"), function(x, i, j, ..., drop=TRUE) x$getByID(i) )
-setMethod("[", c("PlotSetArray", "ANY", "ANY", "ANY"), function(x, i, j, ..., drop=TRUE) x$get(i, j) )
+setMethod("[", signature(x = "PlotSetArray", i = "ANY", j = "missing"),
+          function (x, i, j, ...) {
+              message('NARGS: ', nargs())
+              if((na <- nargs()) == 2)
+                  x$getByID(i)
+              else if(na == 3)
+                  x$get(i, 1:worm$ntracks())
+              else stop("invalid nargs()= ",na)
+          })
+setMethod("[", c("PlotSetArray", "ANY", "vector"), function(x, i, j) x$get(i, j) )
+
+# setMethod("[", c("PlotSetArray", "ANY", "missing", "ANY"), function(x, i, j, ..., drop=TRUE) x$get(i, 1:worm$ntracks()) )
+# setMethod("[", c("PlotSetArray", "vector"), function(x, i) x$getByID(i) )
 
 
 MotifSetup <- setRefClass("MotifSetup", fields = list( data = "list", annotations = "list")  )
