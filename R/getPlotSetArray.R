@@ -115,54 +115,40 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
                 }
                 
             } else if (type == 'af') {
+                left_ind <- seq(-x1, -1, by=bin)
+                mid_ind <- seq(0, xm, by=bin)   
+                right_ind <- seq(xm+bin, xm+x2, by=bin) 
+                all_ind <- c(left_ind, mid_ind, right_ind)
+                
                 if( class(tracks[[i]]) == 'character' ) {
-                    #left
-                    left_ind <- seq(-x1, -1, by=bin)
-                    M.left <- extarct_matrix(track, flank(sel, x1, start=TRUE), length(left_ind), ignore_strand)
+                    M.left <- extarct_matrix(track, flank(sel, x1, start=TRUE), length(left_ind), ignore_strand) #left
+                    M.middle <- extarct_matrix(track, sel, length(mid_ind), ignore_strand) #middle    
+                    M.right <- extarct_matrix(track, flank(sel, x2, start=FALSE), length(right_ind), ignore_strand)  #right
+                    M <- cbind(M.left, M.middle, M.right)   
                     
-                    #middle
-                    mid_ind <- seq(0, xm, by=bin)			
-                    M.middle <- extarct_matrix(track, sel, length(mid_ind), ignore_strand)
-                    
-                    #right
-                    right_ind <- seq(xm+1, xm+x2, by=bin)	
-                    M.right <- extarct_matrix(track, flank(sel, x2, start=FALSE), length(right_ind), ignore_strand)
-                    
-                    M <- cbind(M.left, M.middle, M.right)
-                    all_ind <- c(left_ind, mid_ind, right_ind)
                 } else if ( class(tracks[[i]]) == 'list' ) {
-                    
-                    #MOTIF  
-                    #LEFT
+                    #MOTIF - left 
                     cat4(paste0("MOTIF: Processing upsterem ", pattern, " motif..."))
-                    left_ind <- seq(-x1, -1, by=bin)
-                    
                     gr <- flank(sel, x1, start=TRUE); seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
                     M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
                     if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
                     M.left <-  t(apply(M, 1, function(x) approx(x, n=length(left_ind))$y ))
                     
-                    #middle
+                    #MOTIF - middle
                     cat4(paste0("MOTIF: Processing middle ", pattern, " motif..."))
-                    mid_ind <- seq(0, xm, by=bin)
-                    
                     gr <- sel; seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];		
                     M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
                     if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
                     M.middle <-  t(apply(M, 1, function(x) approx(x, n=length(mid_ind))$y ))
                     
-                    #right
+                    #MOTIF - right
                     cat4(paste0("MOTIF: Processing downsteream ", pattern, " motif..."))
-                    right_ind <- seq(xm+1, xm+x2, by=bin)	
-                    
                     gr <- flank(sel, x1, start=FALSE); seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
                     M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
                     if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
                     M.right <-  t(apply(M, 1, function(x) approx(x, n=length(right_ind))$y ))
-                    
-                    #FIN
-                    M <- cbind(M.left, M.middle, M.right)
-                    all_ind <- c(left_ind, mid_ind, right_ind)      
+
+                    M <- cbind(M.left, M.middle, M.right)                        
                     
                 }
             }
