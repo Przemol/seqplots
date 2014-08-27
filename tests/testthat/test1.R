@@ -17,7 +17,8 @@ test_that("Test getPlotSetArray functiona and plotting interfaces", {
     expect_is(capture.output(show(psa)),    'character', info = NULL, label = NULL)
     expect_is(unlist(psa), 'PlotSetList', info = NULL, label = NULL)
     expect_is(psa[1],      'PlotSetList', info = NULL, label = NULL)
-    expect_is(psa[2,1],    'PlotSetList', info = NULL, label = NULL)
+    expect_is(psa[2,1],    'PlotSetArray', info = NULL, label = NULL)
+    expect_is(psa[[2]],    'PlotSetPair', info = NULL, label = NULL)
     
     context("Testing graphics")
     expect_error(plot(psa, what='h'))
@@ -46,7 +47,8 @@ test_that("Test motifs", {
     expect_is(capture.output(show(psa)),    'character', info = NULL, label = NULL)
     expect_is(unlist(psa), 'PlotSetList', info = NULL, label = NULL)
     expect_is(psa[1],      'PlotSetList', info = NULL, label = NULL)
-    expect_is(psa[2,1],    'PlotSetList', info = NULL, label = NULL)
+    expect_is(psa[2,1],    'PlotSetArray', info = NULL, label = NULL)
+    expect_is(psa[[2]],    'PlotSetPair', info = NULL, label = NULL)
     
     context("Testing graphics with motifs")
     expect_error(plot(psa, what='h'))
