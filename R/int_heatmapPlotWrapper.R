@@ -6,7 +6,7 @@
 #' @keywords internal
 #'    
 
-.heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),    bins=1:(ncol(MAT[[1]])/length(MAT)), 
+heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),    bins=1:(ncol(MAT[[1]])/length(MAT)), 
                                lfs=12.0, afs=12.0, lgfs=12.0, xlabel='xlab', Leg=TRUE, autoscale=TRUE, zmin=0, zmax=10, ln.v=TRUE, e=NULL, xlim=NULL, ylabel="", s = 0.01, indi=TRUE,
                                o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, poinsize=12) {
     
@@ -75,7 +75,7 @@
             col <- if( is.character(colvec[i]) ) colorRampPalette(c('white', colvec[i]))(ncollevel) else gcol(ncollevel)
             
             #par(cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs)
-            .imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlabel, ylab=ylabel, 
+            imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlabel, ylab=ylabel, 
                     xlim=if (is.null(xlim)) range(bins) else xlim,  ylim=c(nrow(data),1),
                     zlim=keycolor_lim, col=col,
                     legend.width=1, horizontal=TRUE, useRaster=raster)
