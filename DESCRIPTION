@@ -45,3 +45,19 @@ VignetteBuilder: utils
 Suggests:
     testthat,
     BiocStyle
+Collate:
+    'MotifSetup-class.R'
+    'PlotSetPair-class.R'
+    'PlotSetArray-class.R'
+    'PlotSetList-class.R'
+    'getPlotSetArray.R'
+    'int_getSF.R'
+    'int_heatmapPlotWrapper.R'
+    'int_imPlot2.R'
+    'int_plotMext.R'
+    'plotAverage.R'
+    'plotHeatmap.R'
+    'run.R'
+    'seqplots-package.R'
+    'z_classes.R'
+    'zzz.R'
