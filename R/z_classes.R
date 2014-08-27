@@ -7,7 +7,21 @@
 #' @field data a list holding the plot data
 #' @field annotations list of annotations
 #' 
-PlotSetPair <- setRefClass("PlotSetPair", fields = list( data = "list", annotations = "list")  )
+PlotSetPair <- setRefClass("PlotSetPair", fields = list(means='numeric', stderror='numeric', conint='numeric', all_ind='numeric', e='ANY', desc='character', heatmap='matrix')  )
+PlotSetPair$methods( show = function() {
+    cat( 'PlotSetPair contatining:', gsub('\n@', ' @ ', desc) ) 
+})
+PlotSetPair$methods( as.list = function() {
+    list(means=means, stderror=stderror, conint=conint, all_ind=all_ind, e=e, desc=desc, heatmap=heatmap)
+})
+PlotSetPair$methods( plot = function(what='a', ...) {
+    if (what=="a") plotAverage(list(.self), ...) else if (what=="h") plotHeatmap(list(.self), ...) 
+    else message('Unknown type of the plot, use what="a" for average plot and what="h" for heatmap')
+})
+setGeneric('plot')
+setMethod(plot,   c("PlotSetPair"), function(x, ...) x$plot(...) )
+
+
 
 #' PlotSetList Reference Class
 #'
@@ -29,6 +43,14 @@ PlotSetList$methods( plot = function(what='a', ...) {
   if (what=="a") plotAverage(data, ...) else if (what=="h") plotHeatmap(data, ...) 
   else message('Unknown type of the plot, use what="a" for average plot and what="h" for heatmap')
 })
+
+setMethod("[", c("PlotSetList", "ANY"), function(x, i, ...) x$get(i) )
+setMethod("[[", c("PlotSetList", "ANY"), function(x, i, ...) {
+    if(length(i) > 1 ) stop('recursive indexing not allowed')
+    do.call(PlotSetPair, x$data[[i]])
+})
+setGeneric('plot')
+setMethod(plot,   c("PlotSetList"), function(x, ...) x$plot(...) )
 
 #' PlotSetArray Reference Class
 #'
@@ -54,10 +76,10 @@ PlotSetArray$methods( show = function() {
 })
 
 
-PlotSetArray$methods( as.array = function(x, ...) { do.call(rbind, worm$data) })
+PlotSetArray$methods( as.array = function(x, ...) { do.call(rbind, lapply( data, function(x) lapply(x, function(y) do.call(PlotSetPair, y) ))) })
 
 PlotSetArray$methods( getByID = function(i) unlist()$get(i) )
-PlotSetArray$methods( get = function(i, j) PlotSetArray( data=lapply( worm$data[i], '[', j) ) )
+PlotSetArray$methods( get = function(i, j) PlotSetArray( data=lapply( data[i], '[', j) ) )
 
 PlotSetArray$methods( getPairs = function(i) PlotSetList(data=lapply( i, function(x) data[[x[2]]][[x[1]]] )) )
 PlotSetArray$methods( plot = function(...) unlist()$plot(...) )
@@ -67,7 +89,7 @@ setGeneric('pairs')
 setGeneric('plot')
 setMethod(unlist, c("PlotSetArray"), function(x) x$unlist() )
 setMethod(plot,   c("PlotSetArray"), function(x, ...) x$plot(...) )
-setMethod(plot,   c("PlotSetList"), function(x, ...) x$plot(...) )
+
 #setMethod(pairs,  c("PlotSetArray"), function(x) x$pairs() )
 
 
@@ -84,14 +106,18 @@ PlotSetArray$methods( subset = function(i, j) data[[as.integer(i)]][[as.integer(
 #Set method forgeneric functions
 setMethod("[", signature(x = "PlotSetArray", i = "ANY", j = "missing"),
           function (x, i, j, ...) {
-              message('NARGS: ', nargs())
               if((na <- nargs()) == 2)
                   x$getByID(i)
               else if(na == 3)
-                  x$get(i, 1:worm$ntracks())
+                  x$get(i, 1:x$ntracks())
               else stop("invalid nargs()= ",na)
           })
 setMethod("[", c("PlotSetArray", "ANY", "vector"), function(x, i, j) x$get(i, j) )
+
+setMethod("[[", c("PlotSetArray", "ANY"), function(x, i, ...) {
+    if(length(i) > 1 ) stop('recursive indexing not allowed')
+    do.call(PlotSetPair, x$getByID(i)$data[[1]])
+})
 
 # setMethod("[", c("PlotSetArray", "ANY", "missing", "ANY"), function(x, i, j, ..., drop=TRUE) x$get(i, 1:worm$ntracks()) )
 # setMethod("[", c("PlotSetArray", "vector"), function(x, i) x$getByID(i) )
