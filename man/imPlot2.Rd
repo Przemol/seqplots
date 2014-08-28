@@ -21,7 +21,7 @@ by users.
 }
 \details{
 For more help see documentation of image.plot fuction
-\link{fields::image.plot}
+\code{\link[fields]{image.plot}}
 }
 \keyword{internal}
 

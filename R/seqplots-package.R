@@ -28,7 +28,7 @@
 #' 
 #' @keywords CHiP-seq genomics plotting sequencing
 #' 
-#' @import digest rtracklayer GenomicRanges BSgenome Biostrings IRanges methods
+#' @import digest rtracklayer GenomicRanges BSgenome Biostrings IRanges methods GenomeInfoDb
 #' @import DBI RSQLite parallel RJSONIO Cairo
 #' @import grid methods
 #' @importFrom fields image.plot set.panel imageplot.info imageplot.setup tim.colors poly.image

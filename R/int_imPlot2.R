@@ -10,10 +10,10 @@
 #' by users.
 #' 
 #' For more help see documentation of image.plot fuction
-#' \link{fields::image.plot}
+#' \code{\link[fields]{image.plot}}
 #'
 #' @keywords internal
-#'    
+#' 
 
 imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE, 
                       legend.shrink = 0.9, legend.width = 1.2, legend.mar = ifelse(horizontal, 

@@ -37,7 +37,8 @@ Imports:
     grid,
     kohonen,
     Cairo,
-    parallel
+    parallel,
+    GenomeInfoDb
 Type: Package
 Date: 2014-4-10
 LazyLoad: yes
