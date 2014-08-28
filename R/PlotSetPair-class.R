@@ -3,7 +3,8 @@
 #' @field data a list holding the plot data
 #' @field annotations list of annotations
 #' 
-
+#' @export
+#' 
 PlotSetPair <- setRefClass("PlotSetPair", fields = list(means='numeric', stderror='numeric', conint='numeric', all_ind='numeric', e='ANY', desc='character', heatmap='matrix')  )
 PlotSetPair$methods( show = function() {
     cat( 'PlotSetPair contatining:', gsub('\n@', ' @ ', desc) ) 

@@ -5,6 +5,8 @@
 #' 
 #' @include PlotSetPair-class.R
 #' 
+#' @export
+#' 
 PlotSetArray <- setRefClass("PlotSetArray", fields = list( data = "list", annotations = "list")  )
 PlotSetArray$methods( nfeatures = function() 
     length(data) )

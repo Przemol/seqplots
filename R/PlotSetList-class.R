@@ -5,6 +5,8 @@
 #' 
 #' @include PlotSetPair-class.R
 #' 
+#' @export
+#' 
 PlotSetList <- setRefClass("PlotSetList", fields = list( data = "list", annotations = "list")  )
 PlotSetList$methods( npaires = function() length(data) )
 PlotSetList$methods( info = function() as.data.frame(t(as.data.frame( 

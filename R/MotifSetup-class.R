@@ -3,6 +3,8 @@
 #' @field data a nested list holding the data
 #' @field annotations list of annotations
 #' 
+#' @export
+#' 
 MotifSetup <- setRefClass("MotifSetup", fields = list( data = "list", annotations = "list")  )
 MotifSetup$methods( nmotifs = function() 
     length(data) )
