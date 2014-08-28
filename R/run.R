@@ -25,7 +25,13 @@ run <- function(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FAL
     
   message('Starting...')
   oldwd <- getwd()
-  on.exit( setwd(oldwd) )
+  on.exit( {
+      rm(list=c("doFileOperations", "GENOMES", "getSF", "heatmapPlotWrapper", 
+                "imPlot2", "mcCalcStart", "mcDoParallel", "plotMext", 
+                "procQuick", "renderHTMLgrid" ), envir=.GlobalEnv)
+      
+      setwd(oldwd) 
+  })
 
   Sys.setenv(root=root, web=system.file('seqplots', package='seqplots'), seqplots_debug=debug)
   if ( !file.exists(root) | any( !file.exists(file.path(root, c('files.sqlite', 'removedFiles','files','publicFiles', 'tmp'))) ) ) {
