@@ -43,15 +43,15 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
     
     n <- 1; k <- 1;
     TSS <- list(length(features))
-    GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+    GENOMES <- BSgenome::installed.genomes(splitNameParts=TRUE)$provider_version
     if( length(GENOMES) ) 
-        names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+        names(GENOMES) <- gsub('^BSgenome.', '', BSgenome::installed.genomes())
     
     extarct_matrix <- function(track, gr, size, ignore_strand) {
-        sum <- .Call(rtracklayer:::BWGFile_summary, path.expand(path(track)),
+        sum <- .Call('BWGFile_summary', path.expand(path(track)),
                      as.character(seqnames(gr)),
-                     ranges(gr), recycleIntegerArg(size, "size", length(gr)), 'mean',
-                     as.numeric(NA_real_))
+                     ranges(gr), recycleIntegerArg(size, "size", length(gr)), "mean",
+                     as.numeric(NA_real_), PACKAGE='rtracklayer')
         M <- do.call( rbind, sum )
         if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
         return(M)
