@@ -15,7 +15,7 @@ PlotSetList <- setRefClass("PlotSetList",
             length(data)
         },
         info = function() {
-           " Outputs data.frame describing the content of PlotSetList"
+           "Outputs data.frame describing the content of PlotSetList"
             as.data.frame(t(as.data.frame( 
                 sapply(1:length(data), function(x) c(x, gsub('\n@', ' @ ', 
                 data[[x]]$desc))), row.names=c('ID', 'Pair name') 

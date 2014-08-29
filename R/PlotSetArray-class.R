@@ -25,40 +25,48 @@ PlotSetArray <- setRefClass("PlotSetArray",
         unlist = function() {
             'Flattens PlotSetArray to PlotSetList'
             PlotSetList(data=lapply(pairind(), function(x) data[[x[1]]][[x[2]]] ))
+        },
+        info = function() {
+            "Outputs data.frame describing the content of PlotSetList"
+            as.data.frame(t(as.data.frame( 
+                sapply(pairind(), function(x) c(x[1], x[2], 
+                    gsub('\n@', ' @ ', data[[x[1]]][[x[2]]]$desc))), 
+                row.names=c('FeatureID', 'TrackID', 'Pair name') 
+            )))
+        },
+        show = function() {
+            cat( 'PlotSetArray with', nfeatures(), 'feature(s) and', ntracks(), 'tracks.\nContain:\n' )
+            print(info()); return(NULL);
+        },
+        as.array = function(x, ...) { 
+            "Converts PlotSetArray calss to matrix of PlotSeqPairs"
+            do.call(rbind, lapply( data, function(x) lapply(x, 
+                function(y) do.call(PlotSetPair, y) 
+            )))
+        },
+        getByID = function(i) {
+            "Subseting method, returns PlotSeqList"
+            unlist()$get(i)
+        },
+        get = function(i, j) {
+            "Subseting method, returns PlotSetArray"
+            PlotSetArray( data=lapply( data[i], '[', j) )
+        },
+        getPairs = function(i) {
+            "Subseting method, takes pair IDs list, returns PlotSetList"
+            PlotSetList(data=lapply( i, function(x) data[[x[2]]][[x[1]]] ))
+        },
+        plot = function(...) {
+            "Plot the PlotSetArray, i.e. all PlotSetPairs within class. See \\code{\\link{plot}} for datails."
+            unlist()$plot(...)
+        },
+        getRow = function(i) {
+            "Subseting method, get row of data as list"
+            data[as.integer(i)]
+        },
+        subset = function(i, j) {
+            "Subseting method, get PlotSetPair as list"
+            data[[as.integer(i)]][[as.integer(j)]]
         }
     )
 )
-
-
-PlotSetArray$methods( info = function() as.data.frame(t(as.data.frame( 
-    sapply(pairind(), function(x) c(x[1], x[2], 
-                                    gsub('\n@', ' @ ', data[[x[1]]][[x[2]]]$desc))), 
-    row.names=c('FeatureID', 'TrackID', 'Pair name') ))) ) 
-PlotSetArray$methods( show = function() {
-    cat( 'PlotSetArray with', nfeatures(), 'feature(s) and', ntracks(), 'tracks.\nContain:\n' )
-    print(info()); return(NULL);
-})
-PlotSetArray$methods( as.array = function(x, ...) { do.call(rbind, lapply( data, function(x) lapply(x, function(y) do.call(PlotSetPair, y) ))) })
-PlotSetArray$methods( getByID = function(i) unlist()$get(i) )
-PlotSetArray$methods( get = function(i, j) PlotSetArray( data=lapply( data[i], '[', j) ) )
-PlotSetArray$methods( getPairs = function(i) PlotSetList(data=lapply( i, function(x) data[[x[2]]][[x[1]]] )) )
-PlotSetArray$methods( plot = function(...) unlist()$plot(...) )
-PlotSetArray$methods( getRow = function(i) data[as.integer(i)] )
-PlotSetArray$methods( subset = function(i, j) data[[as.integer(i)]][[as.integer(j)]] )
-
-setGeneric('plot')
-setMethod(unlist, c("PlotSetArray"), function(x) x$unlist() )
-setMethod(plot,   c("PlotSetArray"), function(x, ...) x$plot(...) )
-setMethod("[", signature(x = "PlotSetArray", i = "ANY", j = "missing"),
-          function (x, i, j, ...) {
-              if((na <- nargs()) == 2)
-                  x$getByID(i)
-              else if(na == 3)
-                  x$get(i, 1:x$ntracks())
-              else stop("invalid nargs()= ",na)
-          })
-setMethod("[", c("PlotSetArray", "ANY", "vector"), function(x, i, j) x$get(i, j) )
-setMethod("[[", c("PlotSetArray", "ANY"), function(x, i, ...) {
-    if(length(i) > 1 ) stop('recursive indexing not allowed')
-    do.call(PlotSetPair, x$getByID(i)$data[[1]])
-})
