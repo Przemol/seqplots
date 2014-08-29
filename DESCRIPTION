@@ -51,6 +51,7 @@ Collate:
     'PlotSetPair-class.R'
     'PlotSetArray-class.R'
     'PlotSetList-class.R'
+    'generic_methods.R'
     'getPlotSetArray.R'
     'int_getSF.R'
     'int_heatmapPlotWrapper.R'

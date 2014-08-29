@@ -4,28 +4,39 @@
 #' @field annotations list of annotations
 #' 
 #' @include PlotSetPair-class.R
-#' 
+#' @family SeqPlotsClasses
 #' @export
 #' 
-PlotSetList <- setRefClass("PlotSetList", fields = list( data = "list", annotations = "list")  )
-PlotSetList$methods( npaires = function() length(data) )
-PlotSetList$methods( info = function() as.data.frame(t(as.data.frame( 
-    sapply(1:length(data), function(x) c(x, gsub('\n@', ' @ ', data[[x]]$desc))), 
-    row.names=c('ID', 'Pair name') ))) ) 
-PlotSetList$methods( show = function() {
-    cat( 'PlotSetList with', npaires(), 'feature/tracks pairs.\nContain:\n' ) 
-    print(info()); return(NULL);
-})
-PlotSetList$methods( get = function(i) PlotSetList(data=data[i]) )
-PlotSetList$methods( plot = function(what='a', ...) {
-    if (what=="a") plotAverage(data, ...) else if (what=="h") plotHeatmap(data, ...) 
-    else message('Unknown type of the plot, use what="a" for average plot and what="h" for heatmap')
-})
+PlotSetList <- setRefClass("PlotSetList", 
+    fields = list( data = "list", annotations = "list"),
+    methods = list(
+        npaires = function() {
+            "Outputs the number (integer) of PlotSetPairs in the PlotSetList"
+            length(data)
+        },
+        info = function() {
+           " Outputs data.frame describing the content of PlotSetList"
+            as.data.frame(t(as.data.frame( 
+                sapply(1:length(data), function(x) c(x, gsub('\n@', ' @ ', 
+                data[[x]]$desc))), row.names=c('ID', 'Pair name') 
+            )))
+        },
+        show = function() {
+            cat( 'PlotSetList with', npaires(), 'feature/tracks pairs.\nContain:\n' ) 
+            print(info()); return(NULL);
+        },
+        get = function(i) {
+            "Subseting method"
+            PlotSetList(data=data[i])
+        },
+        plot = function(what='a', ...) {
+            "Plot the PlotSetList, i.e. all PlotSetPairs in the list. See \\code{\\link{plot}} for datails."
+            if (what=="a") plotAverage(data, ...) else if (what=="h") plotHeatmap(data, ...) 
+            else message('Unknown type of the plot, use what="a" for average plot and what="h" for heatmap')
+        }
+        
+    )
+)
 
-setMethod("[", c("PlotSetList", "ANY"), function(x, i, ...) x$get(i) )
-setMethod("[[", c("PlotSetList", "ANY"), function(x, i, ...) {
-    if(length(i) > 1 ) stop('recursive indexing not allowed')
-    do.call(PlotSetPair, x$data[[i]])
-})
-setGeneric('plot')
-setMethod(plot,   c("PlotSetList"), function(x, ...) x$plot(...) )
+
+

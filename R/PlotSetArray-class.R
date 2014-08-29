@@ -4,18 +4,32 @@
 #' @field annotations list of annotations
 #' 
 #' @include PlotSetPair-class.R
-#' 
+#' @family SeqPlotsClasses
 #' @export
 #' 
-PlotSetArray <- setRefClass("PlotSetArray", fields = list( data = "list", annotations = "list")  )
-PlotSetArray$methods( nfeatures = function() 
-    length(data) )
-PlotSetArray$methods( ntracks = function() 
-    if(length(data)) length(data[[1]]) else 0 )
-PlotSetArray$methods( pairind = function() 
-    as.list(data.frame(t(expand.grid(1:nfeatures(), 1:ntracks())))) )
-PlotSetArray$methods( unlist = function() 
-    PlotSetList(data=lapply(pairind(), function(x) data[[x[1]]][[x[2]]] )) )
+PlotSetArray <- setRefClass("PlotSetArray", 
+    fields = list( data = "list", annotations = "list"),
+    methods = list(
+        nfeatures = function() {
+            'Outputs the number of features in the PlotSetArray'
+            length(data)
+        },
+        ntracks = function() {
+            'Outputs the number of tracks in the PlotSetArray'
+            if(length(data)) length(data[[1]]) else 0
+        },
+        pairind = function() {
+            'Outputs the list of pair IDs'
+            as.list(data.frame(t(expand.grid(1:nfeatures(), 1:ntracks()))))
+        },
+        unlist = function() {
+            'Flattens PlotSetArray to PlotSetList'
+            PlotSetList(data=lapply(pairind(), function(x) data[[x[1]]][[x[2]]] ))
+        }
+    )
+)
+
+
 PlotSetArray$methods( info = function() as.data.frame(t(as.data.frame( 
     sapply(pairind(), function(x) c(x[1], x[2], 
                                     gsub('\n@', ' @ ', data[[x[1]]][[x[2]]]$desc))), 

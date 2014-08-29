@@ -3,6 +3,7 @@
 #' @field data a nested list holding the data
 #' @field annotations list of annotations
 #' 
+#' @family SeqPlotsClasses
 #' @export
 #' 
 MotifSetup <- setRefClass("MotifSetup", fields = list( data = "list", annotations = "list")  )
