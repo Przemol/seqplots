@@ -8,86 +8,108 @@
 \alias{plotAverage,list-method}
 \title{Create the average plot}
 \usage{
-plotAverage(plotset, keepratio = FALSE, ord = NULL, labels = NULL, ...)
+plotAverage(plotset, ...)
 
 \S4method{plotAverage}{list}(plotset, keepratio = FALSE, ord = NULL,
   labels = NULL, ...)
 
-\S4method{plotAverage}{PlotSetPair}(plotset, keepratio = FALSE, ord = NULL,
-  labels = NULL, ...)
+\S4method{plotAverage}{PlotSetPair}(plotset, ...)
 
-\S4method{plotAverage}{PlotSetList}(plotset, keepratio = FALSE, ord = NULL,
-  labels = NULL, ...)
+\S4method{plotAverage}{PlotSetList}(plotset, ...)
 
-\S4method{plotAverage}{PlotSetArray}(plotset, keepratio = FALSE, ord = NULL,
-  labels = NULL, ...)
+\S4method{plotAverage}{PlotSetArray}(plotset, ...)
 }
 \arguments{
-\item{experiment}{The path to experiment (sample) alignment file in BAM format or \code{\link[Rsamtools]{BamFile}} class.}
+\item{plotset}{The dataset to plot - can be \code{\link{PlotSetArray}},
+\code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+properly formated \code{\link[base]{list}}}
 
-\item{control}{The path to control (input) alignment file in BAM format or summed input file in BigWiggle format (accepts \code{\link[Rsamtools]{BamFile}} and \code{\link[rtracklayer]{BigWigFile}} classes as well).}
+\item{main}{an overall title for the plot: see title.}
 
-\item{mappability}{The path to mappability track in BigWiggle format (accepts \code{\link[rtracklayer]{BigWigFile}} class as well).}
+\item{xlab}{a title for the x axis: see title.}
 
-\item{genome}{The path reference genome FASTA or UCSC identifier for installed \code{\link[BSgenome]{BSgenome}} packages e.g. "hg19" for human}
+\item{ylab}{a title for the y axis: see title.}
 
-\item{uniq}{If TRUE the alignment will be uniqued, i.e. only one of non-unique reads will be used.}
+\item{plotScale}{scale the avilable data before ploting, can be "linear" (do not scale), "log2" or "zscore"}
 
-\item{insert}{The expected insert size in base pairs.}
+\item{xlim}{the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
+The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.}
 
-\item{mapq_cutoff}{The cutoff parameter used to filter BAM alignments for low mapping quality reads.}
+\item{ylim}{the y limits (y1, y2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
+The default value, NULL, indicates that the range will be auto calculated including space for error estimates.}
 
-\item{export}{The character vector of BW tracks to be exported.}
+\item{type}{If set to "legend" only the legend/key will be plotted.}
 
-\item{rdata}{If TRUE all data will be exported as R binaries in addition to BigWiggle tracks.}
+\item{error.estimates}{Indicates if error estimates are plotted, default: TRUE}
 
-\item{export_er}{If TRUE the enriched regions will be exported to BED format.}
+\item{legend}{Indicates if key descibing the PlotSetPairs is shown, default: TRUE}
 
-\item{quickMap}{If TRUE the quick mappability processing be used, otherwise the mappability track will be processed by running mean smoothing.}
+\item{legend_ex}{Indicates if key descibing error estimates is shown, default: FALSE}
 
-\item{...}{parameters passed by reference to rbeads internal functions.}
-}
-\value{
-Named \code{\link[rtracklayer]{BigWigFileList}} containing exported BW file connections.
+\item{legend_pos}{The position of main key, default: 'topright'}
+
+\item{legend_ext_pos}{The position of error estimates key,  default: 'topleft'}
+
+\item{cex.axis}{Axis numbers font size in points, default: 14}
+
+\item{cex.lab}{Axis labels labes font size in points, default: 16}
+
+\item{cex.main}{Main title font size in points, default: 20}
+
+\item{cex.legend}{Keys labels font size in points, default: 10}
+
+\item{ln.v}{=TRUE,}
+
+\item{ln.h}{=NULL,}
+
+\item{colvec}{=NULL,}
+
+\item{poinsize}{=12,}
+
+\item{postproc}{=function(){}}
+
+\item{keepratio}{}
+
+\item{ord}{}
+
+\item{labels}{}
+
+\item{...}{Arguments to be passed to methods, such as
+    \link{graphical parameters} (see \code{\link{par}}).
+    Many methods will accept the following arguments:
+    \describe{
+    \item{\code{type}}{what type of plot should be drawn.  Possible types are
+      \itemize{
+        \item \code{"p"} for \bold{p}oints,
+        \item \code{"l"} for \bold{l}ines,
+        \item \code{"b"} for \bold{b}oth,
+        \item \code{"c"} for the lines part alone of \code{"b"},
+        \item \code{"o"} for both \sQuote{\bold{o}verplotted},
+        \item \code{"h"} for \sQuote{\bold{h}istogram} like (or
+        \sQuote{high-density}) vertical lines,
+        \item \code{"s"} for stair \bold{s}teps,
+        \item \code{"S"} for other \bold{s}teps, see \sQuote{Details} below,
+        \item \code{"n"} for no plotting.
+      }
+      All other \code{type}s give a warning or an error; using, e.g.,
+      \code{type = "punkte"} being equivalent to \code{type = "p"} for S
+      compatibility.  Note that some methods,
+      e.g. \code{\link{plot.factor}}, do not accept this.
+    }
+    \item{\code{main}}{an overall title for the plot: see \code{\link{title}}.}
+    \item{\code{sub}}{a sub title for the plot: see \code{\link{title}}.}
+    \item{\code{xlab}}{a title for the x axis: see \code{\link{title}}.}
+    \item{\code{ylab}}{a title for the y axis: see \code{\link{title}}.}
+    \item{\code{asp}}{the \eqn{y/x} aspect ratio,
+      see \code{\link{plot.window}}.}
+    }
+  }
 }
 \description{
 Create the average plot
 }
 \details{
-Mappability/alignability tracks gives numeric score for level of reference sequence uniqueness.
-Short reads cannot be confidently aligned to non-unique sequences, so BEADS masks the out.
-The pre-calculated tracks for many species can be found in genome databases, e.g. following link
-gives the collection of human tracks for reference genome GRCh37/hg19:
-\url{http://genome.ucsc.edu/cgi-bin/hgTrackUi?hgsid=340327143&g=wgEncodeMapability}.
-
-For other species mappability track can be easily calculated from reference FASTA file
-using GEM-mappability software (\url{http://www.ncbi.nlm.nih.gov/pubmed/22276185}). The
-GEM library binaries are available on SourceForge: (\url{http://sourceforge.net/projects/gemlibrary/files/gem-library/}),
-while the reference genome FASTA file can be obtained from UCSC: (\url{http://hgdownload.soe.ucsc.edu/downloads.html}).
-The following example illustrates the procedure for \emph{C. elegans} reference genome
-(36bp read length and 8 parallel threads set in options):
-
-\code{gem-indexer -i ce10.fa -o ce10 -T 8}\cr
-\code{gem-mappability -I ce10.gem -l 36 -o ce10 -T 8}\cr
-\code{gem-2-wig -I ce10.gem -i ce10.map -o ce10}\cr
-\code{wigToBigWig ce10.wig ce10.chrom.sizes ce10.bw}
-
-By default only BEADS normalized track is exported. The export files can be
-control by \code{export} parameter,  which is the character vector containing
-following values:
-\describe{
- \item{\code{'BEADS'}}{fully normalized files, i.e. GC correction, mappability correction, division by input and scaling by median}
- \item{\code{'GCandMap'}}{GC correction and mappability correction}
- \item{\code{'GCcorected'}}{GC correction}
- \item{\code{'readsCoverage'}}{raw reads coverage, after extending to \code{insert}
-   length, filtering /code{mapq_cutoff} and uniquing if \code{uniq}}
- \item{\code{'control_GCandMap'}}{GC normalized and mappability corrected input, only works if input is a BAM file}
- \item{\code{'control_GCcorected'}}{GC normalized, only works if input is a BAM file}
- \item{\code{'control_readsCoverage'}}{input raw reads coverage, after extending to
-   \code{insert} length, filtering \code{mapq_cutoff} and uniquing if
-   \code{uniq}, only works if input is a BAM file}
-}
-For example: \code{  beads(sample_bam, input_bam, map, fa, export=c('control_readsCoverage', 'control_GCcorected', 'control_GCandMap', 'readsCoverage', 'GCcorected', 'GCandMap', 'BEADS'))}
+Soem details.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -100,22 +122,6 @@ For example: \code{  beads(sample_bam, input_bam, map, fa, export=c('control_rea
 \item \code{PlotSetArray}: Method for signature plotset='PlotSetArray'
 }}
 \examples{
-# Get the paths of example files
-sample_bam <- system.file("extdata", "GSM1208360_chrI_100Kb_q5_sample.bam", package="rbeads")
-input_bam <- system.file("extdata", "Input_fE3_AA169.bam", package="rbeads")
-SummedInput_bw <- system.file("extdata", "Ce10_HiSeqFRMInput_UNIQ_bin25bp_chrI_100Kb_sample.bw", package="rbeads")
-map_bw <- system.file("extdata", "ce10_mappability_chrI_100Kb_sample.bw", package="rbeads")
-ref_fa <- system.file("extdata", "ce10_chrI_100Kb_sample.fa", package="rbeads")
-
-# Set the directory where the output files will be crated
-setwd(tempdir())
-
-# Run BEADS for BAM input file
-beads(sample_bam, input_bam, map_bw, ref_fa)
-
-# Run BEADS for SummedInput (BigWig) input file
-beads(sample_bam, SummedInput_bw, map_bw, ref_fa)
-
 \dontrun{
 ## Run BEADS for BSgenome package, the reference genome package have to be installed prior to running this example
 # source("http://bioconductor.org/biocLite.R")
@@ -130,7 +136,5 @@ beads(sample_bam, SummedInput_bw, map_bw, genome='ce10')
 \author{
 Przemyslaw Stempor
 }
-\references{
-\url{http://beads.sourceforge.net/} \cr \url{http://www.ncbi.nlm.nih.gov/pubmed/21646344}
-}
+\keyword{internal}
 
