@@ -14,4 +14,23 @@ PlotSetList Reference Class
 
 \item{\code{annotations}}{list of annotations}
 }}
+\section{Methods}{
+
+\describe{
+\item{\code{get(i)}}{Subseting method}
+
+\item{\code{info()}}{Outputs data.frame describing the content of PlotSetList}
+
+\item{\code{npaires()}}{Outputs the number (integer) of PlotSetPairs in the PlotSetList}
+
+\item{\code{plot(what = "a", ...)}}{Plot the PlotSetList, i.e. all PlotSetPairs in the list. See \code{\link{plot}} for datails.}
+}}
+\seealso{
+Other SeqPlotsClasses: \code{\link{MotifSetup}},
+  \code{\link{MotifSetup-class}};
+  \code{\link{PlotSetArray}},
+  \code{\link{PlotSetArray-class}};
+  \code{\link{PlotSetPair}},
+  \code{\link{PlotSetPair-class}}
+}
 

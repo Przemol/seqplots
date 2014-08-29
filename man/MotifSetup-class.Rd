@@ -14,4 +14,12 @@ MotifSetup Reference Class
 
 \item{\code{annotations}}{list of annotations}
 }}
+\seealso{
+Other SeqPlotsClasses: \code{\link{PlotSetArray}},
+  \code{\link{PlotSetArray-class}};
+  \code{\link{PlotSetList}},
+  \code{\link{PlotSetList-class}};
+  \code{\link{PlotSetPair}},
+  \code{\link{PlotSetPair-class}}
+}
 

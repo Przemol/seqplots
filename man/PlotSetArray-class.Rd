@@ -14,4 +14,19 @@ PlotSetArray Reference Class
 
 \item{\code{annotations}}{list of annotations}
 }}
+\section{Methods}{
+
+\describe{
+\item{\code{nfeatures()}}{Outputs the number of features in the PlotSetArray}
+
+\item{\code{ntracks()}}{Outputs the number of tracks in the PlotSetArray}
+}}
+\seealso{
+Other SeqPlotsClasses: \code{\link{MotifSetup}},
+  \code{\link{MotifSetup-class}};
+  \code{\link{PlotSetList}},
+  \code{\link{PlotSetList-class}};
+  \code{\link{PlotSetPair}},
+  \code{\link{PlotSetPair-class}}
+}
 

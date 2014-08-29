@@ -10,8 +10,35 @@ PlotSetPair Reference Class
 \section{Fields}{
 
 \describe{
-\item{\code{data}}{a list holding the plot data}
+\item{\code{means}}{numeric vector of means}
 
-\item{\code{annotations}}{list of annotations}
+\item{\code{stderror}}{numeric vector of standart errors}
+
+\item{\code{conint}}{numeric vector of 95\% confidence intervals}
+
+\item{\code{all_ind}}{numeric vector giving the relative position of the bins in the genome}
+
+\item{\code{numeric}}{value giving the length of anchored distance, NULL for point feature plots}
+
+\item{\code{desc}}{character string discribeing the PlotSetPair}
+
+\item{\code{heatmap}}{numeric matrix used for plotting the heatmap}
 }}
+\section{Methods}{
+
+\describe{
+\item{\code{as.list()}}{Convert to PlotSetPair list.}
+
+\item{\code{plot(what = "a", ...)}}{Plot the PlotSetPair class. See \code{\link{plot}} for datails.}
+}}
+\seealso{
+PlotFunctions
+
+Other SeqPlotsClasses: \code{\link{MotifSetup}},
+  \code{\link{MotifSetup-class}};
+  \code{\link{PlotSetArray}},
+  \code{\link{PlotSetArray-class}};
+  \code{\link{PlotSetList}},
+  \code{\link{PlotSetList-class}}
+}
 
