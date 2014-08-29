@@ -2,6 +2,7 @@
 \docType{methods}
 \name{plot}
 \alias{plot}
+\alias{plot,PlotSetArray,ANY-method}
 \alias{plot,PlotSetList,ANY-method}
 \alias{plot,PlotSetPair,ANY-method}
 \title{Generic plot function for SeqPlots package calsses}
@@ -11,6 +12,8 @@ plot(x, y, ...)
 \S4method{plot}{PlotSetPair,ANY}(x, y, ...)
 
 \S4method{plot}{PlotSetList,ANY}(x, y, ...)
+
+\S4method{plot}{PlotSetArray,ANY}(x, y, ...)
 }
 \arguments{
 \item{x}{the coordinates of points in the plot. Alternatively, a
@@ -59,5 +62,7 @@ Generic plot function for SeqPlots package calsses
 \item \code{x = PlotSetPair,y = ANY}: Method plot for signature 'PlotSetPair'
 
 \item \code{x = PlotSetList,y = ANY}: Method plot for signature 'PlotSetList'
+
+\item \code{x = PlotSetArray,y = ANY}: Method plot for signature 'PlotSetPair'
 }}
 

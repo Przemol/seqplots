@@ -20,7 +20,7 @@ PlotSetPair Reference Class
 
 \item{\code{numeric}}{value giving the length of anchored distance, NULL for point feature plots}
 
-\item{\code{desc}}{character string discribeing the PlotSetPair}
+\item{\code{desc}}{character string describing the PlotSetPair}
 
 \item{\code{heatmap}}{numeric matrix used for plotting the heatmap}
 }}

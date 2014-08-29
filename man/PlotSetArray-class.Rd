@@ -17,9 +17,29 @@ PlotSetArray Reference Class
 \section{Methods}{
 
 \describe{
+\item{\code{as.array(x, ...)}}{Converts PlotSetArray calss to matrix of PlotSeqPairs}
+
+\item{\code{get(i, j)}}{Subseting method, returns PlotSetArray}
+
+\item{\code{getByID(i)}}{Subseting method, returns PlotSeqList}
+
+\item{\code{getPairs(i)}}{Subseting method, takes pair IDs list, returns PlotSetList}
+
+\item{\code{getRow(i)}}{Subseting method, get row of data as list}
+
+\item{\code{info()}}{Outputs data.frame describing the content of PlotSetList}
+
 \item{\code{nfeatures()}}{Outputs the number of features in the PlotSetArray}
 
 \item{\code{ntracks()}}{Outputs the number of tracks in the PlotSetArray}
+
+\item{\code{pairind()}}{Outputs the list of pair IDs}
+
+\item{\code{plot(...)}}{Plot the PlotSetArray, i.e. all PlotSetPairs within class. See \code{\link{plot}} for datails.}
+
+\item{\code{subset(i, j)}}{Subseting method, get PlotSetPair as list}
+
+\item{\code{unlist()}}{Flattens PlotSetArray to PlotSetList}
 }}
 \seealso{
 Other SeqPlotsClasses: \code{\link{MotifSetup}},
