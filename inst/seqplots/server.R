@@ -100,7 +100,8 @@ shinyServer(function(input, output, clientData, session) {
 	observe({
 		if( is.null(input$publicRdata) ) { return() }		
 		if( input$publicRdata == ' ' & is.null(values$calcID) )   { values$grfile <- NULL; return() }
-		if( input$publicRdata == ' ' )   { return() }
+		if( input$publicRdata == ' ' | !nchar(input$publicRdata) )  { return() }
+		message('Loading Rdata file: "', input$publicRdata, '"')
 		values$grfile <- get(load( file.path('publicFiles', input$publicRdata )))
 		values$calcID <- NULL
 	})
