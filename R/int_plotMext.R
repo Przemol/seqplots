@@ -16,12 +16,12 @@
 plotMext <- function(INPUTS, xlim=NULL, ylim=NULL, main=NULL, xlab='', ylab='', plotScale='linear', type='full', 
                      error.estimates=TRUE, legend=TRUE, legend_ext=FALSE, legend_pos='topright', legend_ext_pos="topleft",
                      cex.axis=14, cex.lab=16, cex.main=20, cex.legend=10, ln.v=TRUE, ln.h=NULL, colvec=NULL, 
-                     poinsize=12, postproc=function(){}, ...) {
+                     pointsize=12, ...) {
     
-    cex.axis   <- cex.axis   / poinsize
-    cex.lab    <- cex.lab    / poinsize
-    cex.main   <- cex.main   / poinsize
-    cex.legend <- cex.legend / poinsize
+    cex.axis   <- cex.axis   / pointsize
+    cex.lab    <- cex.lab    / pointsize
+    cex.main   <- cex.main   / pointsize
+    cex.legend <- cex.legend / pointsize
     
     opar <- par()[c('cex', 'mar')]
     par(cex=1)
@@ -64,7 +64,9 @@ plotMext <- function(INPUTS, xlim=NULL, ylim=NULL, main=NULL, xlab='', ylab='', 
             INPUT <- INPUTS[[i]]
             if (i==1) { 
                 plot( INPUT$all_ind, INPUT$means, type="n", main=main, xlab=xlab, ylab=ylab, xlim=xlim, ylim=ylim, cex.axis=cex.axis, cex.lab=cex.lab, cex.main=cex.main, xaxt="n", ...) 
-                if(is.null(anchor)) axis(1) else axis(1, at=c(min(INPUT$all_ind), 0,  anchor, max(INPUT$all_ind)), labels=c(min(INPUT$all_ind), '0', '0', max(INPUT$all_ind)-anchor));
+                if( !any(c( length(list(...)[['xaxt']])>0, list(...)[['axes']]==FALSE )) ) { 
+                    if(is.null(anchor)) axis(1) else axis(1, at=c(min(INPUT$all_ind), 0,  anchor, max(INPUT$all_ind)), labels=c(min(INPUT$all_ind), '0', '0', max(INPUT$all_ind)-anchor))
+                }
             }
             if(error.estimates) { dispersion(INPUT$all_ind, INPUT$means, INPUT$conint, type="l", fill=adjustcolor(cols[i], 0.5), lty=2) }
             if(error.estimates) { dispersion(INPUT$all_ind, INPUT$means, INPUT$stderror, type="l", fill=adjustcolor(cols[i], 0.3), lty=2) }
@@ -79,8 +81,6 @@ plotMext <- function(INPUTS, xlim=NULL, ylim=NULL, main=NULL, xlab='', ylab='', 
         }
         abline( v=ln.v, h=ln.h, col="gray" )
     }
-    
-    postproc()
     par(opar)
     
 }

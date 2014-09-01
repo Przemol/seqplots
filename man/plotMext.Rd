@@ -8,8 +8,7 @@ plotMext(INPUTS, xlim = NULL, ylim = NULL, main = NULL, xlab = "",
   error.estimates = TRUE, legend = TRUE, legend_ext = FALSE,
   legend_pos = "topright", legend_ext_pos = "topleft", cex.axis = 14,
   cex.lab = 16, cex.main = 20, cex.legend = 10, ln.v = TRUE,
-  ln.h = NULL, colvec = NULL, poinsize = 12, postproc = function() { },
-  ...)
+  ln.h = NULL, colvec = NULL, pointsize = 12, ...)
 }
 \arguments{
 \item{INPUTS}{list of pre calculated inputs}
