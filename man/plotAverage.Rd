@@ -24,13 +24,22 @@ plotAverage(plotset, ...)
 \code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
 properly formated \code{\link[base]{list}}}
 
-\item{main}{an overall title for the plot: see title.}
+\item{main}{The main title of the plot, shown in top-center part of the figure; defaults to NULL (not visible)}
 
-\item{xlab}{a title for the x axis: see title.}
+\item{xlab}{Label shown below horizontal axis; default to \code{""} (empty)}
 
-\item{ylab}{a title for the y axis: see title.}
+\item{ylab}{Label shown below vertical axis; default to \code{""} (empty)}
 
-\item{plotScale}{scale the avilable data before ploting, can be "linear" (do not scale), "log2" or "zscore"}
+\item{labels}{The character vector giving labes used in experiment key. The defaults NULL value
+indicates taht feature/track file names will be used to generate the labes.}
+
+\item{ord}{The numeric vector determinin the plotting order of experiments.
+Feature-track pair with the highest priority will be listed on the top of key.
+If NULL (default) the order established in \code{plotset} is used.}
+
+\item{keepratio}{If TRUE keep 1:1 aspect ratio of the figure; defaults to FALSE}
+
+\item{plotScale}{scale the avilable data before ploting, can be "linear" (do not scale, default), "log2" or "zscore"}
 
 \item{xlim}{the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
 The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.}
@@ -40,76 +49,62 @@ The default value, NULL, indicates that the range will be auto calculated includ
 
 \item{type}{If set to "legend" only the legend/key will be plotted.}
 
-\item{error.estimates}{Indicates if error estimates are plotted, default: TRUE}
+\item{error.estimates}{Indicates if error estimates are plotted, defaults to TRUE}
 
-\item{legend}{Indicates if key descibing the PlotSetPairs is shown, default: TRUE}
+\item{legend}{Indicates if key descibing the PlotSetPairs is shown, defaults to TRUE}
 
-\item{legend_ex}{Indicates if key descibing error estimates is shown, default: FALSE}
+\item{legend_ex}{Indicates if key descibing error estimates is shown, defaults to FALSE}
 
-\item{legend_pos}{The position of main key, default: 'topright'}
+\item{legend_pos}{The position of main key, defaults to 'topright'}
 
-\item{legend_ext_pos}{The position of error estimates key,  default: 'topleft'}
+\item{legend_ext_pos}{The position of error estimates key, defaults to 'topleft'}
 
-\item{cex.axis}{Axis numbers font size in points, default: 14}
+\item{cex.axis}{Axis numbers font size in points, defaults to 14}
 
-\item{cex.lab}{Axis labels labes font size in points, default: 16}
+\item{cex.lab}{Axis labels labes font size in points, Defaults to 16}
 
-\item{cex.main}{Main title font size in points, default: 20}
+\item{cex.main}{Main title font size in points, defaults to 20}
 
-\item{cex.legend}{Keys labels font size in points, default: 10}
+\item{cex.legend}{Keys labels font size in points, defaults to 10}
 
-\item{ln.v}{=TRUE,}
+\item{ln.v}{Determins if vertical gide line(s) should be plotted (TRUE) or ommitted (FALSE).
+For anchored plots 2 lines indicateing the start and end of anchored distane are plotted.}
 
-\item{ln.h}{=NULL,}
+\item{ln.h}{Determins if horzontal gide line should is plotted. Numeric value of the parametter
+indicates the Y-axis position of the lie, NULL (default) indicates to ommit}
 
-\item{colvec}{=NULL,}
+\item{colvec}{The vector of colors used to plot the lines and error estimate fields.
+If set value NULL (default) the automatically generated color vaues will be used.
+Accpeted values are: vector of any of the three kinds of R color specifications, i.e.,
+either a color name (as listed by colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see rgb),
+or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb}}.}
 
-\item{poinsize}{=12,}
+\item{pointsize}{The default font point size to be used for plots. Defaults to 12 (1/72 inch).}
 
-\item{postproc}{=function(){}}
+\item{...}{other graphical parameters passed to plot.default (see \code{\link[graphics]{plot.default}}, \code{\link[graphics]{par}} and section ‘Details’ below)}
 
-\item{keepratio}{}
+\item{log}{a character string which contains "x" if the x axis is to be logarithmic, "y" if the y axis is to be logarithmic and "xy" or "yx" if both axes are to be logarithmic.}
 
-\item{ord}{}
+\item{ann}{a logical value indicating whether the default annotation (title and x and y axis labels) should appear on the plot.}
 
-\item{labels}{}
+\item{axes}{a logical value indicating whether both axes should be drawn on the plot. Use graphical parameter "xaxt" or "yaxt" to suppress just one of the axes.}
 
-\item{...}{Arguments to be passed to methods, such as
-    \link{graphical parameters} (see \code{\link{par}}).
-    Many methods will accept the following arguments:
-    \describe{
-    \item{\code{type}}{what type of plot should be drawn.  Possible types are
-      \itemize{
-        \item \code{"p"} for \bold{p}oints,
-        \item \code{"l"} for \bold{l}ines,
-        \item \code{"b"} for \bold{b}oth,
-        \item \code{"c"} for the lines part alone of \code{"b"},
-        \item \code{"o"} for both \sQuote{\bold{o}verplotted},
-        \item \code{"h"} for \sQuote{\bold{h}istogram} like (or
-        \sQuote{high-density}) vertical lines,
-        \item \code{"s"} for stair \bold{s}teps,
-        \item \code{"S"} for other \bold{s}teps, see \sQuote{Details} below,
-        \item \code{"n"} for no plotting.
-      }
-      All other \code{type}s give a warning or an error; using, e.g.,
-      \code{type = "punkte"} being equivalent to \code{type = "p"} for S
-      compatibility.  Note that some methods,
-      e.g. \code{\link{plot.factor}}, do not accept this.
-    }
-    \item{\code{main}}{an overall title for the plot: see \code{\link{title}}.}
-    \item{\code{sub}}{a sub title for the plot: see \code{\link{title}}.}
-    \item{\code{xlab}}{a title for the x axis: see \code{\link{title}}.}
-    \item{\code{ylab}}{a title for the y axis: see \code{\link{title}}.}
-    \item{\code{asp}}{the \eqn{y/x} aspect ratio,
-      see \code{\link{plot.window}}.}
-    }
-  }
+\item{frame.plot}{a logical indicating whether a box should be drawn around the plot.}
+
+\item{panel.first}{an ‘expression’ to be evaluated after the plot axes are set up but before any plotting takes place. This can be useful for drawing background grids or scatterplot smooths. Note that this works by lazy evaluation: passing this argument from other plot methods may well not work since it may be evaluated too early.}
+
+\item{panel.last}{an expression to be evaluated after plotting has taken place but before the axes, title and box are added. See the comments about panel.first.}
+
+\item{asp}{the y/x aspect ratio, see plot.window.}
 }
 \description{
-Create the average plot
+Draw an average plot from \code{\link{PlotSetArray}},
+\code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+properly formated \code{\link[base]{list}} in active graphics window.
+Axes and titles, keys and other plot elements are controled by function parameters.
 }
 \details{
-Soem details.
+The relavent parameters passed to \code{\link[graphics]{plot.default}} funtion:
 }
 \section{Methods (by class)}{
 \itemize{
@@ -136,5 +131,4 @@ beads(sample_bam, SummedInput_bw, map_bw, genome='ce10')
 \author{
 Przemyslaw Stempor
 }
-\keyword{internal}
 
