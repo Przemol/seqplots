@@ -21,7 +21,7 @@
 #' run()
 #' }
 
-run <- function(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FALSE) {
+run <- function(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FALSE, ...) {
     
   message('Starting...')
   oldwd <- getwd()
@@ -46,7 +46,7 @@ run <- function(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FAL
   }
   message('\nData loaction: ', root)
   
-  message( shiny::runApp(Sys.getenv('web'), launch.browser=TRUE) )
+  message( shiny::runApp(Sys.getenv('web'), ...) )
   
   return(invisible(NULL)) 
 }
