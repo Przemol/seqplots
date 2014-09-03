@@ -106,7 +106,7 @@ remDr$findElement("id", 'SFpattern')$sendKeysToElement(list('GAGA'))
 remDr$findElement("id", 'SFadd')$clickElement()
 
 #reset all
-remDr$findElement("id", 'SFreset')$clickElement()
+#remDr$findElement("id", 'SFreset')$clickElement()
 
 
 remDr$findElement("css selector", '#myModal button[onClick="sendToCalc()"]')$highlightElement(0.25)
