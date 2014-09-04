@@ -4,6 +4,7 @@
 #' 
 #' @param root the path to data directory, it will be created if not existing
 #' @param debug run the SeqPlots in debyug mode, i.e. with web interface R console
+#' @param ... arguments sent to \code{\link[shiny]{runApp}} function
 #' @return 
 #' Normally returns nothing (NULL), returns an error if one accrued.
 #' Usage messages are shown in R console.
