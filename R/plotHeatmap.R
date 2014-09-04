@@ -2,20 +2,41 @@
 #'
 #'This function plots the heatmap from plot array.
 #'
-#' @param tracks list or vector of track paths (BigWig) and/or motif 
-#' setup structers (as \code{\link{list}})
-#' @param features vector of feature file paths (BED or GFF)
-#' @param bin binning window size in base pairs, default 1L
-#' @param rm0 remove 0 from mean/median calculation, default FALSE
-#' @param x1 upsterem distance in base pairs, default 500L
-#' @param x2 downsteram distance in base pairs, default 2000L
-#' @param xm anchored distance in base pairs, default 1000L
-#' @param type the type of the calculation, default, 'Point Features'
-#' @param add_heatmap return the heatmap data,  default FALSE
-#' @param cat3 function, that sends 1st level info to web interface
-#' @param cat4 function, that sends 2nd level info to web interface
-#' @param con connection to SQlite database storing genome information for files
-#' @return nested list: OUT[[FEATURE]][[TRACK/MOTIF]][[VALUE]]
+#' @param main The main title of the plot, shown in top-center part of the figure; defaults to NULL (not visible)
+#' @param labels The character vector giving sub-titles of heatmaps (plotted over the heatmap and below the main title). 
+#'  The defaults NULL value indicates taht feature/track file names will be used to generate the sub-titles.
+#' 
+#' @param cex.axis Axis numbers font size in points, defaults to 12
+#' @param cex.lab Axis labels labes font size in points, Defaults to 12
+#' @param cex.legend Keys labels font size in points, defaults to 12
+#' @param cex.main Main title font size in points, defaults to 16
+#' @param xlab label below x-axis
+#' @param ylab label below y-axis
+#' @param leg if TRUE plot the color key
+#' @param autoscale if TRUE the color keys will be autoscaled
+#' @param zmin global minimum value on color key, ignored if \code{autoscale} is TRUE
+#' @param zmax global maximum value on color key, ignored if \code{autoscale} is TRUE
+#' @param xlim the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
+#'  The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.
+#' @param ln.v Determins if vertical gide line(s) should be plotted (TRUE) or ommitted (FALSE).
+#'  For anchored plots 2 lines indicateing the start and end of anchored distane are plotted.
+#' @param s The saturation value used to autoscale color key limits, defaults to 0.01 
+#' @param indi If TRUE (defaults) the independent color keys will be plotted below heatmaps,
+#'  if FALSE the commmon color key is shown rightmost
+#' @param o_min vector of length equil to number of sub heatmaps determining minimum 
+#'  value on color key for each sub plot, if NULL (default) or NA the global settinsg are used,
+#'  ignored in \code{indi} is FALSE 
+#' @param o_max vector of length equil to number of sub heatmaps determining maximum
+#'  value on color key for each sub plot, if NULL (default) or NA the global settinsg are used, 
+#'  ignored in \code{indi} is FALSE 
+#' @param colvec The vector of colors used to plot the lines and error estimate fields.
+#'  If set value NULL (default) the automatically generated color vaues will be used.
+#'  Accpeted values are: vector of any of the three kinds of R color specifications, i.e.,
+#'  either a color name (as listed by colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see rgb), 
+#'  or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb}}. 
+#' @param colorspace The olorspace of the heatmap, see \code{\link[grDevices]{grDevices}}
+#' @param pointsize The default font point size to be used for plots. Defaults to 12 (1/72 inch).
+#'  
 #' 
 #' @export
 #' 
@@ -24,7 +45,7 @@ setGeneric("plotHeatmap",
            function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
                     ord=1:length(plotset), scale_signal="no", sortrows=FALSE, clusters=5L,
                     clstmethod="kmeans", include=rep(TRUE, length(plotset)), ssomt1=2L, ssomt2=2L, 
-                    title_font_size=16, ...) 
+                    cex.main=16, ...) 
                standardGeneric("plotHeatmap")
 )
 
@@ -33,7 +54,7 @@ setMethod("plotHeatmap", signature(plotset='list'),
            function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
                                   ord=1:length(plotset), scale_signal="no", sortrows=FALSE, clusters=5L,
                                   clstmethod="kmeans", include=rep(TRUE, length(plotset)), ssomt1=2L, ssomt2=2L, 
-                                  title_font_size=16, ...) {
+                                  cex.main=16, ...) {
               
               if(keepratio) par(pty='s')
               
@@ -111,12 +132,12 @@ setMethod("plotHeatmap", signature(plotset='list'),
               lab[!is.na(labels)] <- labels[!is.na(labels)]
               
               
-              if( nchar(main) > 0 ) par(oma=c(0,0,(title_font_size/12)+1,0) )
+              if( nchar(main) > 0 ) par(oma=c(0,0,(cex.main/12)+1,0) )
               
               heatmapPlotWrapper( HLST, clusts, 
                                   bins=plotset[[1]]$all_ind, 
                                   titles=lab, e=plotset[[1]]$e, ...)
-              title(main, outer = TRUE, cex.main=title_font_size/12)
+              title(main, outer = TRUE, cex.main=cex.main/12)
           }
 )
 

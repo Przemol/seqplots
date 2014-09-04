@@ -4,11 +4,69 @@
 \title{Wrapper function, plotting the heatmap}
 \usage{
 heatmapPlotWrapper(MAT, axhline = NULL, titles = rep("", length(MAT)),
-  bins = 1:(ncol(MAT[[1]])/length(MAT)), lfs = 12, afs = 12, lgfs = 12,
-  xlabel = "xlab", Leg = TRUE, autoscale = TRUE, zmin = 0, zmax = 10,
-  ln.v = TRUE, e = NULL, xlim = NULL, ylabel = "", s = 0.01,
+  bins = 1:(ncol(MAT[[1]])/length(MAT)), cex.lab = 12, cex.axis = 12,
+  cex.legend = 12, xlab = "", ylab = "", Leg = TRUE, autoscale = TRUE,
+  zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE, e = NULL, s = 0.01,
   indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
   colorspace = NULL, poinsize = 12)
+}
+\arguments{
+\item{MAT}{- list of matrixes holding heatmap data}
+
+\item{axhline}{- locations of horizontal lines separating the clusters}
+
+\item{titles}{the sub-titles of heatmaps}
+
+\item{bins}{the x-axis indicates in heatmap}
+
+\item{cex.axis}{Axis numbers font size in points, defaults to 12}
+
+\item{cex.lab}{Axis labels labes font size in points, Defaults to 12}
+
+\item{cex.legend}{Keys labels font size in points, defaults to 12}
+
+\item{xlab}{label below x-axis}
+
+\item{ylab}{label below y-axis}
+
+\item{leg}{if TRUE plot the color key}
+
+\item{autoscale}{if TRUE the color keys will be autoscaled}
+
+\item{zmin}{global minimum value on color key, ignored if \code{autoscale} is TRUE}
+
+\item{zmax}{global maximum value on color key, ignored if \code{autoscale} is TRUE}
+
+\item{xlim}{the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
+The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.}
+
+\item{ln.v}{Determins if vertical gide line(s) should be plotted (TRUE) or ommitted (FALSE).
+For anchored plots 2 lines indicateing the start and end of anchored distane are plotted.}
+
+\item{e}{Determins the end of anchored distance}
+
+\item{s}{The saturation value used to autoscale color key limits, defaults to 0.01}
+
+\item{indi}{If TRUE (defaults) the independent color keys will be plotted below heatmaps,
+if FALSE the commmon color key is shown rightmost}
+
+\item{o_min}{vector of length equil to number of sub heatmaps determining minimum
+value on color key for each sub plot, if NULL (default) or NA the global settinsg are used,
+ignored in \code{indi} is FALSE}
+
+\item{o_max}{vector of length equil to number of sub heatmaps determining maximum
+value on color key for each sub plot, if NULL (default) or NA the global settinsg are used,
+ignored in \code{indi} is FALSE}
+
+\item{colvec}{The vector of colors used to plot the lines and error estimate fields.
+If set value NULL (default) the automatically generated color vaues will be used.
+Accpeted values are: vector of any of the three kinds of R color specifications, i.e.,
+either a color name (as listed by colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see rgb),
+or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb}}.}
+
+\item{colorspace}{The olorspace of the heatmap, see \code{\link[grDevices]{grDevices}}}
+
+\item{pointsize}{The default font point size to be used for plots. Defaults to 12 (1/72 inch).}
 }
 \description{
 This function is package internal and should not be executed directly

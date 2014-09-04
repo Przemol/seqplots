@@ -3,12 +3,14 @@
 \alias{run}
 \title{SeqPlots innitiation}
 \usage{
-run(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FALSE)
+run(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FALSE, ...)
 }
 \arguments{
 \item{root}{the path to data directory, it will be created if not existing}
 
 \item{debug}{run the SeqPlots in debyug mode, i.e. with web interface R console}
+
+\item{...}{arguments sent to \code{\link[shiny]{runApp}} function}
 }
 \value{
 Normally returns nothing (NULL), returns an error if one accrued.

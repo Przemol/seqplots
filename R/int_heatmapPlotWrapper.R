@@ -2,17 +2,54 @@
 #' 
 #' This function is package internal and should not be executed directly
 #' by users.
-#'
+#' 
+#' @param MAT - list of matrixes holding heatmap data
+#' @param axhline - locations of horizontal lines separating the clusters
+#' @param titles the sub-titles of heatmaps
+#' @param bins the x-axis indicates in heatmap 
+#' @param cex.axis Axis numbers font size in points, defaults to 12
+#' @param cex.lab Axis labels labes font size in points, Defaults to 12
+#' @param cex.legend Keys labels font size in points, defaults to 12
+#' @param xlab label below x-axis
+#' @param ylab label below y-axis
+#' @param leg if TRUE plot the color key
+#' @param autoscale if TRUE the color keys will be autoscaled
+#' @param zmin global minimum value on color key, ignored if \code{autoscale} is TRUE
+#' @param zmax global maximum value on color key, ignored if \code{autoscale} is TRUE
+#' @param xlim the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
+#'  The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.
+#' @param ln.v Determins if vertical gide line(s) should be plotted (TRUE) or ommitted (FALSE).
+#'  For anchored plots 2 lines indicateing the start and end of anchored distane are plotted.
+#' @param e Determins the end of anchored distance
+#' @param s The saturation value used to autoscale color key limits, defaults to 0.01 
+#' @param indi If TRUE (defaults) the independent color keys will be plotted below heatmaps,
+#'  if FALSE the commmon color key is shown rightmost
+#' @param o_min vector of length equil to number of sub heatmaps determining minimum 
+#'  value on color key for each sub plot, if NULL (default) or NA the global settinsg are used,
+#'  ignored in \code{indi} is FALSE 
+#' @param o_max vector of length equil to number of sub heatmaps determining maximum
+#'  value on color key for each sub plot, if NULL (default) or NA the global settinsg are used, 
+#'  ignored in \code{indi} is FALSE 
+#' @param colvec The vector of colors used to plot the lines and error estimate fields.
+#'  If set value NULL (default) the automatically generated color vaues will be used.
+#'  Accpeted values are: vector of any of the three kinds of R color specifications, i.e.,
+#'  either a color name (as listed by colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see rgb), 
+#'  or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb}}. 
+#' @param colorspace The olorspace of the heatmap, see \code{\link[grDevices]{grDevices}}
+#' @param pointsize The default font point size to be used for plots. Defaults to 12 (1/72 inch).
+#'  
 #' @keywords internal
-#'    
+#'
 
-heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),    bins=1:(ncol(MAT[[1]])/length(MAT)), 
-                               lfs=12.0, afs=12.0, lgfs=12.0, xlabel='xlab', Leg=TRUE, autoscale=TRUE, zmin=0, zmax=10, ln.v=TRUE, e=NULL, xlim=NULL, ylabel="", s = 0.01, indi=TRUE,
-                               o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, poinsize=12) {
+heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),    
+    bins=1:(ncol(MAT[[1]])/length(MAT)), cex.lab=12.0, cex.axis=12.0, 
+    cex.legend=12.0, xlab='', ylab="", Leg=TRUE, autoscale=TRUE, zmin=0, zmax=10, 
+    xlim=NULL, ln.v=TRUE, e=NULL, s = 0.01, indi=TRUE,
+    o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, poinsize=12) {
     
-    lfs  <- lfs / poinsize
-    afs  <- afs / poinsize
-    lgfs <- lgfs / poinsize
+    lfs  <- cex.lab / poinsize
+    afs  <- cex.axis / poinsize
+    lgfs <- cex.legend / poinsize
     opar <- par(no.readonly = TRUE)
     
     datapoints <- unlist(MAT)
@@ -55,7 +92,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),  
             data[data<zmin] <- zmin
             data[data>zmax] <- zmax
             ColorRamp_ex <- ColorRamp[round( (min(data, na.rm=TRUE)-zmin)*ncollevel/(zmax-zmin) ) : round( (max(data, na.rm=TRUE)-zmin)*ncollevel/(zmax-zmin) )]
-            image(bins, 1:nrow(data), t(data), axes=TRUE, col=ColorRamp_ex, xlab=xlabel, ylab=ylabel, xlim=if (is.null(xlim)) range(bins) else xlim, add=FALSE, ylim=c(nrow(data),1),
+            image(bins, 1:nrow(data), t(data), axes=TRUE, col=ColorRamp_ex, xlab=xlab, ylab=ylab, xlim=if (is.null(xlim)) range(bins) else xlim, add=FALSE, ylim=c(nrow(data),1),
                   useRaster=raster, panel.first=rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col="lightgrey"))
             
         } else {
@@ -75,7 +112,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),  
             col <- if( is.character(colvec[i]) ) colorRampPalette(c('white', colvec[i]))(ncollevel) else gcol(ncollevel)
             
             #par(cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs)
-            imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlabel, ylab=ylabel, 
+            imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlab, ylab=ylab, 
                     xlim=if (is.null(xlim)) range(bins) else xlim,  ylim=c(nrow(data),1),
                     zlim=keycolor_lim, col=col,
                     legend.width=1, horizontal=TRUE, useRaster=raster)
