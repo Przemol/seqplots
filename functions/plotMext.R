@@ -17,7 +17,7 @@ plotMext <- function(INPUTS, desc1="", y1=NULL, y2=NULL, x1=NULL, x2=NULL, type=
 	mm <- length(INPUTS)
 	
 	if (ln.v) { ln.v <- c(0, INPUTS[[1]]$e) } else { ln.v <- NULL }
-	
+    anchor <- INPUTS[[1]]$e
 	
 	if (plotScale == 'log2') {
 		for (i in 1:mm) { co <- diff(range(INPUTS[[i]]$means)); INPUTS[[i]]$means <- log2(abs(INPUTS[[i]]$means)); co <- diff(range(INPUTS[[i]]$means))/co; INPUTS[[i]]$stderror <- co*INPUTS[[i]]$stderror; INPUTS[[i]]$conint <- co*INPUTS[[i]]$conint; }
@@ -54,7 +54,11 @@ plotMext <- function(INPUTS, desc1="", y1=NULL, y2=NULL, x1=NULL, x2=NULL, type=
   		par(mar=c(3.2+cex.lab, 3.2+cex.lab, 2+cex.main, 3))
   		for (i in 1:mm) {
   			INPUT <- INPUTS[[i]]
-  			if (i==1) { matplot( INPUT$all_ind, INPUT$means, type="l", col="red", lty="solid", xlab=Xtitle, ylab=Ytitle, main=title, ylim=c(y1, y2), xlim=c(x1, x2), cex.axis=cex.axis, cex.lab=cex.lab, cex.main=cex.main) }
+  			if (i==1) { 
+                plot( INPUT$all_ind, INPUT$means, type="l", col="red", lty="solid", xlab=Xtitle, ylab=Ytitle, main=title, ylim=c(y1, y2), xlim=c(x1, x2), cex.axis=cex.axis, cex.lab=cex.lab, cex.main=cex.main, xaxt="n") 
+                if(is.null(anchor)) axis(1) else 
+                    axis(1, at=c(min(INPUT$all_ind), 0,  anchor, max(INPUT$all_ind)), labels=c(min(INPUT$all_ind), '0', '0', signif(max(INPUT$all_ind)-anchor, 2) ))
+  			}
   			if(EE) { dispersion(INPUT$all_ind, INPUT$means, INPUT$conint, type="l", fill=adjustcolor(cols[i], 0.5), lty=2) }
   			if(EE) { dispersion(INPUT$all_ind, INPUT$means, INPUT$stderror, type="l", fill=adjustcolor(cols[i], 0.3), lty=2) }
   			lines( INPUT$all_ind, INPUT$means, col=cols[i])
