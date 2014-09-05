@@ -42,7 +42,7 @@ PlotSetArray Reference Class
 \item{\code{unlist()}}{Flattens PlotSetArray to PlotSetList}
 }}
 \seealso{
-Other SeqPlotsClasses: \code{\link{MotifSetup}},
+Other classes: \code{\link{MotifSetup}},
   \code{\link{MotifSetup-class}};
   \code{\link{PlotSetList}},
   \code{\link{PlotSetList-class}};

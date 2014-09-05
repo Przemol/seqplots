@@ -4,7 +4,7 @@
 #' @field annotations list of annotations
 #' 
 #' @include PlotSetPair-class.R
-#' @family SeqPlotsClasses
+#' @family classes
 #' @export
 #' 
 PlotSetArray <- setRefClass("PlotSetArray", 

@@ -1,4 +1,5 @@
 %\VignetteIndexEntry{SeqPlots vignette}
+%\VignetteEngine{utils::Sweave}
 
 \documentclass[]{article}
 

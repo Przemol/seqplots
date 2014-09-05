@@ -1,12 +1,12 @@
 #' Create the average plot
 #' 
 #' Draw an average plot from \code{\link{PlotSetArray}}, 
-#' \code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+#' \code{\link{PlotSetList}}, \code{\link{PlotSetPair}} or
 #' properly formated \code{\link[base]{list}} in active graphics window.
 #' Axes and titles, keys and other plot elements are controled by function parameters.
 #' 
 #' @param plotset The dataset to plot - can be \code{\link{PlotSetArray}}, 
-#' \code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+#' \code{\link{PlotSetList}}, \code{\link{PlotSetPair}} or
 #' properly formated \code{\link[base]{list}}
 #' @param main The main title of the plot, shown in top-center part of the figure; defaults to NULL (not visible)
 #' @param xlab Label shown below horizontal axis; default to \code{""} (empty)
@@ -63,20 +63,12 @@
 #' 
 #' 
 #' @author Przemyslaw Stempor
+#' 
+#' @family plotting functions
 #' @export
 #' 
 #' @examples
-#' 
-#' 
 #' \dontrun{
-#' ## Run BEADS for BSgenome package, the reference genome package have to be installed prior to running this example
-#' # source("http://bioconductor.org/biocLite.R")
-#' # biocLite("BSgenome.Celegans.UCSC.ce10")
-#' # library(BSgenome.Celegans.UCSC.ce10)
-#' beads(sample_bam, SummedInput_bw, map_bw, genome='ce10')
-#' 
-#' ## Run BEADS for all BAM files in the directory
-#' #lapply(dir(pattern='bam$'), beads, control=input, mappability=map_bw, genome=ref_fa)
 #' }
 #' 
 setGeneric("plotAverage",

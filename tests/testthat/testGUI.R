@@ -7,12 +7,12 @@ startServer()
 
 #get the instance running
 system(paste(Sys.which('Rscript'), ' -e "library(seqplots); seqplots::run(root=tempdir(),port=3456,launch.browser=FALSE);"'), wait=FALSE)
-message('Starting Seqplots - 30s reserved')
-Sys.sleep(30);
+message('Starting Seqplots - 20s reserved')
+Sys.sleep(20);
 
 
-remDr <-remoteDriver()
-#remDr <- remoteDriver(remoteServerAddr = "localhost", port = 4444, browserName = "chrome")
+#remDr <-remoteDriver()
+remDr <- remoteDriver(remoteServerAddr = "localhost", port = 4444, browserName = "chrome")
 
 # Startup ------------------------------------------------------
 

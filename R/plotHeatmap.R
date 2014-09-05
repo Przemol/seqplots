@@ -1,16 +1,17 @@
 #' Plot heatmap with optional clustering
 #'
-#' Draw an heatmap plot from \code{\link{PlotSetArray}}, 
-#' \code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
-#' properly formated \code{\link[base]{list}} in active graphics window.
+#' Draw the heatmap plot from \code{\link{PlotSetArray}}, 
+#' \code{\link{PlotSetList}}, \code{\link{PlotSetPair}} classes or
+#' properly formated \code{\link[base]{list}} (see details) in active graphics window.
 #' Axes and titles, keys and other plot elements are controled by function parameters.
 #' 
 #' 
 #' @param plotset The dataset to plot - can be \code{\link{PlotSetArray}}, 
-#' \code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+#' \code{\link{PlotSetList}}, \code{\link{PlotSetPair}} or
 #' properly formated \code{\link[base]{list}}
-#' @param clstmethod Determines the heatmap clusering algoritm "kmeans" for k-means (default), 
-#'  "hclust" for hierarchical clustering, "ssom" for (super) self organising map with trical topology nad "none"
+#' @param clstmethod Determines the heatmap clusering algoritm "kmeans" for k-means (default, see \code{\link[stats]{kmeans}}), 
+#'  "hclust" (see \code{\link[stats]{hclust}}) for hierarchical clustering, "ssom" for 
+#'  (super) self organising map (see \code{\link[kohonen]{supersom}}) with trical topology and "none"
 #'  of FALSE to turn off the clustering
 #' @param clusters The number of claster for "kmeans" and "hclust", ignored for "ssom", defaults to 5L
 #' @param ssomt1 Determins , determins the dimentionality of SOM - number of neurons in 1st dimention,
@@ -61,8 +62,11 @@
 #'  or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb}}. 
 #' @param colorspace The olorspace of the heatmap, see \code{\link[grDevices]{grDevices}}
 #' @param pointsize The default font point size to be used for plots. Defaults to 12 (1/72 inch).
-#'  
 #' 
+#' @details
+#'  list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]
+#'  
+#' @family plotting functions
 #' @export
 #' 
 #' 
@@ -74,7 +78,7 @@ setGeneric("plotHeatmap",
                standardGeneric("plotHeatmap")
 )
 
-#' @describeIn plotHeatmap Method for signature plotset='list'
+#' @describeIn plotHeatmap Method for signature \code{\link[base]{list}} and structure list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]
 setMethod("plotHeatmap", signature(plotset='list'),
            function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
                                   ord=1:length(plotset), plotScale="no", sortrows=FALSE, clusters=5L,
@@ -138,7 +142,7 @@ setMethod("plotHeatmap", signature(plotset='list'),
                   Hlist <- HLST[ include ]
                   Hlist <- lapply(Hlist, function(x) {x[is.na(x)] <- 0; if(sortrows) x <- x[sorting_order,]; x} )
                   
-                  ssom <- supersom(Hlist, grid = somgrid(xdim = ssomt1, ydim = ssomt2, "hexagonal"), rlen = 100, toroidal=TRUE)
+                  ssom <- supersom(Hlist, grid = class::somgrid(xdim = ssomt1, ydim = ssomt2, "hexagonal"), rlen = 100, toroidal=TRUE)
                   classes <- ssom$unit.classif
                   cls_order <- order(ssom$unit.classif)
                   
@@ -162,12 +166,12 @@ setMethod("plotHeatmap", signature(plotset='list'),
               heatmapPlotWrapper( HLST, clusts, 
                                   bins=plotset[[1]]$all_ind, 
                                   titles=lab, e=plotset[[1]]$e, 
-                                  leg=legend, ...)
+                                  Leg=legend, ...)
               title(main, outer = TRUE, cex.main=cex.main/12)
           }
 )
 
-#' @describeIn plotHeatmap Method for signature plotset='PlotSetPair'
+#' @describeIn plotHeatmap Method for signature \code{\link{PlotSetPair}}
 #' @include PlotSetPair-class.R
 setMethod("plotHeatmap", signature(plotset='PlotSetPair'),
           function(plotset, ...) {
@@ -175,7 +179,7 @@ setMethod("plotHeatmap", signature(plotset='PlotSetPair'),
           }
 )
 
-#' @describeIn plotHeatmap Method for signature plotset='PlotSetList'
+#' @describeIn plotHeatmap Method for signature \code{\link{PlotSetList}}
 #' @include PlotSetList-class.R
 setMethod("plotHeatmap", signature(plotset='PlotSetList'),
           function(plotset, ...) {
@@ -183,7 +187,7 @@ setMethod("plotHeatmap", signature(plotset='PlotSetList'),
           }
 )
 
-#' @describeIn plotHeatmap Method for signature plotset='PlotSetArray'
+#' @describeIn plotHeatmap Method for signature \code{\link{PlotSetArray}}
 #' @include PlotSetArray-class.R
 setMethod("plotHeatmap", signature(plotset='PlotSetArray'),
           function(plotset, ...) {

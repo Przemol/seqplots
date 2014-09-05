@@ -40,7 +40,7 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
 }
 \arguments{
 \item{plotset}{The dataset to plot - can be \code{\link{PlotSetArray}},
-\code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+\code{\link{PlotSetList}}, \code{\link{PlotSetPair}} or
 properly formated \code{\link[base]{list}}}
 
 \item{main}{The main title of the plot, shown in top-center part of the figure; defaults to NULL (not visible)}
@@ -63,8 +63,9 @@ across all heatmaps, defaults to FALSE}
 
 \item{clusters}{The number of claster for "kmeans" and "hclust", ignored for "ssom", defaults to 5L}
 
-\item{clstmethod}{Determines the heatmap clusering algoritm "kmeans" for k-means (default),
-"hclust" for hierarchical clustering, "ssom" for (super) self organising map with trical topology nad "none"
+\item{clstmethod}{Determines the heatmap clusering algoritm "kmeans" for k-means (default, see \code{\link[stats]{kmeans}}),
+"hclust" (see \code{\link[stats]{hclust}}) for hierarchical clustering, "ssom" for
+(super) self organising map (see \code{\link[kohonen]{supersom}}) with trical topology and "none"
 of FALSE to turn off the clustering}
 
 \item{include}{The logical vector indicating if given subplot should influence
@@ -126,19 +127,30 @@ or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb
 \item{pointsize}{The default font point size to be used for plots. Defaults to 12 (1/72 inch).}
 }
 \description{
-Draw an heatmap plot from \code{\link{PlotSetArray}},
-\code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
-properly formated \code{\link[base]{list}} in active graphics window.
+Draw the heatmap plot from \code{\link{PlotSetArray}},
+\code{\link{PlotSetList}}, \code{\link{PlotSetPair}} classes or
+properly formated \code{\link[base]{list}} (see details) in active graphics window.
 Axes and titles, keys and other plot elements are controled by function parameters.
+}
+\details{
+list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{list}: Method for signature plotset='list'
+\item \code{list}: Method for signature \code{\link[base]{list}} and structure list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]
 
-\item \code{PlotSetPair}: Method for signature plotset='PlotSetPair'
+\item \code{PlotSetPair}: Method for signature \code{\link{PlotSetPair}}
 
-\item \code{PlotSetList}: Method for signature plotset='PlotSetList'
+\item \code{PlotSetList}: Method for signature \code{\link{PlotSetList}}
 
-\item \code{PlotSetArray}: Method for signature plotset='PlotSetArray'
+\item \code{PlotSetArray}: Method for signature \code{\link{PlotSetArray}}
 }}
+\seealso{
+Other plotting functions: \code{\link{getPlotSetArray}};
+  \code{\link{plotAverage}},
+  \code{\link{plotAverage,PlotSetArray-method}},
+  \code{\link{plotAverage,PlotSetList-method}},
+  \code{\link{plotAverage,PlotSetPair-method}},
+  \code{\link{plotAverage,list-method}}
+}
 

@@ -32,9 +32,7 @@ PlotSetPair Reference Class
 \item{\code{plot(what = "a", ...)}}{Plot the PlotSetPair class. See \code{\link{plot}} for datails.}
 }}
 \seealso{
-PlotFunctions
-
-Other SeqPlotsClasses: \code{\link{MotifSetup}},
+Other classes: \code{\link{MotifSetup}},
   \code{\link{MotifSetup-class}};
   \code{\link{PlotSetArray}},
   \code{\link{PlotSetArray-class}};

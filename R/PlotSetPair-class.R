@@ -8,9 +8,8 @@
 #' @field desc character string describing the PlotSetPair
 #' @field heatmap numeric matrix used for plotting the heatmap
 #' 
+#' @family classes
 #' @export
-#' @family SeqPlotsClasses
-#' @seealso PlotFunctions
 #' 
 PlotSetPair <- setRefClass("PlotSetPair", 
     fields = list(means='numeric', stderror='numeric', conint='numeric', 

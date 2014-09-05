@@ -26,7 +26,7 @@ PlotSetList Reference Class
 \item{\code{plot(what = "a", ...)}}{Plot the PlotSetList, i.e. all PlotSetPairs in the list. See \code{\link{plot}} for datails.}
 }}
 \seealso{
-Other SeqPlotsClasses: \code{\link{MotifSetup}},
+Other classes: \code{\link{MotifSetup}},
   \code{\link{MotifSetup-class}};
   \code{\link{PlotSetArray}},
   \code{\link{PlotSetArray-class}};

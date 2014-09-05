@@ -11,30 +11,41 @@
 #' @param features vector of feature file paths (BED or GFF)
 #' @param refgenome the UCSC cole of refference genome, e.g. 'hg19' hor 
 #' Homo sapiens
-#' @param bin binning window size in base pairs, default 1L
-#' @param rm0 remove 0 from mean/median calculation, default FALSE
-#' @param xmin upsterem distance in base pairs, default 500L
-#' @param xmax downsteram distance in base pairs, default 2000L
-#' @param  anchored distance in base pairs, default 1000L
-#' @param type the type of the calculation, default, 'Point Features'
-#' @param add_heatmap return the heatmap data,  default FALSE
-#' @param ignore_strand
+#' @param bin binning window size in base pairs, defaults t 1L
+#' @param rm0 remove 0 from mean/median calculation, defaults t FALSE
+#' @param xmin upsterem distance in base pairs, defaults to 200L
+#' @param xmax downsteram distance in base pairs, defaults to 2000L
+#' @param xanchored distance in base pairs, defaults to 1000L
+#' @param type the type of the calculation, "pf" for point features (default),
+#' "mf" for midpoint features and 'af' for anchored features
+#' @param add_heatmap return the heatmap data, defauls to TRUE
+#' @param ignore_strand If TRUE the strand is ignored, that is 
+#'  all regardless og annotatin in GFF/BED file all strands are treated 
+#'  as undetrmined ("*"), defauls to FALSE
 #' 
 #' @return \code{\link{PlotSetArray}}
 #' 
-#' @family plotFunctions
+#' @details
+#' Function to process genomic signal from tracks and/or motif data, 
+#' calculate statistics. This function shoud be used as the entry point to the
+#' seqplots pipeline and fillowed by plotting function(s).
+#' 
+#' @family plotting functions
 #' @export
 #' 
 #' 
 #' @examples
 #' \dontrun{
-#' getPlotSetArray(c('track1.bw', 'track2.bw'), c('peaks.bed', 'TSS.gff'))
+#' ms <- MotifSetup()
+#' ms$addMotif('GAGA')
+#' ms$addMotif('TATA', window=200L, heatmap=TRUE, 
+#'             revcomp=TRUE, genome='ce10', name='TATA box')
+#'             
+#' bed1 <- system.file("extdata", "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
+#' bed2 <- system.file("extdata", "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
+#' getPlotSetArray(ms, c(bed1, bed2), 'ce10')
 #' }
-
-# Function to process genomic signal from tracks and/or motif data, 
-# calculate statistics and present the data in nested list format.
-###############################################################################
-
+#' 
 getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, 
     ignore_strand=FALSE, xmin=2000L, xmax=2000L, xanchored=1000L, type='pf', 
     add_heatmap=TRUE) {

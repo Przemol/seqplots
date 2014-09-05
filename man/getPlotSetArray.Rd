@@ -4,9 +4,8 @@
 \title{Process genomic signal}
 \usage{
 getPlotSetArray(tracks, features, refgenome, bin = 10L, rm0 = FALSE,
-  ignore_strand = FALSE, x1 = 2000L, x2 = 2000L, xm = 1000L,
-  type = "pf", add_heatmap = TRUE, cat3 = message, cat4 = message,
-  con = NULL)
+  ignore_strand = FALSE, xmin = 2000L, xmax = 2000L, xanchored = 1000L,
+  type = "pf", add_heatmap = TRUE)
 }
 \arguments{
 \item{tracks}{list or vector of track paths (BigWig) and/or motif
@@ -17,40 +16,62 @@ setup structers (as \code{\link{list}})}
 \item{refgenome}{the UCSC cole of refference genome, e.g. 'hg19' hor
 Homo sapiens}
 
-\item{bin}{binning window size in base pairs, default 1L}
+\item{bin}{binning window size in base pairs, defaults t 1L}
 
-\item{rm0}{remove 0 from mean/median calculation, default FALSE}
+\item{rm0}{remove 0 from mean/median calculation, defaults t FALSE}
 
-\item{x1}{upsterem distance in base pairs, default 500L}
+\item{ignore_strand}{If TRUE the strand is ignored, that is
+ all regardless og annotatin in GFF/BED file all strands are treated
+ as undetrmined ("*"), defauls to FALSE}
 
-\item{x2}{downsteram distance in base pairs, default 2000L}
+\item{xmin}{upsterem distance in base pairs, defaults to 200L}
 
-\item{xm}{anchored distance in base pairs, default 1000L}
+\item{xmax}{downsteram distance in base pairs, defaults to 2000L}
 
-\item{type}{the type of the calculation, default, 'Point Features'}
+\item{xanchored}{distance in base pairs, defaults to 1000L}
 
-\item{add_heatmap}{return the heatmap data,  default FALSE}
+\item{type}{the type of the calculation, "pf" for point features (default),
+"mf" for midpoint features and 'af' for anchored features}
 
-\item{cat3}{function, that sends 1st level info to web interface, handeld by
-"message" in console mode}
-
-\item{cat4}{function, that sends 2nd level info to web interface, handeld by
-"message" in console mode}
-
-\item{con}{connection to SQlite database storing genome information for files}
+\item{add_heatmap}{return the heatmap data, defauls to TRUE}
 }
 \value{
-nested list: OUT[[FEATURE]][[TRACK/MOTIF]][[VALUE]]
+\code{\link{PlotSetArray}}
 }
 \description{
-This function extracts and processes genomic signal from tracks and/or
-motif data, calculates statistics and presents the data in nested list format.
-\code{\link{transform}} but for reordering a data frame by its columns.
-This saves a lot of typing!
+This function takes genomic cooridnates in BED or GFF format,
+and extracts the signal from track files (BigWig) and/or
+calculates motif density in these regions. Then it computs the statistics
+required for average and heatmap plots, and returns the \code{\link{PlotSetArray}}
+class.
+}
+\details{
+Function to process genomic signal from tracks and/or motif data,
+calculate statistics. This function shoud be used as the entry point to the
+seqplots pipeline and fillowed by plotting function(s).
 }
 \examples{
 \dontrun{
-getPlotSetArray(c('track1.bw', 'track2.bw'), c('peaks.bed', 'TSS.gff'))
+ms <- MotifSetup()
+ms$addMotif('GAGA')
+ms$addMotif('TATA', window=200L, heatmap=TRUE,
+            revcomp=TRUE, genome='ce10', name='TATA box')
+
+bed1 <- system.file("extdata", "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
+bed2 <- system.file("extdata", "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
+getPlotSetArray(ms, c(bed1, bed2), 'ce10')
 }
+}
+\seealso{
+Other plotting functions: \code{\link{plotAverage}},
+  \code{\link{plotAverage,PlotSetArray-method}},
+  \code{\link{plotAverage,PlotSetList-method}},
+  \code{\link{plotAverage,PlotSetPair-method}},
+  \code{\link{plotAverage,list-method}};
+  \code{\link{plotHeatmap}},
+  \code{\link{plotHeatmap,PlotSetArray-method}},
+  \code{\link{plotHeatmap,PlotSetList-method}},
+  \code{\link{plotHeatmap,PlotSetPair-method}},
+  \code{\link{plotHeatmap,list-method}}
 }
 

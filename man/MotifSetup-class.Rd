@@ -4,6 +4,10 @@
 \alias{MotifSetup}
 \alias{MotifSetup-class}
 \title{MotifSetup Reference Class}
+\usage{
+MotifSetup()$addMotif(pattern, window=200L, heatmap=TRUE,
+            revcomp=TRUE, genome=NULL, name=pattern)
+}
 \description{
 MotifSetup Reference Class
 }
@@ -14,8 +18,18 @@ MotifSetup Reference Class
 
 \item{\code{annotations}}{list of annotations}
 }}
+\section{Methods}{
+
+\describe{
+\item{\code{addBigWig(file_path)}}{Adds new BigWig file.}
+
+\item{\code{addMotif(pattern, window = 200L, heatmap = TRUE, revcomp = TRUE,
+  genome = NULL, name = pattern)}}{Adds new motif.}
+
+\item{\code{nmotifs()}}{Prints number of motifs in class}
+}}
 \seealso{
-Other SeqPlotsClasses: \code{\link{PlotSetArray}},
+Other classes: \code{\link{PlotSetArray}},
   \code{\link{PlotSetArray-class}};
   \code{\link{PlotSetList}},
   \code{\link{PlotSetList-class}};

@@ -21,7 +21,7 @@ plotAverage(plotset, ...)
 }
 \arguments{
 \item{plotset}{The dataset to plot - can be \code{\link{PlotSetArray}},
-\code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+\code{\link{PlotSetList}}, \code{\link{PlotSetPair}} or
 properly formated \code{\link[base]{list}}}
 
 \item{...}{other graphical parameters passed to plot.default
@@ -100,7 +100,7 @@ or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb
 }
 \description{
 Draw an average plot from \code{\link{PlotSetArray}},
-\code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+\code{\link{PlotSetList}}, \code{\link{PlotSetPair}} or
 properly formated \code{\link[base]{list}} in active graphics window.
 Axes and titles, keys and other plot elements are controled by function parameters.
 }
@@ -119,17 +119,17 @@ The relavent parameters passed to \code{\link[graphics]{plot.default}} funtion:
 }}
 \examples{
 \dontrun{
-## Run BEADS for BSgenome package, the reference genome package have to be installed prior to running this example
-# source("http://bioconductor.org/biocLite.R")
-# biocLite("BSgenome.Celegans.UCSC.ce10")
-# library(BSgenome.Celegans.UCSC.ce10)
-beads(sample_bam, SummedInput_bw, map_bw, genome='ce10')
-
-## Run BEADS for all BAM files in the directory
-#lapply(dir(pattern='bam$'), beads, control=input, mappability=map_bw, genome=ref_fa)
 }
 }
 \author{
 Przemyslaw Stempor
+}
+\seealso{
+Other plotting functions: \code{\link{getPlotSetArray}};
+  \code{\link{plotHeatmap}},
+  \code{\link{plotHeatmap,PlotSetArray-method}},
+  \code{\link{plotHeatmap,PlotSetList-method}},
+  \code{\link{plotHeatmap,PlotSetPair-method}},
+  \code{\link{plotHeatmap,list-method}}
 }
 
