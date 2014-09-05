@@ -9,54 +9,86 @@
 \title{Plot heatmap with optional clustering}
 \usage{
 plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
-  keepratio = FALSE, ord = 1:length(plotset), scale_signal = "no",
+  keepratio = FALSE, ord = 1:length(plotset), plotScale = "linear",
   sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
   include = rep(TRUE, length(plotset)), ssomt1 = 2L, ssomt2 = 2L,
   cex.main = 16, ...)
 
 \S4method{plotHeatmap}{list}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  scale_signal = "no", sortrows = FALSE, clusters = 5L,
+  plotScale = "no", sortrows = FALSE, clusters = 5L,
   clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
   ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, ...)
 
 \S4method{plotHeatmap}{PlotSetPair}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  scale_signal = "no", sortrows = FALSE, clusters = 5L,
+  plotScale = "linear", sortrows = FALSE, clusters = 5L,
   clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
   ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, ...)
 
 \S4method{plotHeatmap}{PlotSetList}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  scale_signal = "no", sortrows = FALSE, clusters = 5L,
+  plotScale = "linear", sortrows = FALSE, clusters = 5L,
   clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
   ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, ...)
 
 \S4method{plotHeatmap}{PlotSetArray}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  scale_signal = "no", sortrows = FALSE, clusters = 5L,
+  plotScale = "linear", sortrows = FALSE, clusters = 5L,
   clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
   ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, ...)
 }
 \arguments{
+\item{plotset}{The dataset to plot - can be \code{\link{PlotSetArray}},
+\code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+properly formated \code{\link[base]{list}}}
+
 \item{main}{The main title of the plot, shown in top-center part of the figure; defaults to NULL (not visible)}
 
 \item{labels}{The character vector giving sub-titles of heatmaps (plotted over the heatmap and below the main title).
- The defaults NULL value indicates taht feature/track file names will be used to generate the sub-titles.}
+The defaults NULL value indicates taht feature/track file names will be used to generate the sub-titles.}
+
+\item{legend}{if TRUE plot the color key}
+
+\item{keepratio}{If TRUE keep 1:1 aspect ratio of the figure; defaults to FALSE}
+
+\item{ord}{The numeric vector determinin the plotting order of experiments.
+The heatmap prepesenting feature-track pair with the highest priority will be
+plotted leftmost. If NULL (default) the order established in \code{plotset} is used.}
+
+\item{plotScale}{scale the avilable data before ploting, can be "linear" (do not scale, default), "log2" or "zscore"}
+
+\item{sortrows}{If TRUE the rows of heatmap will be sorted by mean value
+across all heatmaps, defaults to FALSE}
+
+\item{clusters}{The number of claster for "kmeans" and "hclust", ignored for "ssom", defaults to 5L}
+
+\item{clstmethod}{Determines the heatmap clusering algoritm "kmeans" for k-means (default),
+"hclust" for hierarchical clustering, "ssom" for (super) self organising map with trical topology nad "none"
+of FALSE to turn off the clustering}
+
+\item{include}{The logical vector indicating if given subplot should influence
+clustering and sorting, if given element is FALSE the sub-heatmap will be still ploted,
+and the order of data rows will be determined vy clusterin/plottin other sub-heatmaps,
+defaults to \code{rep(TRUE, length(plotset))}}
+
+\item{ssomt1}{Determins , determins the dimentionality of SOM - number of neurons in 1st dimention,
+numbbers of resulting cluters equils ssomt1*ssomt2, defaults to 2L}
+
+\item{ssomt2}{Determins , determins the dimentionality of SOM - number of neurons in 2st dimention,
+numbbers of resulting cluters equils ssomt1*ssomt2, defaults to 2L}
 
 \item{cex.main}{Main title font size in points, defaults to 16}
+
+\item{xlab}{label below x-axis}
+
+\item{ylab}{label below y-axis}
 
 \item{cex.axis}{Axis numbers font size in points, defaults to 12}
 
 \item{cex.lab}{Axis labels labes font size in points, Defaults to 12}
 
 \item{cex.legend}{Keys labels font size in points, defaults to 12}
-
-\item{xlab}{label below x-axis}
-
-\item{ylab}{label below y-axis}
-
-\item{leg}{if TRUE plot the color key}
 
 \item{autoscale}{if TRUE the color keys will be autoscaled}
 
@@ -94,7 +126,10 @@ or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb
 \item{pointsize}{The default font point size to be used for plots. Defaults to 12 (1/72 inch).}
 }
 \description{
-This function plots the heatmap from plot array.
+Draw an heatmap plot from \code{\link{PlotSetArray}},
+\code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+properly formated \code{\link[base]{list}} in active graphics window.
+Axes and titles, keys and other plot elements are controled by function parameters.
 }
 \section{Methods (by class)}{
 \itemize{

@@ -6,13 +6,13 @@ checkForServer()
 startServer()
 
 #get the instance running
-system('Rscript -e \'devtools::load_all("/Users/przemol/code/seqplotsR"); run(root=tempdir(),port=3456, launch.browser=FALSE);\'', wait=FALSE)
+system(paste(Sys.which('Rscript'), ' -e "library(seqplots); seqplots::run(root=tempdir(),port=3456,launch.browser=FALSE);"'), wait=FALSE)
 message('Starting Seqplots - 30s reserved')
 Sys.sleep(30);
 
 
-#remDr <-remoteDriver()
-remDr <- remoteDriver(remoteServerAddr = "localhost", port = 4444, browserName = "chrome")
+remDr <-remoteDriver()
+#remDr <- remoteDriver(remoteServerAddr = "localhost", port = 4444, browserName = "chrome")
 
 # Startup ------------------------------------------------------
 
@@ -80,7 +80,7 @@ test_that("Adding files works", {
 # 01_QuickStart p2 calcuations -------------------------------------------------
 
 test_that("Calculation works", {
-    # Show file modal and take screenshot of body and footer separatly
+    context("Calculating")
     remDr$findElement("css selector", 'a[href="#myModal"]')$clickElement(); Sys.sleep(1.5);
     
     # Select files and motifs, start to calculation
@@ -102,13 +102,15 @@ test_that("Calculation works", {
     remDr$findElement("css selector", '#myModal button[onClick="sendToCalc()"]')$highlightElement(0.25)
     remDr$findElement("css selector", '#myModal button[onClick="sendToCalc()"]')$clickElement()
     
-    Sys.sleep(10);
-    expect_equal( remDr$getAlertText()[[1]],  "Job done!")
+    Sys.sleep(5);
+    #This is not present on windows/in SC mode
+    #expect_equal( remDr$getAlertText()[[1]],  "Job done!")
     remDr$acceptAlert()
 })
 
 # 01_QuickStart p3 plotting ----------------------------------------------------
 test_that("Plotting works", {
+    context("Plotting")
     boxes <- remDr$findElements("css selector", 'input[name="plot_this"]')
     expect_equal( length(boxes),  6)
     boxes[[1]]$clickElement(); boxes[[2]]$clickElement(); boxes[[3]]$clickElement(); 
@@ -123,8 +125,8 @@ test_that("Plotting works", {
     pic <- readPNG(base64Decode(gsub('data:image/png;base64,', '', data), "raw"))
     expect_is(pic, "array")
     
-    plot(0, type='n', xlim=c(1,dim(pic)[2]), ylim=c(1,dim(pic)[1]), asp=1)
-    rasterImage(pic, 1, 1, dim(pic)[2], dim(pic)[1])
+    #plot(0, type='n', xlim=c(1,dim(pic)[2]), ylim=c(1,dim(pic)[1]), asp=1)
+    #rasterImage(pic, 1, 1, dim(pic)[2], dim(pic)[1])
     
     remDr$findElement("id", 'replotH')$clickElement(); Sys.sleep(1);
     img <- remDr$findElement("css selector", '#image > img')

@@ -1,18 +1,43 @@
 #' Plot heatmap with optional clustering
 #'
-#'This function plots the heatmap from plot array.
-#'
+#' Draw an heatmap plot from \code{\link{PlotSetArray}}, 
+#' \code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+#' properly formated \code{\link[base]{list}} in active graphics window.
+#' Axes and titles, keys and other plot elements are controled by function parameters.
+#' 
+#' 
+#' @param plotset The dataset to plot - can be \code{\link{PlotSetArray}}, 
+#' \code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
+#' properly formated \code{\link[base]{list}}
+#' @param clstmethod Determines the heatmap clusering algoritm "kmeans" for k-means (default), 
+#'  "hclust" for hierarchical clustering, "ssom" for (super) self organising map with trical topology nad "none"
+#'  of FALSE to turn off the clustering
+#' @param clusters The number of claster for "kmeans" and "hclust", ignored for "ssom", defaults to 5L
+#' @param ssomt1 Determins , determins the dimentionality of SOM - number of neurons in 1st dimention,
+#'  numbbers of resulting cluters equils ssomt1*ssomt2, defaults to 2L
+#' @param ssomt2 Determins , determins the dimentionality of SOM - number of neurons in 2st dimention,
+#'  numbbers of resulting cluters equils ssomt1*ssomt2, defaults to 2L
+#' @param include The logical vector indicating if given subplot should influence 
+#' clustering and sorting, if given element is FALSE the sub-heatmap will be still ploted,
+#' and the order of data rows will be determined vy clusterin/plottin other sub-heatmaps, 
+#' defaults to \code{rep(TRUE, length(plotset))}
+#' @param sortrows If TRUE the rows of heatmap will be sorted by mean value 
+#'  across all heatmaps, defaults to FALSE
 #' @param main The main title of the plot, shown in top-center part of the figure; defaults to NULL (not visible)
 #' @param labels The character vector giving sub-titles of heatmaps (plotted over the heatmap and below the main title). 
 #'  The defaults NULL value indicates taht feature/track file names will be used to generate the sub-titles.
-#' 
+#' @param ord The numeric vector determinin the plotting order of experiments. 
+#'  The heatmap prepesenting feature-track pair with the highest priority will be 
+#'  plotted leftmost. If NULL (default) the order established in \code{plotset} is used.
+#' @param plotScale scale the avilable data before ploting, can be "linear" (do not scale, default), "log2" or "zscore"
+#' @param legend if TRUE plot the color key
+#' @param keepratio If TRUE keep 1:1 aspect ratio of the figure; defaults to FALSE
+#' @param xlab label below x-axis
+#' @param ylab label below y-axis
+#' @param cex.main Main title font size in points, defaults to 16
 #' @param cex.axis Axis numbers font size in points, defaults to 12
 #' @param cex.lab Axis labels labes font size in points, Defaults to 12
 #' @param cex.legend Keys labels font size in points, defaults to 12
-#' @param cex.main Main title font size in points, defaults to 16
-#' @param xlab label below x-axis
-#' @param ylab label below y-axis
-#' @param leg if TRUE plot the color key
 #' @param autoscale if TRUE the color keys will be autoscaled
 #' @param zmin global minimum value on color key, ignored if \code{autoscale} is TRUE
 #' @param zmax global maximum value on color key, ignored if \code{autoscale} is TRUE
@@ -43,7 +68,7 @@
 #' 
 setGeneric("plotHeatmap",
            function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
-                    ord=1:length(plotset), scale_signal="no", sortrows=FALSE, clusters=5L,
+                    ord=1:length(plotset), plotScale="linear", sortrows=FALSE, clusters=5L,
                     clstmethod="kmeans", include=rep(TRUE, length(plotset)), ssomt1=2L, ssomt2=2L, 
                     cex.main=16, ...) 
                standardGeneric("plotHeatmap")
@@ -52,7 +77,7 @@ setGeneric("plotHeatmap",
 #' @describeIn plotHeatmap Method for signature plotset='list'
 setMethod("plotHeatmap", signature(plotset='list'),
            function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
-                                  ord=1:length(plotset), scale_signal="no", sortrows=FALSE, clusters=5L,
+                                  ord=1:length(plotset), plotScale="no", sortrows=FALSE, clusters=5L,
                                   clstmethod="kmeans", include=rep(TRUE, length(plotset)), ssomt1=2L, ssomt2=2L, 
                                   cex.main=16, ...) {
               
@@ -67,9 +92,9 @@ setMethod("plotHeatmap", signature(plotset='list'),
               HLST <- lapply(plotset, '[[', 'heatmap')[ ord ]  
               
               #Optional scalling
-              if ( scale_signal ==  "log2" ) {
+              if ( plotScale ==  "log2" ) {
                   HLST <- lapply(HLST, log2 )
-              } else if ( scale_signal == "zscore" ) {
+              } else if ( plotScale == "zscore" ) {
                   HLST <- lapply(HLST, scale )
               }
               
@@ -136,7 +161,8 @@ setMethod("plotHeatmap", signature(plotset='list'),
               
               heatmapPlotWrapper( HLST, clusts, 
                                   bins=plotset[[1]]$all_ind, 
-                                  titles=lab, e=plotset[[1]]$e, ...)
+                                  titles=lab, e=plotset[[1]]$e, 
+                                  leg=legend, ...)
               title(main, outer = TRUE, cex.main=cex.main/12)
           }
 )
