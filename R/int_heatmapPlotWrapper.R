@@ -16,7 +16,7 @@
 #' @param autoscale if TRUE the color keys will be autoscaled
 #' @param zmin global minimum value on color key, ignored if \code{autoscale} is TRUE
 #' @param zmax global maximum value on color key, ignored if \code{autoscale} is TRUE
-#' @param xlim the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
+#' @param xlim the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a "reversed axis".
 #'  The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.
 #' @param ln.v Determins if vertical gide line(s) should be plotted (TRUE) or ommitted (FALSE).
 #'  For anchored plots 2 lines indicateing the start and end of anchored distane are plotted.

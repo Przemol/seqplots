@@ -18,9 +18,9 @@
 #'  If NULL (default) the order established in \code{plotset} is used.
 #' @param keepratio If TRUE keep 1:1 aspect ratio of the figure; defaults to FALSE
 #' @param plotScale scale the avilable data before ploting, can be "linear" (do not scale, default), "log2" or "zscore"
-#' @param xlim the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
+#' @param xlim the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a "reversed axis".
 #'  The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.
-#' @param ylim the y limits (y1, y2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
+#' @param ylim the y limits (y1, y2) of the plot. Note that x1 > x2 is allowed and leads to a "reversed axis".
 #'  The default value, NULL, indicates that the range will be auto calculated including space for error estimates. 
 #' @param type If set to "legend" only the legend/key will be plotted. 
 #' @param error.estimates Indicates if error estimates are plotted, defaults to TRUE
@@ -42,7 +42,8 @@
 #'  either a color name (as listed by colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see rgb), 
 #'  or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb}}. 
 #' @param pointsize The default font point size to be used for plots. Defaults to 12 (1/72 inch).
-#' @param ... other graphical parameters passed to plot.default (see \code{\link[graphics]{plot.default}}, \code{\link[graphics]{par}} and section ‘Details’ below)
+#' @param ... other graphical parameters passed to plot.default 
+#' (see \code{\link[graphics]{plot.default}}, \code{\link[graphics]{par}} and section "Details" below)
 #' 
 #' @inheritParams graphics::plot.default
 #' 
@@ -54,9 +55,9 @@
 #' @param ann a logical value indicating whether the default annotation (title and x and y axis labels) should appear on the plot.
 #' @param axes a logical value indicating whether both axes should be drawn on the plot. Use graphical parameter "xaxt" or "yaxt" to suppress just one of the axes.
 #' @param frame.plot a logical indicating whether a box should be drawn around the plot.
-#' @param panel.first	an ‘expression’ to be evaluated after the plot axes are set up but before any plotting takes place. This can be useful for drawing background grids or scatterplot smooths. Note that this works by lazy evaluation: passing this argument from other plot methods may well not work since it may be evaluated too early.
-#' @param panel.last	an expression to be evaluated after plotting has taken place but before the axes, title and box are added. See the comments about panel.first.
-#' @param asp	the y/x aspect ratio, see plot.window.
+#' @param panel.first an "expression" to be evaluated after the plot axes are set up but before any plotting takes place. This can be useful for drawing background grids or scatterplot smooths. Note that this works by lazy evaluation: passing this argument from other plot methods may well not work since it may be evaluated too early.
+#' @param panel.last an expression to be evaluated after plotting has taken place but before the axes, title and box are added. See the comments about panel.first.
+#' @param asp the y/x aspect ratio, see plot.window.
 #' 
 #' 
 #' 

@@ -24,7 +24,8 @@ plotAverage(plotset, ...)
 \code{\link{PlotSetLits}}, \code{\link{PlotSetPair}} or
 properly formated \code{\link[base]{list}}}
 
-\item{...}{other graphical parameters passed to plot.default (see \code{\link[graphics]{plot.default}}, \code{\link[graphics]{par}} and section ‘Details’ below)}
+\item{...}{other graphical parameters passed to plot.default
+(see \code{\link[graphics]{plot.default}}, \code{\link[graphics]{par}} and section "Details" below)}
 
 \item{keepratio}{If TRUE keep 1:1 aspect ratio of the figure; defaults to FALSE}
 
@@ -43,10 +44,10 @@ indicates taht feature/track file names will be used to generate the labes.}
 
 \item{plotScale}{scale the avilable data before ploting, can be "linear" (do not scale, default), "log2" or "zscore"}
 
-\item{xlim}{the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
+\item{xlim}{the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a "reversed axis".
 The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.}
 
-\item{ylim}{the y limits (y1, y2) of the plot. Note that x1 > x2 is allowed and leads to a ‘reversed axis’.
+\item{ylim}{the y limits (y1, y2) of the plot. Note that x1 > x2 is allowed and leads to a "reversed axis".
 The default value, NULL, indicates that the range will be auto calculated including space for error estimates.}
 
 \item{type}{If set to "legend" only the legend/key will be plotted.}
@@ -91,7 +92,7 @@ or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb
 
 \item{frame.plot}{a logical indicating whether a box should be drawn around the plot.}
 
-\item{panel.first}{an ‘expression’ to be evaluated after the plot axes are set up but before any plotting takes place. This can be useful for drawing background grids or scatterplot smooths. Note that this works by lazy evaluation: passing this argument from other plot methods may well not work since it may be evaluated too early.}
+\item{panel.first}{an "expression" to be evaluated after the plot axes are set up but before any plotting takes place. This can be useful for drawing background grids or scatterplot smooths. Note that this works by lazy evaluation: passing this argument from other plot methods may well not work since it may be evaluated too early.}
 
 \item{panel.last}{an expression to be evaluated after plotting has taken place but before the axes, title and box are added. See the comments about panel.first.}
 
