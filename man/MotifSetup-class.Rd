@@ -4,12 +4,12 @@
 \alias{MotifSetup}
 \alias{MotifSetup-class}
 \title{MotifSetup Reference Class}
-\usage{
-MotifSetup()$addMotif(pattern, window=200L, heatmap=TRUE,
-            revcomp=TRUE, genome=NULL, name=pattern)
-}
 \description{
-MotifSetup Reference Class
+This class is used to initialize motif plots and mix them with track plots.
+}
+\details{
+Usage note - the \code{addMotif} and \code{addBigWig} methods can be chained in following way:
+\code{MotifSetup()$addMotif("GAGA", window=200L)$addBigWig("path/to/file.bw")}
 }
 \section{Fields}{
 
