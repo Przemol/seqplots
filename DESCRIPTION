@@ -38,7 +38,8 @@ Imports:
     kohonen,
     Cairo,
     parallel,
-    GenomeInfoDb
+    GenomeInfoDb,
+    class
 Type: Package
 Date: 2014-4-10
 LazyLoad: yes
