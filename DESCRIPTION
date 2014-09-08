@@ -62,5 +62,4 @@ Collate:
     'plotHeatmap.R'
     'run.R'
     'seqplots-package.R'
-    'z_classes.R'
     'zzz.R'
