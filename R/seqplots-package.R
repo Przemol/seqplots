@@ -35,6 +35,7 @@
 #' @importFrom kohonen supersom
 #' @importFrom plotrix dispersion
 #' @importFrom shiny runApp
+#' @importFrom class somgrid
 NULL
 
 #importClassesFrom does not work with 
