@@ -28,11 +28,15 @@ PlotSetArray <- setRefClass("PlotSetArray",
         },
         info = function() {
             "Outputs data.frame describing the content of PlotSetList"
-            as.data.frame(t(as.data.frame( 
-                sapply(pairind(), function(x) c(x[1], x[2], 
-                    gsub('\n@', ' @ ', data[[x[1]]][[x[2]]]$desc))), 
-                row.names=c('FeatureID', 'TrackID', 'Pair name') 
-            )))
+            if( nfeatures() & ntracks() ) {
+                as.data.frame(t(as.data.frame( 
+                    sapply(pairind(), function(x) c(x[1], x[2], 
+                        gsub('\n@', ' @ ', data[[x[1]]][[x[2]]]$desc))), 
+                    row.names=c('FeatureID', 'TrackID', 'Pair name') 
+                )))
+            } else {
+                NULL
+            }
         },
         show = function() {
             cat( 'PlotSetArray with', nfeatures(), 'feature(s) and', ntracks(), 'tracks.\nContain:\n' )
