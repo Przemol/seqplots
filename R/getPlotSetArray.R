@@ -110,18 +110,34 @@
 #' 
 #' @examples
 #' \dontrun{
-#' ms <- MotifSetup()
-#' ms$addMotif('GAGA')
-#' ms$addMotif('TATA', window=200L, heatmap=TRUE, 
-#'             revcomp=TRUE, genome='ce10', name='TATA box')
-#'             
+#'   
+#' # Get the paths of example files                      
 #' bed1 <- system.file("extdata", "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
 #' bed2 <- system.file("extdata", "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
+#' bw1 <- system.file("extdata", "GSM1208360_chrI_100Kb_q5_sample.bw", package="seqplots")
+#' 
+#' #If required install C. elegans genomic package from Bioconductor
+#' if(!"BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes()) {
+#'     source("http://bioconductor.org/biocLite.R")
+#'     biocLite("BSgenome.Celegans.UCSC.ce10")
+#' }
+#' 
+#' #Get getPlotSetArray for track and feature files
+#' plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
+#' plot(plotset1) #Average plot
+#' plot(plotset1[1,], what='h') #Heatmap
+#' 
+#' #Get getPlotSetArray for motifs, track and feature files
+#' ms <- MotifSetup()
+#' ms <- MotifSetup()
+#' ms$addMotif('GAGA')
+#' ms$addMotif('TATA')
+#' ms$addBigWig(bw1)
+#' 
 #' plotset <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
 #' plot(plotset) #Average plot
-#' plot(plotset, what='h') #Aeatmap
-#' 
-#' 
+#' plot(plotset[1,], what='h') #Heatmap
+#'  
 #' }
 #' 
 getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, 

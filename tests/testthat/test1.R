@@ -2,7 +2,16 @@ bw1 <- system.file("extdata", "GSM1208360_chrI_100Kb_q5_sample.bw", package="seq
 bed1 <- system.file("extdata", "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
 bed2 <- system.file("extdata", "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
 
-test_that("Test getPlotSetArray functiona and plotting interfaces", {
+test_that("Test BSgenome package installation", {
+    context("Testing BSgenome package installation")    
+    if(!"BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes()) {
+        source("http://bioconductor.org/biocLite.R")
+        biocLite("BSgenome.Celegans.UCSC.ce10")
+    }
+    expect_true("BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes())
+})
+
+test_that("Test getPlotSetArray function and plotting interfaces", {
     
     tmp <- file.path(tempdir(), 'SeqPlots')
     context("Testing getPlotSetArray")
