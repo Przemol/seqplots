@@ -10,7 +10,8 @@
 #' @field annotations list of annotations
 #' 
 #' @family classes
-#' @export
+#' @export MotifSetup
+#' @exportClass MotifSetup
 #' 
 MotifSetup <- setRefClass("MotifSetup", 
     fields = list( data = "list", annotations = "list" ),
