@@ -74,7 +74,7 @@ BiocStyle::latex()
 \author{Przemyslaw Stempor}
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+% \SweaveOpts{concordance=TRUE}
 \maketitle
 
 {
