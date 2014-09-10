@@ -43,10 +43,11 @@ Imports:
 Type: Package
 Date: 2014-4-10
 LazyLoad: yes
-VignetteBuilder: utils
+VignetteBuilder: knitr
 Suggests:
     testthat,
-    BiocStyle
+    BiocStyle,
+    knitr
 Collate:
     'MotifSetup-class.R'
     'PlotSetPair-class.R'
