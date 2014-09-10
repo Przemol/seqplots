@@ -72,21 +72,21 @@
 #' 
 #'  The \code{addMotiff} methods accepts following parameters:
 #'  \tabular{ll}{
-#'      \code{motif}    \tab The DNA motif sequence. \cr
-#'      \code{window}   \tab Sliding window size in base pairs [bp] - the size 
+#'      \preformatted{motif}    \tab The DNA motif sequence. \cr
+#'      \preformatted{window}   \tab Sliding window size in base pairs [bp] - the size 
 #'      of the sliding window for motif calculation. The value (number of 
 #'      matching motifs within the window) is reported in the middle of the 
 #'      window, e.g. if window is set to 200bp, DNA motif is "GC" and there are 
 #'      8 CpGs in first 200 bp of the chromosome the value 8 will be 
 #'      reported at 100th bp.\cr
-#'      \code{name}     \tab Display name - The name of the motif that will be 
+#'      \preformatted{name}     \tab Display name - The name of the motif that will be 
 #'      shown in key and heatmap labels. Leave blank to use DNA motif value.\cr
-#'      \code{heatmap}  \tab Plot heatmap or error estimates - this checkbox 
+#'      \preformatted{heatmap}  \tab Plot heatmap or error estimates - this checkbox 
 #'      determines if heatmap matrix and error estimates should be calculated. 
 #'      If unchecked much faster algorithm will be used for motif density 
 #'      calculation, but only the average plot without the error estimates 
 #'      will be available.\cr
-#'      \code{revcomp}  \tab Match reverse complement as well - select if 
+#'      \preformatted{revcomp}  \tab Match reverse complement as well - select if 
 #'      reverse complement motif should be reported as well. For example the 
 #'      TATA motif will report both TATA and ATAT with this option selected.\cr
 #'  }

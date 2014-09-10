@@ -8,11 +8,7 @@
 \alias{plotHeatmap,list-method}
 \title{Plot heatmap with optional clustering}
 \usage{
-plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
-  keepratio = FALSE, ord = 1:length(plotset), plotScale = "linear",
-  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
-  include = rep(TRUE, length(plotset)), ssomt1 = 2L, ssomt2 = 2L,
-  cex.main = 16, ...)
+plotHeatmap(plotset, ...)
 
 \S4method{plotHeatmap}{list}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
@@ -20,23 +16,11 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
   ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, ...)
 
-\S4method{plotHeatmap}{PlotSetPair}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  plotScale = "linear", sortrows = FALSE, clusters = 5L,
-  clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
-  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, ...)
+\S4method{plotHeatmap}{PlotSetPair}(plotset, ...)
 
-\S4method{plotHeatmap}{PlotSetList}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  plotScale = "linear", sortrows = FALSE, clusters = 5L,
-  clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
-  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, ...)
+\S4method{plotHeatmap}{PlotSetList}(plotset, ...)
 
-\S4method{plotHeatmap}{PlotSetArray}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  plotScale = "linear", sortrows = FALSE, clusters = 5L,
-  clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
-  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, ...)
+\S4method{plotHeatmap}{PlotSetArray}(plotset, ...)
 }
 \arguments{
 \item{plotset}{The dataset to plot - can be \code{\link{PlotSetArray}},
@@ -137,7 +121,8 @@ list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{list}: Method for signature \code{\link[base]{list}} and structure list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]
+\item \code{list}: Method for signature \code{\link[base]{list}} with
+following format: \code{list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]}
 
 \item \code{PlotSetPair}: Method for signature \code{\link{PlotSetPair}}
 

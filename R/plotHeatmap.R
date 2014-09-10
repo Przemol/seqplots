@@ -71,14 +71,12 @@
 #' 
 #' 
 setGeneric("plotHeatmap",
-           function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
-                    ord=1:length(plotset), plotScale="linear", sortrows=FALSE, clusters=5L,
-                    clstmethod="kmeans", include=rep(TRUE, length(plotset)), ssomt1=2L, ssomt2=2L, 
-                    cex.main=16, ...) 
+           function(plotset, ...) 
                standardGeneric("plotHeatmap")
 )
 
-#' @describeIn plotHeatmap Method for signature \code{\link[base]{list}} and structure list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]
+#' @describeIn plotHeatmap Method for signature \code{\link[base]{list}} with 
+#' following format: \code{list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]}
 setMethod("plotHeatmap", signature(plotset='list'),
            function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
                                   ord=1:length(plotset), plotScale="no", sortrows=FALSE, clusters=5L,
