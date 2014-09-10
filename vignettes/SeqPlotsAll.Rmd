@@ -18,7 +18,7 @@ Welcome to **SeqPlots**
 > An interactive tool for visualizing track signals and sequence motif
 > densities along genomic features using average plots and heatmaps.
 
-![Examples of Seq Plots interfce and outputs](img/01_01.png)
+![Examples of Seq Plots interfce and outputs](../inst/seqplots/www/help/img//01_01.png)
 
 Summary
 -------
@@ -94,7 +94,7 @@ Quick start guide
     web server user just navigate your browser to server address.
 
     ![The SeqPlots interface in web
-    browser](img/02_01.png "Optional title")
+    browser](../inst/seqplots/www/help/img//02_01.png "Optional title")
 
 2.  Upload some feature (BED or GFF) and track (BigWig or WIG) files.
     They can be gzip compressed (e.g. file1.bed.gz). Press green "Add
@@ -102,7 +102,7 @@ Quick start guide
     ready to upload files will show up in upload window, where you
     select user name, reference genome and optionally add some comments.
 
-    > ![File upload panel](img/02_02.png)
+    > ![File upload panel](../inst/seqplots/www/help/img//02_02.png)
 
 3.  When all is done press blue "Start upload" button. After upload and
     processing is done the green "SUCCESS" label should show. It means
@@ -113,7 +113,7 @@ Quick start guide
     information please refer to [**errors
     chapter**](Errors%20explained).
 
-    > ![File upload progress infoermation](img/02_03.png)
+    > ![File upload progress infoermation](../inst/seqplots/www/help/img//02_03.png)
 
 4.  Dismiss upload window and press blue "New plot set" button on side
     panel. This will bring up file management window. In file management
@@ -121,7 +121,7 @@ Quick start guide
     or more file from "Tracks" file or sequence motif(s). The sequence
     motifs and tracks can be processed and plotted together.
 
-    > ![File management panel](img/02_04.png)
+    > ![File management panel](../inst/seqplots/www/help/img//02_04.png)
 
 5.  When you decided which files/motifs to plot it is time to set up the
     processing options. You can find these in the button of plotting
@@ -129,7 +129,7 @@ Quick start guide
     to learn more check [**this**](Running%20the%20plot-set%20jobs)
     section.
 
-    > ![Plot set calculation options](img/02_05.png)
+    > ![Plot set calculation options](../inst/seqplots/www/help/img//02_05.png)
 
 6.  After options are set up press blue "Run calculation" button. This
     will dismiss the file management modal and show processing window.
@@ -137,7 +137,7 @@ Quick start guide
     it if no longer required (or you forgot to add some very important
     file to the plot-set).
 
-    > ![Plot set calculation progress window](img/02_06.png)
+    > ![Plot set calculation progress window](../inst/seqplots/www/help/img//02_06.png)
 
 7.  After some time the calculation will finish (fingers crossed,
     without the error) and you will be able to see plot set array. In
@@ -147,24 +147,24 @@ Quick start guide
     plotting" checkbook just next to it - it will automatically apply
     changes to plots as soon you make them.
 
-    > ![The plot selection grid](img/02_07.png)
+    > ![The plot selection grid](../inst/seqplots/www/help/img//02_07.png)
 
 8.  Congratulation! Your First plot is complete, you can see the preview
     of it on the side panel.
 
-    > ![The plot preview panel](img/02_08.png)
+    > ![The plot preview panel](../inst/seqplots/www/help/img//02_08.png)
 
 9.  You are able to set up labels, titles, font sizes, legends and may
     more on side panel tabs, take a look at
     [**this**](Viewing%20and%20manipulating%20plots) chapter.
 
-    > ![Plot settings tabs](img/02_09.png)
+    > ![Plot settings tabs](../inst/seqplots/www/help/img//02_09.png)
 
 10. By clicking the plot preview you can enlarge it for better view.
     When everything is ready you can get the plot as PDF bt clicking
     green "Line plot" button just on the top of side panel.
 
-    ![Average plot example](img/02_10.png)
+    ![Average plot example](../inst/seqplots/www/help/img//02_10.png)
 
 11. You can also visualize the signal as a heatmap. Please note that
     heatmap plotting is possible only for single feature file or files
@@ -173,13 +173,13 @@ Quick start guide
     and/or cluster it using k-means. To learn more about heatmaps click
     (**here**).
 
-    > ![Heatmap settings tab](img/02_11.png)
+    > ![Heatmap settings tab](../inst/seqplots/www/help/img//02_11.png)
 
 12. Similarly to line plot you can grab the heatmap PDF using 'Heatmap'
     button just on the top of side panel. Just attached to it, there is
     small button allowing you to get cluster definitions.
 
-    ![Heatmap example](img/02_12.png)
+    ![Heatmap example](../inst/seqplots/www/help/img//02_12.png)
 
 Installation: Mac OS X app
 ==========================
@@ -202,7 +202,7 @@ Installation
 2.  Double-click on DMG file to mount the image
 3.  Drag and drop SeqPlots.app to applications
 
-    > ![DMG image mounted in OS X](img/03_01.png)
+    > ![DMG image mounted in OS X](../inst/seqplots/www/help/img//03_01.png)
 
 Usage
 -----
@@ -210,7 +210,7 @@ Usage
 After starting SeqPlots the welcome screen displaying software version,
 currently installed genomes and data folder location would appear.
 
-> ![SeqPlots Mac OS X bindle - the welcome screen](img/03_02.png)
+> ![SeqPlots Mac OS X bindle - the welcome screen](../inst/seqplots/www/help/img//03_02.png)
 
 This screen allows you to set up following options:
 
@@ -222,7 +222,7 @@ This screen allows you to set up following options:
     here:
     http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
 
-    > ![Genomic packages installer window](img/03_03.png)
+    > ![Genomic packages installer window](../inst/seqplots/www/help/img//03_03.png)
 
 Press **`START`** button to initiate SeqPlots. If initiation was
 successful the user interface should open in your default web browser.
@@ -233,7 +233,7 @@ specific chapters of [documentation](..).
 The window in the background allows you to asses if SeqPlots is running
 properly and exit the application at any moment.
 
-> ![SeqPlots Mac OS X bindle - the diagnostic window](img/03_04.png)
+> ![SeqPlots Mac OS X bindle - the diagnostic window](../inst/seqplots/www/help/img//03_04.png)
 
 The "moving" animation progress bar indicates that SeqPlots is running.
 Press "Cancel" to stop it. Pressing "Details" will reveal small text
@@ -494,7 +494,7 @@ Adding files
 
 Pressing the `Add files` button brings up the **file upload panel**.
 
-> ![File upload panel](img/05_01.png)
+> ![File upload panel](../inst/seqplots/www/help/img//05_01.png)
 
 You can drag and drop files here or press the `Add files...` button to
 opens a file selection menu. Before starting the upload the following
@@ -513,7 +513,7 @@ cookies, and the settings will be remembered across different sessions
 as long as the same web browser is used. File extensions that are not
 supported will raise an error.
 
-> ![File upload panel with 4 files selected](img/05_02.png)
+> ![File upload panel with 4 files selected](../inst/seqplots/www/help/img//05_02.png)
 
 Individual files can be uploaded by pressing 'start' next to the file
 name or all files can be uploaded at once by pressing the `Start upload`
@@ -525,7 +525,7 @@ message. Common errors are misformatted file formats or chromosome names
 do not matched the reference genome. For more information please refer
 to [errors documantation](Errors%20explained)
 
-> ![A feedback on successfully upload files](img/05_03.png)
+> ![A feedback on successfully upload files](../inst/seqplots/www/help/img//05_03.png)
 
 To dismiss the upload window, click on `X` or outside the window.
 
@@ -541,7 +541,7 @@ filtered and sorted by any column. The red `x` button on the right site
 of file table removes a single file from the collection, while
 `Remove selected files` button will erase all selected files.
 
-> ![The file collection window](img/05_04.png)
+> ![The file collection window](../inst/seqplots/www/help/img//05_04.png)
 
 Running the plot-set jobs
 =========================
@@ -558,7 +558,7 @@ tabs:
 -   `Sequence features` allows to set up the sequence motif density
     track
 
-> ![The file collection modal](img/06/06_01.png)
+> ![The file collection modal](../inst/seqplots/www/help/img//06/06_01.png)
 
 Selecting files
 ---------------
@@ -641,7 +641,7 @@ can be set here:
     complement motif should be reported as well. For example the TATA
     motif will report both TATA and ATAT with this option selected.
 
-> ![Sequence motifs selection tab](img/06/06_02.png)
+> ![Sequence motifs selection tab](../inst/seqplots/www/help/img//06/06_02.png)
 
 Clicking `Add` button adds the motif to plot set, while `Reset All`
 clears the motif selection. On the right side from motif setting panel
@@ -657,13 +657,13 @@ supporting fork based parallelization) the calculation can be stopped
 using the `Cancel` button - this will bring back all settings in **file
 collection modal**.
 
-> ![The calculation progress dialog](img/06/06_03.png)
+> ![The calculation progress dialog](../inst/seqplots/www/help/img//06/06_03.png)
 
 After the successful execution the **plot array** will appear. In case
 of error the informative error pop-up will explain the problem. Please
 reffer to error section for further information.
 
-> ![The plot array](img/06/06_04.png)
+> ![The plot array](../inst/seqplots/www/help/img//06/06_04.png)
 
 Plotting
 ========
@@ -683,7 +683,7 @@ Clicking on top-left most cell of **plot array** toggles the selection
 of whole array.
 
 > ![Plot preview plus `Line plot`, `Heatmap` and `refresh`
-> buttons](img/07_01.png)
+> buttons](../inst/seqplots/www/help/img//07_01.png)
 
 If at least one pair on **plot array** is selected pressing `Line plot`
 button produces average plot preview and `Heatmap` button the heatmap
@@ -692,7 +692,7 @@ keyboard applies the new selection and options. These operations are
 done automatically in [reactive mode](AdvancedOptions).
 
 > ![The tab selection area - icons represnts seven
-> panels](img/07_02.png)
+> panels](../inst/seqplots/www/help/img//07_02.png)
 
 Below the plotting buttons are seven panels. On application start the
 first panel responsible for bringing file upload, management and plot
@@ -722,7 +722,7 @@ various font sizes plus vertical and horizontal plot limits.
     values are a range between lowest and highest mean signal extended
     by error estimate
 
-> ![The view on titles and axis panel](img/07_03.png)
+> ![The view on titles and axis panel](../inst/seqplots/www/help/img//07_03.png)
 
 Guide lines and data scaling
 ----------------------------
@@ -742,7 +742,7 @@ estimates, and allows to log scale the signal prior to plotting.
     confidence interval as fields, if turned off only the line
     representing the mean signal is shown; turn on by default
 
-> ![The view on guide lines and data scaling](img/07_04.png)
+> ![The view on guide lines and data scaling](../inst/seqplots/www/help/img//07_04.png)
 
 Keys, labels and colors panel
 -----------------------------
@@ -780,7 +780,7 @@ shown on mouse cursor hover.
 
 > ![The view on keys, labels and colors panel (left). Color picker,
 > label text input and Priority/Order checkboxes reviled on plot set
-> grid (right).](img/07_05_06.png)
+> grid (right).](../inst/seqplots/www/help/img//07_05_06.png)
 
 Plotting and adjusting heatmaps
 ===============================
@@ -797,7 +797,7 @@ containing exact same number of ranges. The heatmaps can be sorted and
 clustered by k-means, hierarchical clustering and super self organising
 maps (SupreSOM).
 
-> ![An example of heatmap plot](img/08_01.png)
+> ![An example of heatmap plot](../inst/seqplots/www/help/img//08_01.png)
 
 Heatmap setup tab
 -----------------
@@ -808,7 +808,7 @@ various data processing and graphical options.
 > ![The view on Heatmap setup tab (left). Color picker, Label text
 > input, Priority/Order checkboxes, Choose individual heatmaps for
 > sorting/clustering control and Set individual color key limits numric
-> inputs reviled on plot set grid (right).](img/08_02.png)
+> inputs reviled on plot set grid (right).](../inst/seqplots/www/help/img//08_02.png)
 
 -   **`Preview heatmap`** - this checkbox indicates whether the preview
     of average plot or heatmap will be produced, its state is linked to
@@ -834,7 +834,7 @@ various data processing and graphical options.
 
     > ![`Choose individual heatmaps for sorting/clustering` usage
     > example: hierarchical clustering on both heatmaps included (left)
-    > and second heatmap excluded (right)](img/08_03.png)
+    > and second heatmap excluded (right)](../inst/seqplots/www/help/img//08_03.png)
 
 -   **`Heatmaps have individual color keys`** - this option determines
     if each sub-heatmap should have separate color key (plotted below
@@ -844,7 +844,7 @@ various data processing and graphical options.
     separate (left) and common (right) color keys:
 
     > ![`Heatmaps have individual color keys` usage example: separate
-    > (left) and common (right) color keys](img/08_04.png)
+    > (left) and common (right) color keys](../inst/seqplots/www/help/img//08_04.png)
 
 -   **`Set default color key limits`** - this option determines the
     limits in mapping the numerical values to the colors. The range of
@@ -876,7 +876,7 @@ various data processing and graphical options.
 
 > ![`Set default colorspace` usage example: standard jet colors (left),
 > default blue color mapping after selecting the checkbox (middle) and
-> custom color selection (right)](img/08_05.png)
+> custom color selection (right)](../inst/seqplots/www/help/img//08_05.png)
 
 Other options controlling heatmap appearance
 --------------------------------------------
@@ -924,7 +924,7 @@ Plots can be downladed as portable document files (PDFs) by clicking
 panel** (above the plot preview).
 
 > ![Download:" section of tool panel with `Line plot` and `Heatmap`
-> buttons](img/09_01.png)
+> buttons](../inst/seqplots/www/help/img//09_01.png)
 
 Small buttons next to `Line plot` and `Heatmap` produce additional
 output files:
@@ -990,7 +990,7 @@ changed using the drop-down list to following settings:
 -   `Executive` - a.k.a Monarch paper: 7.25 × 10.5"
 
 > ![The view on top part of batch operation and setup
-> panel](img/09_02.png)
+> panel](../inst/seqplots/www/help/img//09_02.png)
 
 Batch operations
 ----------------
@@ -1001,7 +1001,7 @@ possible to output the plots to multipage PDF, plot an array of plots on
 a single page (for average plots) or mix these options together.
 
 > ![The view on bottom part of batch operation and setup
-> panel](img/09_03.png)
+> panel](../inst/seqplots/www/help/img//09_03.png)
 
 The first drop-down controls the type of the plot - either average or
 heatmap. The second drop down determines the strategy to traverse the
@@ -1030,7 +1030,7 @@ Finally, pressing `Get PDF` produces the final output file. Please see
 example below:
 
 > ![Batch plot usage example - multiple average plots aranged in 6x2
-> plot grid](img/09_04.png)
+> plot grid](../inst/seqplots/www/help/img//09_04.png)
 
 Saving and loading plot sets
 ============================
@@ -1063,7 +1063,7 @@ All saved dataset can be found in `data location`/publicFiles. Any
 SeqPlots Rdata binaries put in the folder will become available for
 loading in **`Load saved plot set`** control.
 
-> ![The view on the "Load or save plotset" panel](img/10_00.png)
+> ![The view on the "Load or save plotset" panel](../inst/seqplots/www/help/img//10_00.png)
 
 Plot set files structure
 ------------------------
@@ -1137,7 +1137,7 @@ Some additional SeqPlots options can be located at very bottom of
 `Bach operation and setup` tab:
 
 > ![The view on 'Advanced options' section of the batch operation and
-> setup panel](img/10_01.png)
+> setup panel](../inst/seqplots/www/help/img//10_01.png)
 
 -   `Keep 1:1 aspect ratio in batch mode` - This option guarantee that
     the ratio between X- and Y-axis height will be 1, hence the produced

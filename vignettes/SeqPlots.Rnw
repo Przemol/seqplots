@@ -1,9 +1,9 @@
 %\VignetteIndexEntry{SeqPlots vignette}
-%\VignetteEngine{utils::Sweave}
+%\VignetteEngine{knitr::knitr}
 
 \documentclass[]{article}
 
-<<style-Sweave, eval=TRUE, echo=FALSE, results=tex>>=
+<<style-knitr, eval=TRUE, echo=FALSE, results="asis">>=
 BiocStyle::latex()
 @
 
@@ -74,7 +74,7 @@ BiocStyle::latex()
 \author{Przemyslaw Stempor}
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+%\SweaveOpts{concordance=TRUE}
 \maketitle
 
 {
