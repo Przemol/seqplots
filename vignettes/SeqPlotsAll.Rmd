@@ -985,10 +985,10 @@ changed using the drop-down list to following settings:
     to set output PDF width and height. The values must be given in
     inches.
 -   `Legal rotated` - US Legal landscape: 14" by 8.5"
--   `A4` - A4 portrait: - 8.27" × 11.69"
--   `Letter` - US Letter portrait: 8.5" × 11"
--   `Legal` - US Legal portrait: 8.5" × 14"
--   `Executive` - a.k.a Monarch paper: 7.25 × 10.5"
+-   `A4` - A4 portrait: - 8.27" x 11.69"
+-   `Letter` - US Letter portrait: 8.5" x 11"
+-   `Legal` - US Legal portrait: 8.5" x 14"
+-   `Executive` - a.k.a Monarch paper: 7.25 x 10.5"
 
 > ![The view on top part of batch operation and setup
 > panel](../inst/seqplots/www/help/img//09_02.png)
