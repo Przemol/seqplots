@@ -5,6 +5,7 @@ output:
 ---
 
 <!-- 
+%\VignetteIndexEntry{SeqPlots GUI vignette HTML version}
 %\VignetteEngine{knitr::knitr} 
 -->
 
