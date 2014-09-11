@@ -24,9 +24,9 @@ tracks and recalculating numeric values.
 source("http://bioconductor.org/biocLite.R")
 biocLite(c("methods", "IRanges", "BSgenome", "digest", "rtracklayer", "GenomicRanges", 
   "Biostrings", "shiny", "DBI", "RSQLite", "RJSONIO", "plotrix", "fields", "grid", 
-  "kohonen", "Cairo", "parallel", "GenomeInfoDb", "class"))
+  "kohonen", "Cairo", "parallel", "GenomeInfoDb", "class", "testthat", "BiocStyle",
+  "knitr"))
 
 if (!require("devtools")) install.packages("devtools")
-devtools::install_github('przemol/seqplots', build_vignettes=FALSE,
-  auth_token='5dc47e7bc3b49c07961d7528a796b8d5818451d4')
+devtools::install_github('przemol/seqplots')
 ```
