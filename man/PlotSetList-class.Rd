@@ -25,6 +25,16 @@ PlotSetList Reference Class
 
 \item{\code{plot(what = "a", ...)}}{Plot the PlotSetList, i.e. all PlotSetPairs in the list. See \code{\link{plot}} for datails.}
 }}
+\section{Subsetting}{
+
+
+\code{x} is an object of \code{PlotSetList} class:
+\itemize{
+ \item \code{x[1:2]} produces \code{\link{PlotSetList}} with 2 feature/tracks
+ pairs.
+ \item \code{x[[1]]} produces single \code{\link{PlotSetPair}}.
+}
+}
 \seealso{
 Other classes: \code{\link{MotifSetup}},
   \code{\link{MotifSetup-class}};
