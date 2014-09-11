@@ -1,18 +1,19 @@
 #' SeqPlots innitiation
 #'
-#' This function is called to initaite SeqPlots and call web browser graphical user interface.
+#' This function initaite SeqPlots and oppens 
+#' web browser with graphical user interface (GUI).
 #' 
 #' @param root the path to data directory, it will be created if not existing
-#' @param debug run the SeqPlots in debyug mode, i.e. with web interface R console
+#' @param debug run the SeqPlots in debug mode, i.e. with R console embended in 
+#'  web interface
 #' @param ... arguments sent to \code{\link[shiny]{runApp}} function
 #' @return 
 #' Normally returns nothing (NULL), returns an error if one accrued.
 #' Usage messages are shown in R console.
 #' 
 #' @details
-#' The default home dir is ~/SeqPlots data
+#' The default data directory is "~/SeqPlots_data".
 #'
-#' @references https://bitbucket.org/przemol/seqplots/wiki/Home
 #' @author Przemyslaw Stempor
 #' @keywords seqplots
 #' @export 
