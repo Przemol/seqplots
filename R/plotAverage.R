@@ -82,33 +82,33 @@
 #' 
 #' 
 setGeneric("plotAverage",
-    function(plotset, keepratio=FALSE, ord=NULL, labels=NULL, 
-            xlim=NULL, ylim=NULL, main=NULL, xlab='', ylab='', plotScale='linear', type='full', 
-            error.estimates=TRUE, legend=TRUE, legend_ext=FALSE, legend_pos='topright', legend_ext_pos="topleft",
-            cex.axis=14, cex.lab=16, cex.main=20, cex.legend=10, ln.v=TRUE, ln.h=NULL, colvec=NULL, 
-            pointsize=12,                
-            ...) standardGeneric("plotAverage")
+           function(plotset, keepratio=FALSE, ord=NULL, labels=NULL, 
+                    xlim=NULL, ylim=NULL, main=NULL, xlab='', ylab='', plotScale='linear', type='full', 
+                    error.estimates=TRUE, legend=TRUE, legend_ext=FALSE, legend_pos='topright', legend_ext_pos="topleft",
+                    cex.axis=14, cex.lab=16, cex.main=20, cex.legend=10, ln.v=TRUE, ln.h=NULL, colvec=NULL, 
+                    pointsize=12,                
+                    ...) standardGeneric("plotAverage")
 )
 
 #' @describeIn plotAverage Method for signature plotset='list'
 setMethod("plotAverage", signature(plotset='list'),
-    function(plotset, ...) {
-      opar <- par(no.readonly = TRUE)['pty']
-      if(keepratio) par(pty='s')
-          if( length(labels) ) {
-              labels <- labels[1:length(plotset)]
-              plotset <- Map(function(x, y) {if(!is.na(y)) x[['desc']]<-y; return(x)}, plotset, labels)
+          function(plotset, ...) {
+              opar <- par(no.readonly = TRUE)['pty']
+              if(keepratio) par(pty='s')
+              if( length(labels) ) {
+                  labels <- labels[1:length(plotset)]
+                  plotset <- Map(function(x, y) {if(!is.na(y)) x[['desc']]<-y; return(x)}, plotset, labels)
+              }
+              if( length(ord) ) { plotset <- plotset[ ord ] }
+              plotMext(plotset,  xlim=xlim, ylim=ylim, main=main, xlab=xlab, ylab=ylab, 
+                       plotScale=plotScale, type=type, error.estimates=error.estimates, 
+                       legend=legend, legend_ext=legend_ext, legend_pos=legend_pos, 
+                       legend_ext_pos=legend_ext_pos, cex.axis=cex.axis, cex.lab=cex.lab, 
+                       cex.main=cex.main, cex.legend=cex.legend, ln.v=ln.v, ln.h=ln.h, 
+                       colvec=colvec, pointsize=pointsize, ...) 
+              par(opar)
+              return(invisible(NULL))
           }
-      if( length(ord) ) { plotset <- plotset[ ord ] }
-      plotMext(plotset,  xlim=xlim, ylim=ylim, main=main, xlab=xlab, ylab=ylab, 
-               plotScale=plotScale, type=type, error.estimates=error.estimates, 
-               legend=legend, legend_ext=legend_ext, legend_pos=legend_pos, 
-               legend_ext_pos=legend_ext_pos, cex.axis=cex.axis, cex.lab=cex.lab, 
-               cex.main=cex.main, cex.legend=cex.legend, ln.v=ln.v, ln.h=ln.h, 
-               colvec=colvec, pointsize=pointsize, ...) 
-      par(opar)
-      return(invisible(NULL))
-    }
 )
 
 #' @describeIn plotAverage Method for signature plotset='PlotSetPair'

@@ -141,8 +141,9 @@
 #'  
 #' 
 getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, 
-    ignore_strand=FALSE, xmin=2000L, xmax=2000L, xanchored=1000L, type='pf', 
-    add_heatmap=TRUE) {
+                            ignore_strand=FALSE, xmin=2000L, xmax=2000L, 
+                            xanchored=1000L, type='pf', 
+                            add_heatmap=TRUE) {
     
     if( class(tracks) == "MotifSetup" ) tracks <- tracks$data
     
@@ -252,7 +253,7 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
                     M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
                     if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
                     M.right <-  t(apply(M, 1, function(x) approx(x, n=length(right_ind))$y ))
-
+                    
                     M <- cbind(M.left, M.middle, M.right)                        
                     
                 }

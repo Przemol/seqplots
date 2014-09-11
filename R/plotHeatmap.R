@@ -84,21 +84,21 @@
 #' plotHeatmap(plotset1[1]) # equivalent to plot(plotset1, what='h') or plotset1$plot(what='h')
 #' 
 setGeneric("plotHeatmap",
-    function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
-        ord=1:length(plotset), plotScale="no", sortrows=FALSE, clusters=5L,
-        clstmethod="kmeans", include=rep(TRUE, length(plotset)), ssomt1=2L, ssomt2=2L, 
-        cex.main=16,  
-        cex.lab=12.0, cex.axis=12.0, 
-        cex.legend=12.0, xlab='', ylab="",autoscale=TRUE, zmin=0, zmax=10, 
-        xlim=NULL, ln.v=TRUE, s = 0.01, indi=TRUE,
-        o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12, ...) 
-        standardGeneric("plotHeatmap")
+           function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
+                    ord=1:length(plotset), plotScale="no", sortrows=FALSE, clusters=5L,
+                    clstmethod="kmeans", include=rep(TRUE, length(plotset)), ssomt1=2L, ssomt2=2L, 
+                    cex.main=16,  
+                    cex.lab=12.0, cex.axis=12.0, 
+                    cex.legend=12.0, xlab='', ylab="",autoscale=TRUE, zmin=0, zmax=10, 
+                    xlim=NULL, ln.v=TRUE, s = 0.01, indi=TRUE,
+                    o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12, ...) 
+               standardGeneric("plotHeatmap")
 )
 
 #' @describeIn plotHeatmap Method for signature \code{\link[base]{list}} with 
 #' following format: \code{list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]}
 setMethod("plotHeatmap", signature(plotset='list'),
-           function(plotset, ...) {
+          function(plotset, ...) {
               
               if(keepratio) par(pty='s')
               
@@ -188,7 +188,7 @@ setMethod("plotHeatmap", signature(plotset='list'),
                                   xlim=xlim, ln.v=ln.v, s=s, indi=indi,
                                   o_min=o_min, o_max=o_max, colvec=colvec, 
                                   colorspace=colorspace, pointsize=pointsize
-                                  )
+              )
               title(main, outer = TRUE, cex.main=cex.main/pointsize)
           }
 )
