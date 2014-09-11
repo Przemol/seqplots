@@ -38,8 +38,8 @@ plotMext <- function(INPUTS, xlim=NULL, ylim=NULL, main=NULL, xlab='', ylab='', 
     }
     
     if (is.null(ylim)) {
-        ylim[1] <- min( sapply(INPUTS, function(INPUT){ min(INPUT$means - INPUT$conint, na.rm=T) }) )
-        ylim[2] <- max( sapply(INPUTS, function(INPUT){ max(INPUT$means + INPUT$conint, na.rm=T) }) )
+        ylim[1] <- min( sapply(INPUTS, function(INPUT){ min(INPUT$means - INPUT$conint, na.rm=TRUE) }) )
+        ylim[2] <- max( sapply(INPUTS, function(INPUT){ max(INPUT$means + INPUT$conint, na.rm=TRUE) }) )
     }
     
     if ( !is.null(colvec) ) {
