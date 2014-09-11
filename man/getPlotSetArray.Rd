@@ -14,21 +14,21 @@ track paths (see details)}
 
 \item{features}{Character vector or list containing feature file paths (BED or GFF).}
 
-\item{refgenome}{The UCSC code of refference genome, e.g. 'hg19' for
+\item{refgenome}{The UCSC code of reference genome, e.g. 'hg19' for
 Homo sapiens (see details)}
 
 \item{bin}{Binning window size in base pairs, defaults to 1L}
 
 \item{rm0}{Remove zeros from mean/error estimate calculation, 0 in track file
-will be treatet as missing data, defaults to FALSE}
+will be treated as missing data, defaults to FALSE}
 
-\item{ignore_strand}{If TRUE the directionality is ignored, that is all features'
- strands, regardless of annotatin in GFF/BED file, are treated
- as undetrmined ("*"), defauls to FALSE}
+\item{ignore_strand}{If TRUE the directionality is ignored, that is all
+ features' strands, regardless of annotation in GFF/BED file, are treated
+ as undetermined ("*"), defaults to FALSE}
 
-\item{xmin}{Upsterem calcualation distance in base pairs, defaults to 200L}
+\item{xmin}{Upstream calculation distance in base pairs, defaults to 200L}
 
-\item{xmax}{Downsteram calcualtion distance in base pairs, defaults to 2000L}
+\item{xmax}{Downstream calculation distance in base pairs, defaults to 2000L}
 
 \item{xanchored}{Anchored, feature body pseudo length in base pairs.
 The features will be extended or shrunk using linear approximation.
@@ -45,15 +45,15 @@ form output \code{\link{PlotSetArray}} class, defauls to TRUE}
 }
 \description{
 Function to process genomic signal from tracks and/or motif data,
-calculate statistics. This function shoud be used as the entry point to the
-seqplots pipeline and fillowed by plotting function(s).
+calculate statistics. This function should be used as the entry point to the
+SeqPlots pipeline and followed by plotting function(s).
 }
 \details{
-This function takes genomic cooridnates in BED or GFF format,
+This function takes genomic coordinates in BED or GFF format,
 and extracts the signal from track files (BigWig) and/or
-calculates motif density in these regions. Then it computs the statistics
+calculates motif density in these regions. Then it computes the statistics
 required for average and heatmap plots. Returns the \code{\link{PlotSetArray}}
-class, which can be further subseted, and used for plotting.
+class, which can be further subsisted, and used for plotting.
 
 \subsection{Modes of operation}{
  The function operate in three modes, determined by \code{type} parameter:
@@ -64,10 +64,15 @@ class, which can be further subseted, and used for plotting.
      features and use end position and plot on negative strand for minus
      strand features). If strand information is not present in the feature
      file (or if the "ignore strand" option is chosen), plot will use start
-     position of feature and be plotted on the positive strand (see explanations).
+     position of feature and be plotted on the positive strand
+     (see explanations).
      User chooses length of upstream and downstream sequence to plot.
-     \item \strong{Midpoint Features} - similar to point feature, but plot is centered on the midpoint of the feature.
-     \item \strong{Anchored Features} - features are anchored at start and stop positions and given pseudo-length chosen by the user. Additionally, the user chooses the length of sequence upstream of the start and downstream of the end to plot.
+     \item \strong{Midpoint Features} - similar to point feature, but plot
+     is centred on the midpoint of the feature.
+     \item \strong{Anchored Features} - features are anchored at start
+     and stop positions and given pseudo-length chosen by the user.
+     Additionally, the user chooses the length of sequence upstream of
+     the start and downstream of the end to plot.
  }
 }
 
@@ -86,7 +91,8 @@ class, which can be further subseted, and used for plotting.
 
 
  \code{ms <- MotifSetup()} \cr
- \code{ms$addMotif("TATA", window=200L, heatmap=TRUE, revcomp=TRUE, name=pattern)} \cr
+ \code{ms$addMotif("TATA", window=200L, heatmap=TRUE, revcomp=TRUE,
+     name=pattern)} \cr
  \code{ms$addMotif("GAGA", window=100L)$addBigWig("path/to/file.bw")} \cr
 
  The \code{addMotiff} methods accepts following parameters:
@@ -114,15 +120,15 @@ class, which can be further subseted, and used for plotting.
 
 
 \subsection{Reference genomes}{
- The \code{refgenome} parameter determins the reference genome to be used
+ The \code{refgenome} parameter determines the reference genome to be used
  for calculation. Reference genome package is needed to establish baseline
  chromosome naming convention (e.g. chrX vs. X) and chromosome lengths.
- Also for motif plots the genomic sequence si used to calcualte motif
- density tracks. To chack which genomic packages are installed in current R
+ Also for motif plots the genomic sequence is used to calculate motif
+ density tracks. To check which genomic packages are installed in current R
  session use \code{\link[BSgenome]{installed.genomes}} function.
- \code{\link[BSgenome]{available.genomes}} gibes the list of all reference
- genome packages curently supplied by BioConductor. Please refer to
- \code{\link[BSgenome]{BSgenome}} package documentation for isnatlling and
+ \code{\link[BSgenome]{available.genomes}} gives the list of all reference
+ genome packages currently supplied by BioConductor. Please refer to
+ \code{\link[BSgenome]{BSgenome}} package documentation for installing and
  forging new genome packages.
 }
 }
