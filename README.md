@@ -29,5 +29,5 @@ biocLite(c("methods", "IRanges", "BSgenome", "digest", "rtracklayer", "GenomicRa
   "knitr"))
 
 if (!require("devtools")) install.packages("devtools")
-devtools::install_github('przemol/seqplots')
+devtools::install_github('przemol/seqplots', build_vignettes=FALSE)
 ```
