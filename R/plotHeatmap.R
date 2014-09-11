@@ -62,26 +62,28 @@
 #'  or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb}}. 
 #' @param colorspace The olorspace of the heatmap, see \code{\link[grDevices]{grDevices}}
 #' @param pointsize The default font point size to be used for plots. Defaults to 12 (1/72 inch).
+#' @param ... parameters passed to internal plotting function
 #' 
-#' @details
-#'  list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]
-#'  
 #' @family plotting functions
 #' @export
 #' 
 #' 
 setGeneric("plotHeatmap",
-           function(plotset, ...) 
-               standardGeneric("plotHeatmap")
+    function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
+        ord=1:length(plotset), plotScale="no", sortrows=FALSE, clusters=5L,
+        clstmethod="kmeans", include=rep(TRUE, length(plotset)), ssomt1=2L, ssomt2=2L, 
+        cex.main=16,  
+        cex.lab=12.0, cex.axis=12.0, 
+        cex.legend=12.0, xlab='', ylab="",autoscale=TRUE, zmin=0, zmax=10, 
+        xlim=NULL, ln.v=TRUE, s = 0.01, indi=TRUE,
+        o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12, ...) 
+        standardGeneric("plotHeatmap")
 )
 
 #' @describeIn plotHeatmap Method for signature \code{\link[base]{list}} with 
 #' following format: \code{list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]}
 setMethod("plotHeatmap", signature(plotset='list'),
-           function(plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
-                                  ord=1:length(plotset), plotScale="no", sortrows=FALSE, clusters=5L,
-                                  clstmethod="kmeans", include=rep(TRUE, length(plotset)), ssomt1=2L, ssomt2=2L, 
-                                  cex.main=16, ...) {
+           function(plotset, ...) {
               
               if(keepratio) par(pty='s')
               
@@ -148,7 +150,7 @@ setMethod("plotHeatmap", signature(plotset='list'),
                   clusts <- table(classes)
                   
               } else {
-                  values$clusters <- NULL
+                  classes <- NULL
                   clusts <- NULL
               }
               
@@ -164,8 +166,15 @@ setMethod("plotHeatmap", signature(plotset='list'),
               heatmapPlotWrapper( HLST, clusts, 
                                   bins=plotset[[1]]$all_ind, 
                                   titles=lab, e=plotset[[1]]$e, 
-                                  Leg=legend, ...)
-              title(main, outer = TRUE, cex.main=cex.main/12)
+                                  Leg=legend,
+                                  cex.lab=cex.lab, cex.axis=cex.axis, 
+                                  cex.legend=cex.legend, xlab=xlab, ylab=ylab,
+                                  autoscale=autoscale, zmin=zmin, zmax=zmax, 
+                                  xlim=xlim, ln.v=ln.v, s=s, indi=indi,
+                                  o_min=o_min, o_max=o_max, colvec=colvec, 
+                                  colorspace=colorspace, pointsize=pointsize
+                                  )
+              title(main, outer = TRUE, cex.main=cex.main/pointsize)
           }
 )
 

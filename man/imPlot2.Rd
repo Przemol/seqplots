@@ -9,7 +9,8 @@ imPlot2(..., add = FALSE, nlevel = 64, horizontal = FALSE,
   3.1, 5.1), legend.lab = NULL, legend.line = 2, graphics.reset = FALSE,
   bigplot = NULL, smallplot = NULL, legend.only = FALSE,
   col = tim.colors(nlevel), lab.breaks = NULL, axis.args = NULL,
-  legend.args = NULL, midpoint = FALSE, border = NA, lwd = 1)
+  legend.args = NULL, midpoint = FALSE, border = NA, lwd = 1,
+  xinds = NULL, e = NULL)
 }
 \description{
 \code{

@@ -1,13 +1,13 @@
+<!-- 
+%\VignetteIndexEntry{SeqPlots GUI vignette HTML version}
+%\VignetteEngine{knitr::knitr}
+-->
+
 ---
 output:
   BiocStyle::html_document:
     toc: true
 ---
-
-<!-- 
-%\VignetteIndexEntry{SeqPlots GUI vignette HTML version}
-%\VignetteEngine{knitr::knitr} 
--->
 
 ```{r style, echo = FALSE, results = 'asis'}
 BiocStyle::markdown()

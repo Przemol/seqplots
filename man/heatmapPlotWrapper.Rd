@@ -8,7 +8,7 @@ heatmapPlotWrapper(MAT, axhline = NULL, titles = rep("", length(MAT)),
   cex.legend = 12, xlab = "", ylab = "", Leg = TRUE, autoscale = TRUE,
   zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE, e = NULL, s = 0.01,
   indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  colorspace = NULL, poinsize = 12)
+  colorspace = NULL, pointsize = 12)
 }
 \arguments{
 \item{MAT}{- list of matrixes holding heatmap data}
@@ -64,9 +64,9 @@ or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb
 
 \item{colorspace}{The olorspace of the heatmap, see \code{\link[grDevices]{grDevices}}}
 
-\item{leg}{if TRUE plot the color key}
-
 \item{pointsize}{The default font point size to be used for plots. Defaults to 12 (1/72 inch).}
+
+\item{leg}{if TRUE plot the color key}
 }
 \description{
 This function is package internal and should not be executed directly

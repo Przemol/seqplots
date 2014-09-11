@@ -25,7 +25,7 @@
 #' @param type If set to "legend" only the legend/key will be plotted. 
 #' @param error.estimates Indicates if error estimates are plotted, defaults to TRUE
 #' @param legend Indicates if key descibing the PlotSetPairs is shown, defaults to TRUE
-#' @param legend_ex Indicates if key descibing error estimates is shown, defaults to FALSE
+#' @param legend_ext Indicates if key descibing error estimates is shown, defaults to FALSE
 #' @param legend_pos The position of main key, defaults to 'topright'
 #' @param legend_ext_pos The position of error estimates key, defaults to 'topleft'
 #' @param cex.axis Axis numbers font size in points, defaults to 14
@@ -45,22 +45,19 @@
 #' @param ... other graphical parameters passed to plot.default 
 #' (see \code{\link[graphics]{plot.default}}, \code{\link[graphics]{par}} and section "Details" below)
 #' 
-#' @inheritParams graphics::plot.default
-#' 
 #' @return NULL
 #' 
 #' @details
 #' The relavent parameters passed to \code{\link[graphics]{plot.default}} funtion:
-#' @param log a character string which contains "x" if the x axis is to be logarithmic, "y" if the y axis is to be logarithmic and "xy" or "yx" if both axes are to be logarithmic.
-#' @param ann a logical value indicating whether the default annotation (title and x and y axis labels) should appear on the plot.
-#' @param axes a logical value indicating whether both axes should be drawn on the plot. Use graphical parameter "xaxt" or "yaxt" to suppress just one of the axes.
-#' @param frame.plot a logical indicating whether a box should be drawn around the plot.
-#' @param panel.first an "expression" to be evaluated after the plot axes are set up but before any plotting takes place. This can be useful for drawing background grids or scatterplot smooths. Note that this works by lazy evaluation: passing this argument from other plot methods may well not work since it may be evaluated too early.
-#' @param panel.last an expression to be evaluated after plotting has taken place but before the axes, title and box are added. See the comments about panel.first.
-#' @param asp the y/x aspect ratio, see plot.window.
-#' 
-#' 
-#' 
+#' \describe{
+#'  \item{\code{log}}{a character string which contains "x" if the x axis is to be logarithmic, "y" if the y axis is to be logarithmic and "xy" or "yx" if both axes are to be logarithmic.}
+#'  \item{\code{ann}}{a logical value indicating whether the default annotation (title and x and y axis labels) should appear on the plot.}
+#'  \item{\code{axes}}{a logical value indicating whether both axes should be drawn on the plot. Use graphical parameter "xaxt" or "yaxt" to suppress just one of the axes.}
+#'  \item{\code{rame.plot}}{a logical indicating whether a box should be drawn around the plot.}
+#'  \item{\code{panel.first}}{an "expression" to be evaluated after the plot axes are set up but before any plotting takes place. This can be useful for drawing background grids or scatterplot smooths. Note that this works by lazy evaluation: passing this argument from other plot methods may well not work since it may be evaluated too early.}
+#'  \item{\code{panel.last}}{an expression to be evaluated after plotting has taken place but before the axes, title and box are added. See the comments about panel.first.}
+#'  \item{\code{asp}}{the y/x aspect ratio, see plot.window.}
+#' }
 #' 
 #' @author Przemyslaw Stempor
 #' 
@@ -72,12 +69,17 @@
 #' }
 #' 
 setGeneric("plotAverage",
-           function(plotset, ...) standardGeneric("plotAverage")
+    function(plotset, keepratio=FALSE, ord=NULL, labels=NULL, 
+            xlim=NULL, ylim=NULL, main=NULL, xlab='', ylab='', plotScale='linear', type='full', 
+            error.estimates=TRUE, legend=TRUE, legend_ext=FALSE, legend_pos='topright', legend_ext_pos="topleft",
+            cex.axis=14, cex.lab=16, cex.main=20, cex.legend=10, ln.v=TRUE, ln.h=NULL, colvec=NULL, 
+            pointsize=12,                
+            ...) standardGeneric("plotAverage")
 )
 
 #' @describeIn plotAverage Method for signature plotset='list'
 setMethod("plotAverage", signature(plotset='list'),
-    function(plotset, keepratio=FALSE, ord=NULL, labels=NULL, ...) {
+    function(plotset, ...) {
       opar <- par(no.readonly = TRUE)['pty']
       if(keepratio) par(pty='s')
           if( length(labels) ) {
@@ -85,7 +87,12 @@ setMethod("plotAverage", signature(plotset='list'),
               plotset <- Map(function(x, y) {if(!is.na(y)) x[['desc']]<-y; return(x)}, plotset, labels)
           }
       if( length(ord) ) { plotset <- plotset[ ord ] }
-      plotMext(plotset, ...) 
+      plotMext(plotset,  xlim=xlim, ylim=ylim, main=main, xlab=xlab, ylab=ylab, 
+               plotScale=plotScale, type=type, error.estimates=error.estimates, 
+               legend=legend, legend_ext=legend_ext, legend_pos=legend_pos, 
+               legend_ext_pos=legend_ext_pos, cex.axis=cex.axis, cex.lab=cex.lab, 
+               cex.main=cex.main, cex.legend=cex.legend, ln.v=ln.v, ln.h=ln.h, 
+               colvec=colvec, pointsize=pointsize, ...) 
       par(opar)
       return(invisible(NULL))
     }

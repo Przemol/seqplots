@@ -8,19 +8,54 @@
 \alias{plotHeatmap,list-method}
 \title{Plot heatmap with optional clustering}
 \usage{
-plotHeatmap(plotset, ...)
+plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
+  keepratio = FALSE, ord = 1:length(plotset), plotScale = "no",
+  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
+  include = rep(TRUE, length(plotset)), ssomt1 = 2L, ssomt2 = 2L,
+  cex.main = 16, cex.lab = 12, cex.axis = 12, cex.legend = 12,
+  xlab = "", ylab = "", autoscale = TRUE, zmin = 0, zmax = 10,
+  xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE, o_min = NA,
+  o_max = NA, colvec = NULL, colorspace = NULL, pointsize = 12, ...)
 
 \S4method{plotHeatmap}{list}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
   plotScale = "no", sortrows = FALSE, clusters = 5L,
   clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
-  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, ...)
+  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, cex.lab = 12,
+  cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
+  autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
+  s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
+  colorspace = NULL, pointsize = 12, ...)
 
-\S4method{plotHeatmap}{PlotSetPair}(plotset, ...)
+\S4method{plotHeatmap}{PlotSetPair}(plotset, main = "", labels = NA,
+  legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
+  plotScale = "no", sortrows = FALSE, clusters = 5L,
+  clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
+  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, cex.lab = 12,
+  cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
+  autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
+  s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
+  colorspace = NULL, pointsize = 12, ...)
 
-\S4method{plotHeatmap}{PlotSetList}(plotset, ...)
+\S4method{plotHeatmap}{PlotSetList}(plotset, main = "", labels = NA,
+  legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
+  plotScale = "no", sortrows = FALSE, clusters = 5L,
+  clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
+  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, cex.lab = 12,
+  cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
+  autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
+  s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
+  colorspace = NULL, pointsize = 12, ...)
 
-\S4method{plotHeatmap}{PlotSetArray}(plotset, ...)
+\S4method{plotHeatmap}{PlotSetArray}(plotset, main = "", labels = NA,
+  legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
+  plotScale = "no", sortrows = FALSE, clusters = 5L,
+  clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
+  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, cex.lab = 12,
+  cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
+  autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
+  s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
+  colorspace = NULL, pointsize = 12, ...)
 }
 \arguments{
 \item{plotset}{The dataset to plot - can be \code{\link{PlotSetArray}},
@@ -65,15 +100,15 @@ numbbers of resulting cluters equils ssomt1*ssomt2, defaults to 2L}
 
 \item{cex.main}{Main title font size in points, defaults to 16}
 
-\item{xlab}{label below x-axis}
-
-\item{ylab}{label below y-axis}
+\item{cex.lab}{Axis labels labes font size in points, Defaults to 12}
 
 \item{cex.axis}{Axis numbers font size in points, defaults to 12}
 
-\item{cex.lab}{Axis labels labes font size in points, Defaults to 12}
-
 \item{cex.legend}{Keys labels font size in points, defaults to 12}
+
+\item{xlab}{label below x-axis}
+
+\item{ylab}{label below y-axis}
 
 \item{autoscale}{if TRUE the color keys will be autoscaled}
 
@@ -109,15 +144,14 @@ or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb
 \item{colorspace}{The olorspace of the heatmap, see \code{\link[grDevices]{grDevices}}}
 
 \item{pointsize}{The default font point size to be used for plots. Defaults to 12 (1/72 inch).}
+
+\item{...}{parameters passed to internal plotting function}
 }
 \description{
 Draw the heatmap plot from \code{\link{PlotSetArray}},
 \code{\link{PlotSetList}}, \code{\link{PlotSetPair}} classes or
 properly formated \code{\link[base]{list}} (see details) in active graphics window.
 Axes and titles, keys and other plot elements are controled by function parameters.
-}
-\details{
-list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]
 }
 \section{Methods (by class)}{
 \itemize{
@@ -131,11 +165,15 @@ following format: \code{list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]}
 \item \code{PlotSetArray}: Method for signature \code{\link{PlotSetArray}}
 }}
 \seealso{
-Other plotting functions: \code{\link{getPlotSetArray}};
+Other plotting.functions: \code{\link{getPlotSetArray}};
   \code{\link{plotAverage}},
   \code{\link{plotAverage,PlotSetArray-method}},
   \code{\link{plotAverage,PlotSetList-method}},
   \code{\link{plotAverage,PlotSetPair-method}},
-  \code{\link{plotAverage,list-method}}
+  \code{\link{plotAverage,list-method}};
+  \code{\link{plot}},
+  \code{\link{plot,PlotSetArray,ANY-method}},
+  \code{\link{plot,PlotSetList,ANY-method}},
+  \code{\link{plot,PlotSetPair,ANY-method}}
 }
 

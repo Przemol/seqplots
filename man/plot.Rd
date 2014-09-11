@@ -9,11 +9,25 @@
 \usage{
 plot(x, y, ...)
 
-\S4method{plot}{PlotSetPair,ANY}(x, y, ...)
+\S4method{plot}{PlotSetPair,ANY}(x, what = "a", ...)
 
-\S4method{plot}{PlotSetList,ANY}(x, y, ...)
+\S4method{plot}{PlotSetList,ANY}(x, what = "a", ...)
 
-\S4method{plot}{PlotSetArray,ANY}(x, y, ...)
+\S4method{plot}{PlotSetArray,ANY}(x, what = "a", ...)
+}
+\arguments{
+\item{x}{This argument should be one of SeqPlots classes:
+\code{\link{PlotSetArray}}, \code{\link{PlotSetList}} or
+\code{\link{PlotSetPair}}}
+
+\item{y}{For plotting SeqPlots classes this argument is ignored, used for
+default functionality of \code{\link[graphics]{plot}} function.}
+
+\item{...}{Other parameters controlong the plot, see \code{\link{plotAverage}}
+ for avareange plot and \code{\link{plotHeatmap}} for heatmaps.}
+
+\item{what}{This argument takes a character determining if avareange
+plot (\code{"a"}, default) or heatmap (\code{"h"}) will be plotted.}
 }
 \description{
 Generic plot function for SeqPlots package calsses
@@ -26,4 +40,19 @@ Generic plot function for SeqPlots package calsses
 
 \item \code{x = PlotSetArray,y = ANY}: Method plot for signature 'PlotSetPair'
 }}
+\seealso{
+\code{\link{getPlotSetArray}}
+
+Other plotting.functions: \code{\link{getPlotSetArray}};
+  \code{\link{plotAverage}},
+  \code{\link{plotAverage,PlotSetArray-method}},
+  \code{\link{plotAverage,PlotSetList-method}},
+  \code{\link{plotAverage,PlotSetPair-method}},
+  \code{\link{plotAverage,list-method}};
+  \code{\link{plotHeatmap}},
+  \code{\link{plotHeatmap,PlotSetArray-method}},
+  \code{\link{plotHeatmap,PlotSetList-method}},
+  \code{\link{plotHeatmap,PlotSetPair-method}},
+  \code{\link{plotHeatmap,list-method}}
+}
 

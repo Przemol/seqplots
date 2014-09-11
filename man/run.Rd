@@ -8,7 +8,8 @@ run(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FALSE, ...)
 \arguments{
 \item{root}{the path to data directory, it will be created if not existing}
 
-\item{debug}{run the SeqPlots in debyug mode, i.e. with web interface R console}
+\item{debug}{run the SeqPlots in debug mode, i.e. with R console embended in
+web interface}
 
 \item{...}{arguments sent to \code{\link[shiny]{runApp}} function}
 }
@@ -17,10 +18,11 @@ Normally returns nothing (NULL), returns an error if one accrued.
 Usage messages are shown in R console.
 }
 \description{
-This function is called to initaite SeqPlots and call web browser graphical user interface.
+This function initaite SeqPlots and oppens
+web browser with graphical user interface (GUI).
 }
 \details{
-The default home dir is ~/SeqPlots data
+The default data directory is "~/SeqPlots_data".
 }
 \examples{
 \dontrun{
@@ -29,9 +31,6 @@ run()
 }
 \author{
 Przemyslaw Stempor
-}
-\references{
-https://bitbucket.org/przemol/seqplots/wiki/Home
 }
 \keyword{seqplots}
 
