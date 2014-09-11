@@ -45,11 +45,11 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     bins=1:(ncol(MAT[[1]])/length(MAT)), cex.lab=12.0, cex.axis=12.0, 
     cex.legend=12.0, xlab='', ylab="", Leg=TRUE, autoscale=TRUE, zmin=0, zmax=10, 
     xlim=NULL, ln.v=TRUE, e=NULL, s = 0.01, indi=TRUE,
-    o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, poinsize=12) {
+    o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12) {
     
-    lfs  <- cex.lab / poinsize
-    afs  <- cex.axis / poinsize
-    lgfs <- cex.legend / poinsize
+    lfs  <- cex.lab / pointsize
+    afs  <- cex.axis / pointsize
+    lgfs <- cex.legend / pointsize
     opar <- par(no.readonly = TRUE)
     
     datapoints <- unlist(MAT)
@@ -87,13 +87,18 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
         data <- MAT[[i]]
         
         par(cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs)
+        xinds <- if (is.null(xlim)) range(bins) else xlim
         
         if( !indi ) {
             data[data<zmin] <- zmin
             data[data>zmax] <- zmax
             ColorRamp_ex <- ColorRamp[round( (min(data, na.rm=TRUE)-zmin)*ncollevel/(zmax-zmin) ) : round( (max(data, na.rm=TRUE)-zmin)*ncollevel/(zmax-zmin) )]
             image(bins, 1:nrow(data), t(data), axes=TRUE, col=ColorRamp_ex, xlab=xlab, ylab=ylab, xlim=if (is.null(xlim)) range(bins) else xlim, add=FALSE, ylim=c(nrow(data),1),
-                  useRaster=raster, panel.first=rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col="lightgrey"))
+                  useRaster=raster, xaxt="n", panel.first={
+                      if(is.null(e)) axis(1) else axis(1, at=c(min(xinds), 0,  e, max(xinds)), labels=c(min(xinds), '0', '0', max(xinds)-e))
+                      rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col="lightgrey")
+                }
+            )
             
         } else {
             if (autoscale) {
@@ -112,10 +117,14 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             col <- if( is.character(colvec[i]) ) colorRampPalette(c('white', colvec[i]))(ncollevel) else gcol(ncollevel)
             
             #par(cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs)
+            
             imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlab, ylab=ylab, 
                     xlim=if (is.null(xlim)) range(bins) else xlim,  ylim=c(nrow(data),1),
                     zlim=keycolor_lim, col=col,
-                    legend.width=1, horizontal=TRUE, useRaster=raster)
+                    legend.width=1, horizontal=TRUE, useRaster=raster, 
+                    xinds=xinds, e=e, xaxt="n")
+            
+            
             
         }
         title( main=titles[i]); box()

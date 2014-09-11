@@ -20,7 +20,7 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
                                                                                    3.1, 5.1), legend.lab = NULL, legend.line = 2, graphics.reset = FALSE, 
                       bigplot = NULL, smallplot = NULL, legend.only = FALSE, col = tim.colors(nlevel), 
                       lab.breaks = NULL, axis.args = NULL, legend.args = NULL, 
-                      midpoint = FALSE, border = NA, lwd = 1) {
+                      midpoint = FALSE, border = NA, lwd = 1, xinds=NULL, e=NULL) {
     old.par <- par(no.readonly = TRUE)
     info <- imageplot.info(...)
     if (add) {
@@ -42,7 +42,10 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
             par(plt = bigplot)
         }
         if (!info$poly.grid) {
-            image(..., add = add, col = col, panel.last=rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = "lightgrey"))
+            image(..., add = add, col = col, panel.last={
+                rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = "lightgrey")
+                if(is.null(e)) axis(1) else axis(1, at=c(min(xinds), 0,  e, max(xinds)), labels=c(min(xinds), '0', '0', max(xinds)-e))
+                })
         }
         else {
             poly.image(..., add = add, col = col, midpoint = midpoint, 

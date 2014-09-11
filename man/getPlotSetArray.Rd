@@ -84,33 +84,35 @@ class, which can be further subseted, and used for plotting.
  reference sequence package. Motif plots can be mixed with track files' signal
  plots. The \code{\link{MotifSetup}} can be initialized in following way:
 
- \code{
- ms <- MotifSetup() \cr
- ms$addMotif("TATA", window=200L, heatmap=TRUE, revcomp=TRUE, name=pattern) \cr
- ms$addMotif("GAGA", window=100L)$addBigWig("path/to/file.bw") \cr
- }
+
+ \code{ms <- MotifSetup()} \cr
+ \code{ms$addMotif("TATA", window=200L, heatmap=TRUE, revcomp=TRUE, name=pattern)} \cr
+ \code{ms$addMotif("GAGA", window=100L)$addBigWig("path/to/file.bw")} \cr
 
  The \code{addMotiff} methods accepts following parameters:
- \tabular{ll}{
-     \preformatted{motif}    \tab The DNA motif sequence. \cr
-     \preformatted{window}   \tab Sliding window size in base pairs [bp] - the size
+ \describe{
+     \item{\code{motif}}{ The DNA motif sequence. }
+     \item{\code{window}}{ Sliding window size in base pairs [bp] - the size
      of the sliding window for motif calculation. The value (number of
      matching motifs within the window) is reported in the middle of the
      window, e.g. if window is set to 200bp, DNA motif is "GC" and there are
      8 CpGs in first 200 bp of the chromosome the value 8 will be
-     reported at 100th bp.\cr
-     \preformatted{name}     \tab Display name - The name of the motif that will be
-     shown in key and heatmap labels. Leave blank to use DNA motif value.\cr
-     \preformatted{heatmap}  \tab Plot heatmap or error estimates - this checkbox
+     reported at 100th bp.}
+     \item{\code{name}}{ Display name - The name of the motif that will be
+     shown in key and heatmap labels. Leave blank to use DNA motif value.}
+     \item{\code{heatmap}}{ Plot heatmap or error estimates - this checkbox
      determines if heatmap matrix and error estimates should be calculated.
      If unchecked much faster algorithm will be used for motif density
      calculation, but only the average plot without the error estimates
-     will be available.\cr
-     \preformatted{revcomp}  \tab Match reverse complement as well - select if
+     will be available.}
+     \item{\code{revcomp}}{ Match reverse complement as well - select if
      reverse complement motif should be reported as well. For example the
-     TATA motif will report both TATA and ATAT with this option selected.\cr
+     TATA motif will report both TATA and ATAT with this option selected.}
  }
+
 }
+
+
 \subsection{Reference genomes}{
  The \code{refgenome} parameter determins the reference genome to be used
  for calculation. Reference genome package is needed to establish baseline
@@ -157,7 +159,7 @@ plot(plotset[1,], what='h') #Heatmap
 }
 }
 \seealso{
-Other plotting functions: \code{\link{plotAverage}},
+Other plotting.functions: \code{\link{plotAverage}},
   \code{\link{plotAverage,PlotSetArray-method}},
   \code{\link{plotAverage,PlotSetList-method}},
   \code{\link{plotAverage,PlotSetPair-method}},
@@ -166,6 +168,10 @@ Other plotting functions: \code{\link{plotAverage}},
   \code{\link{plotHeatmap,PlotSetArray-method}},
   \code{\link{plotHeatmap,PlotSetList-method}},
   \code{\link{plotHeatmap,PlotSetPair-method}},
-  \code{\link{plotHeatmap,list-method}}
+  \code{\link{plotHeatmap,list-method}};
+  \code{\link{plot}},
+  \code{\link{plot,PlotSetArray,ANY-method}},
+  \code{\link{plot,PlotSetList,ANY-method}},
+  \code{\link{plot,PlotSetPair,ANY-method}}
 }
 
