@@ -111,7 +111,6 @@
 #' 
 #' 
 #' @examples
-#' \dontrun{
 #'   
 #' # Get the paths of example files                      
 #' bed1 <- system.file("extdata", "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
@@ -140,7 +139,6 @@
 #' plot(plotset) #Average plot
 #' plot(plotset[1,], what='h') #Heatmap
 #'  
-#' }
 #' 
 getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, 
     ignore_strand=FALSE, xmin=2000L, xmax=2000L, xanchored=1000L, type='pf', 

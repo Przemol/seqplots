@@ -127,8 +127,6 @@ class, which can be further subseted, and used for plotting.
 }
 }
 \examples{
-\dontrun{
-
 # Get the paths of example files
 bed1 <- system.file("extdata", "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
 bed2 <- system.file("extdata", "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
@@ -155,8 +153,6 @@ ms$addBigWig(bw1)
 plotset <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
 plot(plotset) #Average plot
 plot(plotset[1,], what='h') #Heatmap
-
-}
 }
 \seealso{
 Other plotting.functions: \code{\link{plotAverage}},

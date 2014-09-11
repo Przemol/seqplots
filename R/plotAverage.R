@@ -65,8 +65,21 @@
 #' @export
 #' 
 #' @examples
-#' \dontrun{
+#' # Get the paths of example files                      
+#' bed1 <- system.file("extdata", "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
+#' bed2 <- system.file("extdata", "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
+#' bw1 <- system.file("extdata", "GSM1208360_chrI_100Kb_q5_sample.bw", package="seqplots")
+#' 
+#' #If required install C. elegans genomic package from Bioconductor
+#' if(!"BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes()) {
+#'     source("http://bioconductor.org/biocLite.R")
+#'     biocLite("BSgenome.Celegans.UCSC.ce10")
 #' }
+#' 
+#' #Get getPlotSetArray for track and feature files
+#' plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
+#' plotAverage(plotset1) # equivalent to plot(plotset1) or plotset1$plot()
+#' 
 #' 
 setGeneric("plotAverage",
     function(plotset, keepratio=FALSE, ord=NULL, labels=NULL, 
