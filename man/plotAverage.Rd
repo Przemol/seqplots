@@ -120,7 +120,7 @@ properly formatted \code{\link[base]{list}} in active graphics window.
 Axes and titles, keys and other plot elements are controlled by function parameters.
 }
 \details{
-The relavent parameters passed to \code{\link[graphics]{plot.default}} function:
+Relevant parameters passed to \code{\link[graphics]{plot.default}} function:
 \describe{
  \item{\code{log}}{a character string which contains "x" if the x axis is to be logarithmic, "y" if the y axis is to be logarithmic and "xy" or "yx" if both axes are to be logarithmic.}
  \item{\code{ann}}{a logical value indicating whether the default annotation (title and x and y axis labels) should appear on the plot.}

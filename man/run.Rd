@@ -8,7 +8,7 @@ run(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FALSE, ...)
 \arguments{
 \item{root}{the path to data directory, it will be created if not existing}
 
-\item{debug}{run the SeqPlots in debug mode, i.e. with R console embended in
+\item{debug}{run the SeqPlots in debug mode, i.e. with R console embedded in
 web interface}
 
 \item{...}{arguments sent to \code{\link[shiny]{runApp}} function}

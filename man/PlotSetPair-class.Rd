@@ -12,7 +12,7 @@ PlotSetPair Reference Class
 \describe{
 \item{\code{means}}{numeric vector of means}
 
-\item{\code{stderror}}{numeric vector of standart errors}
+\item{\code{stderror}}{numeric vector of standard errors}
 
 \item{\code{conint}}{numeric vector of 95\% confidence intervals}
 
