@@ -8,6 +8,8 @@ before_install:
   - ./travis-tool.sh bootstrap
 
 install:
+  - ./travis-tool.sh bioc_install BiocInstaller
+  - Rscript -e 'library(BiocInstaller); useDevel();'
   - ./travis-tool.sh bioc_install IRanges BSgenome Rsamtools rtracklayer GenomicRanges Biostrings GenomeInfoDb BiocStyle
   - ./travis-tool.sh install_deps
 
