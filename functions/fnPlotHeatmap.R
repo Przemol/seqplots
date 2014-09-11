@@ -12,7 +12,7 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
                                                                                   3.1, 5.1), legend.lab = NULL, legend.line = 2, graphics.reset = FALSE, 
                      bigplot = NULL, smallplot = NULL, legend.only = FALSE, col = tim.colors(nlevel), 
                      lab.breaks = NULL, axis.args = NULL, legend.args = NULL, 
-                     midpoint = FALSE, border = NA, lwd = 1) {
+                     midpoint = FALSE, border = NA, lwd = 1, xinds=NULL, e=NULL) {
   old.par <- par(no.readonly = TRUE)
   info <- imageplot.info(...)
   if (add) {
@@ -34,7 +34,10 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
       par(plt = bigplot)
     }
     if (!info$poly.grid) {
-      image(..., add = add, col = col, panel.last=rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = "lightgrey"))
+      image(..., add = add, col = col, panel.last={
+          rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = "lightgrey")
+          if(is.null(e)) axis(1) else axis(1, at=c(min(xinds), 0,  e, max(xinds)), labels=c(min(xinds), '0', '0', max(xinds)-e))
+      })
     }
     else {
       poly.image(..., add = add, col = col, midpoint = midpoint, 
@@ -154,13 +157,18 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),	b
 		data <- MAT[[i]]
     
 		par(cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs)
-    
+		xinds <- if (is.null(xlim)) range(bins) else xlim
+        
     if( !indi ) {
       data[data<zmin] <- zmin
       data[data>zmax] <- zmax
       ColorRamp_ex <- ColorRamp[round( (min(data, na.rm=TRUE)-zmin)*ncollevel/(zmax-zmin) ) : round( (max(data, na.rm=TRUE)-zmin)*ncollevel/(zmax-zmin) )]
       image(bins, 1:nrow(data), t(data), axes=TRUE, col=ColorRamp_ex, xlab=xlabel, ylab=ylabel, xlim=if (is.null(xlim)) range(bins) else xlim, add=FALSE, ylim=c(nrow(data),1),
-            useRaster=raster, panel.first=rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col="lightgrey"))
+            useRaster=raster, , xaxt="n", panel.first={
+                if(is.null(e)) axis(1) else axis(1, at=c(min(xinds), 0,  e, max(xinds)), labels=c(min(xinds), '0', '0', max(xinds)-e))
+                rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col="lightgrey")
+            }
+        )
       
     } else {
       if (autoscale) {
@@ -182,7 +190,8 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),	b
       imPlot2(bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlabel, ylab=ylabel, 
               xlim=if (is.null(xlim)) range(bins) else xlim,  ylim=c(nrow(data),1),
               zlim=keycolor_lim, col=col,
-              legend.width=1, horizontal=TRUE, useRaster=raster)
+              legend.width=1, horizontal=TRUE, useRaster=raster,
+              xinds=xinds, e=e, xaxt="n")
       
     }
 		title( main=titles[i]); box()
