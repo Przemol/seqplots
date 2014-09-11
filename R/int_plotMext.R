@@ -7,7 +7,8 @@
 #' @param main an overall title for the plot: see title.
 #' @param xlab a title for the x axis: see title.
 #' @param ylab a title for the y axis: see title.
-#' @param plotScale scale the avilable data before ploting, can be "linear" (do not scale), "log2" or "zscore"
+#' @param plotScale scale the available data before ploting, can be "linear" 
+#'  (do not scale), "log2" or "zscore"
 #' 
 #' @inheritParams plot
 #' @keywords internal

@@ -9,7 +9,7 @@
 #' This function is package internal and should not be executed directly
 #' by users.
 #' 
-#' For more help see documentation of image.plot fuction
+#' For more help see documentation of image.plot function: 
 #' \code{\link[fields]{image.plot}}
 #'
 #' @keywords internal

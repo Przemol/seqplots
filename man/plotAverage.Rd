@@ -55,12 +55,12 @@ properly formated \code{\link[base]{list}}}
 
 \item{keepratio}{If TRUE keep 1:1 aspect ratio of the figure; defaults to FALSE}
 
-\item{ord}{The numeric vector determinin the plotting order of experiments.
+\item{ord}{The numeric vector determining the plotting order of experiments.
 Feature-track pair with the highest priority will be listed on the top of key.
 If NULL (default) the order established in \code{plotset} is used.}
 
-\item{labels}{The character vector giving labes used in experiment key. The defaults NULL value
-indicates taht feature/track file names will be used to generate the labes.}
+\item{labels}{The character vector giving labels used in experiment key. The defaults NULL value
+indicates taht feature/track file names will be used to generate the labels.}
 
 \item{xlim}{the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a "reversed axis".
 The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.}
@@ -68,21 +68,21 @@ The default value, NULL, indicates that the whole range present in \code{plotset
 \item{ylim}{the y limits (y1, y2) of the plot. Note that x1 > x2 is allowed and leads to a "reversed axis".
 The default value, NULL, indicates that the range will be auto calculated including space for error estimates.}
 
-\item{main}{The main title of the plot, shown in top-center part of the figure; defaults to NULL (not visible)}
+\item{main}{The main title of the plot, shown in top-centred part of the figure; defaults to NULL (not visible)}
 
 \item{xlab}{Label shown below horizontal axis; default to \code{""} (empty)}
 
 \item{ylab}{Label shown below vertical axis; default to \code{""} (empty)}
 
-\item{plotScale}{scale the avilable data before ploting, can be "linear" (do not scale, default), "log2" or "zscore"}
+\item{plotScale}{scale the available data before plotting, can be "linear" (do not scale, default), "log2" or "zscore"}
 
 \item{type}{If set to "legend" only the legend/key will be plotted.}
 
 \item{error.estimates}{Indicates if error estimates are plotted, defaults to TRUE}
 
-\item{legend}{Indicates if key descibing the PlotSetPairs is shown, defaults to TRUE}
+\item{legend}{Indicates if key describing the PlotSetPairs is shown, defaults to TRUE}
 
-\item{legend_ext}{Indicates if key descibing error estimates is shown, defaults to FALSE}
+\item{legend_ext}{Indicates if key describing error estimates is shown, defaults to FALSE}
 
 \item{legend_pos}{The position of main key, defaults to 'topright'}
 
@@ -90,22 +90,22 @@ The default value, NULL, indicates that the range will be auto calculated includ
 
 \item{cex.axis}{Axis numbers font size in points, defaults to 14}
 
-\item{cex.lab}{Axis labels labes font size in points, Defaults to 16}
+\item{cex.lab}{Axis labels font size in points, Defaults to 16}
 
 \item{cex.main}{Main title font size in points, defaults to 20}
 
 \item{cex.legend}{Keys labels font size in points, defaults to 10}
 
-\item{ln.v}{Determins if vertical gide line(s) should be plotted (TRUE) or ommitted (FALSE).
-For anchored plots 2 lines indicateing the start and end of anchored distane are plotted.}
+\item{ln.v}{Determins if vertical guide line(s) should be plotted (TRUE) or ommitted (FALSE).
+For anchored plots 2 lines indicating the start and end of anchored distane are plotted.}
 
-\item{ln.h}{Determins if horzontal gide line should is plotted. Numeric value of the parametter
-indicates the Y-axis position of the lie, NULL (default) indicates to ommit}
+\item{ln.h}{Determins if horizontal guide line should is plotted. Numeric value of the parameter
+indicates the Y-axis position of the lie, NULL (default) indicates to omit}
 
-\item{colvec}{The vector of colors used to plot the lines and error estimate fields.
-If set value NULL (default) the automatically generated color vaues will be used.
-Accpeted values are: vector of any of the three kinds of R color specifications, i.e.,
-either a color name (as listed by colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see rgb),
+\item{colvec}{The vector of colours used to plot the lines and error estimate fields.
+If set value NULL (default) the automatically generated colour values will be used.
+Accpeted values are: vector of any of the three kinds of R colour specifications, i.e.,
+either a colour name (as listed by colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see rgb),
 or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb}}.}
 
 \item{pointsize}{The default font point size to be used for plots. Defaults to 12 (1/72 inch).}
@@ -116,11 +116,11 @@ or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb
 \description{
 Draw an average plot from \code{\link{PlotSetArray}},
 \code{\link{PlotSetList}}, \code{\link{PlotSetPair}} or
-properly formated \code{\link[base]{list}} in active graphics window.
-Axes and titles, keys and other plot elements are controled by function parameters.
+properly formatted \code{\link[base]{list}} in active graphics window.
+Axes and titles, keys and other plot elements are controlled by function parameters.
 }
 \details{
-The relavent parameters passed to \code{\link[graphics]{plot.default}} funtion:
+The relavent parameters passed to \code{\link[graphics]{plot.default}} function:
 \describe{
  \item{\code{log}}{a character string which contains "x" if the x axis is to be logarithmic, "y" if the y axis is to be logarithmic and "xy" or "yx" if both axes are to be logarithmic.}
  \item{\code{ann}}{a logical value indicating whether the default annotation (title and x and y axis labels) should appear on the plot.}

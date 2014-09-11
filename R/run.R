@@ -4,7 +4,7 @@
 #' web browser with graphical user interface (GUI).
 #' 
 #' @param root the path to data directory, it will be created if not existing
-#' @param debug run the SeqPlots in debug mode, i.e. with R console embended in 
+#' @param debug run the SeqPlots in debug mode, i.e. with R console embedded in 
 #'  web interface
 #' @param ... arguments sent to \code{\link[shiny]{runApp}} function
 #' @return 

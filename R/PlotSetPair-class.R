@@ -1,7 +1,7 @@
 #' PlotSetPair Reference Class
 #'
 #' @field means numeric vector of means
-#' @field stderror numeric vector of standart errors
+#' @field stderror numeric vector of standard errors
 #' @field conint numeric vector of 95\% confidence intervals
 #' @field all_ind numeric vector giving the relative position of the bins in the genome
 #' @field numeric value giving the length of anchored distance, NULL for point feature plots
