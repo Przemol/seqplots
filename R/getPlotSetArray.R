@@ -261,7 +261,7 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
             #message("Calculeating means/stderr/95%CIs...")
             if (rm0) M[M==0] <- NA
             means 	<- colMeans(M, na.rm=TRUE) 
-            stderror<- apply(M, 2, function (n) {sd(n, na.rm=T) / sqrt( sum(!is.na(n)) )})
+            stderror<- apply(M, 2, function (n) {sd(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )})
             conint  <- apply(M, 2, function (n) {qt(0.975, sum(!is.na(n)) ) * sd(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )})
             
             #message("Exporting results...")
