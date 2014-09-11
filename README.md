@@ -5,6 +5,8 @@ SeqPlots
 
 [![Build Status](https://travis-ci.org/Przemol/seqplots.svg?branch=master)](https://travis-ci.org/Przemol/seqplots)
 
+![Examples of Seq Plots interface and outputs](https://github.com/Przemol/seqplots/wiki/img/00_IntroS.png)
+
 ## Introduction
 The SeqPlots is universal, web browser based tool for plotting
 average track signal (e.g. reads coverage) and sequence motif density over
