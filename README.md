@@ -3,6 +3,7 @@ SeqPlots
 
 > An interactive tool for visualizing track signals and sequence motif densities along genomic features using average plots and heatmaps
 
+[![Build Status](https://travis-ci.org/Przemol/seqplots.svg?branch=master)](https://travis-ci.org/Przemol/seqplots)
 
 ## Introduction
 The SeqPlots is universal, web browser based tool for plotting
