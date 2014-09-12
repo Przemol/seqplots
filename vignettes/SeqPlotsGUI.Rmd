@@ -1,13 +1,16 @@
-<!-- 
-%\VignetteIndexEntry{SeqPlots GUI vignette HTML version}
-%\VignetteEngine{knitr::knitr}
--->
-
 ---
+title: "SeqPlots GUI manual"
+author: "Przemyslaw Stempor"
+date: "September 12, 2014"
 output:
   BiocStyle::html_document:
     toc: true
 ---
+
+<!-- 
+%\VignetteIndexEntry{SeqPlots GUI manual}
+%\VignetteEngine{knitr::knitr}
+-->
 
 ```{r style, echo = FALSE, results = 'asis'}
 BiocStyle::markdown()
@@ -19,7 +22,7 @@ Welcome to **SeqPlots**
 > An interactive tool for visualizing track signals and sequence motif
 > densities along genomic features using average plots and heatmaps.
 
-![Examples of Seq Plots interfce and outputs](../inst/seqplots/www/help/img//01_01.png)
+![Examples of Seq Plots interfce and outputs](../inst/seqplots/www/help/img/01_01.png)
 
 Summary
 -------
@@ -32,19 +35,6 @@ software can be run locally on a desktop or deployed on a server and
 allows easy data sharing. SeqPlots pre-calculates and stores binary
 result matrices, allowing rapid plot generation. Plots can also be run
 in batch.
-
-Availability
-------------
-
-Standalone versions of SeqPlots are available as a Mac OS X (10.6 or
-higher) app bundle combing R, all required packages and
-scripts([subproject home]) or as an R package ([subproject home]).
-SeqPlots can also be deployed on a server using free and open sourced
-(GPL licensed) Shiny Server (https://github.com/rstudio/shiny-server),
-making it available for multiple clients. For the server version, clone
-this repo to Shiny Server application directory and set up data
-location:
-`git clone https://przemol@bitbucket.org/przemol/seqplots.git`.
 
 Key features
 ------------
@@ -61,409 +51,10 @@ Key features
 -   Implemented using Shiny R framework providing internet browser
     reactive GUI and session based connectivity (websocets)
 
-Issues and bugs
----------------
-
-Please visit [**issues tracker**](../issues) to view currently know
-issue. To report new issue/bug/feature request please click
-[**here**](../issues/new). If issue is connected to file upload please
-attach the file in the form.
-
-Source code
------------
-
-If you require code repository access, please request by email. The code
-will become public upon release. This repository contains only Shiny
-framework server code [R] and client browser code/libraries [HTML5, CSS3
-and JavaScript]. There are two derivative projects for desktop end
-users:
-
--   [SeqPlots OSX App](https://bitbucket.org/przemol/seqplots_osxapp)
--   [SeqPlots Bioconductor R package]()
-
 References
 ----------
 
 * * * * *
-
-Quick start guide
-=================
-
-1.  Start the SeqPlots. Refer to installation guides for platform
-    specific information. After successful initiation the web interface
-    should automatically open in your default web browser. If you are
-    web server user just navigate your browser to server address.
-
-    ![The SeqPlots interface in web
-    browser](../inst/seqplots/www/help/img//02_01.png "Optional title")
-
-2.  Upload some feature (BED or GFF) and track (BigWig or WIG) files.
-    They can be gzip compressed (e.g. file1.bed.gz). Press green "Add
-    files..." button or just drag and drop files into the window. The
-    ready to upload files will show up in upload window, where you
-    select user name, reference genome and optionally add some comments.
-
-    > ![File upload panel](../inst/seqplots/www/help/img//02_02.png)
-
-3.  When all is done press blue "Start upload" button. After upload and
-    processing is done the green "SUCCESS" label should show. It means
-    that file is on the registered and ready to use. Occasionally the
-    file might be mot formatted properly or chromosome names might not
-    agree with reference genome. In such case a verbose error will
-    window appears and file as labeled as "ERROR". For further
-    information please refer to [**errors
-    chapter**](Errors%20explained).
-
-    > ![File upload progress infoermation](../inst/seqplots/www/help/img//02_03.png)
-
-4.  Dismiss upload window and press blue "New plot set" button on side
-    panel. This will bring up file management window. In file management
-    window select ant least one file from "Features" tab and either one
-    or more file from "Tracks" file or sequence motif(s). The sequence
-    motifs and tracks can be processed and plotted together.
-
-    > ![File management panel](../inst/seqplots/www/help/img//02_04.png)
-
-5.  When you decided which files/motifs to plot it is time to set up the
-    processing options. You can find these in the button of plotting
-    window. For first plot you should do just fine with default options,
-    to learn more check [**this**](Running%20the%20plot-set%20jobs)
-    section.
-
-    > ![Plot set calculation options](../inst/seqplots/www/help/img//02_05.png)
-
-6.  After options are set up press blue "Run calculation" button. This
-    will dismiss the file management modal and show processing window.
-    Here you can observe the progress of the task and optionally cancel
-    it if no longer required (or you forgot to add some very important
-    file to the plot-set).
-
-    > ![Plot set calculation progress window](../inst/seqplots/www/help/img//02_06.png)
-
-7.  After some time the calculation will finish (fingers crossed,
-    without the error) and you will be able to see plot set array. In
-    here you can choose which feature-track or feature-motif pairs to
-    plot. Choose one or more checkboxes and press grey "Replot" button
-    (or RETURN from your keyboard). You can also check "Reactive
-    plotting" checkbook just next to it - it will automatically apply
-    changes to plots as soon you make them.
-
-    > ![The plot selection grid](../inst/seqplots/www/help/img//02_07.png)
-
-8.  Congratulation! Your First plot is complete, you can see the preview
-    of it on the side panel.
-
-    > ![The plot preview panel](../inst/seqplots/www/help/img//02_08.png)
-
-9.  You are able to set up labels, titles, font sizes, legends and may
-    more on side panel tabs, take a look at
-    [**this**](Viewing%20and%20manipulating%20plots) chapter.
-
-    > ![Plot settings tabs](../inst/seqplots/www/help/img//02_09.png)
-
-10. By clicking the plot preview you can enlarge it for better view.
-    When everything is ready you can get the plot as PDF bt clicking
-    green "Line plot" button just on the top of side panel.
-
-    ![Average plot example](../inst/seqplots/www/help/img//02_10.png)
-
-11. You can also visualize the signal as a heatmap. Please note that
-    heatmap plotting is possible only for single feature file or files
-    containing exactly the same number of genomic ranges (which will
-    become the rows of heat map). For heatmap you can choose to sort
-    and/or cluster it using k-means. To learn more about heatmaps click
-    (**here**).
-
-    > ![Heatmap settings tab](../inst/seqplots/www/help/img//02_11.png)
-
-12. Similarly to line plot you can grab the heatmap PDF using 'Heatmap'
-    button just on the top of side panel. Just attached to it, there is
-    small button allowing you to get cluster definitions.
-
-    ![Heatmap example](../inst/seqplots/www/help/img//02_12.png)
-
-Installation: Mac OS X app
-==========================
-
-> Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It
-> contains R binaries and packages that SeqPlost depends on.
-> Additionally, the reference sequences for *Caenorhabditis elegans* is
-> included. The sequences for other popular model organisms can be
-> downloaded using graphical user interface.
-
-**System requirements**
-
--   Mac OS X Snow Leopard (10.6) or higher
-
-Installation
-------------
-
-1.  Downaload the installation disk image from
-    http://bitbucket.org/przemol/seqplots/downloads/SeqPlots\_0.9.1.dmg
-2.  Double-click on DMG file to mount the image
-3.  Drag and drop SeqPlots.app to applications
-
-    > ![DMG image mounted in OS X](../inst/seqplots/www/help/img//03_01.png)
-
-Usage
------
-
-After starting SeqPlots the welcome screen displaying software version,
-currently installed genomes and data folder location would appear.
-
-> ![SeqPlots Mac OS X bindle - the welcome screen](../inst/seqplots/www/help/img//03_02.png)
-
-This screen allows you to set up following options:
-
--   Change your data location folder (by default your home directory
-    will be used)
--   Install new genomes. Using this option requires Internet connection.
-    Corresponding genome packages are required before uploading the
-    files for plotting. Full list of supported genomes is available
-    here:
-    http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
-
-    > ![Genomic packages installer window](../inst/seqplots/www/help/img//03_03.png)
-
-Press **`START`** button to initiate SeqPlots. If initiation was
-successful the user interface should open in your default web browser.
-
-For further usage please refer to [quick start guide](Quick%20start) or
-specific chapters of [documentation](..).
-
-The window in the background allows you to asses if SeqPlots is running
-properly and exit the application at any moment.
-
-> ![SeqPlots Mac OS X bindle - the diagnostic window](../inst/seqplots/www/help/img//03_04.png)
-
-The "moving" animation progress bar indicates that SeqPlots is running.
-Press "Cancel" to stop it. Pressing "Details" will reveal small text
-window that displays diagnostic and error messages.
-
-The package content
--------------------
-
--   Platypus (http://www.sveinbjorn.org/platypus) wrapper
--   R (http://www.r-project.org/) branch 3.1 for Snow leopard
-    (http://r.research.att.com/snowleopard/R-3.1-branch/R-3.1-branch-snowleopard-sa-x86\_64.tar.gz)
--   SeqPlots dependency packages (including Shiny, rtracklayer and
-    BSgenome)
--   Full genome sequences for Caenorhabditis elegans (UCSC version ce10)
-    - BSgenome.Celegans.UCSC.ce10 R package
--   SeqPlots package
-
-Installation: R package
-=======================
-
-> R package is the best way to use SeqPlots on desktop computers when
-> operating system is Windows or Linux. It is also the recommended
-> method for R users Mac OS X.
-
-**System requirements:**
-
--   R 3.1 or higher
-
-Installation
-------------
-
-To install SeqPlots package, start R and enter:
-
-``` {.r}
-source("http://bioconductor.org/biocLite.R")
-biocLite("SeqPlots")
-```
-
-To install SeqPlots development package, start R and enter:
-
-``` {.r}
-install.packages('devtools')
-devtools::install_bitbucket(repo='SeqPlots_Rpackage', username='przemol', 
-auth_user=readline('User?> '), password=readline('Password?> '), dependencies="Depends")
-```
-
-Usage
------
-
-From R prompt run:
-
-``` {.r}
-library(seqplots)
-seqplots()
-```
-
-After a successful initiation the user interface will be opened in your
-default web browser. For further usage please refer to [quick start
-guide](Quick%20start) or specific chapters of [documentation](..).
-
-The `seqplots` function accepts "root" argument, which allows to change
-the data location folder (by default your home directory will be used),
-e.g.:
-
-``` {.r}
-seqplots(root='/path/to/data/location')
-```
-
-### Additional genome packages
-
-Genomic packages can be installed using standard bioconductor installer
-(Internet connection required). For example, to instal human reference
-genome (hg19):
-
-``` {.r}
-source("http://bioconductor.org/biocLite.R")
-biocLite("BSgenome.Hsapiens.UCSC.hg19")
-```
-
-Corresponding genome packages are required before uploading the files
-for plotting. Full list of supported genomes is avilable here:
-http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
-
-Installation: Deployment on the server
-======================================
-
-> The server version is designed to be used by advanced users, who would
-> like to provide shared SeqPlots service to a group of people.
-
-**System requirements:**
-
--   R 3.1 or higher
--   Shiny Server 1.0 or higher
-
-Installation
-------------
-
-1\. Install and configure the Shiny Server by following the instructions
-on https://github.com/rstudio/shiny-server
-
-2\. Install SeqPlots R package and dependences by following the
-instruction [here](Installation%20-%20R%20package)
-
-3\. Copy SeqPlots files to Shiny Server application folder:
-
-``` {.bash}
-cp -r $(Rscript -e "cat(system.file('seqplots', package='seqplots'))") /srv/shiny-server/
-```
-
-4\. Set up SeqPlots **data location** by running from R:
-
-``` {.r}
-seqplots(root='/path/to/data/location')
-```
-
-5\. Edit first line of `/srv/shiny-server/shiny/server_config.R`, so the
-environment variable `root` matches the **data location**; for example:
-
-``` {.r}
-Sys.setenv('root'='/var/shiny-server/DATA')
-```
-
-Usage
------
-
-After successful installation the SeqPlost web GUI will be available at
-`your_server_name:3838/seqplots/`.
-
-For further usage please refer to [quick start guide](Quick%20start) or
-specific chapters of [documentation](..).
-
-### Additional genome packages
-
-Genomic packages can be installed using standard bioconductor installer
-(Internet connection required). For example, to instal human reference
-genome (hg19):
-
-``` {.r}
-source("http://bioconductor.org/biocLite.R")
-biocLite("BSgenome.Hsapiens.UCSC.hg19")
-```
-
-Corresponding genome packages are required before uploading the files
-for plotting. Full list of supported genomes is avilable here:
-http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
-
-Alternative installation
-------------------------
-
-SeqPlots can be directly cloned into Shiny Server application folder
-from git repository by using
-`git clone https://przemol@bitbucket.org/przemol/seqplots.git`. The data
-location can be set up with following R code:
-
-``` {.r}
-root <- /data/location
-dir.create(root)
-setwd(root)
-require(RSQLite)
-sqlite <- dbDriver("SQLite")
-con <- dbConnect(sqlite, dbname = "files.sqlite")
-dbGetQuery(con, "CREATE TABLE files (id INTEGER PRIMARY KEY ASC, name TEXT UNIQUE, 
-  ctime TEXT, type TEXT, format TEXT, genome TEXT, user TEXT, comment TEXT)")
-if (!dbListTables(con) == "files") 
-    warning("Database not created!")
-dbDisconnect(con)
-if (!all(sapply(c("removedFiles", "files", "publicFiles", "tmp"), dir.create))) 
-    warning("Folders not created!")
-message("\nData loaction: ", root)
-```
-
-The following dependencies must be installed in R:
-
-                  package  version
-    1              shiny   0.10.0
-    2             fields      7.1
-    3           parallel    3.1.0
-    4          multicore      0.2
-    5           BSgenome   1.32.0
-    6      GenomicRanges   1.16.3
-    7            plotrix    3.5-7
-    8        rtracklayer   1.24.2
-    9            RJSONIO  1.2-0.2
-    10           RSQLite   0.11.4
-    11           kohonen   2.0.14
-    12             Cairo    1.5-5
-    13            digest    0.6.4
-    14           methods    3.1.0
-    15             tools    3.1.0
-    16             utils    3.1.0
-    17            httpuv    1.3.0
-    18           caTools     1.17
-    19            xtable    1.7-3
-    20         htmltools    0.2.4
-    21            bitops    1.0-6
-    22              Rcpp   0.11.2
-    23              spam   0.41-0
-    24              maps    2.3-7
-    25              grid    3.1.0
-    26         grDevices    3.1.0
-    27      BiocGenerics   0.10.0
-    28           IRanges   1.22.9
-    29        Biostrings   2.32.0
-    30           XVector    0.4.0
-    31         Rsamtools   1.16.1
-    32          graphics    3.1.0
-    33             stats    3.1.0
-    34          zlibbioc   1.10.0
-    35      GenomeInfoDb    1.0.2
-    36            stats4    3.1.0
-    37               XML 3.98-1.1
-    38             RCurl 1.95-4.1
-    39 GenomicAlignments    1.0.1
-    40      BiocParallel    0.6.1
-    41           foreach    1.4.2
-    42         BatchJobs      1.2
-    43            BBmisc      1.7
-    44               DBI    0.2-7
-    45         sendmailR    1.1-2
-    46              brew    1.0-6
-    47              plyr    1.8.1
-    48           stringr    0.6.2
-    49              fail      1.2
-    50         checkmate      1.0
-    51         codetools    0.2-8
-    52         iterators    1.0.7
-    53         base64enc    0.1-1
-    54             class   7.3-10
-    55              MASS   7.3-33
 
 Adding and managing files
 =========================
@@ -666,8 +257,8 @@ reffer to error section for further information.
 
 > ![The plot array](../inst/seqplots/www/help/img//06/06_04.png)
 
-Plotting
-========
+<a name='Plotting'></a>Plotting
+===============================
 
 > This section focuses on average (line) plots and options common
 > between these and heatmaps. For heatmap options please refer to
@@ -1166,8 +757,8 @@ Some additional SeqPlots options can be located at very bottom of
     console. Also might increase the performance for plotting small
     average plots. Turned off by default.
 
-Error messages
-==============
+<a name='Errors'></a>Error messages
+===================================
 
 Adding the files:
 -----------------
@@ -1271,7 +862,7 @@ SeqPlots v0.8.2b
 ##### GENERAL:
 
 -   JS color picker added for browsers, that do not support
-    <select type="color"> i.e. Firefox (checked with modernizr.js
+    select type="color" i.e. Firefox (checked with modernizr.js
     library)
 -   Single process mode and Microsoft Windows compatibility (running
     without fork parallelization)
