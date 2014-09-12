@@ -153,98 +153,62 @@ References
 Quick start guide
 =================
 
-1.  Start the SeqPlots. Refer to installation guides for platform
-    specific information. After successful initiation the web interface
-    should automatically open in your default web browser. If you are
-    web server user just navigate your browser to server address.
+1. Start the SeqPlots. Refer to installation guides for platform specific information. After successful initiation the web interface should automatically open in your default web browser. If you are web server user just navigate your browser to server address.
 
-    ![The SeqPlots interface in web
-    browser](img/02_01.png "Optional title")
+    ![The SeqPlots interface in web browser](img/01_QuickStart/01_QuickStart_01.png)
 
-2.  Upload some feature (BED or GFF) and track (BigWig or WIG) files.
-    They can be gzip compressed (e.g. file1.bed.gz). Press green "Add
-    files..." button or just drag and drop files into the window. The
-    ready to upload files will show up in upload window, where you
-    select user name, reference genome and optionally add some comments.
+2. Upload some feature (BED or GFF) and track (BigWig or WIG) files. They can be gzip compressed (e.g. file1.bed.gz). Press green "Add files..." button or just drag and drop files into the window. The ready to upload files will show up in upload window, where you select user name, reference genome and optionally add some comments.
 
-    > ![File upload panel](img/02_02.png)
+    ![File upload panel](img/01_QuickStart/01_QuickStart_02.png)
 
-3.  When all is done press blue "Start upload" button. After upload and
-    processing is done the green "SUCCESS" label should show. It means
-    that file is on the registered and ready to use. Occasionally the
-    file might be mot formatted properly or chromosome names might not
-    agree with reference genome. In such case a verbose error will
-    window appears and file as labeled as "ERROR". For further
-    information please refer to [**errors
-    chapter**](Errors%20explained).
+3. When all is done press blue "Start upload" button. After upload and processing is done the green "SUCCESS" label should show. It means that file is on the registered and ready to use. Occasionally the file might be mot formatted properly or chromosome names might not agree with reference genome. In such case a verbose error will window appears and file as labeled as "ERROR". For further information please refer to [**errors chapter**](Errors).
+    
+    ![File upload progress infoermation](img/01_QuickStart/01_QuickStart_03.png) 
 
-    > ![File upload progress infoermation](img/02_03.png)
 
-4.  Dismiss upload window and press blue "New plot set" button on side
-    panel. This will bring up file management window. In file management
-    window select ant least one file from "Features" tab and either one
-    or more file from "Tracks" file or sequence motif(s). The sequence
-    motifs and tracks can be processed and plotted together.
+4. Dismiss upload window and press blue "New plot set" button on side panel. This will bring up file management window. In file management window select at least one file from "Features" tab and either one or more file from "Tracks" file or sequence motif(s). The sequence motifs and tracks can be processed and plotted together.
+    
+    ![File management panel](img/01_QuickStart/01_QuickStart_04.png) 
 
-    > ![File management panel](img/02_04.png)
 
-5.  When you decided which files/motifs to plot it is time to set up the
-    processing options. You can find these in the button of plotting
-    window. For first plot you should do just fine with default options,
-    to learn more check [**this**](Running%20the%20plot-set%20jobs)
-    section.
+5. When you decided which files/motifs to plot it is time to set up the processing options. You can find these in the button of plotting window. For first plot you should do just fine with default options, to learn more check [**this**](Running the plot-set jobs) section.
+    
+    ![Plot set calculation options](img/01_QuickStart/01_QuickStart_05.png)
 
-    > ![Plot set calculation options](img/02_05.png)
 
-6.  After options are set up press blue "Run calculation" button. This
-    will dismiss the file management modal and show processing window.
-    Here you can observe the progress of the task and optionally cancel
-    it if no longer required (or you forgot to add some very important
-    file to the plot-set).
+6. After options are set up press blue "Run calculation" button. This will dismiss the file management window and show processing message. Here you can observe the progress of the task and optionally cancel it if no longer required or you forgot to add some very important file to the plot-set (cancel available only in multi process mode).
+    
+    ![Plot set calculation progress window](img/01_QuickStart/01_QuickStart_06.png)
 
-    > ![Plot set calculation progress window](img/02_06.png)
 
-7.  After some time the calculation will finish (fingers crossed,
-    without the error) and you will be able to see plot set array. In
-    here you can choose which feature-track or feature-motif pairs to
-    plot. Choose one or more checkboxes and press grey "Replot" button
-    (or RETURN from your keyboard). You can also check "Reactive
-    plotting" checkbook just next to it - it will automatically apply
-    changes to plots as soon you make them.
+7. After some time the calculation will finish (fingers crossed, without the error) and you will be able to see plot set array. In here you can choose which feature-track or feature-motif pairs to plot. Choose one or more checkboxes and press grey "Line plot" button (or hit RETURN from your keyboard). You can also check "Reactive plotting" checkbook in the bottom of "Batch operations and setup" tab - it will automatically apply changes to plots as soon as you changed any plot-related option.
+    
+    ![The plot selection grid](img/01_QuickStart/01_QuickStart_07.png)
 
-    > ![The plot selection grid](img/02_07.png)
 
-8.  Congratulation! Your First plot is complete, you can see the preview
-    of it on the side panel.
+8. Congratulation! Your First plot is complete, you can see the preview of it on the side panel.
+    
+    ![The plot preview panel](img/01_QuickStart/01_QuickStart_08.png)
 
-    > ![The plot preview panel](img/02_08.png)
 
-9.  You are able to set up labels, titles, font sizes, legends and may
-    more on side panel tabs, take a look at
-    [**this**](Viewing%20and%20manipulating%20plots) chapter.
+9. You are able to set up labels, titles, font sizes, legends and many more on side panel tabs, take a look at [**this**](Plotting) chapter.
+    
+    ![Plot settings tabs](img/01_QuickStart/01_QuickStart_09.png)
 
-    > ![Plot settings tabs](img/02_09.png)
+10. By clicking the plot preview you can enlarge it for better view. When everything is ready you can get the plot as PDF by clicking green "Line plot" button just on the top of side panel.
 
-10. By clicking the plot preview you can enlarge it for better view.
-    When everything is ready you can get the plot as PDF bt clicking
-    green "Line plot" button just on the top of side panel.
+    ![Average plot example](img/01_QuickStart/01_QuickStart_10.png)
 
-    ![Average plot example](img/02_10.png)
 
-11. You can also visualize the signal as a heatmap. Please note that
-    heatmap plotting is possible only for single feature file or files
-    containing exactly the same number of genomic ranges (which will
-    become the rows of heat map). For heatmap you can choose to sort
-    and/or cluster it using k-means. To learn more about heatmaps click
-    (**here**).
+11. You can also visualize the signal as a heatmap. Please note that heatmap plotting is possible only for single feature file or files containing exactly the same number of genomic ranges (which will become the rows of heat map). For heatmap you can choose to sort and/or cluster it using k-means. To learn more about heatmaps click [**here**](Heatmaps).
+    
+    ![Heatmap settings tab](img/01_QuickStart/01_QuickStart_11.png)
 
-    > ![Heatmap settings tab](img/02_11.png)
+12. Similarly to line plot you can grab the heatmap PDF using 'Heatmap' button just on the top of side panel.
+Just attached to it, there is small button allowing you to get cluster definitions.
 
-12. Similarly to line plot you can grab the heatmap PDF using 'Heatmap'
-    button just on the top of side panel. Just attached to it, there is
-    small button allowing you to get cluster definitions.
+    ![Heatmap example](img/01_QuickStart/01_QuickStart_12.png)
 
-    ![Heatmap example](img/02_12.png)
 
 Installation: Mac OS X app
 ==========================
@@ -1446,12 +1410,12 @@ Explanations
     </a>
 
     <ul class="nav">
-      <li><a href="SeqPlots.pdf">PDF documentation</a></li>
-      <li><a href="http://bitbucket.org/przemol/seqplots/wiki/Home">Project home</a></li>
-      <li><a href="http://bitbucket.org/przemol/seqplots/issues?status=new&status=open">Known issues</a></li>
-      <li><a href="http://bitbucket.org/przemol/seqplots/issues/new">Report an issue</a></li>
-      <li><a href="http://bitbucket.org/przemol/seqplots/downloads">Downloads</a></li>
-      <li><a href="http://bitbucket.org/przemol/seqplots/src">Source code</a></li>
+      <li><a href="http://przemol.github.io/seqplots/SeqPlots.pdf">PDF documentation</a></li>
+      <li><a href="https://github.com/Przemol/seqplots">Project home</a></li>
+      <li><a href="https://github.com/Przemol/seqplots/issues">Known issues</a></li>
+      <li><a href="https://github.com/Przemol/seqplots/issues/new">Report an issue</a></li>
+      <li><a href="https://github.com/Przemol/seqplots/releases">Downloads</a></li>
+      <li><a href="https://github.com/Przemol/seqplots/wiki">Wiki pages</a></li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select theme<b class="caret"></b></a>
         <ul class="dropdown-menu">
