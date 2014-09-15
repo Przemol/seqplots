@@ -17,6 +17,10 @@ install:
 
 script: ./travis-tool.sh run_tests
 
+after_script:
+  - FILE=$(ls -1t *.tar.gz | head -n 1)
+  - R CMD BiocCheck \"${FILE}\"
+
 on_failure:
   - ./travis-tool.sh dump_logs
 
