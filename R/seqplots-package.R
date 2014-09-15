@@ -2,34 +2,47 @@
 #' @name seqplots
 #' 
 #' @title 
-#' SeqPlots - An interactive tool for visualizing track signals and sequence 
+#' SeqPlots - An interactive tool for visualizing NGS signals and sequence 
 #' motif densities along genomic features using average plots and heatmaps.
 #' 
 #' @description
-#' SeqPlots is a web browser tool for plotting average track signals (e.g. read 
-#' coverage) and sequence motif densities over user specified genomic features. 
-#' The data can be visualized in linear plots with error estimates or as series 
-#' of heatmaps that can be sorted and clustered. The software can be run locally 
-#' on a desktop or deployed on a server and allows easy data sharing. SeqPlots 
-#' pre-calculates and stores binary result matrices, allowing rapid plot 
-#' generation. Plots can also be run in batch.
+#' SeqPlots is a tool for plotting next generation sequencing (NGS) based 
+#' experiments' signal tracks, e.g. reads coverage from ChIP-seq, RNA-seq 
+#' and DNA accessibility assays like DNase-seq and MNase-seq, over user 
+#' specified genomic features, e.g. promoters, gene bodies, etc. It can 
+#' also calculate sequence motif density profiles from reference genome. 
+#' The data are visualized as average signal profile plot, with error estimates 
+#' (standard error and 95% confidence interval) shown as fields, or as series 
+#' of heatmaps that can be sorted and clustered using hierarchical clustering, 
+#' k-means algorithm and self organising maps. Plots can be prepared using R 
+#' programming language or web browser based graphical user interface (GUI) 
+#' implemented using Shiny framework. The dual-purpose implementation allows 
+#' running the software locally on desktop or deploying it on server. 
+#' SeqPlots is useful for both for exploratory data analyses and preparing 
+#' replicable, publication quality plots. Other features of the software 
+#' include collaboration and data sharing capabilities, as well as ability 
+#' to store pre-calculated result matrixes, that combine many sequencing 
+#' experiments and in-silico generated tracks with multiple different features. 
+#' These binaries can be further used to generate new combination plots on fly, 
+#' run automated batch operations or share with colleagues, who can adjust 
+#' their plotting parameters without loading actual tracks and recalculating 
+#' numeric values. SeqPlots relays on Bioconductor packages, mainly on 
+#' rtracklayer for data input and BSgenome packages for reference genome 
+#' sequence and annotations.
 #' 
 #' @references https://github.com/Przemol/seqplots
 #' @author Przemyslaw Stempor
 #' 
 #' @keywords CHiP-seq genomics plotting sequencing
 #' 
-#' @import digest rtracklayer GenomicRanges BSgenome Biostrings IRanges methods GenomeInfoDb
+#' @import rtracklayer GenomicRanges BSgenome Biostrings IRanges GenomeInfoDb
 #' @import DBI RSQLite parallel RJSONIO Cairo
-#' @import grid methods
-#' @importFrom fields image.plot set.panel imageplot.info imageplot.setup tim.colors poly.image
+#' @import grid methods digest methods
+#' @importFrom fields image.plot set.panel imageplot.info imageplot.setup 
+#' tim.colors poly.image
 #' @importFrom kohonen supersom
 #' @importFrom plotrix dispersion
 #' @importFrom shiny runApp
 #' @importFrom class somgrid
 #' @importFrom S4Vectors recycleIntegerArg
 NULL
-
-#importClassesFrom does not work with 
-#@importClassesFrom BiocGenerics connection file url gzfile bzfile unz pipe sockconn terminal textConnection gzcon characterORconnection
-#@importFrom rtracklayer import export BigWigFile summary SeqinfoForBSGenome wigToBigWig
