@@ -2,6 +2,10 @@
 
 language: c
 
+env:
+  global:
+    - BIOC_USE_DEVEL="TRUE"
+
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
@@ -9,7 +13,6 @@ before_install:
 
 install:
   - ./travis-tool.sh bioc_install BiocInstaller
-  - Rscript -e 'library(BiocInstaller); useDevel();'
   - ./travis-tool.sh bioc_install IRanges BSgenome Rsamtools rtracklayer GenomicRanges Biostrings GenomeInfoDb BiocStyle
   - ./travis-tool.sh install_deps
 
