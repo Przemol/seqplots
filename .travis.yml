@@ -18,6 +18,7 @@ script: ./travis-tool.sh run_tests
 
 after_script:
   - FILE=$(ls -1t *.tar.gz | head -n 1)
+  - ./travis-tool.sh install_bioc BiocCheck
   - Rscript -e "library(BiocCheck); BiocCheck(\"${FILE}\")"
   - R CMD BiocCheck \"${FILE}\"
 
