@@ -19,7 +19,7 @@ BiocStyle::markdown()
 Welcome to **SeqPlots**
 =======================
 
-> An interactive tool for visualizing track signals and sequence motif
+> SeqPlots - An interactive tool for visualizing NGS signals and sequence motif 
 > densities along genomic features using average plots and heatmaps.
 
 ![Examples of Seq Plots interfce and outputs](../inst/seqplots/www/help/img/01_01.png)
@@ -54,7 +54,39 @@ Key features
 References
 ----------
 
-* * * * *
+**R project and Bioconductor:**
+-   R Core Team (2014). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL http://www.R-project.org/.
+-   Bioconductor: Open software development for computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others 2004, Genome Biology, Vol. 5, R80.  URL http://www.bioconductor.org/.
+- RStudio and Inc. (2014). shiny: Web Application Framework for R. R package version 0.10.1. http://CRAN.R-project.org/package=shiny
+- Other CRAN packages: digest, DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, Cairo, parallel
+- Bioconductor packages: IRanges, BSgenome, Rsamtools, rtracklayer, GenomicRanges and Biostrings 
+
+**JavaScript and CSS**
+- jQuery framework - http://jquery.com
+- Bootstrap - http://getbootstrap.com
+- DataTables, Table plug-in for jQuery - http://www.datatables.net
+- jQuery File Upload Plugin - https://github.com/blueimp/jQuery-File-Upload
+- jQuery throttle - http://benalman.com/projects/jquery-throttle-debounce-plugin/
+- jQuery Cookie Plugin - https://github.com/carhartl/jquery-cookie
+- Modernizer JS library - http://modernizr.com
+- JavaScript Templates - https://github.com/blueimp/JavaScript-Templates
+- JavaScript Color Picker - http://jscolor.com
+- md5-js - https://github.com/wbond/md5-js
+- Font Awesome - http://fortawesome.github.io/Font-Awesome
+- Google Fonts - https://www.google.com/fonts
+- jQuery user interface - http://jqueryui.com (documentation)
+- jquery.tocify.js: jQuery Table of Contents - https://github.com/gfranko/jquery.tocify.js (documentation)
+- Strapdown https://github.com/arturadib/strapdown (documentation)
+- Bootswatch themes - http://bootswatch.com (documentation)
+- google-code-prettify - https://code.google.com/p/google-code-prettify (documentation)
+- marked - https://github.com/chjj/marked (documentation)
+
+**Server deployment**
+- Shiny Server - https://github.com/rstudio/shiny-server
+- ShinyApps - https://github.com/rstudio/shinyapps
+
+**Publications using SeqPlots**
+- Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J. [Extreme HOT regions are CpG-dense promoters in C. elegans and humans.](http://www.ncbi.nlm.nih.gov/pubmed/24653213) Genome Res 24(7):1138-1146 Jul 2014
 
 Adding and managing files
 =========================
