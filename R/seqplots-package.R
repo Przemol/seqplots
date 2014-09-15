@@ -27,6 +27,7 @@
 #' @importFrom plotrix dispersion
 #' @importFrom shiny runApp
 #' @importFrom class somgrid
+#' @importFrom S4Vectors recycleIntegerArg
 NULL
 
 #importClassesFrom does not work with 

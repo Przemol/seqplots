@@ -39,7 +39,8 @@ Imports:
     Cairo,
     parallel,
     GenomeInfoDb,
-    class
+    class,
+    S4Vectors
 Type: Package
 Date: 2014-4-10
 LazyLoad: yes

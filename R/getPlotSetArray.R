@@ -161,9 +161,9 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
     
     extarct_matrix <- function(track, gr, size, ignore_strand) {
         sum <- .Call('BWGFile_summary', path.expand(path(track)),
-                     as.character(seqnames(gr)),
-                     ranges(gr), recycleIntegerArg(size, "size", length(gr)), "mean",
-                     as.numeric(NA_real_), PACKAGE='rtracklayer')
+                     as.character(seqnames(gr)), ranges(gr), 
+                     S4Vectors::recycleIntegerArg(size, "size", length(gr)), 
+                     "mean", as.numeric(NA_real_), PACKAGE='rtracklayer')
         M <- do.call( rbind, sum )
         if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
         return(M)
