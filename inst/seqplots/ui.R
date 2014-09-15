@@ -49,15 +49,11 @@ shinyUI(
 						singleton(tags$script(src = "js/jquery.cookie.js")),
 						singleton(tags$script(src = "color/jscolor.js")),
 						## DataTable libraries
-						#singleton(tags$script(src = "js/jquery.dataTables.js")),
 						singleton(tags$script(src = "js/DataTables/jquery.dataTables.js")),
 						singleton(tags$script(src = "js/DataTables/DT_bootstrap.js")),
-						#singleton(tags$script(src = "http://cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/3/dataTables.bootstrap.js")),
-						#singleton(tags$script(src = "js/TableTools.min.js")),
 						singleton(tags$script(src = "js/DataTables/dataTables.tableTools.min.js")),
 						singleton(tags$script(src = "js/DataTables/DT_filter.js")),
 						
-						#singleton(tags$script(src = "js/dataTables.scroller.min.js")),
 						## My scripts
 						singleton(tags$script(src = "js/color.js")),
 						singleton(tags$script(src = "js/js_addons.js")),
