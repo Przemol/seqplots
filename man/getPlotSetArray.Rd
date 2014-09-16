@@ -134,9 +134,12 @@ class, which can be further subsisted, and used for plotting.
 }
 \examples{
 # Get the paths of example files
-bed1 <- system.file("extdata", "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
-bed2 <- system.file("extdata", "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
-bw1 <- system.file("extdata", "GSM1208360_chrI_100Kb_q5_sample.bw", package="seqplots")
+bed1 <- system.file("extdata",
+     "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
+bed2 <- system.file("extdata",
+     "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
+bw1 <- system.file("extdata",
+     "GSM1208360_chrI_100Kb_q5_sample.bw", package="seqplots")
 
 #If required install C. elegans genomic package from Bioconductor
 if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
@@ -145,7 +148,12 @@ if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
 }
 
 #Get getPlotSetArray for track and feature files
-plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
+#Does not work on Windows i386 (32 bit)
+if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
+    plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
+} else {
+    load(system.file("extdata", "precalc_plotset.Rdata", package="seqplots"))
+}
 plot(plotset1) #Average plot
 plot(plotset1[1,], what='h') #Heatmap
 
@@ -155,8 +163,9 @@ ms <- MotifSetup()
 ms$addMotif('GAGA')
 ms$addMotif('TATA')
 ms$addBigWig(bw1)
-
-plotset2 <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
+if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
+     plotset2 <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
+}
 plot(plotset2) #Average plot
 plot(plotset2[1,], what='h') #Heatmap
 }

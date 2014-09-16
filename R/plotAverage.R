@@ -79,7 +79,12 @@
 #' }
 #' 
 #' #Get getPlotSetArray for track and feature files
-#' plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
+#' if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
+#'     plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
+#' } else {
+#'     load(system.file("extdata", "precalc_plotset.Rdata", package="seqplots"))
+#' }
+#' 
 #' plotAverage(plotset1) # equivalent to plot(plotset1) or plotset1$plot()
 #' 
 #' 
