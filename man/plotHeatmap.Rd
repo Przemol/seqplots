@@ -9,94 +9,101 @@
 \title{Plot heatmap with optional clustering}
 \usage{
 plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
-  keepratio = FALSE, ord = 1:length(plotset), plotScale = "no",
-  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
-  include = rep(TRUE, length(plotset)), ssomt1 = 2L, ssomt2 = 2L,
-  cex.main = 16, cex.lab = 12, cex.axis = 12, cex.legend = 12,
-  xlab = "", ylab = "", autoscale = TRUE, zmin = 0, zmax = 10,
-  xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE, o_min = NA,
-  o_max = NA, colvec = NULL, colorspace = NULL, pointsize = 12, ...)
+  keepratio = FALSE, ord = NULL, plotScale = "no", sortrows = FALSE,
+  clusters = 5L, clstmethod = "kmeans", include = NULL, ssomt1 = 2L,
+  ssomt2 = 2L, cex.main = 16, cex.lab = 12, cex.axis = 12,
+  cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
+  zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
+  o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
+  pointsize = 12, ...)
 
 \S4method{plotHeatmap}{list}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  plotScale = "no", sortrows = FALSE, clusters = 5L,
-  clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
-  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, cex.lab = 12,
-  cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
+  legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
+  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
+  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
+  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
   autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
   s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  colorspace = NULL, pointsize = 12, ...)
+  clspace = NULL, pointsize = 12, ...)
 
 \S4method{plotHeatmap}{PlotSetPair}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  plotScale = "no", sortrows = FALSE, clusters = 5L,
-  clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
-  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, cex.lab = 12,
-  cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
+  legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
+  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
+  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
+  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
   autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
   s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  colorspace = NULL, pointsize = 12, ...)
+  clspace = NULL, pointsize = 12, ...)
 
 \S4method{plotHeatmap}{PlotSetList}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  plotScale = "no", sortrows = FALSE, clusters = 5L,
-  clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
-  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, cex.lab = 12,
-  cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
+  legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
+  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
+  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
+  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
   autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
   s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  colorspace = NULL, pointsize = 12, ...)
+  clspace = NULL, pointsize = 12, ...)
 
 \S4method{plotHeatmap}{PlotSetArray}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = 1:length(plotset),
-  plotScale = "no", sortrows = FALSE, clusters = 5L,
-  clstmethod = "kmeans", include = rep(TRUE, length(plotset)),
-  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, cex.lab = 12,
-  cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
+  legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
+  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
+  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
+  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
   autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
   s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  colorspace = NULL, pointsize = 12, ...)
+  clspace = NULL, pointsize = 12, ...)
 }
 \arguments{
 \item{plotset}{The dataset to plot - can be \code{\link{PlotSetArray}},
-\code{\link{PlotSetList}}, \code{\link{PlotSetPair}} or
-properly formatted \code{\link[base]{list}}}
+\code{\link{PlotSetList}}, \code{\link{PlotSetPair}} or properly formatted
+\code{\link[base]{list}}}
 
-\item{main}{The main title of the plot, shown in top-centre part of the figure; defaults to NULL (not visible)}
+\item{main}{The main title of the plot, shown in top-centre part of the
+figure; defaults to NULL (not visible)}
 
-\item{labels}{The character vector giving sub-titles of heatmaps (plotted over the heatmap and below the main title).
-The defaults NULL value indicates that feature/track file names will be used to generate the sub-titles.}
+\item{labels}{The character vector giving sub-titles of heatmaps (plotted
+over the heatmap and below the main title). The defaults NULL value
+indicates that feature/track file names will be used to generate the
+sub-titles.}
 
 \item{legend}{if TRUE plot the colour key}
 
-\item{keepratio}{If TRUE keep 1:1 aspect ratio of the figure; defaults to FALSE}
+\item{keepratio}{If TRUE keep 1:1 aspect ratio of the figure; defaults to
+FALSE}
 
 \item{ord}{The numeric vector determining the plotting order of experiments.
-The heatmap representing feature-track pair with the highest priority will be
-plotted leftmost. If NULL (default) the order established in \code{plotset} is used.}
+The heatmap representing feature-track pair with the highest priority will
+be plotted leftmost. If NULL (default) the order established in
+\code{plotset} is used.}
 
-\item{plotScale}{scale the available data before plotting, can be "linear" (do not scale, default), "log2" or "zscore"}
+\item{plotScale}{scale the available data before plotting, can be "linear"
+(do not scale, default), "log2" or "zscore"}
 
 \item{sortrows}{If TRUE the rows of heatmap will be sorted by mean value
 across all heatmaps, defaults to FALSE}
 
-\item{clusters}{The number of cluster for "kmeans" and "hclust", ignored for "ssom", defaults to 5L}
+\item{clusters}{The number of cluster for "kmeans" and "hclust", ignored for
+"ssom", defaults to 5L}
 
-\item{clstmethod}{Determines the heatmap clustering algorithm "kmeans" for k-means (default, see \code{\link[stats]{kmeans}}),
-"hclust" (see \code{\link[stats]{hclust}}) for hierarchical clustering, "ssom" for
-(super) self organising map (see \code{\link[kohonen]{supersom}}) with torus topology and "none"
-of FALSE to turn off the clustering}
+\item{clstmethod}{Determines the heatmap clustering algorithm "kmeans" for
+k-means (default, see \code{\link[stats]{kmeans}}), "hclust" (see
+\code{\link[stats]{hclust}}) for hierarchical clustering, "ssom" for
+(super) self organising map (see \code{\link[kohonen]{supersom}}) with
+torus topology and "none" of FALSE to turn off the clustering}
 
-\item{include}{The logical vector indicating if given subplot should influence
-clustering and sorting, if given element is FALSE the sub-heatmap will be still plotted,
-and the order of data rows will be determined by clustering/sorting other sub-heatmaps,
-defaults to \code{rep(TRUE, length(plotset))}}
+\item{include}{The logical vector indicating if given subplot should
+influence clustering and sorting, if given element is FALSE the sub-heatmap
+will be still plotted, and the order of data rows will be determined by
+clustering/sorting other sub-heatmaps, defaults to NULL, which incluses all
+- equivalent to \code{rep(TRUE, length(plotset))}}
 
-\item{ssomt1}{Determines , the dimensionality of SOM - number of neurons in 1st dimension,
-number of resulting clusters equals ssomt1*ssomt2, defaults to 2L}
+\item{ssomt1}{Determines , the dimensionality of SOM - number of neurons in
+1st dimension, number of resulting clusters equals ssomt1*ssomt2, defaults
+to 2L}
 
-\item{ssomt2}{Determines , the dimensionality of SOM - number of neurons in 2st dimension,
-number of resulting clusters equals ssomt1*ssomt2, defaults to 2L}
+\item{ssomt2}{Determines , the dimensionality of SOM - number of neurons in
+2st dimension, number of resulting clusters equals ssomt1*ssomt2, defaults
+to 2L}
 
 \item{cex.main}{Main title font size in points, defaults to 16}
 
@@ -112,46 +119,56 @@ number of resulting clusters equals ssomt1*ssomt2, defaults to 2L}
 
 \item{autoscale}{if TRUE the colour keys will be auto scaled}
 
-\item{zmin}{global minimum value on colour key, ignored if \code{autoscale} is TRUE}
+\item{zmin}{global minimum value on colour key, ignored if \code{autoscale}
+is TRUE}
 
-\item{zmax}{global maximum value on colour key, ignored if \code{autoscale} is TRUE}
+\item{zmax}{global maximum value on colour key, ignored if \code{autoscale}
+is TRUE}
 
-\item{xlim}{the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a "reversed axis".
-The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.}
+\item{xlim}{the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed
+and leads to a "reversed axis". The default value, NULL, indicates that the
+whole range present in \code{plotset} will be plotted.}
 
-\item{ln.v}{Determins if vertical guide line(s) should be plotted (TRUE) or ommitted (FALSE).
-For anchored plots 2 lines indicating the start and end of anchored distance are plotted.}
+\item{ln.v}{Determins if vertical guide line(s) should be plotted (TRUE) or
+ommitted (FALSE). For anchored plots 2 lines indicating the start and end
+of anchored distance are plotted.}
 
-\item{s}{The saturation value used to auto scale colour key limits, defaults to 0.01}
+\item{s}{The saturation value used to auto scale colour key limits, defaults
+to 0.01}
 
-\item{indi}{If TRUE (defaults) the independent colour keys will be plotted below heatmaps,
-if FALSE the commmon colour key is shown rightmost}
+\item{indi}{If TRUE (defaults) the independent colour keys will be plotted
+below heatmaps, if FALSE the commmon colour key is shown rightmost}
 
-\item{o_min}{vector of length equal to number of sub heatmaps determining minimum
-value on color key for each sub plot, if NULL (default) or NA the global settings are used,
-ignored in \code{indi} is FALSE}
+\item{o_min}{vector of length equal to number of sub heatmaps determining
+minimum value on color key for each sub plot, if NULL (default) or NA the
+global settings are used, ignored in \code{indi} is FALSE}
 
-\item{o_max}{vector of length equal to number of sub heatmaps determining maximum
-value on color key for each sub plot, if NULL (default) or NA the global settings are used,
-ignored in \code{indi} is FALSE}
+\item{o_max}{vector of length equal to number of sub heatmaps determining
+maximum value on color key for each sub plot, if NULL (default) or NA the
+global settings are used, ignored in \code{indi} is FALSE}
 
-\item{colvec}{The vector of colours used to plot the lines and error estimate fields.
-If set value NULL (default) the automatically generated colour values will be used.
-Accpeted values are: vector of any of the three kinds of R colour specifications, i.e.,
-either a color name (as listed by colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see rgb),
-or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb}}.}
+\item{colvec}{The vector of colours used to plot the lines and error estimate
+fields. If set value NULL (default) the automatically generated colour
+values will be used. Accpeted values are: vector of any of the three kinds
+of R colour specifications, i.e., either a color name (as listed by
+colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see
+rgb), or a positive integer i meaning palette()[i]. See
+\code{\link[grDevices]{col2rgb}}.}
 
-\item{colorspace}{The colours pace of the heatmap, see \code{\link[grDevices]{grDevices}}}
+\item{clspace}{The colours pace of the heatmap, see
+\code{\link[grDevices]{grDevices}}}
 
-\item{pointsize}{The default font point size to be used for plots. Defaults to 12 (1/72 inch).}
+\item{pointsize}{The default font point size to be used for plots. Defaults
+to 12 (1/72 inch).}
 
 \item{...}{parameters passed to internal plotting function}
 }
 \description{
 Draw the heatmap plot from \code{\link{PlotSetArray}},
-\code{\link{PlotSetList}}, \code{\link{PlotSetPair}} classes or
-properly formatted \code{\link[base]{list}} (see details) in active graphics window.
-Axes and titles, keys and other plot elements are controlled by function parameters.
+\code{\link{PlotSetList}}, \code{\link{PlotSetPair}} classes or properly
+formatted \code{\link[base]{list}} (see details) in active graphics window.
+Axes and titles, keys and other plot elements are controlled by function
+parameters.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -166,9 +183,12 @@ following format: \code{list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]}
 }}
 \examples{
 # Get the paths of example files
-bed1 <- system.file("extdata", "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
-bed2 <- system.file("extdata", "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
-bw1 <- system.file("extdata", "GSM1208360_chrI_100Kb_q5_sample.bw", package="seqplots")
+bed1 <- system.file("extdata",
+     "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
+bed2 <- system.file("extdata",
+     "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
+bw1 <- system.file("extdata",
+     "GSM1208360_chrI_100Kb_q5_sample.bw", package="seqplots")
 
 #If required install C. elegans genomic package from Bioconductor
 if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
@@ -178,7 +198,8 @@ if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
 
 #Get getPlotSetArray for track and feature files
 plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
-plotHeatmap(plotset1[1]) # equivalent to plot(plotset1, what='h') or plotset1$plot(what='h')
+# equivalent to plot(plotset1, what='h') or plotset1$plot(what='h')
+plotHeatmap(plotset1[1])
 }
 \seealso{
 Other plotting.functions: \code{\link{getPlotSetArray}};
