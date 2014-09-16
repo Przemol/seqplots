@@ -38,6 +38,8 @@
 #' @param colorspace The colorspace of the heatmap, see \code{\link[grDevices]{grDevices}}
 #' @param pointsize The default font point size to be used for plots. Defaults to 12 (1/72 inch).
 #'  
+#' @return \code{NULL}
+#'  
 #' @keywords internal
 #'
 heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),    

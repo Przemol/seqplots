@@ -29,6 +29,10 @@ default functionality of \code{\link[graphics]{plot}} function.}
 \item{what}{This argument takes a character determining if avareange
 plot (\code{"a"}, default) or heatmap (\code{"h"}) will be plotted.}
 }
+\value{
+Returns \code{NULL} for avareange plot and cluster report \code{data.frame}
+for hetamap - see \code{\link{plotHeatmap}} for details.
+}
 \description{
 Generic plot function for SeqPlots package calsses
 }

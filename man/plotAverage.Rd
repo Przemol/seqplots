@@ -113,6 +113,9 @@ or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb
 \item{...}{other graphical parameters passed to plot.default
 (see \code{\link[graphics]{plot.default}}, \code{\link[graphics]{par}} and section "Details" below)}
 }
+\value{
+\code{NULL}
+}
 \description{
 Draw an average plot from \code{\link{PlotSetArray}},
 \code{\link{PlotSetList}}, \code{\link{PlotSetPair}} or

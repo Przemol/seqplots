@@ -14,7 +14,7 @@ web interface}
 \item{...}{arguments sent to \code{\link[shiny]{runApp}} function}
 }
 \value{
-Normally returns nothing (NULL), returns an error if one accrued.
+Normally returns nothing (\code{NULL}), returns an error if one accrued.
 Usage messages are shown in R console.
 }
 \description{

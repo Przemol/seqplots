@@ -11,10 +11,11 @@
 #' 
 #' For more help see documentation of image.plot function: 
 #' \code{\link[fields]{image.plot}}
+#' 
+#' @return \code{NULL}
 #'
 #' @keywords internal
 #' 
-
 imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE, 
                       legend.shrink = 0.9, legend.width = 1.2, legend.mar = ifelse(horizontal, 
                                                                                    3.1, 5.1), legend.lab = NULL, legend.line = 2, graphics.reset = FALSE, 

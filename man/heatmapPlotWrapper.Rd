@@ -68,6 +68,9 @@ or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb
 
 \item{leg}{if TRUE plot the color key}
 }
+\value{
+\code{NULL}
+}
 \description{
 This function is package internal and should not be executed directly
 by users.

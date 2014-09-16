@@ -25,6 +25,9 @@ plotMext(INPUTS, xlim = NULL, ylim = NULL, main = NULL, xlab = "",
 \item{...}{Other parameters controlong the plot, see \code{\link{plotAverage}}
  for avareange plot and \code{\link{plotHeatmap}} for heatmaps.}
 }
+\value{
+\code{NULL}
+}
 \description{
 This function is package internal and should not be executed directly
 by users.

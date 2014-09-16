@@ -10,6 +10,8 @@
 #' @param plotScale scale the available data before ploting, can be "linear" 
 #'  (do not scale), "log2" or "zscore"
 #' 
+#' @return \code{NULL}
+#' 
 #' @inheritParams plot
 #' @keywords internal
 #'    

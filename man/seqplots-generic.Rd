@@ -8,9 +8,7 @@
 \alias{[[,PlotSetList,ANY,ANY-method}
 \alias{seqplots-generic}
 \alias{unlist,PlotSetArray-method}
-\title{Generic operators acting on \code{\link{PlotSetArray}},
-\code{\link{PlotSetList}} or \code{\link{PlotSetPair}} to extract pairs
-or flatten the data structure.}
+\title{SeqPlots generic methods}
 \usage{
 \S4method{[}{PlotSetList,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
 
@@ -61,14 +59,7 @@ or flatten the data structure.}
     \code{\link{drop}} for further details.
   }
 }
-\description{
-Generic operators acting on \code{\link{PlotSetArray}},
-\code{\link{PlotSetList}} or \code{\link{PlotSetPair}} to extract pairs
-or flatten the data structure.
-}
-\section{Subsetting}{
-
-
+\value{
 If \code{x} is \strong{\code{\link{PlotSetArray}}} class:
 \itemize{
  \item \code{x[1:2,1:2]} produces \code{\link{PlotSetArray}} with 2 feature(s) and
@@ -82,12 +73,17 @@ If \code{x} is \strong{\code{\link{PlotSetArray}}} class:
   classes with all feature/tracks pairs.
 }
 
-#' If \code{x} is \strong{\code{\link{PlotSetList}}} class:
+If \code{x} is \strong{\code{\link{PlotSetList}}} class:
 \itemize{
  \item \code{x[1:2]} produces \code{\link{PlotSetList}} with 2 feature/tracks
  pairs.
  \item \code{x[[1]]} produces single \code{\link{PlotSetPair}}.
 }
+}
+\description{
+Generic operators working with \code{\link{PlotSetArray}},
+\code{\link{PlotSetList}} and \code{\link{PlotSetPair}} to subset
+or flatten the data structure.
 }
 \seealso{
 \code{\link[base]{Extract}}

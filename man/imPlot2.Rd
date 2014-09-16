@@ -12,6 +12,9 @@ imPlot2(..., add = FALSE, nlevel = 64, horizontal = FALSE,
   legend.args = NULL, midpoint = FALSE, border = NA, lwd = 1,
   xinds = NULL, e = NULL)
 }
+\value{
+\code{NULL}
+}
 \description{
 \code{
 #added following line of code:

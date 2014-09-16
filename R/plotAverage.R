@@ -47,7 +47,7 @@
 #' (see \code{\link[graphics]{plot.default}}, \code{\link[graphics]{par}} and section "Details" below)
 #' 
 #' 
-#' @return NULL
+#' @return \code{NULL}
 #' 
 #' @details
 #' Relevant parameters passed to \code{\link[graphics]{plot.default}} function:

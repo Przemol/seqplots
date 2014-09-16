@@ -8,7 +8,7 @@
 #'  web interface
 #' @param ... arguments sent to \code{\link[shiny]{runApp}} function
 #' @return 
-#' Normally returns nothing (NULL), returns an error if one accrued.
+#' Normally returns nothing (\code{NULL}), returns an error if one accrued.
 #' Usage messages are shown in R console.
 #' 
 #' @details
