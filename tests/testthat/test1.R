@@ -5,8 +5,10 @@ bed2 <- system.file("extdata", "GSM1208361_chrI_100Kb_PeakCalls.bed", package="s
 test_that("Test BSgenome package installation", {
     context("Testing BSgenome package installation")    
     if(!"BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes()) {
-        source("http://bioconductor.org/biocLite.R")
-        biocLite("BSgenome.Celegans.UCSC.ce10")
+        if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
+            source("http://bioconductor.org/biocLite.R")
+            biocLite("BSgenome.Celegans.UCSC.ce10")
+        }
     }
     expect_true("BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes())
 })
@@ -15,12 +17,13 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
     
     tmp <- file.path(tempdir(), 'SeqPlots')
     context("Testing getPlotSetArray")
-    #cat(tmp,'\n')
-    expect_that({  
-        #dir.create(tmp, showWarnings = FALSE); setwd(tmp)
-      
-        suppressWarnings(psa <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10'))
-    }, is_a("PlotSetArray"))
+    if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
+         psa <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
+    } else {
+        psa <- get(load(system.file(
+            "extdata", "precalc_plotset.Rdata", package="seqplots"))[[1]])
+    }
+    expect_that(psa, is_a("PlotSetArray"))
     
     context("Testing utils")
     expect_is(capture.output(show(psa)),    'character', info = NULL, label = NULL)
@@ -48,9 +51,13 @@ test_that("Test motifs", {
     expect_equal(ms$nmotifs(), 3, info = NULL, label = NULL)
 
     context("Testing getPlotSetArray with motifs")
-    expect_that({  
-        suppressWarnings(psa <- getPlotSetArray(ms, c(bed1, bed2), 'ce10'))
-    }, is_a("PlotSetArray"))
+    if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
+        psa <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
+    } else {
+        psa <- get(load(system.file(
+            "extdata", "precalc_plotset.Rdata", package="seqplots"))[[2]])
+    }
+    expect_that(psa, is_a("PlotSetArray"))
     
     context("Testing utils with motifs")
     expect_is(capture.output(show(psa)),    'character', info = NULL, label = NULL)
