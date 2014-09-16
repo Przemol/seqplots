@@ -164,14 +164,17 @@ to 12 (1/72 inch).}
 \item{...}{parameters passed to internal plotting function}
 }
 \value{
-The cluster report \code{data.frame}, giving cluster assignments and sorting
-order for each feature. It contains following columns:
-\itemize{
-     \item \strong{originalOrder} - number of feature (row) in GFF/BED, can be used to restore original order after sorting on cluster ID
-     \item \strong{ClusterID} - the numeric ID of the cluster. The topmost cluster on the heatmap is annotated with 1, and the bottom cluster with k, where k equals to number of clusters selected, exported only if clustering is enabled
-     \item \strong{SortingOrder} - the order imposed on heatmap by sorting by mean row(s) values, exported only if sorting is enabled
-     \item \strong{FinalOrder} - the final order of heatmap's rows, this can be influenced by sorting and clustering; 1 indicates topmost row
- }
+The cluster report \code{data.frame}, giving cluster assignments and
+sorting order for each feature. It contains following columns: \itemize{
+\item \strong{originalOrder} - number of feature (row) in GFF/BED, can be
+used to restore original order after sorting on cluster ID \item
+\strong{ClusterID} - the numeric ID of the cluster. The topmost cluster on
+the heatmap is annotated with 1, and the bottom cluster with k, where k
+equals to number of clusters selected, exported only if clustering is enabled
+\item \strong{SortingOrder} - the order imposed on heatmap by sorting by mean
+row(s) values, exported only if sorting is enabled \item \strong{FinalOrder}
+- the final order of heatmap's rows, this can be influenced by sorting and
+clustering; 1 indicates topmost row }
 }
 \description{
 Draw the heatmap plot from \code{\link{PlotSetArray}},

@@ -1,12 +1,12 @@
 #' Wrapper function, plotting the heatmap
 #' 
-#' This function is package internal and should not be executed directly
-#' by users.
+#' This function is package internal and should not be executed directly by
+#' users.
 #' 
 #' @param MAT - list of matrixes holding heatmap data
 #' @param axhline - locations of horizontal lines separating the clusters
 #' @param titles the sub-titles of heatmaps
-#' @param bins the x-axis indicates in heatmap 
+#' @param bins the x-axis indicates in heatmap
 #' @param cex.axis Axis numbers font size in points, defaults to 12
 #' @param cex.lab Axis labels font size in points, Defaults to 12
 #' @param cex.legend Keys labels font size in points, defaults to 12
@@ -14,34 +14,43 @@
 #' @param ylab label below y-axis
 #' @param leg if TRUE plot the color key
 #' @param autoscale if TRUE the color keys will be auto scaled
-#' @param zmin global minimum value on color key, ignored if \code{autoscale} is TRUE
-#' @param zmax global maximum value on color key, ignored if \code{autoscale} is TRUE
-#' @param xlim the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed and leads to a "reversed axis".
-#'  The default value, NULL, indicates that the whole range present in \code{plotset} will be plotted.
-#' @param ln.v Determines if vertical guide line(s) should be plotted (TRUE) or ommitted (FALSE).
-#'  For anchored plots 2 lines indicating the start and end of anchored distance are plotted.
+#' @param zmin global minimum value on color key, ignored if \code{autoscale} is
+#'   TRUE
+#' @param zmax global maximum value on color key, ignored if \code{autoscale} is
+#'   TRUE
+#' @param xlim the x limits (x1, x2) of the plot. Note that x1 > x2 is allowed
+#'   and leads to a "reversed axis". The default value, NULL, indicates that the
+#'   whole range present in \code{plotset} will be plotted.
+#' @param ln.v Determines if vertical guide line(s) should be plotted (TRUE) or
+#'   ommitted (FALSE). For anchored plots 2 lines indicating the start and end
+#'   of anchored distance are plotted.
 #' @param e Determines the end of anchored distance
-#' @param s The saturation value used to auto scale color key limits, defaults to 0.01 
-#' @param indi If TRUE (defaults) the independent color keys will be plotted below heatmaps,
-#'  if FALSE the common color key is shown rightmost
-#' @param o_min vector of length equal to number of sub heatmaps determining minimum 
-#'  value on color key for each sub plot, if NULL (default) or NA the global settings are used,
-#'  ignored in \code{indi} is FALSE 
-#' @param o_max vector of length equal to number of sub heatmaps determining maximum
-#'  value on color key for each sub plot, if NULL (default) or NA the global settings are used, 
-#'  ignored in \code{indi} is FALSE 
-#' @param colvec The vector of colors used to plot the lines and error estimate fields.
-#'  If set value NULL (default) the automatically generated color values will be used.
-#'  Accepted values are: vector of any of the three kinds of R color specifications, i.e.,
-#'  either a color name (as listed by colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see rgb), 
-#'  or a positive integer i meaning palette()[i]. See \code{\link[grDevices]{col2rgb}}. 
-#' @param colorspace The colorspace of the heatmap, see \code{\link[grDevices]{grDevices}}
-#' @param pointsize The default font point size to be used for plots. Defaults to 12 (1/72 inch).
-#'  
+#' @param s The saturation value used to auto scale color key limits, defaults
+#'   to 0.01
+#' @param indi If TRUE (defaults) the independent color keys will be plotted
+#'   below heatmaps, if FALSE the common color key is shown rightmost
+#' @param o_min vector of length equal to number of sub heatmaps determining
+#'   minimum value on color key for each sub plot, if NULL (default) or NA the
+#'   global settings are used, ignored in \code{indi} is FALSE
+#' @param o_max vector of length equal to number of sub heatmaps determining
+#'   maximum value on color key for each sub plot, if NULL (default) or NA the
+#'   global settings are used, ignored in \code{indi} is FALSE
+#' @param colvec The vector of colors used to plot the lines and error estimate
+#'   fields. If set value NULL (default) the automatically generated color
+#'   values will be used. Accepted values are: vector of any of the three kinds
+#'   of R color specifications, i.e., either a color name (as listed by
+#'   colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see
+#'   rgb), or a positive integer i meaning palette()[i]. See
+#'   \code{\link[grDevices]{col2rgb}}.
+#' @param colorspace The colorspace of the heatmap, see
+#'   \code{\link[grDevices]{grDevices}}
+#' @param pointsize The default font point size to be used for plots. Defaults
+#'   to 12 (1/72 inch).
+#'   
 #' @return \code{NULL}
-#'  
+#'   
 #' @keywords internal
-#'
+#'   
 heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),    
     bins=1:(ncol(MAT[[1]])/length(MAT)), cex.lab=12.0, cex.axis=12.0, 
     cex.legend=12.0, xlab='', ylab="", Leg=TRUE, autoscale=TRUE, zmin=0, zmax=10, 
@@ -62,7 +71,8 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     if(length(colorspace)) {
         gcol <- colorRampPalette(colorspace)
     }else {
-        gcol <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
+        gcol <- colorRampPalette(
+            c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
         #colorRampPalette(c("#053061","#2166AC","#4393C3","#92C5DE","#D1E5F0","#F7F7F7","#FDDBC7","#F4A582","#D6604D","#B2182B","#67001F"))     
     }
     min <- min(datapoints, na.rm=TRUE)

@@ -11,10 +11,15 @@ getSF  <- function(genome, gr, pattern, bin, simple=TRUE, revcomp=FALSE) {
         #Simle line plot
         hits <- unlist( vmatchPattern(pattern, seqs, algorithm="naive-exact") )
         if(revcomp) {
-            hits <- c(hits, unlist( vmatchPattern(reverseComplement(pattern), seqs, algorithm="naive-exact") ))
+            hits <- c(hits, 
+                      unlist( vmatchPattern(
+                          reverseComplement(pattern), 
+                          seqs, algorithm="naive-exact") ))
         }
-        vec <- coverage( restrict( resize(hits, bin, fix='center'), 
-                                   start=1, end=sl+(2*bin), keep.all.ranges=TRUE, use.names=FALSE) ) / length(grf)
+        vec <- coverage( 
+            restrict(resize( hits, bin, fix='center'), 
+                start=1, end=sl+(2*bin), keep.all.ranges=TRUE, use.names=FALSE
+            )) / length(grf)
         vec <- as.numeric( as.numeric(vec)[bin:(bin+sl)] )
         
         return( rbind(vec) )
@@ -40,11 +45,15 @@ getSF  <- function(genome, gr, pattern, bin, simple=TRUE, revcomp=FALSE) {
             return( M )
         }
         #Matrix-like results
-        rd <- as(vmatchPattern(pattern, seqs, algorithm="naive-exact"), "CompressedIRangesList")
+        rd <- as(vmatchPattern(pattern, seqs, algorithm="naive-exact"), 
+                 "CompressedIRangesList")
         out <- npl_count(rd, bin, seqs, sl, pattern)
         
         if(revcomp) {
-            rd.rev <- as(vmatchPattern(reverseComplement(pattern), seqs, algorithm="naive-exact"), "CompressedIRangesList")
+            rd.rev <- as(
+                vmatchPattern(reverseComplement(pattern), 
+                              seqs, algorithm="naive-exact"), 
+                "CompressedIRangesList")
             out <- out + npl_count(rd.rev, bin, seqs, sl, pattern)
         }
         return( out )

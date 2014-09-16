@@ -16,10 +16,12 @@
 #' @keywords internal
 #'    
 
-plotMext <- function(INPUTS, xlim=NULL, ylim=NULL, main=NULL, xlab='', ylab='', plotScale='linear', type='full', 
-                     error.estimates=TRUE, legend=TRUE, legend_ext=FALSE, legend_pos='topright', legend_ext_pos="topleft",
-                     cex.axis=14, cex.lab=16, cex.main=20, cex.legend=10, ln.v=TRUE, ln.h=NULL, colvec=NULL, 
-                     pointsize=12, ...) {
+plotMext <- function(
+    INPUTS, xlim=NULL, ylim=NULL, main=NULL, xlab='', ylab='', 
+    plotScale='linear', type='full', error.estimates=TRUE, legend=TRUE, 
+    legend_ext=FALSE, legend_pos='topright', legend_ext_pos="topleft",
+    cex.axis=14, cex.lab=16, cex.main=20, cex.legend=10, ln.v=TRUE, 
+    ln.h=NULL, colvec=NULL, pointsize=12, ...) {
     
     cex.axis   <- cex.axis   / pointsize
     cex.lab    <- cex.lab    / pointsize

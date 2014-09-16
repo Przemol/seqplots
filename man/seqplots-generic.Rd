@@ -60,30 +60,23 @@
   }
 }
 \value{
-If \code{x} is \strong{\code{\link{PlotSetArray}}} class:
-\itemize{
- \item \code{x[1:2,1:2]} produces \code{\link{PlotSetArray}} with 2 feature(s) and
- 2 tracks.
- \item \code{x[1:2]} produces \code{\link{PlotSetList}} with 2 feature/tracks
- pairs.
- \item \code{x[[1]]} produces single \code{\link{PlotSetPair}}.
- \item \code{unlist(x)} produces \code{\link{PlotSetList}} with all
-  feature/tracks pairs.
-  \item \code{x$as.array()} produces the matrix of \code{\link{PlotSetPair}}
-  classes with all feature/tracks pairs.
-}
+If \code{x} is \strong{\code{\link{PlotSetArray}}} class: \itemize{ \item
+\code{x[1:2,1:2]} produces \code{\link{PlotSetArray}} with 2 feature(s) and 2
+tracks. \item \code{x[1:2]} produces \code{\link{PlotSetList}} with 2
+feature/tracks pairs. \item \code{x[[1]]} produces single
+\code{\link{PlotSetPair}}. \item \code{unlist(x)} produces
+\code{\link{PlotSetList}} with all feature/tracks pairs. \item
+\code{x$as.array()} produces the matrix of \code{\link{PlotSetPair}} classes
+with all feature/tracks pairs. }
 
-If \code{x} is \strong{\code{\link{PlotSetList}}} class:
-\itemize{
- \item \code{x[1:2]} produces \code{\link{PlotSetList}} with 2 feature/tracks
- pairs.
- \item \code{x[[1]]} produces single \code{\link{PlotSetPair}}.
-}
+If \code{x} is \strong{\code{\link{PlotSetList}}} class: \itemize{ \item
+\code{x[1:2]} produces \code{\link{PlotSetList}} with 2 feature/tracks pairs.
+\item \code{x[[1]]} produces single \code{\link{PlotSetPair}}. }
 }
 \description{
 Generic operators working with \code{\link{PlotSetArray}},
-\code{\link{PlotSetList}} and \code{\link{PlotSetPair}} to subset
-or flatten the data structure.
+\code{\link{PlotSetList}} and \code{\link{PlotSetPair}} to subset or flatten
+the data structure.
 }
 \seealso{
 \code{\link[base]{Extract}}
