@@ -26,7 +26,7 @@
 #'  features' strands, regardless of annotation in GFF/BED file, are treated 
 #'  as undetermined ("*"), defaults to FALSE
 #' 
-#' @return \code{\link{PlotSetArray}}
+#' @return The \code{\link{PlotSetArray}} object.
 #' 
 #' @details
 #' This function takes genomic coordinates in BED or GFF format, 
@@ -141,9 +141,9 @@
 #' ms$addMotif('TATA')
 #' ms$addBigWig(bw1)
 #' 
-#' plotset <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
-#' plot(plotset) #Average plot
-#' plot(plotset[1,], what='h') #Heatmap
+#' plotset2 <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
+#' plot(plotset2) #Average plot
+#' plot(plotset2[1,], what='h') #Heatmap
 #'  
 #' 
 getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, 

@@ -41,7 +41,7 @@ Used only if /code{type="af"}, defaults to 1000L}
 form output \code{\link{PlotSetArray}} class, defauls to TRUE}
 }
 \value{
-\code{\link{PlotSetArray}}
+The \code{\link{PlotSetArray}} object.
 }
 \description{
 Function to process genomic signal from tracks and/or motif data,
@@ -156,9 +156,9 @@ ms$addMotif('GAGA')
 ms$addMotif('TATA')
 ms$addBigWig(bw1)
 
-plotset <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
-plot(plotset) #Average plot
-plot(plotset[1,], what='h') #Heatmap
+plotset2 <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
+plot(plotset2) #Average plot
+plot(plotset2[1,], what='h') #Heatmap
 }
 \seealso{
 Other plotting.functions: \code{\link{plotAverage}},

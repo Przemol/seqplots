@@ -1,5 +1,7 @@
-#' Generic operators acting on \code{\link{PlotSetArray}}, 
-#' \code{\link{PlotSetList}} or \code{\link{PlotSetPair}} to extract pairs 
+#' SeqPlots generic methods
+#' 
+#' Generic operators working with \code{\link{PlotSetArray}}, 
+#' \code{\link{PlotSetList}} and \code{\link{PlotSetPair}} to subset 
 #' or flatten the data structure.
 #' 
 #' @param x an object of class \code{\link{PlotSetArray}}, 
@@ -7,7 +9,7 @@
 #' @param j see description for \code{i}
 #' @param ... see description for \code{i}
 #' 
-#' @section Subsetting:
+#' @return
 #' 
 #' If \code{x} is \strong{\code{\link{PlotSetArray}}} class:
 #' \itemize{
@@ -22,7 +24,7 @@
 #'   classes with all feature/tracks pairs.
 #' }
 #' 
-#' #' If \code{x} is \strong{\code{\link{PlotSetList}}} class:
+#' If \code{x} is \strong{\code{\link{PlotSetList}}} class:
 #' \itemize{
 #'  \item \code{x[1:2]} produces \code{\link{PlotSetList}} with 2 feature/tracks 
 #'  pairs. 
@@ -47,9 +49,12 @@ NULL
 #'  plot (\code{"a"}, default) or heatmap (\code{"h"}) will be plotted.
 #' @param ... Other parameters controlong the plot, see \code{\link{plotAverage}}
 #'  for avareange plot and \code{\link{plotHeatmap}} for heatmaps.
+#' 
+#' @return
+#' Returns \code{NULL} for avareange plot and cluster report \code{data.frame} 
+#' for hetamap - see \code{\link{plotHeatmap}} for details.  
 #'  
-#' @seealso 
-#' \code{\link{getPlotSetArray}}
+#' @seealso \code{\link{getPlotSetArray}}
 #'  
 #' @family plotting functions
 #' @export
