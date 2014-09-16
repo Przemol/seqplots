@@ -5,7 +5,7 @@
 \usage{
 getPlotSetArray(tracks, features, refgenome, bin = 10L, rm0 = FALSE,
   ignore_strand = FALSE, xmin = 2000L, xmax = 2000L, xanchored = 1000L,
-  type = "pf", add_heatmap = TRUE)
+  type = "pf", add_heatmap = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{tracks}{Character vector or list of BigWig track paths. For motif density plots
@@ -23,8 +23,8 @@ Homo sapiens (see details)}
 will be treated as missing data, defaults to FALSE}
 
 \item{ignore_strand}{If TRUE the directionality is ignored, that is all
- features' strands, regardless of annotation in GFF/BED file, are treated
- as undetermined ("*"), defaults to FALSE}
+features' strands, regardless of annotation in GFF/BED file, are treated
+as undetermined ("*"), defaults to FALSE}
 
 \item{xmin}{Upstream calculation distance in base pairs, defaults to 200L}
 
@@ -39,6 +39,8 @@ Used only if /code{type="af"}, defaults to 1000L}
 
 \item{add_heatmap}{Add the heatmap data to output, must be on to plot heatmap
 form output \code{\link{PlotSetArray}} class, defauls to TRUE}
+
+\item{verbose}{Print various messages and warnings, defaults to FALSE}
 }
 \value{
 The \code{\link{PlotSetArray}} object.
@@ -142,10 +144,12 @@ bw1 <- system.file("extdata",
      "GSM1208360_chrI_100Kb_q5_sample.bw", package="seqplots")
 
 #If required install C. elegans genomic package from Bioconductor
-if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
-    source("http://bioconductor.org/biocLite.R")
-    biocLite("BSgenome.Celegans.UCSC.ce10")
-}
+ if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
+     if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
+         source("http://bioconductor.org/biocLite.R")
+         biocLite("BSgenome.Celegans.UCSC.ce10")
+     }
+ }
 
 #Get getPlotSetArray for track and feature files
 #Does not work on Windows i386 (32 bit)

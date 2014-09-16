@@ -25,7 +25,8 @@
 #' @param ignore_strand If TRUE the directionality is ignored, that is all 
 #'  features' strands, regardless of annotation in GFF/BED file, are treated 
 #'  as undetermined ("*"), defaults to FALSE
-#' 
+#' @param verbose Print various messages and warnings, defaults to FALSE
+#'  
 #' @return The \code{\link{PlotSetArray}} object.
 #' 
 #' @details
@@ -127,10 +128,12 @@
 #'      "GSM1208360_chrI_100Kb_q5_sample.bw", package="seqplots")
 #' 
 #' #If required install C. elegans genomic package from Bioconductor
-#' if(!"BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes()) {
-#'     source("http://bioconductor.org/biocLite.R")
-#'     biocLite("BSgenome.Celegans.UCSC.ce10")
-#' }
+#'  if(!"BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes()) {
+#'      if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
+#'          source("http://bioconductor.org/biocLite.R")
+#'          biocLite("BSgenome.Celegans.UCSC.ce10")
+#'      }
+#'  }
 #' 
 #' #Get getPlotSetArray for track and feature files
 #' #Does not work on Windows i386 (32 bit)
@@ -158,8 +161,11 @@
 getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, 
                             ignore_strand=FALSE, xmin=2000L, xmax=2000L, 
                             xanchored=1000L, type='pf', 
-                            add_heatmap=TRUE) {
+                            add_heatmap=TRUE, verbose=FALSE) {
     
+    old_opt <- options('warn'); on.exit(options(old_opt));
+    
+    if( !verbose ) options('warn'=-1)
     if( class(tracks) == "MotifSetup" ) tracks <- tracks$data
     
     n <- 1; k <- 1;
@@ -222,15 +228,15 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
                     
-                    message("Processing genome...")
+                    if(verbose) message("Processing genome...")
                     seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)]
                     gr <- trim(gr)
                     
-                    message("Searching for motif...")
+                    if(verbose) message("Searching for motif...")
                     M <- getSF(GENOME, gr, pattern, seq_win, !add_heatmap, revcomp=revcomp)
                     if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
                     
-                    message("Binning the motif...")
+                    if(verbose) message("Binning the motif...")
                     M <-  t(apply(M, 1, function(x) approx(x, n=ceiling(ncol(M)/bin))$y ))        
                     
                 }
@@ -249,21 +255,21 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
                     #MOTIF - left 
-                    message(paste0("MOTIF: Processing upsterem ", pattern, " motif..."))
+                    if(verbose) message(paste0("MOTIF: Processing upsterem ", pattern, " motif..."))
                     gr <- flank(sel, xmin, start=TRUE); seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
                     M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
                     if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
                     M.left <-  t(apply(M, 1, function(x) approx(x, n=length(left_ind))$y ))
                     
                     #MOTIF - middle
-                    message(paste0("MOTIF: Processing middle ", pattern, " motif..."))
+                    if(verbose) message(paste0("MOTIF: Processing middle ", pattern, " motif..."))
                     gr <- sel; seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];		
                     M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
                     if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
                     M.middle <-  t(apply(M, 1, function(x) approx(x, n=length(mid_ind))$y ))
                     
                     #MOTIF - right
-                    message(paste0("MOTIF: Processing downsteream ", pattern, " motif..."))
+                    if(verbose) message(paste0("MOTIF: Processing downsteream ", pattern, " motif..."))
                     gr <- flank(sel, xmin, start=FALSE); seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
                     M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
                     if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
@@ -274,13 +280,13 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
                 }
             }
             
-            #message("Calculeating means/stderr/95%CIs...")
+            if(verbose) message("Calculeating means/stderr/95%CIs...")
             if (rm0) M[M==0] <- NA
             means 	<- colMeans(M, na.rm=TRUE) 
             stderror<- apply(M, 2, function (n) {sd(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )})
             conint  <- apply(M, 2, function (n) {qt(0.975, sum(!is.na(n)) ) * sd(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )})
             
-            #message("Exporting results...")
+            if(verbose) message("Exporting results...")
             proc[[i]] <- list(means=means, stderror=stderror, conint=conint, all_ind=all_ind, e=if (type == 'af') xanchored else NULL,
                               desc=paste(sub("\\.(bw|BW)$", "", basename(tracks[[i]][[1]])), sub("\\.(gff|GFF)$", "", basename(j)), sep="\n@"),
                               heatmap=if (add_heatmap) M else NULL)
