@@ -158,10 +158,10 @@
 #' plot(plotset2[1,], what='h') #Heatmap
 #'  
 #' 
-getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE, 
-                            ignore_strand=FALSE, xmin=2000L, xmax=2000L, 
-                            xanchored=1000L, type='pf', 
-                            add_heatmap=TRUE, verbose=FALSE) {
+getPlotSetArray <- function(
+    tracks, features, refgenome, bin=10L, rm0=FALSE, ignore_strand=FALSE, 
+    xmin=2000L, xmax=2000L, xanchored=1000L, type='pf', add_heatmap=TRUE, 
+    verbose=FALSE) {
     
     old_opt <- options('warn'); on.exit(options(old_opt));
     
@@ -175,16 +175,18 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
         names(GENOMES) <- gsub('^BSgenome.', '', BSgenome::installed.genomes())
     
     extarct_matrix <- function(track, gr, size, ignore_strand) {
-        sum <- .Call('BWGFile_summary', path.expand(path(track)),
-                     as.character(seqnames(gr)), ranges(gr), 
-                     S4Vectors::recycleIntegerArg(size, "size", length(gr)), 
-                     "mean", as.numeric(NA_real_), PACKAGE='rtracklayer')
+        sum <- .Call(
+            'BWGFile_summary', path.expand(path(track)),
+            as.character(seqnames(gr)), ranges(gr), 
+            S4Vectors::recycleIntegerArg(size, "size", length(gr)), 
+            "mean", as.numeric(NA_real_), PACKAGE='rtracklayer'
+        )
         M <- do.call( rbind, sum )
         if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
         return(M)
     }
     
-    for (j in features)	{
+    for (j in features) {
         
         #Set up genome package
         genome_ind <- refgenome
@@ -263,7 +265,7 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
                     
                     #MOTIF - middle
                     if(verbose) message(paste0("MOTIF: Processing middle ", pattern, " motif..."))
-                    gr <- sel; seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];		
+                    gr <- sel; seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
                     M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
                     if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
                     M.middle <-  t(apply(M, 1, function(x) approx(x, n=length(mid_ind))$y ))
@@ -282,16 +284,20 @@ getPlotSetArray <- function(tracks, features, refgenome, bin=10L, rm0=FALSE,
             
             if(verbose) message("Calculeating means/stderr/95%CIs...")
             if (rm0) M[M==0] <- NA
-            means 	<- colMeans(M, na.rm=TRUE) 
+            means   <- colMeans(M, na.rm=TRUE)
             stderror<- apply(M, 2, function (n) {sd(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )})
             conint  <- apply(M, 2, function (n) {qt(0.975, sum(!is.na(n)) ) * sd(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )})
             
             if(verbose) message("Exporting results...")
-            proc[[i]] <- list(means=means, stderror=stderror, conint=conint, all_ind=all_ind, e=if (type == 'af') xanchored else NULL,
-                              desc=paste(sub("\\.(bw|BW)$", "", basename(tracks[[i]][[1]])), sub("\\.(gff|GFF)$", "", basename(j)), sep="\n@"),
-                              heatmap=if (add_heatmap) M else NULL)
+            proc[[i]] <- list(
+                means=means, stderror=stderror, conint=conint, all_ind=all_ind, 
+                e=if (type == 'af') xanchored else NULL,
+                desc=paste(sub("\\.(bw|BW)$", "", basename(tracks[[i]][[1]])), 
+                           sub("\\.(gff|GFF)$", "", basename(j)), sep="\n@"),
+                heatmap=if (add_heatmap) M else NULL
+            )
             k <- k+1
-        }		
+        }
         names(proc) <- basename( sapply(tracks, '[[', 1) )
         TSS[[n]] <- proc
         n <- n+1
