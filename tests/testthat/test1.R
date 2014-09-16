@@ -32,8 +32,8 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
     context("Testing graphics")
     expect_error(plot(psa, what='h'))
     expect_null(plot(psa, what='a'))
-    expect_null(plot(psa[2], what='h'))
-    expect_null(plot(psa[2,1], what='h'))
+    expect_is(plot(psa[2], what='h'), 'data.frame')
+    expect_is(plot(psa[2,1], what='h'), 'data.frame')
     
 })
 
@@ -62,8 +62,12 @@ test_that("Test motifs", {
     context("Testing graphics with motifs")
     expect_error(plot(psa, what='h'))
     expect_null(plot(psa, what='a'))
-    expect_null(plot(psa[2,1], what='h'))
-    expect_null(plot(psa[c(1,3,5)], what='h'))
+    expect_is(plot(psa[2,1], what='h'), 'data.frame')
+    expect_is(plot(psa[c(1,3,5)], what='h'), 'data.frame')
+    
+    context("Testing heatmap cluster report")
+    expect_true( all(is.na( psa[1,]$plot('h', clusters=0)$ClusterID )) )
+    expect_true( all(is.na( plotHeatmap(psa[1,], clstmethod='none' )$ClusterID )) )
     
 })
 
