@@ -55,13 +55,16 @@ References
 ----------
 
 **R project and Bioconductor:**
--   R Core Team (2014). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL http://www.R-project.org/.
--   Bioconductor: Open software development for computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others 2004, Genome Biology, Vol. 5, R80.  URL http://www.bioconductor.org/.
+
+- R Core Team (2014). R: A language and environment for statistical computing. 
+R Foundation for Statistical Computing, Vienna, Austria. URL http://www.R-project.org/.
+- Bioconductor: Open software development for computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others 2004, Genome Biology, Vol. 5, R80.  URL http://www.bioconductor.org/.
 - RStudio and Inc. (2014). shiny: Web Application Framework for R. R package version 0.10.1. http://CRAN.R-project.org/package=shiny
 - Other CRAN packages: digest, DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, Cairo, parallel
 - Bioconductor packages: IRanges, BSgenome, Rsamtools, rtracklayer, GenomicRanges and Biostrings 
 
 **JavaScript and CSS**
+
 - jQuery framework - http://jquery.com
 - Bootstrap - http://getbootstrap.com
 - DataTables, Table plug-in for jQuery - http://www.datatables.net
@@ -82,10 +85,12 @@ References
 - marked - https://github.com/chjj/marked (documentation)
 
 **Server deployment**
+
 - Shiny Server - https://github.com/rstudio/shiny-server
 - ShinyApps - https://github.com/rstudio/shinyapps
 
 **Publications using SeqPlots**
+
 - Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J. [Extreme HOT regions are CpG-dense promoters in C. elegans and humans.](http://www.ncbi.nlm.nih.gov/pubmed/24653213) Genome Res 24(7):1138-1146 Jul 2014
 
 Adding and managing files
@@ -289,8 +294,10 @@ reffer to error section for further information.
 
 > ![The plot array](../inst/seqplots/www/help/img//06/06_04.png)
 
-<a name='Plotting'></a>Plotting
-===============================
+<a name='Plotting'></a>
+
+Plotting
+========
 
 > This section focuses on average (line) plots and options common
 > between these and heatmaps. For heatmap options please refer to
@@ -789,8 +796,10 @@ Some additional SeqPlots options can be located at very bottom of
     console. Also might increase the performance for plotting small
     average plots. Turned off by default.
 
-<a name='Errors'></a>Error messages
-===================================
+<a name='Errors'></a>
+
+Error messages
+==============
 
 Adding the files:
 -----------------
@@ -835,174 +844,6 @@ Adding the files:
 > misformatted.
 
 * * * * *
-
-Version History
-===============
-
-SeqPlots v0.9.1 RC
-------------------
-
-##### GENERAL:
-
--   inputs and features sorted alphabetically
--   DataTables v1.10.0 with pagination, selection number indicator and
-    infinite row selections
--   buttons for heatmap and lineplots, PDF default sizes,
--   changes in GUI layout
--   default PDF output paper size set to A4 horizontal,
--   Font sizes are in points
--   preview is compatible with A4 PDF output (at 100 DPI)
--   color key for heatmap are always generated using image.plot function
-    that provides better labeling
--   batch plots do not override individual labels if set
--   option to keep 1:1 aspect ratio (default for batch plots)
--   miscellaneous options renamed for clarity
-
-SeqPlots v0.9.0 RC
-------------------
-
-##### FEATURES:
-
--   Multi-plot grid option in batch mode - many line plots on single
-    page
-
-##### GENERAL:
-
--   R 3.1 and BioC 2.14 compatibility
--   faster BigWig signal retrieval, no need for modified rtracklayer C
-    code in the package
--   warning message if JS File API is not supported (old browsers)
--   improved the performance of heatmap plotting by using list of
-    matrices instead concatenated matrix
-
-##### BUGFIX:
-
--   application start properly without any BSGenome genomic packages
-    installed
--   cluster report - the final order agrees with cluster indicates
-
-SeqPlots v0.8.2b
-----------------
-
-##### FEATURES:
-
--   Hierarchical and super self-organizing network clustering added for
-    heatmaps
--   Anchored motif plots
--   The row order of the heatmap is exported along with cluster report
-
-##### GENERAL:
-
--   JS color picker added for browsers, that do not support
-    select type="color" i.e. Firefox (checked with modernizr.js
-    library)
--   Single process mode and Microsoft Windows compatibility (running
-    without fork parallelization)
--   Shiny 0.9.1 compatibility
--   Saved datasets can be downloaded for local usage
--   Clicking row or column name in plot grid toggles the checkboxes
--   Minor GUI changes
-
-SeqPlots v0.8.1b
-----------------
-
-##### GENERAL:
-
--   GUI redesign: plot matrix incorporates sub-plot/heatmap specific
-    controls, all heatmap options gathered in single tab
--   warning before closing/refreshing a webpage with active session
--   cookie based default options: user, genome and deactivate page exit
-    warning
--   heat-map clusters provided as cluster report - a CSV file containing
-    original features, annotations and cluster information, see more:
-    https://bitbucket.org/przemol/seqplots/wiki/Heatmaps\#markdown-header-cluster-report
--   Wiggle files processing: correct for multiple header definitions and
-    roman/arabic chromosome names correction
--   Optimised keyboard shortcuts: plot - RETUTRN or ctrl/cmd+SPACE,
-    switch heatmap - ctrl/cmd+H, switch reactive plotting - ctrl/cmd+R
--   minor speed improvement
-
-##### BUGFIX:
-
--   Motif density plots and heatmaps: flip rows on (-) strand
-
-SeqPlots v0.8.0b
-----------------
-
-##### GENERAL:
-
--   GUI redesign, option partitioned to more tabs
--   preview plot is zoomed on click rather than on mouse hover
--   possibility to remove multiple files
--   comments visible as popup in file managmed window
--   all chromosome naming conventions (most notably chrX/X and variants
-    of chrM/M/MtDNA/MT etc.) are accepted
-    (http://www.bioconductor.org/packages/release/data/annotation/html/seqnames.db.html)
--   incoming featurefiles (GFF and BED) are not processed, just chacked
-    for errors
--   explicit error handling for incoming flies, the line with problem or
-    unexpected chromosome(s) are indentified to the user
--   motif density tracks can be binned (defoult at 10bp)
--   tracks amd motif densities cna be mixed together in plots
-
-##### SERVER:
-
--   server\_config.R added - a configuration file that allows to set up
-    server varaiables, e.g. the user data location
-
-##### MAC OS X APP:
-
--   interface to insrall new genomes from Bioconductor and local
-    resources (R BSgemome format:
-    http://www.bioconductor.org/packages/release/bioc/html/BSgenome.html)
--   option to set up data location
-
-SeqPlots v0.7.0a
-----------------
-
--   SeqPlots for Mac OS X relesed - an user frienddly wrapper app
-    containig R, packages and SeqPlots coede
--   heatmap plotting added
--   motif denstty plotting added for lineplot and heatmap
--   minior interface redesign
--   reactive interface can be turn off for plottting, user plots on
-    demend
--   adding files from jQuery File Upload
-    (http://blueimp.github.io/jQuery-File-Upload/) is handled directly
-    by R eliminating additional node.js server application and making
-    proper file handling for desktop version
--   computationally expensive operations (calculating plot matrix and
-    plotting) are handeled by new R process (parallel R library) - many
-    proces can run simmutainously in same Shiny instance, user can get
-    fedback from the calcualtion can be cancelled
-
-SeqPlots v0.6.0a
-----------------
-
--   Shiny (https://github.com/rstudio/shiny) used as R web fraimwork,
-    support for Rserver/EXT JS version dropped
--   support for 145 genomes from UCSC database (via user provideing
-    valid genome symbol)
--   new reactive user interface
--   new plot type: midpoint features - it calculates the middle of given
-    features and centres the summary on it
--   the option to ignore the strand (plot always in the same direction)
--   the option to remove the zeros (0 value of score in Wiggle track)
-    from mean and error estimate calculations
--   the support for BED feature files (in addition to GFF, Wiggle (all
-    variants), BigWiggle)
--   automatic chromosome name correction for C. elegans genomes (I =\>
-    chrI, MtDNA =\> chrM, etc.)
--   accepts wiggle with overlapping ranges (e.g. microarray experiments
-    processed using MA2C)
--   basic user management for uploaded files
--   option to download the features and track files directly from
-    application
-
-SeqPlots v0.1.0a - v0.5.0a
---------------------------
-
--   Initial test and alpha releases
 
 Explanations
 ============
@@ -1055,5 +896,65 @@ Explanations
     Also known as `pileups`.
 
     * * * * *
+
+
+Session Information
+-------------------
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
+References
+==========
+
+**R project and Bioconductor**
+
+-   R Core Team (2014). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL http://www.R-project.org/.
+-   Bioconductor: Open software development for computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others 2004, Genome Biology, Vol. 5, R80.  URL http://www.bioconductor.org/.
+- RStudio and Inc. (2014). shiny: Web Application Framework for R. R package version 0.10.1. http://shiny.rstudio.com/
+- **Other CRAN packages:** digest, DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, Cairo and parallel
+- **Bioconductor packages:** IRanges, BSgenome, Rsamtools, rtracklayer, GenomicRanges and Biostrings 
+
+**JavaScript and CSS**
+
+- jQuery framework - http://jquery.com
+- Bootstrap - http://getbootstrap.com
+- DataTables, Table plug-in for jQuery - http://www.datatables.net
+- jQuery File Upload Plugin - https://github.com/blueimp/jQuery-File-Upload
+- jQuery throttle - http://benalman.com/projects/jquery-throttle-debounce-plugin/
+- jQuery Cookie Plugin - https://github.com/carhartl/jquery-cookie
+- Modernizer JS library - http://modernizr.com
+- JavaScript Templates - https://github.com/blueimp/JavaScript-Templates
+- JavaScript Color Picker - http://jscolor.com
+- md5-js - https://github.com/wbond/md5-js
+- Font Awesome - http://fortawesome.github.io/Font-Awesome
+- Google Fonts - https://www.google.com/fonts
+- jQuery user interface - http://jqueryui.com (documentation)
+- jquery.tocify.js: jQuery Table of Contents - https://github.com/gfranko/jquery.tocify.js (documentation)
+- Strapdown https://github.com/arturadib/strapdown (documentation)
+- Bootswatch themes - http://bootswatch.com (documentation)
+- google-code-prettify - https://code.google.com/p/google-code-prettify (documentation)
+- marked - https://github.com/chjj/marked (documentation)
+
+**Important conceptual contribution to the project**
+
+- Liu T, Ortiz J, Taing L, Meyer C, Lee B, Zhang Y, Shin H, Wong S, Ma J, Lei Y, et al. 2011. [Cistrome: an integrative platform for transcriptional regulation studies.](http://www.ncbi.nlm.nih.gov/pubmed/21859476) Genome Biology 12: R83.
+- Thomas Williams, Colin Kelley and others (2010). Gnuplot 4.4: an interactive plotting program. URL http://www.R-project.org/.
+- Kent, W.J., Sugnet, C.W., Furey, T.S., Roskin, K.M., Pringle, T.H., Zahler, A.M. and Haussler, a. D. (2002). [The Human Genome Browser at UCSC](http://www.ncbi.nlm.nih.gov/pubmed/12045153). Genome Research. 12:996–1006.
+- Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. (2010). [BigWig and BigBed: enabling browsing of large distributed datasets.](http://www.ncbi.nlm.nih.gov/pubmed/20639541) Bioinformatics. 1;26(17):2204-7
+- Nicol, J.W., Helt, G.A., Blanchard, S.G., Raja, A. and Loraine, A.E. (2009). [The Integrated Genome Browser: free software for distribution and exploration of genome-scale datasets.](http://www.ncbi.nlm.nih.gov/pubmed/19654113) Bioinformatics (Oxford, England). 25:2730–1.
+- Thorvaldsdóttir, H., Robinson, J.T. and Mesirov, J.P. (2012). [Integrative Genomics Viewer (IGV): high-performance genomics data visualization and exploration.](http://www.ncbi.nlm.nih.gov/pubmed/22517427) Briefings in bioinformatics. bbs017
+
+
+**Server deployment**
+
+- Shiny Server - https://github.com/rstudio/shiny-server
+- ShinyApps - https://github.com/rstudio/shinyapps
+
+
+**Publications containing figures made by SeqPlots**
+
+- Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J. [Extreme HOT regions are CpG-dense promoters in C. elegans and humans.](http://www.ncbi.nlm.nih.gov/pubmed/24653213) Genome Res 24(7):1138-1146 Jul 2014
 
 
