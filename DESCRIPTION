@@ -28,6 +28,8 @@ Description: SeqPlots is a tool for plotting next generation sequencing (NGS)
     values. SeqPlots relays on Bioconductor packages, mainly on rtracklayer for
     data input and BSgenome packages for reference genome sequence and
     annotations.
+URL: http://github.com/przemol/seqplots
+BugReports: http://github.com/przemol/seqplots/issues
 Depends:
     R (>= 3.1.0)
 Imports:

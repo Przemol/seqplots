@@ -30,14 +30,108 @@ numeric values. SeqPlots relays on Bioconductor packages, mainly on
 rtracklayer for data input and BSgenome packages for reference genome
 sequence and annotations.
 }
+\details{
+Useful links:
+\itemize{
+  \item Project web page: \url{https://github.com/Przemol/seqplots}
+  \item Online documentation: \url{http://przemol.github.io/seqplots/}
+  \item Project wiki: \url{https://github.com/przemol/seqplots/wiki}
+  \item Issue tracker: \url{http://github.com/przemol/seqplots/issues}
+  \item Bug reports: \url{http://github.com/przemol/seqplots/issues/new}
+}
+}
 \author{
 Przemyslaw Stempor
 }
 \references{
-https://github.com/Przemol/seqplots
+\strong{R project and Bioconductor:}
+\itemize{
+  \item R Core Team (2014). R: A language and environment for statistical
+   computing. R Foundation for Statistical Computing, Vienna, Austria. URL
+   \url{http://www.R-project.org/}.
+  \item Bioconductor: Open software development for
+   computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M.
+   Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and
+   others 2004, Genome Biology, Vol. 5, R80.  URL
+   \url{http://www.bioconductor.org/}.
+  \item RStudio and Inc. (2014). shiny: Web
+   Application Framework for R. R package version 0.10.1.
+   \url{http://shiny.rstudio.com/}.
+  \item Other CRAN packages: digest,
+   DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, Cairo, parallel
+  \item Bioconductor packages: IRanges, BSgenome, Rsamtools, rtracklayer,
+   GenomicRanges and Biostrings
+  }
+
+\strong{JavaScript and CSS}
+\itemize{
+  \item jQuery framework - \url{http://jquery.com}
+  \item Bootstrap - \url{http://getbootstrap.com}
+  \item DataTables, Table plug-in for jQuery -
+   \url{http://www.datatables.net}
+  \item jQuery File Upload Plugin -
+   \url{https://github.com/blueimp/jQuery-File-Upload}
+  \item jQuery throttle -
+   \url{http://benalman.com/projects/jquery-throttle-debounce-plugin/}
+  \item jQuery Cookie Plugin -
+   \url{https://github.com/carhartl/jquery-cookie}
+  \item Modernizer JS library - \url{http://modernizr.com}
+  \item JavaScript Templates -
+   \url{https://github.com/blueimp/JavaScript-Templates}
+  \item JavaScript Color Picker - \url{http://jscolor.com}
+  \item md5-js - \url{https://github.com/wbond/md5-js}
+  \item Font Awesome - \url{http://fortawesome.github.io/Font-Awesome}
+  \item Google Fonts - \url{https://www.google.com/fonts}
+  \item jQuery user interface - \url{http://jqueryui.com} (documentation)
+  \item jquery.tocify.js: jQuery Table of Contents -
+   \url{https://github.com/gfranko/jquery.tocify.js} (documentation)
+  \item Strapdown \url{https://github.com/arturadib/strapdown}
+   (documentation)
+  \item Bootswatch themes - \url{http://bootswatch.com} (documentation)
+  \item google-code-prettify -
+   \url{https://code.google.com/p/google-code-prettify} (documentation)
+  \item marked - \url{https://github.com/chjj/marked} (documentation)
 }
-\keyword{CHiP-seq}
-\keyword{genomics}
-\keyword{plotting}
-\keyword{sequencing}
+
+\strong{Important conceptual contribution to the project}
+\itemize{
+\item Liu T, Ortiz J, Taing L, Meyer C, Lee B, Zhang Y, Shin H, Wong S, Ma J,
+Lei Y, et al. 2011.
+\href{http://www.ncbi.nlm.nih.gov/pubmed/21859476}{Cistrome: an integrative
+platform for transcriptional regulation studies.} Genome Biology 12: R83.
+\item Thomas Williams, Colin Kelley and others (2010).
+Gnuplot 4.4: an interactive plotting program. URL
+\url{http://www.R-project.org/}.
+\item Kent, W.J., Sugnet, C.W., Furey, T.S., Roskin, K.M., Pringle, T.H.,
+Zahler, A.M. and Haussler, a. D. (2002).
+\href{http://www.ncbi.nlm.nih.gov/pubmed/12045153}{The Human Genome Browser
+at UCSC}. Genome Research. 12:996–1006.
+\item Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D.
+(2010). \href{http://www.ncbi.nlm.nih.gov/pubmed/20639541}{BigWig and BigBed:
+ enabling browsing of large distributed datasets.} Bioinformatics.
+1;26(17):2204-7
+\item Nicol, J.W., Helt, G.A., Blanchard, S.G., Raja, A. and Loraine, A.E.
+(2009). \href{http://www.ncbi.nlm.nih.gov/pubmed/19654113}{The Integrated
+Genome Browser: free software for distribution and exploration of
+genome-scale datasets.} Bioinformatics (Oxford, England). 25:2730–1.
+\item Thorvaldsdóttir, H., Robinson, J.T. and Mesirov, J.P. (2012).
+\href{http://www.ncbi.nlm.nih.gov/pubmed/22517427}{Integrative Genomics
+Viewer (IGV): high-performance genomics data visualization and
+exploration.} Briefings in bioinformatics. bbs017
+}
+
+\strong{Server deployment}
+\itemize{
+  \item Shiny Server - \url{https://github.com/rstudio/shiny-server}
+  \item ShinyApps - \url{https://github.com/rstudio/shinyapps}
+}
+
+\strong{Publications containing figures made by SeqPlots}
+\itemize{
+  \item Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J.
+  \href{http://www.ncbi.nlm.nih.gov/pubmed/24653213}{Extreme HOT regions are
+  CpG-dense promoters in C. elegans and humans.} Genome Res
+  24(7):1138-1146 Jul 2014
+}
+}
 
