@@ -19,7 +19,7 @@
 #' @export 
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' run()
 #' }
 

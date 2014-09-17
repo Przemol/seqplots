@@ -25,7 +25,7 @@ web browser with graphical user interface (GUI).
 The default data directory is "~/SeqPlots_data".
 }
 \examples{
-\dontrun{
+\donttest{
 run()
 }
 }
