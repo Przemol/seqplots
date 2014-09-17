@@ -77,11 +77,8 @@ shinyUI(
         ##File management modal
         eval(parse( file.path(Sys.getenv("web", '.'), 'ui/FileManagementModal.R') )),
 
-				#Animated header
-				tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">SeqPlots</a></h2>')),
-				
-				#Banner
-        #eval(parse( file.path(Sys.getenv("web", '.'), 'ui/banner.R') )),
+		#Animated header
+		tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">SeqPlots</a></h2>')),
 				
 			
 ###############################################################################
