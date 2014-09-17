@@ -105,7 +105,7 @@ Gnuplot 4.4: an interactive plotting program. URL
 \item Kent, W.J., Sugnet, C.W., Furey, T.S., Roskin, K.M., Pringle, T.H.,
 Zahler, A.M. and Haussler, a. D. (2002).
 \href{http://www.ncbi.nlm.nih.gov/pubmed/12045153}{The Human Genome Browser
-at UCSC}. Genome Research. 12:996–1006.
+at UCSC}. Genome Research. 12:996-1006.
 \item Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D.
 (2010). \href{http://www.ncbi.nlm.nih.gov/pubmed/20639541}{BigWig and BigBed:
  enabling browsing of large distributed datasets.} Bioinformatics.
@@ -113,8 +113,8 @@ at UCSC}. Genome Research. 12:996–1006.
 \item Nicol, J.W., Helt, G.A., Blanchard, S.G., Raja, A. and Loraine, A.E.
 (2009). \href{http://www.ncbi.nlm.nih.gov/pubmed/19654113}{The Integrated
 Genome Browser: free software for distribution and exploration of
-genome-scale datasets.} Bioinformatics (Oxford, England). 25:2730–1.
-\item Thorvaldsdóttir, H., Robinson, J.T. and Mesirov, J.P. (2012).
+genome-scale datasets.} Bioinformatics (Oxford, England). 25:2730-1.
+\item Thorvaldsdottir, H., Robinson, J.T. and Mesirov, J.P. (2012).
 \href{http://www.ncbi.nlm.nih.gov/pubmed/22517427}{Integrative Genomics
 Viewer (IGV): high-performance genomics data visualization and
 exploration.} Briefings in bioinformatics. bbs017
