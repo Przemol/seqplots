@@ -13,6 +13,21 @@
 #' @export MotifSetup
 #' @exportClass MotifSetup
 #' 
+#' @examples
+#' 
+#' #Motifs only
+#' motif1 <- MotifSetup()
+#' motif1$addMotif("GAGA", window=200L)
+#' motif1$addMotif("TATA", window=100L, name="TATA box")
+#' 
+#' #Motifs and BigWigs
+#' motif2 <- MotifSetup()
+#' motif2$addMotif("GAGA", window=200L)
+#' motif2$addBigWig("path/to/file.bw")
+#' 
+#' #Chaining commands
+#' motif3 <- MotifSetup()$addMotif("GAGA", window=200L)$addBigWig("path/to/file.bw")
+#'  
 MotifSetup <- setRefClass("MotifSetup", 
     fields = list( data = "list", annotations = "list" ),
     methods = list( 

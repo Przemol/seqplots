@@ -44,6 +44,26 @@ Generic plot function for SeqPlots package calsses
 
 \item \code{x = PlotSetArray,y = ANY}: Method plot for signature 'PlotSetPair'
 }}
+\examples{
+#load precalculated PlotSetArrays "plotset1" and "plotset2", usually these
+#objects are the output of getPlotSetArray function
+load(system.file("extdata", "precalc_plotset.Rdata", package="seqplots"))
+
+#plot with default values
+plot(plotset2) #Average plot
+plot(plotset2[1,], what='h') #Heatmap
+
+#setting plot options
+plot(plotset2, main='Title', xlab='Relative position [bp]', ylab='Signal',
+     colvec=rainbow(6, 0.7, 0.5), labels=LETTERS, legend_ext=TRUE,
+     legend_ext_pos='topright', legend_pos='topleft', ln.h=9)
+
+plot(plotset2[2,], what='h', main="The heatmap", labels=LETTERS,
+     ord = c(3,1,2), sortrows = TRUE, clusters = 2, clstmethod = "hclust",
+     cex.main = 20, cex.lab = 12, cex.legend = 12, xlab = "Rel. pos. [bp]",
+     ylab = "Signal", autoscale = FALSE, zmin = 0, zmax = 20,
+     clspace = rev(rainbow(4, 0.7, 0.5)) )
+}
 \seealso{
 \code{\link{getPlotSetArray}}
 

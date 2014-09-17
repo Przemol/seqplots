@@ -28,6 +28,20 @@ Usage note - the \code{addMotif} and \code{addBigWig} methods can be chained in 
 
 \item{\code{nmotifs()}}{Prints number of motifs in class}
 }}
+\examples{
+#Motifs only
+motif1 <- MotifSetup()
+motif1$addMotif("GAGA", window=200L)
+motif1$addMotif("TATA", window=100L, name="TATA box")
+
+#Motifs and BigWigs
+motif2 <- MotifSetup()
+motif2$addMotif("GAGA", window=200L)
+motif2$addBigWig("path/to/file.bw")
+
+#Chaining commands
+motif3 <- MotifSetup()$addMotif("GAGA", window=200L)$addBigWig("path/to/file.bw")
+}
 \seealso{
 Other classes: \code{\link{PlotSetArray}},
   \code{\link{PlotSetArray-class}};
