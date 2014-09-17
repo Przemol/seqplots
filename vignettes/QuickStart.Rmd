@@ -20,7 +20,7 @@ BiocStyle::markdown()
 Quick start guide
 =================
 
-1. Start the SeqPlots. Refer to installation guides for platform specific information. After successful initiation the web interface should automatically open in your default web browser. If you are web server user just navigate your browser to server address.
+1. Start the SeqPlots GUI with `seqplots::run()` command in R. After successful initiation the web interface should automatically open in your default web browser. If you are web server user just navigate your browser to server address.
 
     ![The SeqPlots interface in web browser](../inst/seqplots/www/help/img/01_QuickStart/01_QuickStart_01.png)
 
@@ -76,3 +76,9 @@ Just attached to it, there is small button allowing you to get cluster definitio
 
     ![Heatmap example](../inst/seqplots/www/help/img/01_QuickStart/01_QuickStart_12.png)
 
+
+Session Information
+-------------------
+```{r echo=FALSE}
+sessionInfo()
+```
