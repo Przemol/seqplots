@@ -8,19 +8,20 @@ getPlotSetArray(tracks, features, refgenome, bin = 10L, rm0 = FALSE,
   type = "pf", add_heatmap = TRUE, verbose = FALSE)
 }
 \arguments{
-\item{tracks}{Character vector or list of BigWig track paths. For motif density plots
-\code{\link{MotifSetup}} class containing motifs setup and and/or BigWig
-track paths (see details)}
+\item{tracks}{Character vector or list of BigWig track paths. For motif
+density plots \code{\link{MotifSetup}} class containing motifs setup
+and/or BigWig track paths (see details)}
 
-\item{features}{Character vector or list containing feature file paths (BED or GFF).}
+\item{features}{Character vector or list containing feature file paths (BED
+or GFF).}
 
 \item{refgenome}{The UCSC code of reference genome, e.g. 'hg19' for
 Homo sapiens (see details)}
 
 \item{bin}{Binning window size in base pairs, defaults to 1L}
 
-\item{rm0}{Remove zeros from mean/error estimate calculation, 0 in track file
-will be treated as missing data, defaults to FALSE}
+\item{rm0}{Remove zeros from mean/error estimate calculation, 0 in track
+file will be treated as missing data, defaults to FALSE}
 
 \item{ignore_strand}{If TRUE the directionality is ignored, that is all
 features' strands, regardless of annotation in GFF/BED file, are treated
@@ -37,8 +38,8 @@ Used only if /code{type="af"}, defaults to 1000L}
 \item{type}{The type of the calculation, "pf" for point features (default),
 "mf" for midpoint features and "af" for anchored features, see details}
 
-\item{add_heatmap}{Add the heatmap data to output, must be on to plot heatmap
-form output \code{\link{PlotSetArray}} class, defauls to TRUE}
+\item{add_heatmap}{Add the heatmap data to output, must be on to plot
+heatmap form output \code{\link{PlotSetArray}} class, defauls to TRUE}
 
 \item{verbose}{Print various messages and warnings, defaults to FALSE}
 }
@@ -51,11 +52,11 @@ calculate statistics. This function should be used as the entry point to the
 SeqPlots pipeline and followed by plotting function(s).
 }
 \details{
-This function takes genomic coordinates in BED or GFF format,
-and extracts the signal from track files (BigWig) and/or
-calculates motif density in these regions. Then it computes the statistics
-required for average and heatmap plots. Returns the \code{\link{PlotSetArray}}
-class, which can be further subsisted, and used for plotting.
+This function takes genomic coordinates in BED or GFF format, and extracts
+the signal from track files (BigWig) and/or calculates motif density in
+these regions. Then it computes the statistics required for average
+and heatmap plots. Returns the \code{\link{PlotSetArray}} class,
+which can be further subsisted, and used for plotting.
 
 \subsection{Modes of operation}{
  The function operate in three modes, determined by \code{type} parameter:
@@ -80,16 +81,17 @@ class, which can be further subsisted, and used for plotting.
 
 \subsection{Binning the track}{
  \code{bin} numeric parameter determines the resolution of data acquisition.
- The default value 10 means that 10bp intervals within the plotting range will
- be summarized by calculating the mean. Higher values increases the speed of
- calculation and produces smoother plots, but decreases resolution.
+ The default value 10 means that 10bp intervals within the plotting range
+ will be summarized by calculating the mean. Higher values increases the
+ speed of calculation and produces smoother plots, but decreases resolution.
 }
 
 \subsection{DNA motifs}{
  The \code{\link{MotifSetup}} class allows to calculate and plot the density
  of any user-defined motif around the chosen genomic feature using the
- reference sequence package. Motif plots can be mixed with track files' signal
- plots. The \code{\link{MotifSetup}} can be initialized in following way:
+ reference sequence package. Motif plots can be mixed with track files'
+ signal plots. The \code{\link{MotifSetup}} can be initialized in following
+ way:
 
 
  \code{ms <- MotifSetup()} \cr
@@ -154,9 +156,9 @@ bw1 <- system.file("extdata",
 #Get getPlotSetArray for track and feature files
 #Does not work on Windows i386 (32 bit)
 if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
-    plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
+   plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
 } else {
-    load(system.file("extdata", "precalc_plotset.Rdata", package="seqplots"))
+   load(system.file("extdata", "precalc_plotset.Rdata", package="seqplots"))
 }
 plot(plotset1) #Average plot
 plot(plotset1[1,], what='h') #Heatmap
