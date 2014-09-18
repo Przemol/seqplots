@@ -149,9 +149,16 @@ setMethod(
         if(keepratio) par(pty='s')
         
         if( is.null(plotset[[1]]$heatmap) ) 
-            stop('Heatmap plotting: No heatmap data avilabe! Re-run with "Calculate Heatmap" option selected.', call.=FALSE)
-        if(length(unique(sapply(plotset, function(x) nrow(x[['heatmap']])))) != 1) 
-            stop('Heatmap plotting: All plots must have equal number of features. Do not plot heatmaps on multiple GFF/BED.', call.=FALSE)
+            stop(
+                'Heatmap plotting: No heatmap data avilabe!
+                Re-run with "Calculate Heatmap" option selected.', call.=FALSE
+            )
+        if(length(unique(sapply(
+            plotset, function(x) nrow(x[['heatmap']])))) != 1) 
+            stop(
+                'Heatmap plotting: All plots must have equal number of features.
+                Do not plot heatmaps on multiple GFF/BED.', call.=FALSE
+            )
         
         opar <- par(no.readonly = TRUE)['pty']
         if(is.null(ord)) { ord <- 1:length(plotset) }
@@ -174,7 +181,9 @@ setMethod(
         
         #Sorting
         if(sortrows) { 
-            sorting_order <- order(rowMeans(Hclc, na.rm=TRUE), decreasing = TRUE) 
+            sorting_order <- order(
+                rowMeans(Hclc, na.rm=TRUE), decreasing = TRUE
+            ) 
             finalOrd <- finalOrd[sorting_order] 
             Hclc <- Hclc[sorting_order,]
         } else {
@@ -205,9 +214,15 @@ setMethod(
         } else if(clstmethod == 'ssom') {
             
             Hlist <- HLST[ include ]
-            Hlist <- lapply(Hlist, function(x) {x[is.na(x)] <- 0; if(sortrows) x <- x[sorting_order,]; x} )
+            Hlist <- lapply(Hlist, function(x) {
+                x[is.na(x)] <- 0; if(sortrows) x <- x[sorting_order,]; x
+            })
             
-            ssom <- supersom(Hlist, grid = class::somgrid(xdim = ssomt1, ydim = ssomt2, "hexagonal"), rlen = 100, toroidal=TRUE)
+            ssom <- supersom(
+                Hlist, grid = class::somgrid(
+                    xdim = ssomt1, ydim = ssomt2, "hexagonal"), 
+                rlen = 100, toroidal=TRUE)
+            
             classes <- ssom$unit.classif
             cls_order <- order(ssom$unit.classif)
             
@@ -248,16 +263,16 @@ setMethod(
         #                    paste0('metadata_', colnames(elementMetadata(gr))) 
         #           }
         #              
-        #               gr$OriginalOrder <- 1:length(gr); 
-        #               if( nchar(input$clusters) ) 
-        #                   gr$ClusterID <- fromJSON(input$clusters)
-        #               if( nchar(input$sortingord) ) 
-        #                   gr$SortingOrder <- order(fromJSON(input$sortingord))
+        #           gr$OriginalOrder <- 1:length(gr); 
+        #           if( nchar(input$clusters) ) 
+        #               gr$ClusterID <- fromJSON(input$clusters)
+        #           if( nchar(input$sortingord) ) 
+        #               gr$SortingOrder <- order(fromJSON(input$sortingord))
         #               
-        #               gr$FinalOrder <- order(finalOrd)
+        #           gr$FinalOrder <- order(finalOrd)
         #               
-        #               out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
-        #               out <- out[finalOrd,]
+        #           out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
+        #           out <- out[finalOrd,]
         
         return( invisible(data.frame(
             originalOrder=1:length(finalOrd), 

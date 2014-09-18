@@ -138,7 +138,9 @@ setMethod(
         if(keepratio) par(pty='s')
         if( length(labels) ) {
             labels <- labels[1:length(plotset)]
-            plotset <- Map(function(x, y) {if(!is.na(y)) x[['desc']]<-y; return(x)}, plotset, labels)
+            plotset <- Map(function(x, y) {
+                if(!is.na(y)) x[['desc']]<-y; return(x)
+            }, plotset, labels)
         }
         if( length(ord) ) { plotset <- plotset[ ord ] }
         plotMext(

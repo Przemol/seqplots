@@ -33,7 +33,9 @@ PlotSetArray <- setRefClass("PlotSetArray",
         },
         unlist = function() {
             'Flattens PlotSetArray to PlotSetList'
-            PlotSetList(data=lapply(pairind(), function(x) data[[x[1]]][[x[2]]] ))
+            PlotSetList(
+                data=lapply(pairind(), function(x) data[[x[1]]][[x[2]]] )
+            )
         },
         info = function() {
             "Outputs data.frame describing the content of PlotSetList"
@@ -48,7 +50,10 @@ PlotSetArray <- setRefClass("PlotSetArray",
             }
         },
         show = function() {
-            cat( 'PlotSetArray with', nfeatures(), 'feature(s) and', ntracks(), 'tracks.\nContain:\n' )
+            cat( 
+                'PlotSetArray with', nfeatures(), 'feature(s) and', ntracks(), 
+                'tracks.\nContain:\n' 
+            )
             print(info()); return(NULL);
         },
         as.array = function(x, ...) { 
@@ -70,7 +75,8 @@ PlotSetArray <- setRefClass("PlotSetArray",
             PlotSetList(data=lapply( i, function(x) data[[x[2]]][[x[1]]] ))
         },
         plot = function(...) {
-            "Plot the PlotSetArray, i.e. all PlotSetPairs within class. See \\code{\\link{plot}} for datails."
+            "Plot the PlotSetArray, i.e. all PlotSetPairs within class. 
+            See \\code{\\link{plot}} for datails."
             unlist()$plot(...)
         },
         getRow = function(i) {
