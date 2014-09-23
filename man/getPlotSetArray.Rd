@@ -59,106 +59,104 @@ and heatmap plots. Returns the \code{\link{PlotSetArray}} class,
 which can be further subsisted, and used for plotting.
 
 \subsection{Modes of operation}{
- The function operate in three modes, determined by \code{type} parameter:
- \itemize{
-     \item \strong{Point Features} - anchor plot on the start of a feature.
-     By default, plot will be directional if strand information is present
-     (i.e, use start position and plot on positive strand for + strand
-     features and use end position and plot on negative strand for minus
-     strand features). If strand information is not present in the feature
-     file (or if the "ignore strand" option is chosen), plot will use start
-     position of feature and be plotted on the positive strand
-     (see explanations).
-     User chooses length of upstream and downstream sequence to plot.
-     \item \strong{Midpoint Features} - similar to point feature, but plot
-     is centred on the midpoint of the feature.
-     \item \strong{Anchored Features} - features are anchored at start
-     and stop positions and given pseudo-length chosen by the user.
-     Additionally, the user chooses the length of sequence upstream of
-     the start and downstream of the end to plot.
- }
+The function operate in three modes, determined by \code{type} parameter:
+\itemize{
+    \item \strong{Point Features} - anchor plot on the start of a feature.
+    By default, plot will be directional if strand information is present
+    (i.e, use start position and plot on positive strand for + strand
+    features and use end position and plot on negative strand for minus
+    strand features). If strand information is not present in the feature
+    file (or if the "ignore strand" option is chosen), plot will use start
+    position of feature and be plotted on the positive strand
+    (see explanations).
+    User chooses length of upstream and downstream sequence to plot.
+    \item \strong{Midpoint Features} - similar to point feature, but plot
+    is centred on the midpoint of the feature.
+    \item \strong{Anchored Features} - features are anchored at start
+    and stop positions and given pseudo-length chosen by the user.
+    Additionally, the user chooses the length of sequence upstream of
+    the start and downstream of the end to plot.
+}
 }
 
 \subsection{Binning the track}{
- \code{bin} numeric parameter determines the resolution of data acquisition.
- The default value 10 means that 10bp intervals within the plotting range
- will be summarized by calculating the mean. Higher values increases the
- speed of calculation and produces smoother plots, but decreases resolution.
+\code{bin} numeric parameter determines the resolution of data acquisition.
+The default value 10 means that 10bp intervals within the plotting range
+will be summarized by calculating the mean. Higher values increases the
+speed of calculation and produces smoother plots, but decreases resolution.
 }
 
 \subsection{DNA motifs}{
- The \code{\link{MotifSetup}} class allows to calculate and plot the density
- of any user-defined motif around the chosen genomic feature using the
- reference sequence package. Motif plots can be mixed with track files'
- signal plots. The \code{\link{MotifSetup}} can be initialized in following
- way:
+The \code{\link{MotifSetup}} class allows to calculate and plot the density
+of any user-defined motif around the chosen genomic feature using the
+reference sequence package. Motif plots can be mixed with track files'
+signal plots. The \code{\link{MotifSetup}} can be initialized in following
+way:
 
 
- \code{ms <- MotifSetup()} \cr
- \code{ms$addMotif("TATA", window=200L, heatmap=TRUE, revcomp=TRUE,
-     name=pattern)} \cr
- \code{ms$addMotif("GAGA", window=100L)$addBigWig("path/to/file.bw")} \cr
+\code{ms <- MotifSetup()} \cr
+\code{ms$addMotif("TATA", window=200L, heatmap=TRUE, revcomp=TRUE,
+    name=pattern)} \cr
+\code{ms$addMotif("GAGA", window=100L)$addBigWig("path/to/file.bw")} \cr
 
- The \code{addMotiff} methods accepts following parameters:
- \describe{
-     \item{\code{motif}}{ The DNA motif sequence. }
-     \item{\code{window}}{ Sliding window size in base pairs [bp] - the size
-     of the sliding window for motif calculation. The value (number of
-     matching motifs within the window) is reported in the middle of the
-     window, e.g. if window is set to 200bp, DNA motif is "GC" and there are
-     8 CpGs in first 200 bp of the chromosome the value 8 will be
-     reported at 100th bp.}
-     \item{\code{name}}{ Display name - The name of the motif that will be
-     shown in key and heatmap labels. Leave blank to use DNA motif value.}
-     \item{\code{heatmap}}{ Plot heatmap or error estimates - this checkbox
-     determines if heatmap matrix and error estimates should be calculated.
-     If unchecked much faster algorithm will be used for motif density
-     calculation, but only the average plot without the error estimates
-     will be available.}
-     \item{\code{revcomp}}{ Match reverse complement as well - select if
-     reverse complement motif should be reported as well. For example the
-     TATA motif will report both TATA and ATAT with this option selected.}
- }
-
+The \code{addMotiff} methods accepts following parameters:
+\describe{
+    \item{\code{motif}}{ The DNA motif sequence. }
+    \item{\code{window}}{ Sliding window size in base pairs [bp] - the size
+    of the sliding window for motif calculation. The value (number of
+    matching motifs within the window) is reported in the middle of the
+    window, e.g. if window is set to 200bp, DNA motif is "GC" and there are
+    8 CpGs in first 200 bp of the chromosome the value 8 will be
+    reported at 100th bp.}
+    \item{\code{name}}{ Display name - The name of the motif that will be
+    shown in key and heatmap labels. Leave blank to use DNA motif value.}
+    \item{\code{heatmap}}{ Plot heatmap or error estimates - this checkbox
+    determines if heatmap matrix and error estimates should be calculated.
+    If unchecked much faster algorithm will be used for motif density
+    calculation, but only the average plot without the error estimates
+    will be available.}
+    \item{\code{revcomp}}{ Match reverse complement as well - select if
+    reverse complement motif should be reported as well. For example the
+    TATA motif will report both TATA and ATAT with this option selected.}
+}
 }
 
 
 \subsection{Reference genomes}{
- The \code{refgenome} parameter determines the reference genome to be used
- for calculation. Reference genome package is needed to establish baseline
- chromosome naming convention (e.g. chrX vs. X) and chromosome lengths.
- Also for motif plots the genomic sequence is used to calculate motif
- density tracks. To check which genomic packages are installed in current R
- session use \code{\link[BSgenome]{installed.genomes}} function.
- \code{\link[BSgenome]{available.genomes}} gives the list of all reference
- genome packages currently supplied by BioConductor. Please refer to
- \code{\link[BSgenome]{BSgenome}} package documentation for installing and
- forging new genome packages.
+The \code{refgenome} parameter determines the reference genome to be used
+chromosome naming convention (e.g. chrX vs. X) and chromosome lengths.
+Also for motif plots the genomic sequence is used to calculate motif
+density tracks. To check which genomic packages are installed in current R
+session use \code{\link[BSgenome]{installed.genomes}} function.
+\code{\link[BSgenome]{available.genomes}} gives the list of all reference
+genome packages currently supplied by BioConductor. Please refer to
+\code{\link[BSgenome]{BSgenome}} package documentation for installing and
+forging new genome packages.
 }
 }
 \examples{
 # Get the paths of example files
 bed1 <- system.file("extdata",
-     "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
+    "Transcripts_ce10_chrI_100Kb.bed", package="seqplots")
 bed2 <- system.file("extdata",
-     "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
+    "GSM1208361_chrI_100Kb_PeakCalls.bed", package="seqplots")
 bw1 <- system.file("extdata",
-     "GSM1208360_chrI_100Kb_q5_sample.bw", package="seqplots")
+    "GSM1208360_chrI_100Kb_q5_sample.bw", package="seqplots")
 
 #If required install C. elegans genomic package from Bioconductor
- if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
-     if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
-         source("http://bioconductor.org/biocLite.R")
-         biocLite("BSgenome.Celegans.UCSC.ce10")
-     }
- }
+if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
+    if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
+        source("http://bioconductor.org/biocLite.R")
+        biocLite("BSgenome.Celegans.UCSC.ce10")
+    }
+}
 
 #Get getPlotSetArray for track and feature files
 #Does not work on Windows i386 (32 bit)
 if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
-   plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
+    plotset1 <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
 } else {
-   load(system.file("extdata", "precalc_plotset.Rdata", package="seqplots"))
+    load(system.file("extdata", "precalc_plotset.Rdata", package="seqplots"))
 }
 plot(plotset1) #Average plot
 plot(plotset1[1,], what='h') #Heatmap
@@ -170,7 +168,7 @@ ms$addMotif('GAGA')
 ms$addMotif('TATA')
 ms$addBigWig(bw1)
 if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
-     plotset2 <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
+    plotset2 <- getPlotSetArray(ms, c(bed1, bed2), 'ce10')
 }
 plot(plotset2) #Average plot
 plot(plotset2[1,], what='h') #Heatmap
