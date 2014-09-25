@@ -55,7 +55,8 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     bins=1:(ncol(MAT[[1]])/length(MAT)), cex.lab=12.0, cex.axis=12.0, 
     cex.legend=12.0, xlab='', ylab="", Leg=TRUE, autoscale=TRUE, zmin=0, 
     zmax=10, xlim=NULL, ln.v=TRUE, e=NULL, s = 0.01, indi=TRUE,
-    o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12) {
+    o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12,
+    embend=FALSE) {
     
     lfs  <- cex.lab / pointsize
     afs  <- cex.axis / pointsize
@@ -86,14 +87,15 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             zmax<-zlim[2]
         } 
         #par(oma = c(0, 0, 3, 0))
-        layout(
-            matrix(seq(NP+1), nrow=1, ncol=NP+1), widths=c(rep(12/NP, NP), 1), 
-            heights=rep(1,NP+1)
-        )
+        if(!embend) 
+            layout(
+                matrix(seq(NP+1), nrow=1, ncol=NP+1), 
+                widths=c(rep(12/NP, NP), 1), heights=rep(1,NP+1)
+            )
         ColorRamp <-gcol(ncollevel)
         ColorLevels <- seq(to=zmax,from=zmin, length=ncollevel)#number sequence
     } else {
-        invisible(capture.output( set.panel(1, NP) ))
+        if(!embend) invisible(capture.output( set.panel(1, NP) ))
     }
     
     
@@ -174,10 +176,12 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
         if (ln.v){
             abline(v=c(0, e), lwd=2)
         }
+        
+        if(embend) break()
     }
     
     #draw legend/color key for multiple heatmaps
-    if(Leg & !indi) {
+    if(Leg & !indi & !embend) {
         par(cex.axis=lgfs, mar=c(0,0,0,0)); plot.new()
         image.plot(
             1, ColorLevels, 
@@ -186,5 +190,6 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             smallplot=c(.1,.4,0.1,.9)
         )
     }
-    par(opar); layout(1)
+    if(!embend) par(opar) 
+    if(!embend) layout(1)
 }
