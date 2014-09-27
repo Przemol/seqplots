@@ -694,7 +694,7 @@ goes as follow:
 
 The example structure:
 
-``` {.r}
+```
 List of 2
  $ HTZ1_Differential_genes_TOP100_v2.gff:List of 2
   ..$ HTZ1_JA00001_IL1andIL2_F_N2_L3_NORM_linear_1bp_IL010andIL009_averaged.bw    :List of 7
@@ -738,8 +738,8 @@ Advanced options
 Some additional SeqPlots options can be located at very bottom of
 `Bach operation and setup` tab:
 
-> ![The view on 'Advanced options' section of the batch operation and
-> setup panel](../inst/seqplots/www/help/img//10_01.png)
+![The view on 'Advanced options' section of the batch operation and
+setup panel](../inst/seqplots/www/help/img//10_01.png)
 
 -   `Keep 1:1 aspect ratio in batch mode` - This option guarantee that
     the ratio between X- and Y-axis height will be 1, hence the produced
