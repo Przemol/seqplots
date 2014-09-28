@@ -61,7 +61,6 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     lfs  <- cex.lab / pointsize
     afs  <- cex.axis / pointsize
     lgfs <- cex.legend / pointsize
-    opar <- par(no.readonly = TRUE)
     
     datapoints <- unlist(MAT)
     NP=length(MAT)
@@ -86,7 +85,6 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             zmin<-zlim[1]
             zmax<-zlim[2]
         } 
-        #par(oma = c(0, 0, 3, 0))
         if(!embend) 
             layout(
                 matrix(seq(NP+1), nrow=1, ncol=NP+1), 
@@ -103,7 +101,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     for (i in seq(NP)) {
         data <- MAT[[i]]
         
-        par(cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs)
+
         xinds <- if (is.null(xlim)) range(bins) else xlim
         
         if( !indi ) {
@@ -116,7 +114,8 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             image(
                 bins, 1:nrow(data), t(data), axes=TRUE, col=ColorRamp_ex, 
                 xlab=xlab, ylab=ylab, add=FALSE, ylim=c(nrow(data),1),
-                xlim=if (is.null(xlim)) range(bins) else xlim, 
+                xlim=if (is.null(xlim)) range(bins) else xlim,
+                cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs,
                 useRaster=raster, xaxt="n", panel.first={
                     if(is.null(e)) axis(1) 
                     else axis(
@@ -152,14 +151,14 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
                     colorRampPalette(c('white', colvec[i]))(ncollevel) 
                 else gcol(ncollevel)
             
-            #par(cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs)
             
             imPlot2(
                 bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlab, ylab=ylab, 
                 xlim=if (is.null(xlim)) range(bins) else xlim,  
                 ylim=c(nrow(data),1), zlim=keycolor_lim, col=col,
                 legend.width=1, horizontal=TRUE, useRaster=raster, 
-                xinds=xinds, e=e, xaxt="n"
+                xinds=xinds, e=e, xaxt="n",
+                cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs
             )
             
             
@@ -182,7 +181,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     
     #draw legend/color key for multiple heatmaps
     if(Leg & !indi & !embend) {
-        par(cex.axis=lgfs, mar=c(0,0,0,0)); plot.new()
+        plot.new(cex.axis=lgfs, mar=c(0,0,0,0))
         image.plot(
             1, ColorLevels, 
             matrix(data=ColorLevels, ncol=length(ColorLevels),nrow=1),
@@ -190,6 +189,5 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             smallplot=c(.1,.4,0.1,.9)
         )
     }
-    if(!embend) par(opar) 
     if(!embend) layout(1)
 }

@@ -149,7 +149,7 @@ setGeneric(
 setMethod(
     "plotHeatmap", signature(plotset='list'),
     function(plotset, ...) {
-        opar <- par(no.readonly = TRUE)['pty']
+        opar <- par(no.readonly = TRUE)[c('pty')]
         
         if(keepratio) par(pty='s')
         
@@ -245,7 +245,7 @@ setMethod(
         lab[!is.na(labels)] <- labels[!is.na(labels)]
         
         
-        if( nchar(main) > 0 ) par(oma=c(0,0,(cex.main/12)+1,0) )
+        if( nchar(main) > 0 & !embend) par(oma=c(0,0,(cex.main/12)+1,0) )
         
         heatmapPlotWrapper( 
             HLST, clusts, bins=plotset[[1]]$all_ind, titles=lab, 
