@@ -250,10 +250,8 @@ getPlotSetArray <- function(
                         message("Searching for motif...")
                     M <- getSF(
                         GENOME, gr, pattern, seq_win, !add_heatmap, 
-                        revcomp=revcomp )
-                    if (!ignore_strand) 
-                        M[as.character(strand(gr))=='-', ] <- M[
-                            as.character(strand(gr))=='-', ncol(M):1]
+                        revcomp=revcomp
+                    )
                     
                     if(verbose) message("Binning the motif...")
                     M <-  t(apply(M, 1, function(x) 
@@ -288,9 +286,6 @@ getPlotSetArray <- function(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
                         revcomp=revcomp
                     )
-                    if (!ignore_strand) 
-                        M[as.character(strand(gr))=='-', ] <- M[
-                            as.character(strand(gr))=='-', ncol(M):1]
                     M.left <-  t(apply(M, 1, function(x) 
                         approx(x, n=length(left_ind))$y ))
                     
@@ -305,9 +300,6 @@ getPlotSetArray <- function(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
                         revcomp=revcomp
                     )
-                    if (!ignore_strand) 
-                        M[as.character(strand(gr))=='-', ]  <- M[
-                            as.character(strand(gr))=='-', ncol(M):1]
                     M.middle <- t(apply(M, 1, function(x) 
                         approx(x, n=length(mid_ind))$y ))
                     
@@ -320,9 +312,6 @@ getPlotSetArray <- function(
                     M <- getSF(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap,
                         revcomp=revcomp)
-                    if (!ignore_strand) 
-                        M[as.character(strand(gr))=='-', ] <- M[
-                            as.character(strand(gr))=='-', ncol(M):1]
                     M.right <-  t(apply(M, 1, function(x) 
                         approx(x, n=length(right_ind))$y ))
                     
@@ -337,9 +326,12 @@ getPlotSetArray <- function(
             stderror<- apply(M, 2, function (n) {
                 sd(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )
             })
+            stderror[is.na(stderror)] <- 0
+            
             conint  <- apply(M, 2, function (n) {
                 qt(0.975,sum(!is.na(n)))*sd(n,na.rm=TRUE)/sqrt(sum(!is.na(n)))
             })
+            conint[is.na(conint)] <- 0
             
             if(verbose) message("Exporting results...")
             proc[[i]] <- list(
