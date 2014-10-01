@@ -36,10 +36,6 @@
 #'   over the heatmap and below the main title). The defaults NULL value 
 #'   indicates that feature/track file names will be used to generate the 
 #'   sub-titles.
-#' @param ord The numeric vector determining the plotting order of experiments. 
-#'   The heatmap representing feature-track pair with the highest priority will 
-#'   be plotted leftmost. If NULL (default) the order established in 
-#'   \code{plotset} is used.
 #' @param plotScale scale the available data before plotting, can be "linear" 
 #'   (do not scale, default), "log2" or "zscore"
 #' @param legend if TRUE plot the colour key
@@ -83,6 +79,10 @@
 #'   \code{\link[grDevices]{grDevices}}
 #' @param pointsize The default font point size to be used for plots. Defaults 
 #'   to 12 (1/72 inch).
+#' @param embend If TRUE plot single (first) heatmap without using grid system. 
+#'   Useful to embed heatmap in complex layouts, see 
+#'   \code{\link[graphics]{layout}} and \code{\link[graphics]{par}} for details.
+#'   Defaults to FALSE.
 #' @param ... parameters passed to internal plotting function
 #'   
 #' @return The cluster report \code{data.frame}, giving cluster assignments and
@@ -131,12 +131,12 @@ setGeneric(
     "plotHeatmap",
     function(
         plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
-        ord=NULL, plotScale="no", sortrows=FALSE, clusters=5L,
+        plotScale="no", sortrows=FALSE, clusters=5L,
         clstmethod="kmeans", include=NULL, ssomt1=2L, ssomt2=2L, cex.main=16,  
         cex.lab=12.0, cex.axis=12.0, cex.legend=12.0, xlab='', ylab="",
         autoscale=TRUE, zmin=0, zmax=10, xlim=NULL, ln.v=TRUE, s = 0.01, 
         indi=TRUE, o_min=NA, o_max=NA, colvec=NULL, clspace=NULL, pointsize=12, 
-        ...
+        embend=FALSE, ...
     ) standardGeneric("plotHeatmap")
 )
 
@@ -145,20 +145,26 @@ setGeneric(
 setMethod(
     "plotHeatmap", signature(plotset='list'),
     function(plotset, ...) {
+        opar <- par(no.readonly = TRUE)[c('pty')]
         
         if(keepratio) par(pty='s')
         
         if( is.null(plotset[[1]]$heatmap) ) 
-            stop('Heatmap plotting: No heatmap data avilabe! Re-run with "Calculate Heatmap" option selected.', call.=FALSE)
-        if(length(unique(sapply(plotset, function(x) nrow(x[['heatmap']])))) != 1) 
-            stop('Heatmap plotting: All plots must have equal number of features. Do not plot heatmaps on multiple GFF/BED.', call.=FALSE)
+            stop(
+                'Heatmap plotting: No heatmap data avilabe!
+                Re-run with "Calculate Heatmap" option selected.', call.=FALSE
+            )
+        if(length(unique(sapply(
+            plotset, function(x) nrow(x[['heatmap']])))) != 1) 
+            stop(
+                'Heatmap plotting: All plots must have equal number of features.
+                Do not plot heatmaps on multiple GFF/BED.', call.=FALSE
+            )
         
-        opar <- par(no.readonly = TRUE)['pty']
-        if(is.null(ord)) { ord <- 1:length(plotset) }
         if(is.null(include)) { include <- rep(TRUE, length(plotset)) }
         
         #Heatmap data aquizition (as list of matrixes)
-        HLST <- lapply(plotset, '[[', 'heatmap')[ ord ]  
+        HLST <- lapply(plotset, '[[', 'heatmap')
         
         #Optional scalling
         if ( plotScale ==  "log2" ) {
@@ -174,7 +180,9 @@ setMethod(
         
         #Sorting
         if(sortrows) { 
-            sorting_order <- order(rowMeans(Hclc, na.rm=TRUE), decreasing = TRUE) 
+            sorting_order <- order(
+                rowMeans(Hclc, na.rm=TRUE), decreasing = TRUE
+            ) 
             finalOrd <- finalOrd[sorting_order] 
             Hclc <- Hclc[sorting_order,]
         } else {
@@ -205,9 +213,15 @@ setMethod(
         } else if(clstmethod == 'ssom') {
             
             Hlist <- HLST[ include ]
-            Hlist <- lapply(Hlist, function(x) {x[is.na(x)] <- 0; if(sortrows) x <- x[sorting_order,]; x} )
+            Hlist <- lapply(Hlist, function(x) {
+                x[is.na(x)] <- 0; if(sortrows) x <- x[sorting_order,]; x
+            })
             
-            ssom <- supersom(Hlist, grid = class::somgrid(xdim = ssomt1, ydim = ssomt2, "hexagonal"), rlen = 100, toroidal=TRUE)
+            ssom <- supersom(
+                Hlist, grid = class::somgrid(
+                    xdim = ssomt1, ydim = ssomt2, "hexagonal"), 
+                rlen = 100, toroidal=TRUE)
+            
             classes <- ssom$unit.classif
             cls_order <- order(ssom$unit.classif)
             
@@ -226,7 +240,7 @@ setMethod(
         lab[!is.na(labels)] <- labels[!is.na(labels)]
         
         
-        if( nchar(main) > 0 ) par(oma=c(0,0,(cex.main/12)+1,0) )
+        if( nchar(main) > 0 & !embend) par(oma=c(0,0,(cex.main/12)+1,0) )
         
         heatmapPlotWrapper( 
             HLST, clusts, bins=plotset[[1]]$all_ind, titles=lab, 
@@ -234,10 +248,9 @@ setMethod(
             cex.legend=cex.legend, xlab=xlab, ylab=ylab, autoscale=autoscale, 
             zmin=zmin, zmax=zmax, xlim=xlim, ln.v=ln.v, s=s, indi=indi,
             o_min=o_min, o_max=o_max, colvec=colvec, colorspace=clspace, 
-            pointsize=pointsize
+            pointsize=pointsize, embend=embend
         )
         title(main, outer = TRUE, cex.main=cex.main/pointsize)
-        par(opar)
         
         infile <- strsplit( plotset[[1]]$desc, '\n@')[[1]][[2]]
         # TODO: implement saving GenomicRanges in GetPlotSetArray
@@ -248,17 +261,17 @@ setMethod(
         #                    paste0('metadata_', colnames(elementMetadata(gr))) 
         #           }
         #              
-        #               gr$OriginalOrder <- 1:length(gr); 
-        #               if( nchar(input$clusters) ) 
-        #                   gr$ClusterID <- fromJSON(input$clusters)
-        #               if( nchar(input$sortingord) ) 
-        #                   gr$SortingOrder <- order(fromJSON(input$sortingord))
+        #           gr$OriginalOrder <- 1:length(gr); 
+        #           if( nchar(input$clusters) ) 
+        #               gr$ClusterID <- fromJSON(input$clusters)
+        #           if( nchar(input$sortingord) ) 
+        #               gr$SortingOrder <- order(fromJSON(input$sortingord))
         #               
-        #               gr$FinalOrder <- order(finalOrd)
+        #           gr$FinalOrder <- order(finalOrd)
         #               
-        #               out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
-        #               out <- out[finalOrd,]
-        
+        #           out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
+        #           out <- out[finalOrd,]
+        par(opar)
         return( invisible(data.frame(
             originalOrder=1:length(finalOrd), 
             ClusterID=classes, 
@@ -274,10 +287,11 @@ setMethod(
     "plotHeatmap", signature(plotset='PlotSetPair'),
     function(plotset, ...) {
         plotHeatmap(list(plotset), main, labels, legend, keepratio, 
-                    ord, plotScale, sortrows, clusters, clstmethod, 
+                    plotScale, sortrows, clusters, clstmethod, 
                     include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
                     cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
-                    s, indi, o_min, o_max, colvec, clspace, pointsize, ...)
+                    s, indi, o_min, o_max, colvec, clspace, pointsize, 
+                    embend=embend, ...)
     }
 )
 
@@ -287,10 +301,11 @@ setMethod(
     "plotHeatmap", signature(plotset='PlotSetList'), 
     function(plotset, ...) {
         plotHeatmap(plotset$data, main, labels, legend, keepratio, 
-                    ord, plotScale, sortrows, clusters, clstmethod, 
+                    plotScale, sortrows, clusters, clstmethod, 
                     include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
                     cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
-                    s, indi, o_min, o_max, colvec, clspace, pointsize, ...)
+                    s, indi, o_min, o_max, colvec, clspace, pointsize, 
+                    embend=embend, ...)
     }
 )
 
@@ -301,10 +316,11 @@ setMethod(
     function(plotset, ...) {
         plotHeatmap(
             unlist(plotset)$data, main, labels, legend, keepratio, 
-            ord, plotScale, sortrows, clusters, clstmethod, 
+            plotScale, sortrows, clusters, clstmethod, 
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
-            s, indi, o_min, o_max, colvec, clspace, pointsize, ...
+            s, indi, o_min, o_max, colvec, clspace, pointsize, 
+            embend=embend, ...
         )
     }
 )

@@ -15,7 +15,7 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
   zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
   o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
-  pointsize = 12, ...)
+  pointsize = 12, embend = FALSE, ...)
 
 \S4method{plotHeatmap}{list}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
@@ -24,7 +24,7 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
   autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
   s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  clspace = NULL, pointsize = 12, ...)
+  clspace = NULL, pointsize = 12, embend = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetPair}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
@@ -33,7 +33,7 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
   autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
   s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  clspace = NULL, pointsize = 12, ...)
+  clspace = NULL, pointsize = 12, embend = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetList}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
@@ -42,7 +42,7 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
   autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
   s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  clspace = NULL, pointsize = 12, ...)
+  clspace = NULL, pointsize = 12, embend = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetArray}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
@@ -51,7 +51,7 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
   autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
   s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  clspace = NULL, pointsize = 12, ...)
+  clspace = NULL, pointsize = 12, embend = FALSE, ...)
 }
 \arguments{
 \item{plotset}{The dataset to plot - can be \code{\link{PlotSetArray}},
@@ -160,6 +160,11 @@ rgb), or a positive integer i meaning palette()[i]. See
 
 \item{pointsize}{The default font point size to be used for plots. Defaults
 to 12 (1/72 inch).}
+
+\item{embend}{If TRUE plot single (first) heatmap without using grid system.
+Useful to embed heatmap in complex layouts, see
+\code{\link[graphics]{layout}} and \code{\link[graphics]{par}} for details.
+Defaults to FALSE.}
 
 \item{...}{parameters passed to internal plotting function}
 }

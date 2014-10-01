@@ -16,12 +16,16 @@
 #'
 #' @keywords internal
 #' 
-imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE, 
-                      legend.shrink = 0.9, legend.width = 1.2, legend.mar = ifelse(horizontal, 
-                                                                                   3.1, 5.1), legend.lab = NULL, legend.line = 2, graphics.reset = FALSE, 
-                      bigplot = NULL, smallplot = NULL, legend.only = FALSE, col = tim.colors(nlevel), 
-                      lab.breaks = NULL, axis.args = NULL, legend.args = NULL, 
-                      midpoint = FALSE, border = NA, lwd = 1, xinds=NULL, e=NULL) {
+imPlot2 <- function (
+    ..., add = FALSE, nlevel = 64, horizontal = FALSE, 
+    legend.shrink = 0.9, legend.width = 1.2, 
+    legend.mar = ifelse(horizontal,  3.1, 5.1), 
+    legend.lab = NULL, legend.line = 2, graphics.reset = FALSE, 
+    bigplot = NULL, smallplot = NULL, legend.only = FALSE, 
+    col = tim.colors(nlevel), 
+    lab.breaks = NULL, axis.args = NULL, legend.args = NULL, 
+    midpoint = FALSE, border = NA, lwd = 1, xinds=NULL, e=NULL) {
+    
     old.par <- par(no.readonly = TRUE)
     info <- imageplot.info(...)
     if (add) {
@@ -33,9 +37,10 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
     if (is.null(legend.mar)) {
         legend.mar <- ifelse(horizontal, 3.1, 5.1)
     }
-    temp <- imageplot.setup(add = add, legend.shrink = legend.shrink, 
-                            legend.width = legend.width, legend.mar = legend.mar, 
-                            horizontal = horizontal, bigplot = bigplot, smallplot = smallplot)
+    temp <- imageplot.setup(
+        add = add, legend.shrink = legend.shrink, 
+        legend.width = legend.width, legend.mar = legend.mar, 
+        horizontal = horizontal, bigplot = bigplot, smallplot = smallplot)
     smallplot <- temp$smallplot
     bigplot <- temp$bigplot
     if (!legend.only) {
@@ -44,13 +49,19 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
         }
         if (!info$poly.grid) {
             image(..., add = add, col = col, panel.last={
-                rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = "lightgrey")
-                if(is.null(e)) axis(1) else axis(1, at=c(min(xinds), 0,  e, max(xinds)), labels=c(min(xinds), '0', '0', max(xinds)-e))
-                })
+                rect(
+                    par("usr")[1],par("usr")[3],par("usr")[2],
+                    par("usr")[4],col = "lightgrey")
+                if(is.null(e)) axis(1) else axis(
+                    1, at=c(min(xinds), 0,  e, max(xinds)), 
+                    labels=c(min(xinds), '0', '0', max(xinds)-e))
+            })
         }
         else {
-            poly.image(..., add = add, col = col, midpoint = midpoint, 
-                       border = border, lwd.poly = lwd)
+            poly.image(
+                ..., add = add, col = col, midpoint = midpoint, 
+                border = border, lwd.poly = lwd
+            )
         }
         big.par <- par(no.readonly = TRUE)
     }
@@ -75,33 +86,34 @@ imPlot2 <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE,
     else {
         axis.args <- c(list(side = ifelse(horizontal, 1, 4), 
                             mgp = c(3, 1, 0), las = ifelse(horizontal, 0, 2)), 
-                       axis.args)
+                        axis.args)
     }
     if (!horizontal) {
         if (is.null(breaks)) {
             image(ix, iy, iz, xaxt = "n", yaxt = "n", xlab = "", 
-                  ylab = "", col = col)
+                ylab = "", col = col)
         }
         else {
             image(ix, iy, iz, xaxt = "n", yaxt = "n", xlab = "", 
-                  ylab = "", col = col, breaks = breaks)
+                ylab = "", col = col, breaks = breaks)
         }
     }
     else {
         if (is.null(breaks)) {
             image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", 
-                  ylab = "", col = col)
+                ylab = "", col = col)
         }
         else {
             image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", 
-                  ylab = "", col = col, breaks = breaks)
+                ylab = "", col = col, breaks = breaks)
         }
     }
     do.call("axis", axis.args)
     box()
     if (!is.null(legend.lab)) {
-        legend.args <- list(text = legend.lab, side = ifelse(horizontal, 
-                                                             1, 4), line = legend.line)
+        legend.args <- list(
+            text = legend.lab, side = ifelse(horizontal, 1, 4), 
+            line = legend.line)
     }
     if (!is.null(legend.args)) {
         do.call(mtext, legend.args)

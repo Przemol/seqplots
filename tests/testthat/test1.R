@@ -72,6 +72,9 @@ test_that("Test motifs", {
     expect_is(plot(psa[2,1], what='h'), 'data.frame')
     expect_is(plot(psa[c(1,3,5)], what='h'), 'data.frame')
     
+    context("Testing heatmap options")
+    expect_is(plotHeatmap(psa[1,], indi = FALSE), 'data.frame')
+    
     context("Testing heatmap cluster report")
     expect_true( all(is.na( psa[1,]$plot('h', clusters=0)$ClusterID )) )
     expect_true( all(is.na( plotHeatmap(psa[1,], clstmethod='none' )$ClusterID )) )

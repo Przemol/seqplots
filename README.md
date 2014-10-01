@@ -1,5 +1,5 @@
-SeqPlots
-========
+![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/LogoSeqPlotsLabeled.png)
+=================================================================================
 
 > An interactive tool for visualizing track signals and sequence motif densities along genomic features using average plots and heatmaps
 
@@ -7,7 +7,13 @@ SeqPlots
 
 ![Examples of Seq Plots interface and outputs](https://github.com/Przemol/seqplots/wiki/img/00_IntroS.png)
 
-## Introduction
+:exclamation: **RELEASE NOTE** :exclamation:
+
+SeqPlots is in development stage. The software is provided for testing purposes. Please report the problem, bugs, unexpected behaviors and missing features using [**issue tracker**](../issues).
+
+Introduction
+------------
+
 The SeqPlots is universal, web browser based tool for plotting
 average track signal (e.g. reads coverage) and sequence motif density over
 user specified genomic features. The data are visualized on linear plot,
@@ -22,14 +28,87 @@ combination plots on fly, run automated batch operations or share with
 colleagues, who can adjust their plotting parameters without loading actual
 tracks and recalculating numeric values.
 
-## Installation
+Installation
+------------
+
+Install develpment version from Bioconductor:
+
 ```{r}
 source("http://bioconductor.org/biocLite.R")
-biocLite(c("methods", "IRanges", "BSgenome", "digest", "rtracklayer", "GenomicRanges", 
-  "Biostrings", "shiny", "DBI", "RSQLite", "RJSONIO", "plotrix", "fields", "grid", 
-  "kohonen", "Cairo", "parallel", "GenomeInfoDb", "class", "testthat", "BiocStyle",
-  "knitr"))
+useDevel()
+biocLite("seqplots")
+```
 
+To install GitHub vesrion (in order to solve dependencies install from Bioconductor first):
+```{r}
 if (!require("devtools")) install.packages("devtools")
 devtools::install_github('przemol/seqplots', build_vignettes=FALSE)
 ```
+
+Quick start
+-----------
+
+To start web browser GUI:
+
+```{r}
+library(seqplots)
+run()
+```
+
+To start with R scripting mode:
+
+```{r}
+?getPlotSetArry
+```
+
+References
+----------
+
+**R project and Bioconductor**
+
+-   R Core Team (2014). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL http://www.R-project.org/.
+-   Bioconductor: Open software development for computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others 2004, Genome Biology, Vol. 5, R80.  URL http://www.bioconductor.org/.
+- RStudio and Inc. (2014). shiny: Web Application Framework for R. R package version 0.10.1. http://shiny.rstudio.com/
+- **Other CRAN packages:** digest, DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, Cairo and parallel
+- **Bioconductor packages:** IRanges, BSgenome, Rsamtools, rtracklayer, GenomicRanges and Biostrings 
+
+**JavaScript and CSS**
+
+- jQuery framework - http://jquery.com
+- Bootstrap - http://getbootstrap.com
+- DataTables, Table plug-in for jQuery - http://www.datatables.net
+- jQuery File Upload Plugin - https://github.com/blueimp/jQuery-File-Upload
+- jQuery throttle - http://benalman.com/projects/jquery-throttle-debounce-plugin/
+- jQuery Cookie Plugin - https://github.com/carhartl/jquery-cookie
+- Modernizer JS library - http://modernizr.com
+- JavaScript Templates - https://github.com/blueimp/JavaScript-Templates
+- JavaScript Color Picker - http://jscolor.com
+- md5-js - https://github.com/wbond/md5-js
+- Font Awesome - http://fortawesome.github.io/Font-Awesome
+- Google Fonts - https://www.google.com/fonts
+- jQuery user interface - http://jqueryui.com (documentation)
+- jquery.tocify.js: jQuery Table of Contents - https://github.com/gfranko/jquery.tocify.js (documentation)
+- Strapdown https://github.com/arturadib/strapdown (documentation)
+- Bootswatch themes - http://bootswatch.com (documentation)
+- google-code-prettify - https://code.google.com/p/google-code-prettify (documentation)
+- marked - https://github.com/chjj/marked (documentation)
+
+**Important conceptual contribution to the project**
+
+- Liu T, Ortiz J, Taing L, Meyer C, Lee B, Zhang Y, Shin H, Wong S, Ma J, Lei Y, et al. 2011. [Cistrome: an integrative platform for transcriptional regulation studies.](http://www.ncbi.nlm.nih.gov/pubmed/21859476) Genome Biology 12: R83.
+- Thomas Williams, Colin Kelley and others (2010). Gnuplot 4.4: an interactive plotting program. URL http://www.R-project.org/.
+- Kent, W.J., Sugnet, C.W., Furey, T.S., Roskin, K.M., Pringle, T.H., Zahler, A.M. and Haussler, a. D. (2002). [The Human Genome Browser at UCSC](http://www.ncbi.nlm.nih.gov/pubmed/12045153). Genome Research. 12:996–1006.
+- Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. (2010). [BigWig and BigBed: enabling browsing of large distributed datasets.](http://www.ncbi.nlm.nih.gov/pubmed/20639541) Bioinformatics. 1;26(17):2204-7
+- Nicol, J.W., Helt, G.A., Blanchard, S.G., Raja, A. and Loraine, A.E. (2009). [The Integrated Genome Browser: free software for distribution and exploration of genome-scale datasets.](http://www.ncbi.nlm.nih.gov/pubmed/19654113) Bioinformatics (Oxford, England). 25:2730–1.
+- Thorvaldsdóttir, H., Robinson, J.T. and Mesirov, J.P. (2012). [Integrative Genomics Viewer (IGV): high-performance genomics data visualization and exploration.](http://www.ncbi.nlm.nih.gov/pubmed/22517427) Briefings in bioinformatics. bbs017
+
+
+**Server deployment**
+
+- Shiny Server - https://github.com/rstudio/shiny-server
+- ShinyApps - https://github.com/rstudio/shinyapps
+
+
+**Publications containing figures made by SeqPlots**
+
+- Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J. [Extreme HOT regions are CpG-dense promoters in C. elegans and humans.](http://www.ncbi.nlm.nih.gov/pubmed/24653213) Genome Res 24(7):1138-1146 Jul 2014
