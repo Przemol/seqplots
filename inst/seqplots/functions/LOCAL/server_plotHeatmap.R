@@ -25,7 +25,7 @@ plotHeatmap <- function(pl, title=input$title, legend=TRUE) {
   
   #Preparing flat matrix fro sorrting an clustering
   if( length(subplotSetup$inc) & input$heat_include ) {
-    Hclc <- do.call(cbind, HLST[ as.logical(subplotSetup$inc) ])
+    Hclc <- do.call(cbind, HLST[ as.logical(subplotSetup$inc)[ ord ] ])
   } else {
     Hclc <- do.call(cbind, HLST)
   }
@@ -69,7 +69,7 @@ plotHeatmap <- function(pl, title=input$title, legend=TRUE) {
   } else if(input$img_clstmethod == 'ssom') {
     
     if( length(subplotSetup$inc) & input$heat_include ) {
-      Hlist <- HLST[ as.logical(subplotSetup$inc) ]
+      Hlist <- HLST[ as.logical(subplotSetup$inc)[ ord ] ]
     } else {
       Hlist <- HLST
     }
