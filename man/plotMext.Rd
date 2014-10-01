@@ -22,8 +22,9 @@ plotMext(INPUTS, xlim = NULL, ylim = NULL, main = NULL, xlab = "",
 \item{plotScale}{scale the available data before ploting, can be "linear"
  (do not scale), "log2" or "zscore"}
 
-\item{...}{Other parameters controlong the plot, see \code{\link{plotAverage}}
- for avareange plot and \code{\link{plotHeatmap}} for heatmaps.}
+\item{...}{Other parameters controlong the plot, see
+ \code{\link{plotAverage}} for avareange plot and \code{\link{plotHeatmap}}
+ for heatmaps.}
 }
 \value{
 \code{NULL}

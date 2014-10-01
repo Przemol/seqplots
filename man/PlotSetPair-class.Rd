@@ -16,9 +16,11 @@ PlotSetPair Reference Class
 
 \item{\code{conint}}{numeric vector of 95\% confidence intervals}
 
-\item{\code{all_ind}}{numeric vector giving the relative position of the bins in the genome}
+\item{\code{all_ind}}{numeric vector giving the relative position of the bins in the
+genome}
 
-\item{\code{numeric}}{value giving the length of anchored distance, NULL for point feature plots}
+\item{\code{numeric}}{value giving the length of anchored distance, NULL for point
+feature plots}
 
 \item{\code{desc}}{character string describing the PlotSetPair}
 

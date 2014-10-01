@@ -1,54 +1,80 @@
 Package: seqplots
 Maintainer: Przemyslaw Stempor <ps562@cam.ac.uk>
 Author: Przemyslaw Stempor
-Version: 0.99.1
+Version: 0.99.2
 License: GPL-3
-Title: SeqPlots - An interactive tool for visualizing NGS signals and
-        sequence motif densities along genomic features using average
-        plots and heatmaps.
-Description: SeqPlots is a tool for plotting next generation sequencing
-        (NGS) based experiments' signal tracks, e.g. reads coverage
-        from ChIP-seq, RNA-seq and DNA accessibility assays like
-        DNase-seq and MNase-seq, over user specified genomic features,
-        e.g. promoters, gene bodies, etc. It can also calculate
-        sequence motif density profiles from reference genome. The data
-        are visualized as average signal profile plot, with error
-        estimates (standard error and 95% confidence interval) shown as
-        fields, or as series of heatmaps that can be sorted and
-        clustered using hierarchical clustering, k-means algorithm and
-        self organising maps. Plots can be prepared using R programming
-        language or web browser based graphical user interface (GUI)
-        implemented using Shiny framework. The dual-purpose
-        implementation allows running the software locally on desktop
-        or deploying it on server. SeqPlots is useful for both for
-        exploratory data analyses and preparing replicable, publication
-        quality plots. Other features of the software include
-        collaboration and data sharing capabilities, as well as ability
-        to store pre-calculated result matrixes, that combine many
-        sequencing experiments and in-silico generated tracks with
-        multiple different features. These binaries can be further used
-        to generate new combination plots on fly, run automated batch
-        operations or share with colleagues, who can adjust their
-        plotting parameters without loading actual tracks and
-        recalculating numeric values. SeqPlots relays on Bioconductor
-        packages, mainly on rtracklayer for data input and BSgenome
-        packages for reference genome sequence and annotations.
+Title: SeqPlots - An interactive tool for visualizing NGS signals and sequence
+    motif densities along genomic features using average plots and heatmaps.
+Description: SeqPlots is a tool for plotting next generation sequencing (NGS)
+    based experiments' signal tracks, e.g. reads coverage from ChIP-seq,
+    RNA-seq and DNA accessibility assays like DNase-seq and MNase-seq, over
+    user specified genomic features, e.g. promoters, gene bodies, etc. It can
+    also calculate sequence motif density profiles from reference genome. The
+    data are visualized as average signal profile plot, with error estimates
+    (standard error and 95% confidence interval) shown as fields, or as series
+    of heatmaps that can be sorted and clustered using hierarchical clustering,
+    k-means algorithm and self organising maps. Plots can be prepared using R
+    programming language or web browser based graphical user interface (GUI)
+    implemented using Shiny framework. The dual-purpose implementation allows
+    running the software locally on desktop or deploying it on server. SeqPlots
+    is useful for both for exploratory data analyses and preparing replicable,
+    publication quality plots. Other features of the software include
+    collaboration and data sharing capabilities, as well as ability to store
+    pre-calculated result matrixes, that combine many sequencing experiments
+    and in-silico generated tracks with multiple different features. These
+    binaries can be further used to generate new combination plots on fly, run
+    automated batch operations or share with colleagues, who can adjust their
+    plotting parameters without loading actual tracks and recalculating numeric
+    values. SeqPlots relays on Bioconductor packages, mainly on rtracklayer for
+    data input and BSgenome packages for reference genome sequence and
+    annotations.
 URL: http://github.com/przemol/seqplots
 BugReports: http://github.com/przemol/seqplots/issues
-Depends: R (>= 3.1.0)
-Imports: methods, IRanges, BSgenome, digest, rtracklayer,
-        GenomicRanges, Biostrings, shiny, DBI, RSQLite, RJSONIO,
-        plotrix, fields, grid, kohonen, Cairo, parallel, GenomeInfoDb,
-        class, S4Vectors
+Depends:
+    R (>= 3.1.0)
+Imports:
+    methods,
+    IRanges,
+    BSgenome,
+    digest,
+    rtracklayer,
+    GenomicRanges,
+    Biostrings,
+    shiny,
+    DBI,
+    RSQLite,
+    RJSONIO,
+    plotrix,
+    fields,
+    grid,
+    kohonen,
+    Cairo,
+    parallel,
+    GenomeInfoDb,
+    class,
+    S4Vectors
 Type: Package
 Date: 2014-09-15
 LazyLoad: yes
 VignetteBuilder: knitr
-Suggests: testthat, BiocStyle, knitr
-Collate: 'MotifSetup-class.R' 'PlotSetPair-class.R'
-        'PlotSetArray-class.R' 'PlotSetList-class.R'
-        'generic_methods.R' 'getPlotSetArray.R' 'int_getSF.R'
-        'int_heatmapPlotWrapper.R' 'int_imPlot2.R' 'int_plotMext.R'
-        'plotAverage.R' 'plotHeatmap.R' 'run.R' 'seqplots-package.R'
-        'zzz.R'
+Suggests:
+    testthat,
+    BiocStyle,
+    knitr
+Collate:
+    'MotifSetup-class.R'
+    'PlotSetPair-class.R'
+    'PlotSetArray-class.R'
+    'PlotSetList-class.R'
+    'generic_methods.R'
+    'getPlotSetArray.R'
+    'int_getSF.R'
+    'int_heatmapPlotWrapper.R'
+    'int_imPlot2.R'
+    'int_plotMext.R'
+    'plotAverage.R'
+    'plotHeatmap.R'
+    'run.R'
+    'seqplots-package.R'
+    'zzz.R'
 biocViews: ChIPSeq, RNASeq, Sequencing, Software, Visualization

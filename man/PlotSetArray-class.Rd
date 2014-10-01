@@ -35,7 +35,8 @@ PlotSetArray Reference Class
 
 \item{\code{pairind()}}{Outputs the list of pair IDs}
 
-\item{\code{plot(...)}}{Plot the PlotSetArray, i.e. all PlotSetPairs within class. See \code{\link{plot}} for datails.}
+\item{\code{plot(...)}}{Plot the PlotSetArray, i.e. all PlotSetPairs within class. 
+See \code{\link{plot}} for datails.}
 
 \item{\code{subset(i, j)}}{Subseting method, get PlotSetPair as list}
 

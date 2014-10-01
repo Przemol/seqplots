@@ -23,8 +23,9 @@ plot(x, y, ...)
 \item{y}{For plotting SeqPlots classes this argument is ignored, used for
 default functionality of \code{\link[graphics]{plot}} function.}
 
-\item{...}{Other parameters controlong the plot, see \code{\link{plotAverage}}
- for avareange plot and \code{\link{plotHeatmap}} for heatmaps.}
+\item{...}{Other parameters controlong the plot, see
+ \code{\link{plotAverage}} for avareange plot and \code{\link{plotHeatmap}}
+ for heatmaps.}
 
 \item{what}{This argument takes a character determining if avareange
 plot (\code{"a"}, default) or heatmap (\code{"h"}) will be plotted.}

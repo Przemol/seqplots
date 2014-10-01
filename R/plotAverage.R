@@ -16,9 +16,6 @@
 #' @param labels The character vector giving labels used in experiment key. The
 #'   defaults NULL value indicates taht feature/track file names will be used to
 #'   generate the labels.
-#' @param ord The numeric vector determining the plotting order of experiments. 
-#'   Feature-track pair with the highest priority will be listed on the top of
-#'   key. If NULL (default) the order established in \code{plotset} is used.
 #' @param keepratio If TRUE keep 1:1 aspect ratio of the figure; defaults to
 #'   FALSE
 #' @param plotScale scale the available data before plotting, can be "linear"
@@ -119,7 +116,7 @@
 setGeneric(
     "plotAverage",
     function(
-        plotset, keepratio=FALSE, ord=NULL, labels=NULL, xlim=NULL, ylim=NULL, 
+        plotset, keepratio=FALSE, labels=NULL, xlim=NULL, ylim=NULL, 
         main=NULL, xlab='', ylab='', plotScale='linear', type='full', 
         error.estimates=TRUE, legend=TRUE, legend_ext=FALSE, 
         legend_pos='topright', legend_ext_pos="topleft", cex.axis=14, 
@@ -138,9 +135,10 @@ setMethod(
         if(keepratio) par(pty='s')
         if( length(labels) ) {
             labels <- labels[1:length(plotset)]
-            plotset <- Map(function(x, y) {if(!is.na(y)) x[['desc']]<-y; return(x)}, plotset, labels)
+            plotset <- Map(function(x, y) {
+                if(!is.na(y)) x[['desc']]<-y; return(x)
+            }, plotset, labels)
         }
-        if( length(ord) ) { plotset <- plotset[ ord ] }
         plotMext(
             plotset,  xlim=xlim, ylim=ylim, main=main, xlab=xlab, ylab=ylab, 
             plotScale=plotScale, type=type, error.estimates=error.estimates, 
@@ -160,7 +158,7 @@ setMethod(
     "plotAverage", signature(plotset='PlotSetPair'),
     function(plotset, ...) {
         plotAverage(
-            list(plotset), keepratio, ord, labels, xlim, ylim, main, 
+            list(plotset), keepratio, labels, xlim, ylim, main, 
             xlab, ylab, plotScale, type, error.estimates, legend, legend_ext, 
             legend_pos, legend_ext_pos, cex.axis, cex.lab, cex.main, 
             cex.legend, ln.v, ln.h, colvec, pointsize, ...
@@ -174,7 +172,7 @@ setMethod(
     "plotAverage", signature(plotset='PlotSetList'),
     function(plotset, ...) {
         plotAverage(
-            plotset$data, keepratio, ord, labels, xlim, ylim, main, xlab, ylab, 
+            plotset$data, keepratio, labels, xlim, ylim, main, xlab, ylab, 
             plotScale, type, error.estimates, legend, legend_ext, legend_pos, 
             legend_ext_pos, cex.axis, cex.lab, cex.main, cex.legend, ln.v, 
             ln.h, colvec, pointsize, ...
@@ -188,7 +186,7 @@ setMethod(
     "plotAverage", signature(plotset='PlotSetArray'),
     function(plotset, ...) {
         plotAverage(
-            unlist(plotset)$data, keepratio, ord, labels, xlim, ylim, main, 
+            unlist(plotset)$data, keepratio, labels, xlim, ylim, main, 
             xlab, ylab, plotScale, type, error.estimates, legend, legend_ext, 
             legend_pos, legend_ext_pos, cex.axis, cex.lab, cex.main, 
             cex.legend, ln.v, ln.h, colvec, pointsize, ...
