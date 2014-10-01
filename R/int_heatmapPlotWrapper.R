@@ -181,13 +181,15 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     
     #draw legend/color key for multiple heatmaps
     if(Leg & !indi & !embend) {
-        plot.new(cex.axis=lgfs, mar=c(0,0,0,0))
+        opar <- par()[c('cex.axis', 'mar')]; par(cex.axis=lgfs, mar=c(0,0,0,0));
+        plot.new(); 
         image.plot(
             1, ColorLevels, 
             matrix(data=ColorLevels, ncol=length(ColorLevels),nrow=1),
             col=ColorRamp, legend.only = TRUE, legend.shrink=1, 
-            smallplot=c(.1,.4,0.1,.9)
+            smallplot=c(.01,.25,0.3,.8)
         )
+        par(opar)
     }
     if(!embend) layout(1)
 }
