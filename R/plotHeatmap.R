@@ -36,10 +36,6 @@
 #'   over the heatmap and below the main title). The defaults NULL value 
 #'   indicates that feature/track file names will be used to generate the 
 #'   sub-titles.
-#' @param ord The numeric vector determining the plotting order of experiments. 
-#'   The heatmap representing feature-track pair with the highest priority will 
-#'   be plotted leftmost. If NULL (default) the order established in 
-#'   \code{plotset} is used.
 #' @param plotScale scale the available data before plotting, can be "linear" 
 #'   (do not scale, default), "log2" or "zscore"
 #' @param legend if TRUE plot the colour key
@@ -135,7 +131,7 @@ setGeneric(
     "plotHeatmap",
     function(
         plotset, main="", labels=NA, legend=TRUE, keepratio=FALSE, 
-        ord=NULL, plotScale="no", sortrows=FALSE, clusters=5L,
+        plotScale="no", sortrows=FALSE, clusters=5L,
         clstmethod="kmeans", include=NULL, ssomt1=2L, ssomt2=2L, cex.main=16,  
         cex.lab=12.0, cex.axis=12.0, cex.legend=12.0, xlab='', ylab="",
         autoscale=TRUE, zmin=0, zmax=10, xlim=NULL, ln.v=TRUE, s = 0.01, 
@@ -165,11 +161,10 @@ setMethod(
                 Do not plot heatmaps on multiple GFF/BED.', call.=FALSE
             )
         
-        if(is.null(ord)) { ord <- 1:length(plotset) }
         if(is.null(include)) { include <- rep(TRUE, length(plotset)) }
         
         #Heatmap data aquizition (as list of matrixes)
-        HLST <- lapply(plotset, '[[', 'heatmap')[ ord ]  
+        HLST <- lapply(plotset, '[[', 'heatmap')
         
         #Optional scalling
         if ( plotScale ==  "log2" ) {
@@ -292,7 +287,7 @@ setMethod(
     "plotHeatmap", signature(plotset='PlotSetPair'),
     function(plotset, ...) {
         plotHeatmap(list(plotset), main, labels, legend, keepratio, 
-                    ord, plotScale, sortrows, clusters, clstmethod, 
+                    plotScale, sortrows, clusters, clstmethod, 
                     include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
                     cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
                     s, indi, o_min, o_max, colvec, clspace, pointsize, 
@@ -306,7 +301,7 @@ setMethod(
     "plotHeatmap", signature(plotset='PlotSetList'), 
     function(plotset, ...) {
         plotHeatmap(plotset$data, main, labels, legend, keepratio, 
-                    ord, plotScale, sortrows, clusters, clstmethod, 
+                    plotScale, sortrows, clusters, clstmethod, 
                     include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
                     cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
                     s, indi, o_min, o_max, colvec, clspace, pointsize, 
@@ -321,7 +316,7 @@ setMethod(
     function(plotset, ...) {
         plotHeatmap(
             unlist(plotset)$data, main, labels, legend, keepratio, 
-            ord, plotScale, sortrows, clusters, clstmethod, 
+            plotScale, sortrows, clusters, clstmethod, 
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
