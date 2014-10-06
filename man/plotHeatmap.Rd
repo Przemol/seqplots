@@ -9,7 +9,16 @@
 \title{Plot heatmap with optional clustering}
 \usage{
 plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
-  keepratio = FALSE, ord = NULL, plotScale = "no", sortrows = FALSE,
+  keepratio = FALSE, plotScale = "no", sortrows = FALSE, clusters = 5L,
+  clstmethod = "kmeans", include = NULL, ssomt1 = 2L, ssomt2 = 2L,
+  cex.main = 16, cex.lab = 12, cex.axis = 12, cex.legend = 12,
+  xlab = "", ylab = "", autoscale = TRUE, zmin = 0, zmax = 10,
+  xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE, o_min = NA,
+  o_max = NA, colvec = NULL, clspace = NULL, pointsize = 12,
+  embend = FALSE, ...)
+
+\S4method{plotHeatmap}{list}(plotset, main = "", labels = NA,
+  legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
   clusters = 5L, clstmethod = "kmeans", include = NULL, ssomt1 = 2L,
   ssomt2 = 2L, cex.main = 16, cex.lab = 12, cex.axis = 12,
   cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
@@ -17,41 +26,32 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
   pointsize = 12, embend = FALSE, ...)
 
-\S4method{plotHeatmap}{list}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
-  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
-  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
-  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
-  autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
-  s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  clspace = NULL, pointsize = 12, embend = FALSE, ...)
-
 \S4method{plotHeatmap}{PlotSetPair}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
-  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
-  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
-  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
-  autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
-  s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  clspace = NULL, pointsize = 12, embend = FALSE, ...)
+  legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
+  clusters = 5L, clstmethod = "kmeans", include = NULL, ssomt1 = 2L,
+  ssomt2 = 2L, cex.main = 16, cex.lab = 12, cex.axis = 12,
+  cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
+  zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
+  o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
+  pointsize = 12, embend = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetList}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
-  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
-  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
-  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
-  autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
-  s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  clspace = NULL, pointsize = 12, embend = FALSE, ...)
+  legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
+  clusters = 5L, clstmethod = "kmeans", include = NULL, ssomt1 = 2L,
+  ssomt2 = 2L, cex.main = 16, cex.lab = 12, cex.axis = 12,
+  cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
+  zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
+  o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
+  pointsize = 12, embend = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetArray}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, ord = NULL, plotScale = "no",
-  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
-  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
-  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
-  autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE,
-  s = 0.01, indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  clspace = NULL, pointsize = 12, embend = FALSE, ...)
+  legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
+  clusters = 5L, clstmethod = "kmeans", include = NULL, ssomt1 = 2L,
+  ssomt2 = 2L, cex.main = 16, cex.lab = 12, cex.axis = 12,
+  cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
+  zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
+  o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
+  pointsize = 12, embend = FALSE, ...)
 }
 \arguments{
 \item{plotset}{The dataset to plot - can be \code{\link{PlotSetArray}},
@@ -70,11 +70,6 @@ sub-titles.}
 
 \item{keepratio}{If TRUE keep 1:1 aspect ratio of the figure; defaults to
 FALSE}
-
-\item{ord}{The numeric vector determining the plotting order of experiments.
-The heatmap representing feature-track pair with the highest priority will
-be plotted leftmost. If NULL (default) the order established in
-\code{plotset} is used.}
 
 \item{plotScale}{scale the available data before plotting, can be "linear"
 (do not scale, default), "log2" or "zscore"}
