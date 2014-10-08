@@ -79,7 +79,7 @@
 #'   \code{\link[grDevices]{grDevices}}
 #' @param pointsize The default font point size to be used for plots. Defaults 
 #'   to 12 (1/72 inch).
-#' @param embend If TRUE plot single (first) heatmap without using grid system. 
+#' @param embed If TRUE plot single (first) heatmap without using grid system. 
 #'   Useful to embed heatmap in complex layouts, see 
 #'   \code{\link[graphics]{layout}} and \code{\link[graphics]{par}} for details.
 #'   Defaults to FALSE.
@@ -136,7 +136,7 @@ setGeneric(
         cex.lab=12.0, cex.axis=12.0, cex.legend=12.0, xlab='', ylab="",
         autoscale=TRUE, zmin=0, zmax=10, xlim=NULL, ln.v=TRUE, s = 0.01, 
         indi=TRUE, o_min=NA, o_max=NA, colvec=NULL, clspace=NULL, pointsize=12, 
-        embend=FALSE, ...
+        embed=FALSE, ...
     ) standardGeneric("plotHeatmap")
 )
 
@@ -240,7 +240,7 @@ setMethod(
         lab[!is.na(labels)] <- labels[!is.na(labels)]
         
         
-        if( nchar(main) > 0 & !embend) par(oma=c(0,0,(cex.main/12)+1,0) )
+        if( nchar(main) > 0 & !embed) par(oma=c(0,0,(cex.main/12)+1,0) )
         
         heatmapPlotWrapper( 
             HLST, clusts, bins=plotset[[1]]$all_ind, titles=lab, 
@@ -248,7 +248,7 @@ setMethod(
             cex.legend=cex.legend, xlab=xlab, ylab=ylab, autoscale=autoscale, 
             zmin=zmin, zmax=zmax, xlim=xlim, ln.v=ln.v, s=s, indi=indi,
             o_min=o_min, o_max=o_max, colvec=colvec, colorspace=clspace, 
-            pointsize=pointsize, embend=embend
+            pointsize=pointsize, embed=embed
         )
         title(main, outer = TRUE, cex.main=cex.main/pointsize)
         
@@ -291,7 +291,7 @@ setMethod(
                     include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
                     cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
                     s, indi, o_min, o_max, colvec, clspace, pointsize, 
-                    embend=embend, ...)
+                    embed=embed, ...)
     }
 )
 
@@ -305,7 +305,7 @@ setMethod(
                     include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
                     cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
                     s, indi, o_min, o_max, colvec, clspace, pointsize, 
-                    embend=embend, ...)
+                    embed=embed, ...)
     }
 )
 
@@ -320,7 +320,7 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embend=embend, ...
+            embed=embed, ...
         )
     }
 )
