@@ -31,7 +31,7 @@ run <- function(
     on.exit( {
         rm(list=c(
             "doFileOperations", "GENOMES", "heatmapPlotWrapper", 
-            "imPlot2", "mcCalcStart", "mcDoParallel", "plotMext", 
+            "imPlot2", "mcCalcStart", "mcDoParallel", 
             "renderHTMLgrid"
         ), envir=.GlobalEnv)
         setwd(oldwd) 
