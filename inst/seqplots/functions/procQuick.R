@@ -118,27 +118,37 @@ procQuick <- function(trackfiles, filelist, bin=1L, rm0=FALSE, ignore_strand=FAL
 			  } else if ( class(trackfiles[[i]]) == 'list' ) {
 			      #MOTIF - left 
 			      cat4(paste0("MOTIF: Processing upsterem ", pattern, " motif..."))
-			      gr <- flank(sel, x1, start=TRUE); seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
-			      M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
-			      if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
-			      M.left <-  t(apply(M, 1, function(x) approx(x, n=length(left_ind))$y ))
+			      gr <- flank(sel, xmin, start=TRUE)
+			      seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)]
+			      M <- getSF(
+			          GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
+			          revcomp=revcomp
+			      )
+			      M.left <-  t(apply(M, 1, function(x) 
+			          approx(x, n=length(left_ind))$y ))
 			      
 			      #MOTIF - middle
 			      cat4(paste0("MOTIF: Processing middle ", pattern, " motif..."))
-			      gr <- sel; seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];    	
-			      M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
-			      if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
-			      M.middle <-  t(apply(M, 1, function(x) approx(x, n=length(mid_ind))$y ))
+			      gr <- sel
+			      seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
+			      M <- getSF(
+			          GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
+			          revcomp=revcomp
+			      )
+			      M.middle <- t(apply(M, 1, function(x) 
+			          approx(x, n=length(mid_ind))$y ))
 			      
 			      #MOTIF - right
 			      cat4(paste0("MOTIF: Processing downsteream ", pattern, " motif..."))
-			      gr <- flank(sel, x1, start=FALSE); seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
-			      M <- getSF(GENOME, trim(gr), pattern, seq_win, !add_heatmap, revcomp=revcomp)
-			      if (!ignore_strand) M[as.character(strand(gr))=='-', ] <- M[as.character(strand(gr))=='-', ncol(M):1]
-			      M.right <-  t(apply(M, 1, function(x) approx(x, n=length(right_ind))$y ))
+			      gr <- flank(sel, xmin, start=FALSE)
+			      seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
+			      M <- getSF(
+			          GENOME, trim(gr), pattern, seq_win, !add_heatmap,
+			          revcomp=revcomp)
+			      M.right <-  t(apply(M, 1, function(x) 
+			          approx(x, n=length(right_ind))$y ))
 			      
-			      M <- cbind(M.left, M.middle, M.right)                             
-			    
+			      M <- cbind(M.left, M.middle, M.right)                          
 			  }
 			}
 			
