@@ -274,9 +274,9 @@ setMethod(
         par(opar)
         return( invisible(data.frame(
             originalOrder=1:length(finalOrd), 
-            ClusterID=classes, 
-            SortingOrder=order(sorting_order), 
-            FinalOrder=order(finalOrd)
+            ClusterID=classes[order(sorting_order)], 
+            SortingOrder=sorting_order, 
+            FinalOrder=finalOrd
         )) )
     }
 )
