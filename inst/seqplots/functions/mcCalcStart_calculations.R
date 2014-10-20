@@ -11,10 +11,26 @@ mcCalcStart <- quote({
     cat3 <- function(x) { session$sendCustomMessage("jsExec", sprintf("$('#summary2').text('%s')", x)) }
     cat4 <- function(x) { session$sendCustomMessage("jsExec", sprintf("$('#summary3').text('%s')", x)) }
     if ( length( values$SFsetup ) > 0 | length( input$f_tracks ) > 0 ) {
-      procQuick(c(sort(input$f_tracks), values$SFsetup), sort(input$f_features),
-                x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
-                type = input$plot_type, bin= as.numeric(input$BWbin),
-                cat3=cat3, cat4=cat4, rm0=input$rm0, ignore_strand=input$ignore_strand, add_heatmap=input$add_heatmap, con=con)
+        
+        out <- seqplots::getPlotSetArray(
+                tracks=c(file.path('files', sort(input$f_tracks)), values$SFsetup),
+                features=file.path('files', sort(input$f_features)),
+                refgenome=con,
+                xmin = input$plot_upstream, 
+                xanchored = input$anchored_downstream, 
+                xmax = input$plot_downstream,
+                type = gsub('^(.)[a-z]+ (.).+', '\\1\\2', tolower(input$plot_type)), 
+                bin= as.numeric(input$BWbin),
+                rm0=input$rm0,
+                ignore_strand=input$ignore_strand,
+                add_heatmap=input$add_heatmap,
+                verbose=TRUE, lvl1m=cat3, lvl2m=cat4
+            )       
+        out$data 
+      #procQuick(c(sort(input$f_tracks), values$SFsetup), sort(input$f_features),
+       #         x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
+        #        type = input$plot_type, bin= as.numeric(input$BWbin),
+         #       cat3=cat3, cat4=cat4, rm0=input$rm0, ignore_strand=input$ignore_strand, add_heatmap=input$add_heatmap, con=con)
       
     }  else ( stop('Nothing to calculate!') )
   })
