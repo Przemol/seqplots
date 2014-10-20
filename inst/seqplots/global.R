@@ -10,6 +10,7 @@
     require(Cairo)
     require(plotrix)
     require(fields)
+    library(seqplots)
   })
 #}
 
