@@ -26,7 +26,7 @@ tagList(
                div(class="span2", 
                    numericInput("BWbin", "Bin track @ [bp]: ", 10)
                ),
-               div(class="span2", radioButtons('plot_type', 'Choose the plot type', c( 'Point Features', 'Midpoint Features', 'Anchored Features' ) ) ),
+               div(class="span2", radioButtons('plot_type', 'Choose the plot type', c( 'Point Features', 'Midpoint Features', 'Endpoint Features', 'Anchored Features' ) ) ),
                div(class="span2", p("Additional options:"), 
                    #conditionalPanel( condition = "input.plot_type != 'Anchored Features'", 
                    checkboxInput("ignore_strand", "Ignore strand", FALSE),
