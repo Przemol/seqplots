@@ -263,13 +263,8 @@ getPlotSetArray <- function(
                         lvl2m("Searching for motif...")
                     M <- getSF(
                         GENOME, gr, pattern, seq_win, !add_heatmap, 
-                        revcomp=revcomp
+                        revcomp=revcomp,  nbins=length(all_ind)
                     )
-                    
-                    if(verbose) lvl2m("Binning the motif...")
-                    M <-  t(apply(M, 1, function(x) 
-                        approx(x, n=ceiling(ncol(M)/bin))$y ))        
-                    
                 }
                 
             } else if (type == 'af') {
@@ -296,12 +291,10 @@ getPlotSetArray <- function(
                     ))
                     gr <- flank(sel, xmin, start=TRUE)
                     seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)]
-                    M <- getSF(
+                    M.left <- getSF(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
-                        revcomp=revcomp
+                        revcomp=revcomp, nbins=length(left_ind)
                     )
-                    M.left <-  t(apply(M, 1, function(x) 
-                        approx(x, n=length(left_ind))$y ))
                     
                     #MOTIF - middle
                     if(verbose) lvl2m(paste0(
@@ -309,12 +302,10 @@ getPlotSetArray <- function(
                     ))
                     gr <- sel
                     seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
-                    M <- getSF(
+                    M.middle <- getSF(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
-                        revcomp=revcomp
+                        revcomp=revcomp, nbins=length(mid_ind)
                     )
-                    M.middle <- t(apply(M, 1, function(x) 
-                        approx(x, n=length(mid_ind))$y ))
                     
                     #MOTIF - right
                     if(verbose) lvl2m(paste0(
@@ -322,12 +313,10 @@ getPlotSetArray <- function(
                     ))
                     gr <- flank(sel, xmin, start=FALSE)
                     seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
-                    M <- getSF(
+                    M.right <- getSF(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap,
-                        revcomp=revcomp)
-                    M.right <-  t(apply(M, 1, function(x) 
-                        approx(x, n=length(right_ind))$y ))
-                    
+                        revcomp=revcomp, nbins=length(right_ind)
+                    )
                     M <- cbind(M.left, M.middle, M.right)
                     
                 }
