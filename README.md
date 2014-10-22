@@ -9,7 +9,21 @@
 
 :exclamation: **RELEASE NOTE** :exclamation:
 
-SeqPlots is in development stage. The software is provided for testing purposes. Please report the problem, bugs, unexpected behaviors and missing features using [**issue tracker**](../issues).
+GitHub repository holds development version of SeqPlots. The release is available on Bioconductor.
+Please report the problem, bugs, unexpected behaviors and missing features using [**issue tracker**](../issues).
+
+Live demo
+---------
+
+The working demonstration preview of SeqPlots is available on ShinyApps.io:
+**https://seqplots.shinyapps.io/seqplots/**
+
+Demo limits:
+
+-	the application contains some pre-loaded data (*C. elegans* genes and histone modifications)
+-	size of uploaded files is limited to 30MB, please bin or subset your tracks to fit within the limit (due to ShinyApps beta upload limitations)
+-	only *C. elegans* genome is available (due ShinyApps beta space limits)
+-	uploaded files will be deleted after some time
 
 Introduction
 ------------
