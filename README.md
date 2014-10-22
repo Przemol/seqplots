@@ -35,7 +35,6 @@ Install develpment version from Bioconductor:
 
 ```{r}
 source("http://bioconductor.org/biocLite.R")
-useDevel()
 biocLite("seqplots")
 ```
 
