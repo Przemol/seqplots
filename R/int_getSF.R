@@ -9,19 +9,21 @@ getSF  <- function(genome, gr, pattern, bin, nbins, simple=TRUE, revcomp=FALSE) 
     hits <- resize( as(hits, "CompressedIRangesList"), bin, fix='center')
     
     if(!revcomp) {
-        out <- sapply(coverage(hits, width=width(seqs)), function(x) 
-            approx(as.numeric(x)[(bin+1):(length(x) - bin)], n=nbins)$y
-        )
+        cover <- coverage(hits, width=width(seqs))
     } else {
         rhits <- vmatchPattern(
             reverseComplement(pattern), seqs, algorithm="naive-exact"
         )
         rhits <- resize( as(rhits, "CompressedIRangesList"), bin, fix='center')
-        
         cover <- coverage(hits, width=width(seqs)) + coverage(rhits, width=width(seqs))
-        out <- sapply(cover, function(x) 
-            approx(as.numeric(x)[(bin+1):(length(x) - bin)], n=nbins)$y
-        )
     }
+    out <- sapply(cover, function(x) {
+        vec <- as.numeric(x)[(bin+1):(length(x) - bin)]
+        if(length(vec) < 2) {
+            rep(vec, nbins)
+        } else {
+            approx(vec, n=nbins)$y
+        }
+    })
     return( t(out) )
 }
