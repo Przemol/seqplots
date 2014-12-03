@@ -107,7 +107,7 @@ shinyServer(function(input, output, clientData, session) {
 	})
 	output$htmltab <- reactive({
 		if( is.null( values$grfile ) )	return('')	
-		return( renderHTMLgrid(values$grfile, TRUE, urlSetup$select, addcls=digest::digest(input$publicRdata)) )					
+		return( renderHTMLgrid(values$grfile, TRUE, urlSetup$select, addcls=digest::digest(input$publicRdata), isolate(input$subplot_options)) )					
 	})
 	
 	#Determined if plot and dataset save menu shoud be visible
@@ -501,16 +501,21 @@ shinyServer(function(input, output, clientData, session) {
       session$sendCustomMessage("jsExec", sprintf("$('#file_genome').children().removeAttr('selected').filter('[value=%s]').attr('selected', 'selected')", query$genome))
     }
     
+    for(n in names(query)[!names(query) %in% c('load', 'select', 'genome')] ){
+        session$sendInputMessage(n, list(
+            value = unlist(strsplit(query[[n]], ',')) 
+        ) )
+        
+    }
+    
     if(length(query$load)){
       #session$sendCustomMessage("jsAlert", sprintf('loading file: [%s]', file.path('publicFiles', query$load)) )
       values$grfile <- get(load( file.path('publicFiles', query$load) ))
       updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  query$load)
       #session$sendCustomMessage("jsExec", sprintf("$('#publicRdata').val('%s').change()", query$load))
     }
-    for(n in names(query)[!names(query) %in% c('load', 'select', 'genome')] ){
-      session$sendInputMessage(n, list(value = query[[n]]) )
-      
-    }
+    
+
     if( is.character(query$select) ) {
       #session$sendCustomMessage("jsAlert", sprintf('Selecting plots: [%s]', query$select) )
       sel <- do.call( rbind, strsplit(strsplit(query$select, ';')[[1]], ',') )
