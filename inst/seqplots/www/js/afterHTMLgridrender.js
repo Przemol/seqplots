@@ -28,6 +28,12 @@ $(".grid-row-select-btn").click(function() {
 $(".toogle-sel-btn-vis").click(function() { 
     $( "a[class*='grid-']" ).toggle();
 });
+$(".toogle-col-btn-vis").click(function() { 
+    $('.rhdrs').toggle();
+});
+$(".toogle-row-btn-vis").click(function() { 
+    $('.hhdrs').toggle()
+});
 
 $('a[data-toggle=tooltip]').tooltip();
 
@@ -53,9 +59,7 @@ $('.hhdr').click(function() {
     } else {
         $('#plotTable tr > :nth-child('+num+') input[id*='+who+']').val(text).change();
     }
-     
-
-    
+       
 });
 
 $('.hdr-numeric-auto-input').change(function() { 
@@ -65,6 +69,34 @@ $('.hdr-numeric-auto-input').change(function() {
     $('#plotTable tr > :nth-child('+num+') input[id*='+who+']').val(text).change();
     
 });
+
+$('.chdr').click(function() { 
+   
+    var text = $(this).siblings().val();
+    var who = $(this).attr('data-who');
+    if( text == '' ) text = $(this).attr('data-fname');
+    if( who == 'inc' ) {
+        $('#plotTable select[id*='+who+']').val(text).change();
+    } else {
+        $('#plotTable input[id*='+who+']').val(text).change();
+    }
+       
+});
+
+$('.chdrat').click(function() { 
+    $('#plotTable input[id*=label_]').each( function() { $(this).val($(this).attr('data-at')).change() } )   
+});
+
+
+
+$('.chdr-numeric-auto-input').change(function() { 
+    var num = $(this).parents('th').index()+1;
+    var text = $(this).val();
+    var who = $(this).attr('data-who');
+    $('#plotTable input[id*='+who+']').val(text).change();
+    
+});
+
 
 
     // $('#plotTable tr > :nth-child('+num+') input[id*=label]')
