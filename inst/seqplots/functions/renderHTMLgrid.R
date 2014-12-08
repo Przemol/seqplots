@@ -10,9 +10,11 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
 	cls <- c("darkblue", "darkgreen", "darkred", "darkmagenta", "darkgray", "darkorange", "darkcyan", "black", rainbow((length(grfile)*length(grfile[[1]]))-8))[1:(length(grfile)*length(grfile[[1]]))]
 	cltab <-matrix( rgb(t(col2rgb(cls)), maxColorValue=255), length(grfile[[1]]), length(grfile)  )
   html.text <- capture.output( {
+                
 				cat('<table id="plotTable" class="',addcls,'" style="margin-left: auto; margin-right: auto; text-align: center;">')
 				cat('<thead>')
-				cat('<tr><th><b>
+				cat(
+                    '<tr><th><b>
                     <a class="btn btn-mini pull-left grid-all-toggle-btn" href="#" style="margin-right: 5px" title="Toggle all selections" data-placement=top data-toggle=tooltip>
 				        <i class="icon-check icon-large"></i></a>
                     <a class="btn btn-mini pull-left grid-all-select-btn" href="#" style="margin-right: 5px" title="Select all" data-placement=top data-toggle=tooltip>
@@ -20,7 +22,46 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
                     <a class="btn btn-mini pull-left grid-all-remove-btn" href="#" style="margin-right: 5px" title="Select none" data-placement=top data-toggle=tooltip>
     			        <i class="icon-remove-circle icon-large"></i></a>
                         Features: 
-                    </b></th>')
+                    </b>'
+				)
+				cat('
+                    <div class="hhdrs"  style="text-align: center;"> 
+                        <div class="div_separator div_setup"  style="display:none;"><hr /></div>
+                        <div class="div_color div_setup"  style="display:none">
+                            <div class="input-append">
+                                <input type="color" style="width:55px" name="plot_col" class="color {hash:true}" title="Set a color for whole row." data-placement="left"/>  
+                                <a class="btn chdr" data-who="color" href="#"><i class="icon-fullscreen"></i></a>
+                            </div>                        
+                        </div> 
+                        <div class="div_label div_setup" style="display:none">
+                            <div class="input-append">
+                                <input type="text" style="width:55px" placeholder="All labels" title="Set a header label here." data-placement="left"/> 
+                                <a class="btn chdr" data-who="label" href="#"><i class="icon-fullscreen"></i></a>
+                                <a class="btn chdrat" data-who="color" href="#">@</a>
+                            </div>
+                        </div>
+                        <div class="div_prior div_setup" style="display:none">
+                            <div class="input-append">
+                                <input type="number"  style="width:55px" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> 
+                                <a class="btn chdr" data-who="prior" href="#"><i class="icon-fullscreen"></i></a>
+                            </div> 
+                        </div> 
+              
+                        <div class="div_inc div_setup"  style="display:none; min-width:91px">
+                            <div class="input-append">
+                                <select  style="width:70px" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select>
+                                <a class="btn chdr" data-who="inc" href="#"><i class="icon-fullscreen"></i></a>
+                            </div> 
+                        </div>
+              
+                        <div class="div_min div_max div_setup"   style="display:none; min-width:127px"">
+                            <input class="chdr-numeric-auto-input" data-who="min" type="number" style="width:40px" title="Heatmap MIN limit."/> - 
+                            <input class="chdr-numeric-auto-input" data-who="max" type="number" style="width:40px" title="Heatmap MAX limit.."/>
+ 
+                        </div>
+                        </div>'
+                    )
+                    cat('</th>')
                 
                 for(i in 1:length(names(grfile[[1]]))) {
                     cat('<th>')
@@ -39,7 +80,7 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
                         </div> 
                         <div class="div_label div_setup" style="display:none">
                             <div class="input-append">
-                                <input type="text" style="width:55px" placeholder="Row header..." title="Set a header label here." data-placement="left"/> 
+                                <input type="text" style="width:55px" placeholder="', names(grfile[[1]])[i], '" title="Set a header label here." data-placement="left"/> 
                                 <a class="btn hhdr" data-who="label" data-fname="', names(grfile[[1]])[i], '" href="#"><i class="icon-chevron-down"></i></a>
                             </div>
                         </div>
@@ -73,9 +114,9 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
 					cat("<tr>")
 					cat(
                         "<td>",
-                        '<a class="btn btn-mini pull-left grid-row-select-btn" href="#" style="margin-right: 5px" title="Toggle row selection" data-placement=left data-toggle=tooltip>
+                        '<p style="white-space:nowrap; margin-right:27px;"><a class="btn btn-mini pull-left grid-row-select-btn" href="#" style="margin-right: 5px" title="Toggle row selection" data-placement=left data-toggle=tooltip>
                         <i class="icon-check icon-large"></i></a>',
-                        names(grfile)[j]
+                        names(grfile)[j], '</p>'
 					)
                      cat(
                         '<div class="rhdrs" style="text-align: right;">',
@@ -88,7 +129,7 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
                         </div> 
                         <div class="div_label div_setup" style="display:none">
                             <div class="input-append">
-                                <input style="width:80px" type="text" placeholder="Row header..." title="Set a header label here." data-placement="left"/> 
+                                <input style="width:80px" type="text" placeholder="', gsub('\\..+$', '', names(grfile)[j]), '" title="Set a header label here." data-placement="left"/> 
                                 <a class="btn rhdr" data-who="label" data-fname="', gsub('\\..+$', '', names(grfile)[j]), '" href="#"><i class="icon-chevron-right"></i></a>
                             </div>
                         </div>
@@ -121,6 +162,7 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
                         "</td>", sep=''
                     )
 					for (i in 1:length(grfile[[j]])) {
+					    at_txt <- paste0( gsub('\\..+$', '', names(grfile[[1]])[i]), ' @ ', gsub('\\..+$', '', names(grfile)[j]) )
 						cat('<td>')
             if ( if(!is.null(checked)) if( any( apply(checked, 1, identical, c(i,j)) ) ) TRUE else FALSE else FALSE ) {
 							cat('<input type="checkbox" name="plot_this" value="[',i,',',j,']" checked />', sep='')
@@ -135,7 +177,7 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
                     <input type="color" name="plot_col" id="color_',i,'x', j,'" class="color {hash:true}", value="',cltab[i,j],'" style="width:60px;" title="Set a color here." data-placement="left"/>  </div> ', sep='')
               
               cat('<div class="div_label div_setup"  style="display:none">
-                  <input type="text"   id="label_',i,'x', j,'" style="width:60px" placeholder="Label..." title="Set a label here." data-placement="left"/> </div> ', sep='')
+                  <input type="text"   id="label_',i,'x', j,'" data-at="', at_txt, '" style="width:60px" placeholder="Label..." title="Set a label here." data-placement="left"/> </div> ', sep='')
               
               cat('<div class="div_prior div_setup" style="display:none">
                   <input type="number" id="prior_',i,'x', j,'" style="width:60px" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> </div> ', sep='')
@@ -154,13 +196,15 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
 					cat("</tr>")
 				}
 				cat('<tr><td style="border: 0px"><br>
-                    <a class="btn btn-small pull-left toogle-sel-btn-vis" href="#"><i class="icon-eye-open icon-large"></i> Show/hide selection buttons</a>
-                    <a style="display:none;" class="btn btn-small pull-left toogle-row-btn-vis div_setup div_separator" href="#"><i class="icon-eye-open icon-large"></i> Show/hide row setup tools</a>
-                    <a style="display:none;" class="btn btn-small pull-left toogle-col-btn-vis div_setup div_separator" href="#"><i class="icon-eye-open icon-large"></i> Show/hide column setup tools</a>
+                    <a style="width:220px;" class="btn btn-small pull-left toogle-sel-btn-vis" href="#"><i class="icon-eye-close icon-large"></i> Show/hide selection buttons</a>
+                    <br />
+                    <a style="display:none; width:220px" class="btn btn-small pull-left toogle-row-btn-vis div_setup div_separator" href="#"><i class="icon-list icon-fixed-width icon-large"></i> Show/hide row setup tools</a>
+                    <br />
+                    <a style="display:none; width:220px" class="btn btn-small pull-left toogle-col-btn-vis div_setup div_separator" href="#"><i class="icon-list icon-fixed-width icon-rotate-90 icon-large"></i> Show/hide column setup tools</a>
                     </td></tr>')
 				cat('</tbody>')
-				
 				cat('</table>')
+				
         #cat('<script> if( !Modernizr.inputtypes.color ) { jscolor.bind() } </script>')
 				cat('<script>')
 				  cat(readLines(file.path(Sys.getenv("web", '.'), 'www/js/afterHTMLgridrender.js'), warn = FALSE, encoding = "UTF-8"))
