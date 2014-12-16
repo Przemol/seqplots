@@ -8,7 +8,8 @@ heatmapPlotWrapper(MAT, axhline = NULL, titles = rep("", length(MAT)),
   cex.legend = 12, xlab = "", ylab = "", Leg = TRUE, autoscale = TRUE,
   zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE, e = NULL, s = 0.01,
   indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  colorspace = NULL, pointsize = 12, embed = FALSE)
+  colorspace = NULL, pointsize = 12, embed = FALSE, raster = FALSE,
+  ylim = c(nrow(data), 1), ...)
 }
 \arguments{
 \item{MAT}{- list of matrixes holding heatmap data}
