@@ -59,8 +59,8 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
         s = input$hsccoef,
         colvec=if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL,
         clspace=if(input$heat_colorspace) c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max) else NULL,
-        raster=FALSE,
-        ggplot=FALSE
+        raster=input$raster,
+        ggplot=input$ggplot
     ) 
     
     session$sendCustomMessage("jsExec", paste0(

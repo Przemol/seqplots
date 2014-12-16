@@ -285,6 +285,8 @@ shinyUI(
 						      checkboxInput('pty_batch', 'Keep 1:1 aspect ratio in batch mode', TRUE),
 						      checkboxInput('pty', 'Always keep 1:1 aspect ratio', FALSE),
 						      checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE),
+						      checkboxInput("raster", "Use raster bitmap to plot heatmaps", TRUE),
+						      checkboxInput("ggplot", "Use ggplot2 graphics package for heatmaps [EXPERIMENTAL]", FALSE),
 						      conditionalPanel( condition = tolower(as.character(Sys.getenv("SHINY_SERVER_VERSION") == '')),
 						        checkboxInput('setup_multithread', 'Use multithreading for calculations', .Platform$OS.type != 'windows')
 						      )
