@@ -212,7 +212,7 @@ shinyServer(function(input, output, clientData, session) {
           if (input$batch_what == "lineplots") {
             plotLineplot(pl, title=title) 
           } else {
-            plotHeatmap(pl, title=title) 
+            plotHeatmapLocal(pl, title=title) 
           } 
         }
       } else if(input$batch_how=="rows") {
@@ -226,7 +226,7 @@ shinyServer(function(input, output, clientData, session) {
           if (input$batch_what == "lineplots") {
             plotLineplot(pl, title=title) 
           } else {
-            plotHeatmap(pl, title=title) 
+            plotHeatmapLocal(pl, title=title) 
           } 
         }
       } else if(input$batch_how=="single")  {
@@ -238,7 +238,7 @@ shinyServer(function(input, output, clientData, session) {
             if (input$batch_what == "lineplots") {
               plotLineplot(pl, title=title, legend=FALSE) 
             } else {
-              plotHeatmap(pl, title=title, legend=FALSE) 
+              plotHeatmapLocal(pl, title=title, legend=FALSE) 
             } 
           }  
         }
@@ -273,7 +273,7 @@ shinyServer(function(input, output, clientData, session) {
 				co <- lapply(input$plot_this, function(x) fromJSON(x))
 				pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
 				pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size), paper=input$paper)
-					plotHeatmap(pl=pl)				
+					plotHeatmapLocal(pl=pl)				
 				dev.off()
 			}
 	)
