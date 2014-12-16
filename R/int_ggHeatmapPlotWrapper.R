@@ -56,7 +56,7 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     cex.legend=12.0, xlab='', ylab="", Leg=TRUE, autoscale=TRUE, zmin=0, 
     zmax=10, xlim=NULL, ln.v=TRUE, e=NULL, s = 0.01, indi=TRUE,
     o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12,
-    embed=FALSE, ...) {
+    embed=FALSE, raster=TRUE, ...) {
     
     lfs  <- cex.lab / pointsize
     afs  <- cex.axis / pointsize
@@ -153,9 +153,9 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             
             #browser()
             colnames(data) <- bins
-            p <- ggplot(melt(data), aes(Var2, Var1, fill = value)) + 
-                geom_raster() + 
-                scale_fill_gradientn(
+            p <- ggplot(melt(data), aes(Var2, Var1, fill = value))
+            p <- p + geom_raster()
+            p <- p + scale_fill_gradientn(
                     colours = gcol(100), limits = keycolor_lim, 
                     breaks=keycolor_lim, labels=format(keycolor_lim, digits=2)
                 ) +
