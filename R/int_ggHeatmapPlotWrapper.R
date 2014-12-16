@@ -51,12 +51,12 @@
 #'   
 #' @keywords internal
 #'   
-heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
+ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     bins=1:(ncol(MAT[[1]])/length(MAT)), cex.lab=12.0, cex.axis=12.0, 
     cex.legend=12.0, xlab='', ylab="", Leg=TRUE, autoscale=TRUE, zmin=0, 
     zmax=10, xlim=NULL, ln.v=TRUE, e=NULL, s = 0.01, indi=TRUE,
     o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12,
-    embed=FALSE, raster=FALSE, ylim=c(nrow(data),1), ...) {
+    embed=FALSE, ...) {
     
     lfs  <- cex.lab / pointsize
     afs  <- cex.axis / pointsize
@@ -64,7 +64,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     
     datapoints <- unlist(MAT)
     NP=length(MAT)
-    raster <- length(unique(diff(bins)))==1 & raster
+    raster <- length(unique(diff(bins)))==1
     
     #colvec[ grepl('#ffffff', colvec) ] <- NA
     ncollevel = 64
@@ -85,19 +85,19 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             zmin<-zlim[1]
             zmax<-zlim[2]
         } 
-        if(!embed) 
-            layout(
-                matrix(seq(NP+1), nrow=1, ncol=NP+1), 
-                widths=c(rep(12/NP, NP), 1), heights=rep(1,NP+1)
-            )
+#         if(!embed) 
+#             layout(
+#                 matrix(seq(NP+1), nrow=1, ncol=NP+1), 
+#                 widths=c(rep(12/NP, NP), 1), heights=rep(1,NP+1)
+#             )
         ColorRamp <-gcol(ncollevel)
         ColorLevels <- seq(to=zmax,from=zmin, length=ncollevel)#number sequence
     } else {
-        if(!embed) invisible(capture.output( set.panel(1, NP) ))
+#        if(!embed) invisible(capture.output( set.panel(1, NP) ))
     }
     
     
-    
+    plots <- list()
     for (i in seq(NP)) {
         data <- MAT[[i]]
         
@@ -113,26 +113,15 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
                 )]
             image(
                 bins, 1:nrow(data), t(data), axes=TRUE, col=ColorRamp_ex, 
-                xlab=xlab, ylab=ylab, add=FALSE, ylim=ylim,
+                xlab=xlab, ylab=ylab, add=FALSE, #ylim=c(nrow(data),1),
                 xlim=if (is.null(xlim)) range(bins) else xlim,
                 cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs,
-                useRaster=raster, xaxt="n", yaxt="n", panel.first={
-                    axis(2, at=nrow(data), labels=nrow(data), cex.axis=afs)
-                    if(is.null(e)) { 
-                        axis(
-                            1, at=c(min(xinds), 0,  max(xinds)), 
-                            labels=c(num2bp(min(xinds)), '0bp', 
-                                     num2bp(max(xinds))), cex.axis=afs
-                        ) 
-                    } else {
-                        axis(
-                            1, at=c(min(xinds), 0,  e, max(xinds)), 
-                            labels=c(
-                                num2bp(min(xinds)), '0bp', '0bp', 
-                                num2bp(max(xinds)-e)
-                            ), cex.axis=afs
-                        )
-                    }
+                useRaster=raster, xaxt="n", panel.first={
+                    if(is.null(e)) axis(1) 
+                    else axis(
+                        1, at=c(min(xinds), 0,  e, max(xinds)), 
+                        labels=c(min(xinds), '0', '0', max(xinds)-e)
+                    )
                     rect(
                         par("usr")[1],par("usr")[3],par("usr")[2],
                         par("usr")[4],col="lightgrey"
@@ -162,41 +151,69 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
                     colorRampPalette(c('white', colvec[i]))(ncollevel) 
                 else gcol(ncollevel)
             
+            #browser()
+            colnames(data) <- bins
+            p <- ggplot(melt(data), aes(Var2, Var1, fill = value)) + 
+                geom_raster() + 
+                scale_fill_gradientn(
+                    colours = gcol(100), limits = keycolor_lim, 
+                    breaks=keycolor_lim, labels=format(keycolor_lim, digits=2)
+                ) +
+                scale_x_continuous(
+                    breaks=c(min(bins), 0, max(bins)),
+                    labels=sapply(c(min(bins), 0, max(bins)), num2bp),
+                    expand = c(0.05, 0.05)
+                ) +
+                geom_hline(yintercept=cumsum(axhline)[-length(axhline)]+.5, size=1) +
+                geom_vline(xintercept=c(0, e), size=.75, colour='black') +
+                scale_y_reverse(
+                    #limits=if (is.null(xlim)) range(bins) else xlim,
+                    breaks=c(cumsum(axhline)-(axhline/2)+.5, nrow(data)),
+                    labels=c(paste0('C', 1:length(axhline)), nrow(data)),
+                    expand = c(0.015, 0.015)
+                ) +
+                ggtitle(titles[i]) +
+                xlab(xlab) +
+                ylab(ylab) +
+                theme(legend.position = "bottom") +
+                guides(fill = guide_colorbar(barwidth = 10/5, barheight = 1, title = "", raster = TRUE))
+            #dev.off()
+            #labs(title = "New plot title", fill="")+
             
-            imPlot2(
-                bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlab, ylab=ylab, 
-                xlim=if (is.null(xlim)) range(bins) else xlim,  
-                zlim=keycolor_lim, col=col, ylim=ylim,
-                legend.width=1, horizontal=TRUE, useRaster=raster, 
-                xinds=xinds, e=e, xaxt="n", yaxt="n",
-                cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs, 
-                ylast=nrow(data), afs=afs, ...
-            )
+            plots[[i]] <- p
             
+#             imPlot2(
+#                 bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlab, ylab=ylab, 
+#                 xlim=if (is.null(xlim)) range(bins) else xlim,  
+#                 zlim=keycolor_lim, col=col, #ylim=c(nrow(data),1),
+#                 legend.width=1, horizontal=TRUE, useRaster=raster, 
+#                 xinds=xinds, e=e, xaxt="n",
+#                 cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs, ...
+#             )
+            
+#             axis(1)
             
             
             
         }
-        title( main=titles[i]); box()
-        if (!is.null(axhline)){
-            #message(paste(axhline, collapse=', '))
-            abline(h=cumsum(axhline)+.5, lwd=4)
-            axis(
-                2, at=cumsum(axhline)-(axhline/2)+.5, 
-                labels=paste0('C', 1:length(axhline)), las = 1, 
-                col.axis='darkred', font.axis=2, cex.axis=afs
-            )
-            
-            #cumsum(axhline)
-         
-        }
-        if (ln.v){
-            abline(v=c(0, e), lwd=2)
-        }
-        
-        if(embed) break()
+#         title( main=titles[i]); box()
+#         if (!is.null(axhline)){
+#             message(paste(axhline, collapse=', '))
+#             abline(h=cumsum(axhline)+.5, lwd=4)
+#             axis(4, at=cumsum(axhline)-(axhline/2)+.5, labels=1:length(axhline))
+#             #cumsum(axhline)
+#          
+#         }
+#         if (ln.v){
+#             abline(v=c(0, e), lwd=2)
+#         }
+#         
+#         if(embed) break()
     }
-    
+
+    do.call(grid.arrange, c(
+        plots, ncol=length(plots), main="The Heatmap", clip=FALSE, legend='zzzz'
+    ))
     #draw legend/color key for multiple heatmaps
     if(Leg & !indi & !embed) {
         opar <- par()[c('cex.axis', 'mar')]; par(cex.axis=lgfs, mar=c(0,0,0,0));
@@ -209,5 +226,5 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
         )
         par(opar)
     }
-    if(!embed) layout(1)
+    #if(!embed) layout(1)
 }
