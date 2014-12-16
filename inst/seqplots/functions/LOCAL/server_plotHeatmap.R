@@ -1,5 +1,5 @@
 #Heatmap plotting function
-plotHeatmap <- function(pl, title=input$title, legend=TRUE) {
+plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
   
     if( length(pl) > 10 ) 
         stop('Heatmap plotting: Select less than 10 checkboxes!', call.=FALSE)
@@ -58,7 +58,9 @@ plotHeatmap <- function(pl, title=input$title, legend=TRUE) {
         indi = input$indi, 
         s = input$hsccoef,
         colvec=if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL,
-        colorspace=if(input$heat_colorspace) c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max) else NULL        
+        clspace=if(input$heat_colorspace) c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max) else NULL,
+        raster=FALSE,
+        ggplot=FALSE
     ) 
     
     session$sendCustomMessage("jsExec", paste0(
