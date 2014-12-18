@@ -83,6 +83,19 @@ shinyServer(function(input, output, clientData, session) {
   	str(values$SFsetup) 
   })
   
+  #Subclust logic
+  observe({
+      input$clusters
+      if( !isolate(input$heat_seed) ) {
+          updateSelectInput(session, 'heat_subclust', choices='All clusters')
+          return()
+      }
+      if( isolate(input$heat_subclust) != "All clusters") return()
+      clusters <- fromJSON(input$clusters)
+      updateSelectInput(session, 'heat_subclust', choices = c('All clusters', sort(unique(clusters))))
+      
+  })
+  
   #Multicore calculations definictions 
   observe( mcCalcStart, quoted = TRUE, label = 'BigCalc')
   observe( mcDoParallel, quoted = TRUE, label = 'Plotting')
