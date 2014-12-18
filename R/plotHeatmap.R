@@ -219,10 +219,17 @@ setMethod(
             Hcl <- Hclc; Hcl[is.na(Hcl)] <- 0
             cls <- hclust(dist(Hcl))
             cls_order <- cls$order
-            classes <- cutree(cls, clusters)
+            
+            #Awkward hack to rename class labels, so that they are in order
+            init_cut <- cutree(cls, clusters)
+            cut_map <- table(init_cut)[unique(init_cut[cls_order])]
             
             finalOrd <- finalOrd[cls_order]
-            clusts <- table(classes)
+            
+            classes <- rep(1:clusters, cut_map)[order(finalOrd)]
+            clusts <- cut_map
+            
+            #browser()
             
         } else if(clstmethod == 'ssom') {
             
@@ -279,6 +286,7 @@ setMethod(
                 zmin=zmin, zmax=zmax, xlim=xlim, ln.v=ln.v, s=s, indi=indi,
                 o_min=o_min, o_max=o_max, colvec=colvec, colorspace=clspace, 
                 pointsize=pointsize, embed=embed, raster=raster, 
+                dendro=if(clstmethod == 'hclust') as.dendrogram(cls) else NULL,
                 ...
             )
             title(main, outer = TRUE, cex.main=cex.main/pointsize)
@@ -306,12 +314,13 @@ setMethod(
         #           out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
         #           out <- out[finalOrd,]
         par(opar)
-        return( invisible(data.frame(
+        out <- data.frame(
             originalOrder=1:length(finalOrd), 
             ClusterID=classes[order(sorting_order)], 
             SortingOrder=sorting_order, 
             FinalOrder=finalOrd
-        )) )
+        )
+        return( invisible(out) )
     }
 )
 
