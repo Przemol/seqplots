@@ -56,14 +56,15 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     cex.legend=12.0, xlab='', ylab="", Leg=TRUE, autoscale=TRUE, zmin=0, 
     zmax=10, xlim=NULL, ln.v=TRUE, e=NULL, s = 0.01, indi=TRUE,
     o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12,
-    embed=FALSE, raster=FALSE, ylim=c(nrow(data),1), ...) {
+    embed=FALSE, raster=FALSE, ylim=c(nrow(MAT[[1]]),1), dendro=NULL, ...) {
     
     lfs  <- cex.lab / pointsize
     afs  <- cex.axis / pointsize
     lgfs <- cex.legend / pointsize
     
     datapoints <- unlist(MAT)
-    NP=length(MAT)
+    NP <- length(MAT)
+    if(!is.null(dendro)) NP <- NP+1
     raster <- length(unique(diff(bins)))==1 & raster
     
     #colvec[ grepl('#ffffff', colvec) ] <- NA
@@ -96,9 +97,11 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
         if(!embed) invisible(capture.output( set.panel(1, NP) ))
     }
     
+    if(!is.null(dendro)) {
+     dendro  %>% color_branches(k=5)  %T>% plot(horiz=TRUE, leaflab='none', ylim=ylim)  %>% rect.dendrogram(k=5,horiz=TRUE)
+    }
     
-    
-    for (i in seq(NP)) {
+    for( i in seq(length(MAT)) ) {
         data <- MAT[[i]]
         
 
