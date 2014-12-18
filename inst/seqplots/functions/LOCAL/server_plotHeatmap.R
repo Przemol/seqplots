@@ -8,6 +8,12 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
     if(length(unique(sapply(pl, function(x) nrow(x[['heatmap']])))) != 1) 
         stop('Heatmap plotting: All plots must have equal number of features. Do not plot heatmaps on multiple GFF/BED.', call.=FALSE)
     
+    if(input$heat_seed) set.seed(2)
+    
+    if(!exists(".Random.seed", where = globalenv())) runif(1)
+    seed <- .Random.seed
+    
+    
     ord <- if( length(subplotSetup$prior) & ('prior' %in% input$subplot_options) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
     pl <- pl[ ord ]
     
@@ -27,6 +33,13 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
     
     o_min <- if( length(subplotSetup$min) & input$heat_min_max ) as.numeric( subplotSetup$min[ord] ) else rep(NA, length(pl))
     o_max <- if( length(subplotSetup$max) & input$heat_min_max ) as.numeric( subplotSetup$max[ord] ) else rep(NA, length(pl))
+    
+    if(input$heat_subclust == "All clusters" | !input$heat_seed) {
+        ylim <- c(nrow(pl[[1]]$heatmap), 1)
+    } else{
+        n <- as.numeric(input$heat_subclust)
+        ylim <- range(which(fromJSON(input$clusters)[fromJSON(input$finalord)]==n))
+    }
     
     out <- seqplots::plotHeatmap(
         pl, 
@@ -60,7 +73,8 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
         colvec=if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL,
         clspace=if(input$heat_colorspace) c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max) else NULL,
         raster=input$raster,
-        ggplot=input$ggplot
+        ggplot=input$ggplot,
+        ylim=ylim
     ) 
     
     session$sendCustomMessage("jsExec", paste0(
@@ -72,4 +86,7 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
     session$sendCustomMessage("jsExec", paste0(
         "$('#finalord').val('",   toJSON(out$FinalOrder  ), "').change()"
      ))
+    
+    attr(out, "seed") <- seed
+    return(out)
 }
