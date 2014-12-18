@@ -105,13 +105,13 @@ shinyUI(
 						    div(class="img", imageOutput(outputId = "image", width = "1169px", height = "782px") )
 				
 						),
-						conditionalPanel(condition = "!input.reactive", div(class='row-fluid',
-						                                                    div(class='span2', 'Preview '),
-						                                                    div(class='span4', tags$a(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-picture"), 'Line plot' ))),
-						                                                    div(class='span4', tags$a(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-th"), 'Heatmap' ))), 
-						                                                    div(class='span2', actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large")) )),
-                                                                tags$hr()
-						))
+						div(class='row-fluid',
+						    div(class='span2', 'Preview '),
+						    div(class='span4', tags$a(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-picture"), 'Line plot' ))),
+						    div(class='span4', tags$a(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-th"), 'Heatmap' ))), 
+						    div(class='span2', actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large")) )),
+						    tags$hr()
+						)
 					),
 			
 					
@@ -199,7 +199,9 @@ shinyUI(
 								tabPanel(value = 'panel6', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
 								  h5(tags$u('Heatmap setup'), hlp("Heatmapsetuptab")),
 								  div( class='hidden', checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]") ), 
-									checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
+									#checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
+									selectInput("img_sort", "Sort heatmap rows by mean signal", c('do not sort', "increasing", "decreasing"), 
+                                                selected = NULL, multiple = FALSE, selectize = TRUE, width = NULL),
 									div(class='row-fluid',
 									  div(class='span6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'Hierarchical'='hclust', 'SuperSOM'='ssom', 'do not cluster'='none'))),
 									  div(class='span6',   
