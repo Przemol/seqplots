@@ -85,7 +85,7 @@ shinyServer(function(input, output, clientData, session) {
   
   #Subclust logic
   observe({
-      input$clusters
+      input$clusters; input$replot
       if( !isolate(input$heat_seed) ) {
           updateSelectInput(session, 'heat_subclust', choices='All clusters')
           return()

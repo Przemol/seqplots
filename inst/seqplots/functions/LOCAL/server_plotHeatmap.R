@@ -8,9 +8,12 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
     if(length(unique(sapply(pl, function(x) nrow(x[['heatmap']])))) != 1) 
         stop('Heatmap plotting: All plots must have equal number of features. Do not plot heatmaps on multiple GFF/BED.', call.=FALSE)
     
-    if(input$heat_seed) set.seed(2)
-    
     if(!exists(".Random.seed", where = globalenv())) runif(1)
+    if(input$heat_seed) {
+        assign(".Random.seed", values$seed, pos = globalenv())
+    }
+    
+    
     seed <- .Random.seed
     
     
@@ -38,7 +41,7 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
         ylim <- c(nrow(pl[[1]]$heatmap), 1)
     } else{
         n <- as.numeric(input$heat_subclust)
-        ylim <- range(which(fromJSON(input$clusters)[fromJSON(input$finalord)]==n))
+        ylim <- rev(range(which(fromJSON(input$clusters)[fromJSON(input$finalord)]==n)))
     }
     
     out <- seqplots::plotHeatmap(
