@@ -188,6 +188,6 @@ function showDef(e) {
 function submitDef(e) {
   $.cookie('genome',$('.f1_genome_default').val( ) );
   $.cookie('user',  $('.f1_user_default'  ).val( ) );
-  $.cookie('warn',  $('#f1_warn_default'  ).attr('checked')=="checked" );
+  $.cookie('warn',  $('#f1_warn_default'  ).prop('checked') );
   $('.fileupload-defaults').hide();
 }
