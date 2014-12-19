@@ -15,11 +15,11 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
 				cat('<thead>')
 				cat(
                     '<tr><th><b>
-                    <a class="btn btn-mini pull-left grid-all-toggle-btn" href="#" style="margin-right: 5px" title="Toggle all selections" data-placement=top data-toggle=tooltip>
+                    <a class="btn btn-mini pull-left grid-all-toggle-btn havettp" href="#" style="margin-right: 5px" title="Toggle all selections" data-placement=top>
 				        <i class="icon-check icon-large"></i></a>
-                    <a class="btn btn-mini pull-left grid-all-select-btn" href="#" style="margin-right: 5px" title="Select all" data-placement=top data-toggle=tooltip>
+                    <a class="btn btn-mini pull-left grid-all-select-btn havettp" href="#" style="margin-right: 5px" title="Select all" data-placement=top>
     			        <i class="icon-ok-circle icon-large"></i></a>
-                    <a class="btn btn-mini pull-left grid-all-remove-btn" href="#" style="margin-right: 5px" title="Select none" data-placement=top data-toggle=tooltip>
+                    <a class="btn btn-mini pull-left grid-all-remove-btn havettp" href="#" style="margin-right: 5px" title="Select none" data-placement=top>
     			        <i class="icon-remove-circle icon-large"></i></a>
                         Features: 
                     </b>'
@@ -30,33 +30,36 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
                         <div class="div_color div_setup"  style="display:none">
                             <div class="input-append">
                                 <input type="color" style="width:55px" name="plot_col" class="color {hash:true}" title="Set a color for whole row." data-placement="left"/>  
-                                <a class="btn chdr" data-who="color" href="#"><i class="icon-fullscreen"></i></a>
+                                <a class="btn chdr havettp" data-who="color" href="#" title="Copy color to all" data-placement=top><i class="icon-fullscreen"></i></a>
                             </div>                        
                         </div> 
                         <div class="div_label div_setup" style="display:none">
                             <div class="input-append">
                                 <input type="text" style="width:55px" placeholder="All labels" title="Set a header label here." data-placement="left"/> 
-                                <a class="btn chdr" data-who="label" href="#"><i class="icon-fullscreen"></i></a>
-                                <a class="btn chdrat" data-who="color" href="#">@</a>
+                                <a class="btn chdr havettp" data-who="label" href="#" title="Copy label to all" data-placement=top><i class="icon-fullscreen"></i></a>
+                                <a class="btn chdrrowcol havettp" data-who="color" href="#" title="Construct labels using row and col fields" data-placement=top>@</a>
+                                <a class="btn chdrat havettp" data-who="color" href="#" title="Set labels to default" data-placement=top>D</a>
+                                <a class="btn chdrrm havettp" data-who="color" href="#" title="Clear all labels" data-placement=top>X</a>
+                                
                             </div>
                         </div>
                         <div class="div_prior div_setup" style="display:none">
                             <div class="input-append">
                                 <input type="number"  style="width:55px" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> 
-                                <a class="btn chdr" data-who="prior" href="#"><i class="icon-fullscreen"></i></a>
+                                <a class="btn chdr havettp" data-who="prior" href="#" title="Copy priority to all"><i class="icon-fullscreen"></i></a>
                             </div> 
                         </div> 
               
                         <div class="div_inc div_setup"  style="display:none; min-width:91px">
                             <div class="input-append">
                                 <select  style="width:70px" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select>
-                                <a class="btn chdr" data-who="inc" href="#"><i class="icon-fullscreen"></i></a>
+                                <a class="btn chdr havettp" data-who="inc" href="#" title="Copy value to all"><i class="icon-fullscreen"></i></a>
                             </div> 
                         </div>
               
                         <div class="div_min div_max div_setup"   style="display:none; min-width:127px"">
-                            <input class="chdr-numeric-auto-input" data-who="min" type="number" style="width:40px" title="Heatmap MIN limit."/> - 
-                            <input class="chdr-numeric-auto-input" data-who="max" type="number" style="width:40px" title="Heatmap MAX limit.."/>
+                            <input class="chdr-numeric-auto-input" data-who="min" type="number" style="width:40px" title="Heatmap MIN for all heatmaps"/> - 
+                            <input class="chdr-numeric-auto-input" data-who="max" type="number" style="width:40px" title="Heatmap MAX for all heatmaps"/>
  
                         </div>
                         </div>'
@@ -65,7 +68,7 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
                 
                 for(i in 1:length(names(grfile[[1]]))) {
                     cat('<th>')
-                    cat('<a class="btn btn-mini grid-col-select-btn" href="#" title="Toggle column selection" data-placement=bottom data-toggle=tooltip>')
+                    cat('<a class="btn btn-mini grid-col-select-btn havettp" href="#" title="Toggle column selection" data-placement=bottom>')
                     cat('<i class="icon-check icon-large"></i></a>')
                     cat('<span><span><span>')
                     cat(names(grfile[[1]])[i])
@@ -75,36 +78,35 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
                         <div class="div_color div_setup"  style="display:none">
                             <div class="input-append">
                                 <input type="color" style="width:55px" name="plot_col" class="color {hash:true}" title="Set a color for whole row." data-placement="left"/>  
-                                <a class="btn hhdr" data-who="color" href="#"><i class="icon-chevron-down"></i></a>
+                                <a class="btn hhdr havettp" data-who="color" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
                             </div>                        
                         </div> 
                         <div class="div_label div_setup" style="display:none">
                             <div class="input-append">
-                                <input type="text" style="width:55px" placeholder="', names(grfile[[1]])[i], '" title="Set a header label here." data-placement="left"/> 
-                                <a class="btn hhdr" data-who="label" data-fname="', names(grfile[[1]])[i], '" href="#"><i class="icon-chevron-down"></i></a>
+                                <input id="hhdr_', i, '" type="text" style="width:55px" placeholder="', names(grfile[[1]])[i], '" title="Set a header label here." data-placement="left"/> 
+                                <a class="btn hhdr havettp" data-who="label" data-fname="', names(grfile[[1]])[i], '" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
                             </div>
                         </div>
                         <div class="div_prior div_setup" style="display:none">
                             <div class="input-append">
                                 <input type="number"  style="width:55px" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> 
-                                <a class="btn hhdr" data-who="prior" href="#"><i class="icon-chevron-down"></i></a>
+                                <a class="btn hhdr havettp" data-who="prior" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
                             </div> 
                         </div> 
               
                         <div class="div_inc div_setup"  style="display:none; min-width:91px">
                             <div class="input-append">
                                 <select  style="width:70px" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select>
-                                <a class="btn hhdr" data-who="inc" href="#"><i class="icon-chevron-down"></i></a>
+                                <a class="btn hhdr havettp" data-who="inc" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
                             </div> 
                         </div>
               
                         <div class="div_min div_max div_setup"   style="display:none; min-width:127px"">
-                            <input class="hdr-numeric-auto-input" data-who="min" type="number" style="width:40px" title="Heatmap MIN limit."/> - 
-                            <input class="hdr-numeric-auto-input" data-who="max" type="number" style="width:40px" title="Heatmap MAX limit.."/>
- 
+                            <input class="hdr-numeric-auto-input" data-who="min" type="number" style="width:40px" title="Heatmap MIN limit for whole column"/> - 
+                            <input class="hdr-numeric-auto-input" data-who="max" type="number" style="width:40px" title="Heatmap MAX limit for whole column"/>
                         </div>
                         </div> ',
-                        "</th>")
+                        "</th>", sep='')
                 }
 	
 				cat('</thead>')
@@ -114,7 +116,7 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
 					cat("<tr>")
 					cat(
                         "<td>",
-                        '<p style="white-space:nowrap; margin-right:27px;"><a class="btn btn-mini pull-left grid-row-select-btn" href="#" style="margin-right: 5px" title="Toggle row selection" data-placement=left data-toggle=tooltip>
+                        '<p style="white-space:nowrap; margin-right:27px;"><a class="btn btn-mini pull-left grid-row-select-btn havettp" href="#" style="margin-right: 5px" title="Toggle row selection" data-placement=left>
                         <i class="icon-check icon-large"></i></a>',
                         names(grfile)[j], '</p>'
 					)
@@ -124,39 +126,33 @@ renderHTMLgrid <- function(grfile, CC, checked=NULL, addcls='', controls=NULL) {
                         <div class="div_color div_setup"  style="display:none">
                             <div class="input-append">
                                 <input style="width:80px" type="color" name="plot_col" class="color {hash:true}" title="Set a color for whole row." data-placement="left"/>  
-                                <a class="btn rhdr" data-who="color" href="#"><i class="icon-chevron-right"></i></a>
+                                <a class="btn rhdr havettp" data-who="color" href="#" title="Copy to whole row"><i class="icon-chevron-right"></i></a>
                             </div>                        
                         </div> 
                         <div class="div_label div_setup" style="display:none">
                             <div class="input-append">
-                                <input style="width:80px" type="text" placeholder="', gsub('\\..+$', '', names(grfile)[j]), '" title="Set a header label here." data-placement="left"/> 
-                                <a class="btn rhdr" data-who="label" data-fname="', gsub('\\..+$', '', names(grfile)[j]), '" href="#"><i class="icon-chevron-right"></i></a>
+                                <input id="rhdrs_', j, '"style="width:80px" type="text" placeholder="', gsub('\\..+$', '', names(grfile)[j]), '" title="Set a header label here." data-placement="left"/> 
+                                <a class="btn rhdr havettp" data-who="label" data-fname="', gsub('\\..+$', '', names(grfile)[j]), '" href="#" title="Copy to whole row"><i class="icon-chevron-right"></i></a>
                             </div>
                         </div>
                         <div class="div_prior div_setup" style="display:none">
                             <div class="input-append">
                                 <input style="width:80px" type="number" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> 
-                                <a class="btn rhdr" data-who="prior" href="#"><i class="icon-chevron-right"></i></a>
+                                <a class="btn rhdr havettp" data-who="prior" href="#" title="Copy to whole row"><i class="icon-chevron-right"></i></a>
                             </div> 
                         </div> 
               
                         <div class="div_inc div_setup"  style="display:none; min-width:91px">
                             <div class="input-append">
                                 <select style="width:90px" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select>
-                                <a class="btn rhdr" data-who="inc" href="#"><i class="icon-chevron-right"></i></a>
+                                <a class="btn rhdr havettp" data-who="inc" href="#"  title="Copy to whole row"><i class="icon-chevron-right"></i></a>
                             </div> 
                         </div>
-              
+
                         <div class="div_min div_max div_setup"   style="display:none; min-width:127px"">
-                                <div class="input-append">
-                                    <input type="number" style="width:40px" title="Heatmap MIN limit."/> 
-                                    <a class="btn rhdr" data-who="min" href="#"><i class="icon-chevron-right"></i></a>
-                                </div> - 
-                                <div class="input-append">
-                                    <input type="number" style="width:40px" title="Heatmap MIN limit."/> 
-                                    <a class="btn rhdr" data-who="max" href="#"><i class="icon-chevron-right"></i></a>
-                                </div>
-                            </div> 
+                            <input class="rdr-numeric-auto-input" data-who="min" type="number" style="width:40px" title="Heatmap MIN limit for whole row"/> - 
+                            <input class="rdr-numeric-auto-input" data-who="max" type="number" style="width:40px" title="Heatmap MAX limit for whole row"/>
+                        </div> 
                         </div> ',
                         '</div>',
                         "</td>", sep=''
