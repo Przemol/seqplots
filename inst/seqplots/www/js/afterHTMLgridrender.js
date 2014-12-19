@@ -35,8 +35,6 @@ $(".toogle-row-btn-vis").click(function() {
     $('.hhdrs').toggle()
 });
 
-$('a[data-toggle=tooltip]').tooltip();
-
 $(".rhdr").click(function() { 
     var text = $(this).siblings().val();
     var who = $(this).attr('data-who');
