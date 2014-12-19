@@ -10,7 +10,7 @@ imPlot2(..., add = FALSE, nlevel = 64, horizontal = FALSE,
   bigplot = NULL, smallplot = NULL, legend.only = FALSE,
   col = tim.colors(nlevel), lab.breaks = NULL, axis.args = NULL,
   legend.args = NULL, midpoint = FALSE, border = NA, lwd = 1,
-  xinds = NULL, e = NULL)
+  xinds = NULL, e = NULL, ylast = 0, afs = 1)
 }
 \value{
 \code{NULL}
