@@ -98,7 +98,22 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     }
     
     if(!is.null(dendro)) {
-     dendro  %>% color_branches(k=5)  %T>% plot(horiz=TRUE, leaflab='none', ylim=ylim)  %>% rect.dendrogram(k=5,horiz=TRUE)
+        #dendro  <- color_branches(dendro, k=length(axhline))
+        mar2=par()$mar; if(indi){
+            par(mar=c(12.3, 4.1, 2.6, 2.1))
+        } else {
+            par(mar=c(3.0, 4.1, 2.3, 2.1))
+        }
+        plot(dendro, horiz=TRUE, leaflab='none', ylim=ylim, main='Dendrogram')
+        par(mar=mar2)
+        #rect.dendrogram(dendro, k=length(axhline), horiz=TRUE)
+        abline(h=cumsum(axhline[-length(axhline)])+.5, lwd=2, col='red')
+        axis(2, at=ylim, labels=ylim, cex.axis=afs*0.9, col.axis='darkgrey')
+        axis(
+            2, at=cumsum(axhline)-(axhline/2)+.5, 
+            labels=paste0('C', 1:length(axhline)), las = 1, 
+            col.axis='darkred', font.axis=2, cex.axis=afs
+        )
     }
     
     for( i in seq(length(MAT)) ) {
@@ -120,7 +135,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
                 xlim=if (is.null(xlim)) range(bins) else xlim,
                 cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs,
                 useRaster=raster, xaxt="n", yaxt="n", panel.first={
-                    axis(2, at=nrow(data), labels=nrow(data), cex.axis=afs)
+                    axis(2, at=ylim, labels=ylim, cex.axis=afs*0.9,  col.axis='darkgrey')
                     if(is.null(e)) { 
                         axis(
                             1, at=c(min(xinds), 0,  max(xinds)), 
