@@ -74,7 +74,17 @@ rgb), or a positive integer i meaning palette()[i]. See
 \code{\link[grDevices]{grDevices}}}
 
 \item{pointsize}{The default font point size to be used for plots. Defaults
-  to 12 (1/72 inch).}
+to 12 (1/72 inch).}
+
+\item{embed}{Configures heatmap to be used embedded plot. Defaults
+to FALSE}
+
+\item{raster}{Uses raster graphics for heatmaps. Defaults to FALSE}
+
+\item{ylim}{Y axis limits. Defaults to c(nrow(MAT[[1]]),1)}
+
+\item{dendro}{Dendrogram object, will be plotted left to heatmaps. Defaults
+  to NULL}
 
 \item{leg}{if TRUE plot the color key}
 }

@@ -46,6 +46,12 @@
 #'   \code{\link[grDevices]{grDevices}}
 #' @param pointsize The default font point size to be used for plots. Defaults
 #'   to 12 (1/72 inch).
+#' @param embed Configures heatmap to be used embedded plot. Defaults
+#'   to FALSE 
+#' @param raster Uses raster graphics for heatmaps. Defaults to FALSE
+#' @param ylim Y axis limits. Defaults to c(nrow(MAT[[1]]),1) 
+#' @param dendro Dendrogram object, will be plotted left to heatmaps. Defaults 
+#'   to NULL
 #'   
 #' @return \code{NULL}
 #'   
