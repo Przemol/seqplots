@@ -500,6 +500,7 @@ shinyServer(function(input, output, clientData, session) {
     if( is.null( input$exitconfirmed )) {
       session$sendCustomMessage("jsExec", 'confirm("Are you sure you want to exit!?") ? Shiny.shinyapp.sendInput({"exitconfirmed":true}) : console.log("Exit canceled")')
     } else { 
+      session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = null;")
       session$sendCustomMessage("jsExec", "window.onbeforeunload = function(){}; window.open('','_self').close();")
       stopApp(returnValue = 'Stopped by user!' )
     }
