@@ -30,6 +30,7 @@ Description: SeqPlots is a tool for plotting next generation sequencing (NGS)
     annotations.
 URL: http://github.com/przemol/seqplots
 BugReports: http://github.com/przemol/seqplots/issues
+biocViews: ChIPSeq, RNASeq, Sequencing, Software, Visualization
 Depends:
     R (>= 3.1.0)
 Imports:
