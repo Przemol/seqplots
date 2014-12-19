@@ -49,6 +49,12 @@ $(".rhdr").click(function() {
 
 });
 
+$('.rdr-numeric-auto-input').change(function() { 
+    var text = $(this).val();
+    var who = $(this).attr('data-who');
+    $(this).parents('tr').find('input[id*='+who+']').val(text).change();
+});
+
 $('.hhdr').click(function() { 
     var num = $(this).parents('th').index()+1;
     var text = $(this).siblings().val();
@@ -87,8 +93,6 @@ $('.chdrat').click(function() {
     $('#plotTable input[id*=label_]').each( function() { $(this).val($(this).attr('data-at')).change() } )   
 });
 
-
-
 $('.chdr-numeric-auto-input').change(function() { 
     var num = $(this).parents('th').index()+1;
     var text = $(this).val();
@@ -96,6 +100,23 @@ $('.chdr-numeric-auto-input').change(function() {
     $('#plotTable input[id*='+who+']').val(text).change();
     
 });
+
+$('.chdrrowcol').click(function() { 
+    $('#plotTable input[id*=label_]').each( function(x) { 
+        var z = $(this).attr('id'); 
+        var x = z.match('_(.)x(.)$')[1];
+        var y = z.match('_(.)x(.)$')[2];
+        var v = $('#hhdr_' + x).val() + ' @ ' + $('#rhdrs_' + y).val();
+        $(this).val(v).change();
+    })
+});
+
+$('.chdrrm').click(function() { 
+    $('#plotTable input[id*=label_]').each( function() { $(this).val('').change() } )   
+});
+
+$('.havettp').tooltip();
+    
 
 
 
