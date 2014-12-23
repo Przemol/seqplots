@@ -63,7 +63,7 @@ mcDoParallel <- quote({
       session$sendCustomMessage( "jsAlert", paste('ERROR:', attr(out, 'condition')$message) ) 
     } else {
       values$im <-  as.character(out$url)
-      values$seed <- res$seed
+      values$seed <- out$seed
     }
   } else {
     
