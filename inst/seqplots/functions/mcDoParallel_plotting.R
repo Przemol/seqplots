@@ -38,7 +38,7 @@ mcDoParallel <- quote({
       if(input$recordHistory) { dev.control(displaylist="enable") }
       
       if ( !input$img_heatmap ) {
-            ans <- plotLineplot(pl=pl)
+            ans <- plotLineplotLocal(pl=pl)
       } else {
             ans <- plotHeatmapLocal(pl=pl)
       }
