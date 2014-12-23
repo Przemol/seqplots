@@ -145,5 +145,4 @@
 #' @importFrom shiny runApp
 #' @importFrom class somgrid
 #' @importFrom S4Vectors recycleIntegerArg
-#' @importFrom ggplot2 ggplotGrob
 NULL
