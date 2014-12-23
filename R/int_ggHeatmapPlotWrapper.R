@@ -56,18 +56,12 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     cex.legend=12.0, xlab='', ylab="", Leg=TRUE, autoscale=TRUE, zmin=0, 
     zmax=10, xlim=NULL, ln.v=TRUE, e=NULL, s = 0.01, indi=TRUE,
     o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12,
-    embed=FALSE, raster=TRUE, main='The heatmap', ...) {
-    
-    lfs  <- cex.lab / pointsize
-    afs  <- cex.axis / pointsize
-    lgfs <- cex.legend / pointsize
+    embed=FALSE, raster=TRUE, main='The heatmap', cex.title=20, ...) {
     
     datapoints <- unlist(MAT)
     NP=length(MAT)
-    raster <- length(unique(diff(bins)))==1
+    raster <- length(unique(diff(bins)))==1 & raster
     
-    #colvec[ grepl('#ffffff', colvec) ] <- NA
-    ncollevel = 64
     if(length(colorspace)) {
         gcol <- colorRampPalette(colorspace)
     }else {
@@ -81,13 +75,20 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     
     if (!indi) {
         MAT <- lapply(MAT, function(x) {colnames(x) <- bins; return(x)} )
+        names(MAT) <- titles
+        
         if (autoscale) {
             zlim <- quantile(datapoints, c(s,1-s), na.rm=TRUE)
             zmin<-zlim[1]
             zmax<-zlim[2]
         } 
+        
         p <- ggplot(melt(MAT), aes(Var2, Var1, fill = value))
-        p <- p + geom_raster()
+        if(raster) {
+            p <- p + geom_raster()
+        } else {
+            p <- p + geom_tile()
+        }
         p <- p + facet_wrap(~L1, nrow=1)
         p <- p + scale_fill_gradientn(
             colours = gcol(100), limits = c(zmin, zmax), 
@@ -110,6 +111,12 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
         p <- p + xlab(xlab) 
         p <- p + ylab(ylab)
         p <- p + guides(fill = guide_colorbar(title = "", raster = TRUE))
+        p <- p + theme( 
+            axis.text=element_text(size=cex.axis), 
+            axis.title=element_text(size=cex.lab),
+            title=element_text(size=cex.title),
+            legend.text=element_text(size=cex.legend) 
+        )
         
         print(p)
         return(p)
@@ -138,14 +145,14 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
         if( is.na(o_max[i]) ) keycolor_lim[2] <- zmax 
         else keycolor_lim[2] <- o_max[i]
         
-        col <- if( is.character(colvec[i]) ) 
-            colorRampPalette(c('white', colvec[i]))(ncollevel) 
-        else gcol(ncollevel)
-        
         #browser()
         colnames(data) <- bins
         p <- ggplot(melt(data), aes(Var2, Var1, fill = value))
-        p <- p + geom_raster()
+        if(raster) {
+            p <- p + geom_raster()
+        } else {
+            p <- p + geom_tile()
+        }
         p <- p + scale_fill_gradientn(
             colours = gcol(100), limits = keycolor_lim, 
             breaks=keycolor_lim, labels=format(keycolor_lim, digits=2)
@@ -166,7 +173,13 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
         p <- p + ggtitle(titles[i]) 
         p <- p + xlab(xlab) 
         p <- p + ylab(ylab) 
-        p <- p + theme(legend.position = "bottom") 
+        p <- p + theme(
+            legend.position = "bottom", 
+            axis.text=element_text(size=cex.axis), 
+            axis.title=element_text(size=cex.lab),
+            title=element_text(size=cex.lab),
+            legend.text=element_text(size=cex.legend) 
+        )
         p <- p + guides(fill = guide_colorbar(barwidth = 10/5, barheight = 1, title = "", raster = TRUE))
         
         
@@ -178,9 +191,10 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     #fix for importing ggplot2::ggplotGrob into namespace
     if(!"package:ggplot2" %in% search()) attachNamespace('ggplot2')
     
-    out <- do.call(grid.arrange, c(
-        plots, nrow=1, main=main, clip=FALSE #, legend=''
-    ))
+    grid <- do.call(arrangeGrob, c(plots, nrow=1))
+    out <- grid.arrange(grid,
+        main=textGrob(main,gp=gpar(fontsize=cex.title))
+    )
     show(out)
     return(out)
 }
