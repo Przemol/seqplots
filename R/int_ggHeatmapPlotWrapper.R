@@ -210,6 +210,9 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
 #         
 #         if(embed) break()
     }
+    
+    #fix for importing ggplot2::ggplotGrob into namespace
+    if(!"package:ggplot2" %in% search()) attachNamespace('ggplot2')
 
     do.call(grid.arrange, c(
         plots, ncol=length(plots), main="The Heatmap", clip=FALSE, legend='zzzz'
