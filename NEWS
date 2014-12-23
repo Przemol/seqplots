@@ -1,4 +1,39 @@
-CHANGES IN VERSION 0.99.4
+CHANGES IN VERSION 1.2.0
+--------------------------------------------------------------------------------
+
+PACKAGE:
+
+* plot a dendrogram as first panel on heatmap plot clustered with hierarchical 
+  clustering
+* heatmap can be plotted as vector graphics (default for R scripting) or 
+  raster graphics (default for web GUI)
+* heatmaps can be sorted in increasing or decreasing order
+* y-axis is annotated with cluster IDs and number of data rows (heatmap)
+* x-axis is annotated with base pairs, e.g. 10bp, 1kb, 1.2Mb, etc.
+* heatmaps can be plotted using GGplot2 package instead of R base graphics 
+  system
+* speed-up in motif plots thanks to faster, vectored implementation 
+  of motif density data acquisition 
+* code simplification - seqplots in Shiny GUI mode use all functions 
+  from package core
+
+GUI:
+
+* feature-track pairs selection grid have UI elements to multi-select and batch 
+  change labels/colors/etc.
+* option to make a clustering repeatable (works by reusing a .Random.seed)
+* option to plot selected cluster only as heatmap
+
+BUGFIX:
+
+* lines separating the clusters are drawn in correct places on 
+  grDevices::quartz devices
+* proper positioning of 3' ends of anchored region in motif plot
+* fixed error with anchored plots and genomic feature width equals 1bp
+* y-axis does respect cex.axis parameter
+
+
+CHANGES IN VERSION 1.0.0
 --------------------------------------------------------------------------------
 
 PACKAGE:
