@@ -1,5 +1,5 @@
 #Lineplot plotting function
-plotLineplot <- function(pl, title=input$title, type='dev', legend=TRUE) {
+plotLineplotLocal <- function(pl, title=input$title, type='dev', legend=TRUE) {
     
     ord <- if( length(subplotSetup$prior) & ('prior' %in% input$subplot_options) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
     pl <- pl[ ord ]
