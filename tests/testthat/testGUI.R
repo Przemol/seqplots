@@ -146,7 +146,6 @@ test_that("Exiting works", {
     remDr$findElement("id", 'stopapp')$clickElement(); Sys.sleep(1);
     expect_equal(remDr$getAlertText()[[1]], "Are you sure you want to exit!?")
     remDr$acceptAlert(); Sys.sleep(1);
-    remDr$acceptAlert()
     
     remDr$close()
     remDr$quit()
