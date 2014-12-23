@@ -167,7 +167,7 @@ shinyServer(function(input, output, clientData, session) {
 			co <- lapply(input$plot_this, function(x) fromJSON(x))
 			pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
 			pdf(file, width = 10.0, height = 10.0, onefile = FALSE, paper = input$paper)
-			  plotLineplot(pl=pl, type='legend')
+			  plotLineplotLocal(pl=pl, type='legend')
 			dev.off()
 		},
 		contentType = 'application/pdf'
@@ -223,7 +223,7 @@ shinyServer(function(input, output, clientData, session) {
           
           
           if (input$batch_what == "lineplots") {
-            plotLineplot(pl, title=title) 
+            plotLineplotLocal(pl, title=title) 
           } else {
             plotHeatmapLocal(pl, title=title) 
           } 
@@ -237,7 +237,7 @@ shinyServer(function(input, output, clientData, session) {
           if(!nchar(title)) title <- gsub(input$multi_name_flt, '', unique( Map('[[', strsplit(t1, '\n@'), 2) ))
           
           if (input$batch_what == "lineplots") {
-            plotLineplot(pl, title=title) 
+            plotLineplotLocal(pl, title=title) 
           } else {
             plotHeatmapLocal(pl, title=title) 
           } 
@@ -249,7 +249,7 @@ shinyServer(function(input, output, clientData, session) {
             title <- input[[paste0('label_',m,'x',n)]]
             if(!nchar(title)) title <- pl[[1]]$desc
             if (input$batch_what == "lineplots") {
-              plotLineplot(pl, title=title, legend=FALSE) 
+              plotLineplotLocal(pl, title=title, legend=FALSE) 
             } else {
               plotHeatmapLocal(pl, title=title, legend=FALSE) 
             } 
@@ -270,7 +270,7 @@ shinyServer(function(input, output, clientData, session) {
 		  co <- lapply(input$plot_this, function(x) fromJSON(x))
 		  pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
 		  pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size), paper=input$paper)
-		    plotLineplot(pl=pl)		
+		    plotLineplotLocal(pl=pl)		
 		  dev.off()
 		  #Sys.sleep(1)
 		},
