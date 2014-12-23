@@ -275,7 +275,7 @@ setMethod(
                 cex.legend=cex.legend, xlab=xlab, ylab=ylab, autoscale=autoscale, 
                 zmin=zmin, zmax=zmax, xlim=xlim, ln.v=ln.v, s=s, indi=indi,
                 o_min=o_min, o_max=o_max, colvec=colvec, colorspace=clspace, 
-                pointsize=pointsize, embed=embed,
+                pointsize=pointsize, embed=embed, main=main,
                 ...
             )
         } else {
@@ -335,7 +335,7 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embed=embed, ggplot=FALSE, raster=FALSE, ...
+            embed, ggplot, raster, ...
         )
     }
 )
@@ -351,7 +351,7 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embed=embed, ggplot=FALSE, raster=FALSE, ...
+            embed, ggplot, raster, ...
         )
     }
 )
@@ -367,7 +367,7 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embed=embed, ...
+            embed, ggplot, raster, ...
         )
     }
 )
