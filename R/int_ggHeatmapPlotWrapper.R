@@ -56,7 +56,7 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     cex.legend=12.0, xlab='', ylab="", Leg=TRUE, autoscale=TRUE, zmin=0, 
     zmax=10, xlim=NULL, ln.v=TRUE, e=NULL, s = 0.01, indi=TRUE,
     o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12,
-    embed=FALSE, raster=TRUE, main='The heatmap', cex.title=20, ...) {
+    embed=FALSE, raster=TRUE, main='', cex.title=20, ...) {
     
     datapoints <- unlist(MAT)
     NP=length(MAT)
@@ -74,14 +74,20 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     max <- max(datapoints, na.rm=TRUE) 
     
     if (!indi) {
-        MAT <- lapply(MAT, function(x) {colnames(x) <- bins; return(x)} )
-        names(MAT) <- titles
         
         if (autoscale) {
             zlim <- quantile(datapoints, c(s,1-s), na.rm=TRUE)
             zmin<-zlim[1]
             zmax<-zlim[2]
         } 
+        
+        MAT <- lapply(MAT, function(x) {
+            colnames(x) <- bins
+            x[x<zmin] <- zmin 
+            x[x>zmax] <- zmax 
+            return(x)
+        })
+        names(MAT) <- titles
         
         p <- ggplot(melt(MAT), aes(Var2, Var1, fill = value))
         if(raster) {
