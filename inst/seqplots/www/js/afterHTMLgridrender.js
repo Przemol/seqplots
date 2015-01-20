@@ -20,7 +20,7 @@ $('.grid-col-select-btn').click(function() {
 });
 
 $(".grid-row-select-btn").click(function() { 
-	var num = $(this).parent().parent().children().index($(this).parent()) + 1;
+	var num = $(this).parents('tbody').children().index($(this).parents('tr')) + 1;
 	$('input[value*=",'+num+']"]').click()
 
 });
