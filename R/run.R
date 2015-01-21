@@ -30,9 +30,8 @@ run <- function(
     oldwd <- getwd()
     on.exit( {
         rm(list=c(
-            "doFileOperations", "GENOMES", "getSF", "heatmapPlotWrapper", 
-            "imPlot2", "mcCalcStart", "mcDoParallel", "plotMext", 
-            "procQuick", "renderHTMLgrid"
+            "doFileOperations", "GENOMES", "mcCalcStart", "mcDoParallel", 
+            "renderHTMLgrid"
         ), envir=.GlobalEnv)
         setwd(oldwd) 
     })

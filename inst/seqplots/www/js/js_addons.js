@@ -190,6 +190,7 @@ $(function() {
   $('#hsccoef').parents('.row-fluid').tooltip({title:'0.01 (default on slider) calculates color key limits using data range from 1-99 percentile.  0.1 uses data range from 10-90 percentile.', placement:"right"});
 	$('#spawn').addClass('btn-warning');
   $('i[data-toggle=tooltip]').tooltip();
+  
 	
   $('#stopapp').addClass('btn-warning');
   
@@ -208,10 +209,10 @@ $(function() {
     		}
 	});
   
-  $('#plotTable th').click(function(e) {
-    var i = $(this).index()+1;
-    $('#plotTable tr > :nth-child('+i+') input[type=checkbox]').prop('checked', !$('#plotTable tr > :nth-child('+i+') input[type=checkbox]').prop('checked'));
-  });
+  //$('#plotTable th').click(function(e) {
+   // var i = $(this).index()+1;
+   // $('#plotTable tr > :nth-child('+i+') input[type=checkbox]').prop('checked', !$('#plotTable tr > :nth-child('+i+') input[type=checkbox]').prop('checked'));
+  //});
 
   function closeEditorWarning() { 
     if ( (Shiny.shinyapp.$socket.readyState == 1) && !($.cookie('warn')=='false') ) {

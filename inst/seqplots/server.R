@@ -83,6 +83,19 @@ shinyServer(function(input, output, clientData, session) {
   	str(values$SFsetup) 
   })
   
+  #Subclust logic
+  observe({
+      input$clusters; input$replot
+      if( !isolate(input$heat_seed) ) {
+          updateSelectInput(session, 'heat_subclust', choices='All clusters')
+          return()
+      }
+      if( isolate(input$heat_subclust) != "All clusters") return()
+      clusters <- fromJSON(input$clusters)
+      updateSelectInput(session, 'heat_subclust', choices = c('All clusters', sort(unique(clusters))))
+      
+  })
+  
   #Multicore calculations definictions 
   observe( mcCalcStart, quoted = TRUE, label = 'BigCalc')
   observe( mcDoParallel, quoted = TRUE, label = 'Plotting')
@@ -107,7 +120,7 @@ shinyServer(function(input, output, clientData, session) {
 	})
 	output$htmltab <- reactive({
 		if( is.null( values$grfile ) )	return('')	
-		return( renderHTMLgrid(values$grfile, TRUE, urlSetup$select, addcls=digest::digest(input$publicRdata)) )					
+		return( renderHTMLgrid(values$grfile, TRUE, urlSetup$select, addcls=digest::digest(input$publicRdata), isolate(input$subplot_options)) )					
 	})
 	
 	#Determined if plot and dataset save menu shoud be visible
@@ -154,7 +167,7 @@ shinyServer(function(input, output, clientData, session) {
 			co <- lapply(input$plot_this, function(x) fromJSON(x))
 			pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
 			pdf(file, width = 10.0, height = 10.0, onefile = FALSE, paper = input$paper)
-			  plotLineplot(pl=pl, type='legend')
+			  plotLineplotLocal(pl=pl, type='legend')
 			dev.off()
 		},
 		contentType = 'application/pdf'
@@ -210,9 +223,9 @@ shinyServer(function(input, output, clientData, session) {
           
           
           if (input$batch_what == "lineplots") {
-            plotLineplot(pl, title=title) 
+            plotLineplotLocal(pl, title=title) 
           } else {
-            plotHeatmap(pl, title=title) 
+            plotHeatmapLocal(pl, title=title) 
           } 
         }
       } else if(input$batch_how=="rows") {
@@ -224,9 +237,9 @@ shinyServer(function(input, output, clientData, session) {
           if(!nchar(title)) title <- gsub(input$multi_name_flt, '', unique( Map('[[', strsplit(t1, '\n@'), 2) ))
           
           if (input$batch_what == "lineplots") {
-            plotLineplot(pl, title=title) 
+            plotLineplotLocal(pl, title=title) 
           } else {
-            plotHeatmap(pl, title=title) 
+            plotHeatmapLocal(pl, title=title) 
           } 
         }
       } else if(input$batch_how=="single")  {
@@ -236,9 +249,9 @@ shinyServer(function(input, output, clientData, session) {
             title <- input[[paste0('label_',m,'x',n)]]
             if(!nchar(title)) title <- pl[[1]]$desc
             if (input$batch_what == "lineplots") {
-              plotLineplot(pl, title=title, legend=FALSE) 
+              plotLineplotLocal(pl, title=title, legend=FALSE) 
             } else {
-              plotHeatmap(pl, title=title, legend=FALSE) 
+              plotHeatmapLocal(pl, title=title, legend=FALSE) 
             } 
           }  
         }
@@ -257,7 +270,7 @@ shinyServer(function(input, output, clientData, session) {
 		  co <- lapply(input$plot_this, function(x) fromJSON(x))
 		  pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
 		  pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size), paper=input$paper)
-		    plotLineplot(pl=pl)		
+		    plotLineplotLocal(pl=pl)		
 		  dev.off()
 		  #Sys.sleep(1)
 		},
@@ -273,7 +286,7 @@ shinyServer(function(input, output, clientData, session) {
 				co <- lapply(input$plot_this, function(x) fromJSON(x))
 				pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
 				pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size), paper=input$paper)
-					plotHeatmap(pl=pl)				
+					plotHeatmapLocal(pl=pl)				
 				dev.off()
 			}
 	)
@@ -487,6 +500,7 @@ shinyServer(function(input, output, clientData, session) {
     if( is.null( input$exitconfirmed )) {
       session$sendCustomMessage("jsExec", 'confirm("Are you sure you want to exit!?") ? Shiny.shinyapp.sendInput({"exitconfirmed":true}) : console.log("Exit canceled")')
     } else { 
+      session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = null;")
       session$sendCustomMessage("jsExec", "window.onbeforeunload = function(){}; window.open('','_self').close();")
       stopApp(returnValue = 'Stopped by user!' )
     }
@@ -501,16 +515,21 @@ shinyServer(function(input, output, clientData, session) {
       session$sendCustomMessage("jsExec", sprintf("$('#file_genome').children().removeAttr('selected').filter('[value=%s]').attr('selected', 'selected')", query$genome))
     }
     
+    for(n in names(query)[!names(query) %in% c('load', 'select', 'genome')] ){
+        session$sendInputMessage(n, list(
+            value = unlist(strsplit(query[[n]], ',')) 
+        ) )
+        
+    }
+    
     if(length(query$load)){
       #session$sendCustomMessage("jsAlert", sprintf('loading file: [%s]', file.path('publicFiles', query$load)) )
       values$grfile <- get(load( file.path('publicFiles', query$load) ))
       updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  query$load)
       #session$sendCustomMessage("jsExec", sprintf("$('#publicRdata').val('%s').change()", query$load))
     }
-    for(n in names(query)[!names(query) %in% c('load', 'select', 'genome')] ){
-      session$sendInputMessage(n, list(value = query[[n]]) )
-      
-    }
+    
+
     if( is.character(query$select) ) {
       #session$sendCustomMessage("jsAlert", sprintf('Selecting plots: [%s]', query$select) )
       sel <- do.call( rbind, strsplit(strsplit(query$select, ';')[[1]], ',') )

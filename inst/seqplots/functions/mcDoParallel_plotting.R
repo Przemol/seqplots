@@ -38,15 +38,16 @@ mcDoParallel <- quote({
       if(input$recordHistory) { dev.control(displaylist="enable") }
       
       if ( !input$img_heatmap ) {
-        plotLineplot(pl=pl)
+            ans <- plotLineplotLocal(pl=pl)
       } else {
-        plotHeatmap(pl=pl)
+            ans <- plotHeatmapLocal(pl=pl)
       }
       
       if(input$recordHistory) { out$plot <- recordPlot(); dev.control(displaylist="inhibit");  }
       
       dev.off()
       out$url <- a
+      out$seed <- attr(ans, 'seed')
       
       class(out) <- 'ans'; out 
   })
@@ -61,7 +62,8 @@ mcDoParallel <- quote({
     if (class(out) == "try-error") {
       session$sendCustomMessage( "jsAlert", paste('ERROR:', attr(out, 'condition')$message) ) 
     } else {
-      values$im <-  as.character(out$url) 
+      values$im <-  as.character(out$url)
+      values$seed <- out$seed
     }
   } else {
     
@@ -71,6 +73,7 @@ mcDoParallel <- quote({
       }),
       quote({ 
         values$im <- as.character(res$url)
+        values$seed <- res$seed
         if( !is.null(res$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
       })
     )

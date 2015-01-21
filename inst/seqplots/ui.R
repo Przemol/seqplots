@@ -105,13 +105,13 @@ shinyUI(
 						    div(class="img", imageOutput(outputId = "image", width = "1169px", height = "782px") )
 				
 						),
-						conditionalPanel(condition = "!input.reactive", div(class='row-fluid',
-						                                                    div(class='span2', 'Preview '),
-						                                                    div(class='span4', tags$a(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-picture"), 'Line plot' ))),
-						                                                    div(class='span4', tags$a(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-th"), 'Heatmap' ))), 
-						                                                    div(class='span2', actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large")) )),
-                                                                tags$hr()
-						))
+						div(class='row-fluid',
+						    div(class='span2', 'Preview '),
+						    div(class='span4', tags$a(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-picture"), 'Line plot' ))),
+						    div(class='span4', tags$a(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-th"), 'Heatmap' ))), 
+						    div(class='span2', actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large")) )),
+						    tags$hr()
+						)
 					),
 			
 					
@@ -139,9 +139,10 @@ shinyUI(
 								    	  actionButton('stopapp', tags$span(tags$i(class="icon-off icon-large"), HTML('Exit SeqPlots') ))
 								    	)},
 										tags$hr(),
-										tags$a(class='', tags$span(class="label label-success", 'Help'), href=paste0("help/help.html"), target="_blank", 'Read SeqPlots documentation'),
+										tags$a(class='', tags$span(class="label label-success", 'Help'), href=paste0("help/help.html"), target="_blank", 'Read documentation'),
                     ' or press ', tags$i(class="icon-question-sign icon-large", style='color:orange'), 
-                    ' button to get help on specific controls. Also available as ', tags$a(class='', href=paste0("help/SeqPlots.pdf"), target="_blank", 'print ready PDF file.')
+                    ' button to get help on specific controls. Also available as ', tags$a(class='', href=paste0("http://przemol.github.io/seqplots/SeqPlots.pdf"), target="_blank", 'print ready PDF file.'),
+										tags$em(paste0('SeqPlots v', packageVersion('seqplots'), '.'))
 										
 								),
 					#3) TITLES AND AXIS PANEL
@@ -195,50 +196,56 @@ shinyUI(
 					         sliderInput("legend_font_size", "Legend font size:", 1, 48, 12, 1, ticks = TRUE)
 					),
 					#6) HEATMAP SPECIFIC OPTIONS
-								tabPanel(value = 'panel6', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
-								  h5(tags$u('Heatmap setup'), hlp("Heatmapsetuptab")),
-								  div( class='hidden', checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]") ), 
-									checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
-									div(class='row-fluid',
-									  div(class='span6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'Hierarchical'='hclust', 'SuperSOM'='ssom', 'do not cluster'='none'))),
-									  div(class='span6',   
-                        conditionalPanel( condition = "input.img_clstmethod != 'none' && input.img_clstmethod != 'ssom'", numericInput("img_clusters", "Number of clusters", 5, min=1)),
-									      conditionalPanel( condition = "input.img_clstmethod == 'ssom'", 
-									                        div(class='row-fluid',
-									                            div(class='span1'), div(class='span3', numericInput("img_ssomt1", "topo_x", 2, min=1) ),
-									                            div(class='span2'), div(class='span3', numericInput("img_ssomt2", "topo_y", 2, min=1) )
-                                          )
-                        )
-									  )
-									), 
-									checkboxInput('heat_include', 'Choose individual heatmaps for sorting/clustering', FALSE),
-                  tags$br(),
-                  
-									checkboxInput("indi", "Heatmaps have individual color keys", TRUE),
-									checkboxInput("heatmapzauto", "Set default color key limits", FALSE),
-									conditionalPanel( condition = "input.heatmapzauto == false",
-									  div(class='row-fluid',
-									                      div(class='span5', tags$br(), "Color key scaling:"),
-									                      div(class='span7', sliderInput("hsccoef", "Color key saturation:", 0, 0.1, 0.01, 0.001, ticks = TRUE)									                      )
-									                  )                
-									   
-									),
-									conditionalPanel( condition = "input.heatmapzauto == true",
-									    p( numericInput("zmin1", "-> ", -1), numericInput("zmin2", "-", 10) )
-									),
-									conditionalPanel( condition = "input.indi == true",
-									                  checkboxInput('heat_min_max', 'Set individual color key limits', FALSE)
-									),
-									checkboxInput('heat_colorspace', 'Set default colorspace', FALSE),
-									conditionalPanel( condition = "input.heat_colorspace == true",
-									                  div(class='row-fluid', 
-									                      div(class='span4', HTML('Min: <input type="color" class="color {hash:true}" id="heat_csp_min" value="#FFFFFF" style="width:40px;" title=""/>')),
-									                      div(class='span4', HTML('Mid: <input type="color" class="color {hash:true}" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
-									                      div(class='span4', HTML('Max: <input type="color" class="color {hash:true}" id="heat_csp_max" value="#00008B" style="width:40px;" title=""/>'))
-									                  )
-									)
-									
-								),
+					tabPanel(value = 'panel6', title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
+					         h5(tags$u('Heatmap setup'), hlp("Heatmapsetuptab")),
+					         div( class='hidden', checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]") ), 
+					         #checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
+					         selectInput("img_sort", "Sort heatmap rows by mean signal", c('do not sort', "increasing", "decreasing"), 
+					                     selected = NULL, multiple = FALSE, selectize = TRUE, width = NULL),
+					         div(class='row-fluid',
+					             div(class='span6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'Hierarchical'='hclust', 'SuperSOM'='ssom', 'do not cluster'='none'))),
+					             div(class='span6',   
+					                 conditionalPanel( condition = "input.img_clstmethod != 'none' && input.img_clstmethod != 'ssom'", numericInput("img_clusters", "Number of clusters", 5, min=1)),
+					                 conditionalPanel( condition = "input.img_clstmethod == 'ssom'", 
+					                                   div(class='row-fluid',
+					                                       div(class='span1'), div(class='span3', numericInput("img_ssomt1", "topo_x", 2, min=1) ),
+					                                       div(class='span2'), div(class='span3', numericInput("img_ssomt2", "topo_y", 2, min=1) )
+					                                   )
+					                 )
+					             )
+					         ),
+					         checkboxInput('heat_seed', 'Make cluster calculation repeatable', FALSE),
+					         conditionalPanel( condition = "input.heat_seed == true", {
+					             selectInput(inputId = 'heat_subclust', label = 'Plot cluster only selected', choices = 'All clusters')  
+					         }),
+					         checkboxInput('heat_include', 'Choose individual heatmaps for sorting/clustering', FALSE),
+					         tags$br(),
+					         
+					         checkboxInput("indi", "Heatmaps have individual color keys", TRUE),
+					         checkboxInput("heatmapzauto", "Set default color key limits", FALSE),
+					         conditionalPanel( condition = "input.heatmapzauto == false",
+					                           div(class='row-fluid',
+					                               div(class='span5', tags$br(), "Color key scaling:"),
+					                               div(class='span7', sliderInput("hsccoef", "Color key saturation:", 0, 0.1, 0.01, 0.001, ticks = TRUE)									                      )
+					                           )                
+					                           
+					         ),
+					         conditionalPanel( condition = "input.heatmapzauto == true",
+					                           p( numericInput("zmin1", "-> ", -1), numericInput("zmin2", "-", 10) )
+					         ),
+					         conditionalPanel( condition = "input.indi == true",
+					                           checkboxInput('heat_min_max', 'Set individual color key limits', FALSE)
+					         ),
+					         checkboxInput('heat_colorspace', 'Set default colorspace', FALSE),
+					         conditionalPanel( condition = "input.heat_colorspace == true",
+					                           div(class='row-fluid', 
+					                               div(class='span4', HTML('Min: <input type="color" class="color {hash:true}" id="heat_csp_min" value="#FFFFFF" style="width:40px;" title=""/>')),
+					                               div(class='span4', HTML('Mid: <input type="color" class="color {hash:true}" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
+					                               div(class='span4', HTML('Max: <input type="color" class="color {hash:true}" id="heat_csp_max" value="#00008B" style="width:40px;" title=""/>'))
+					                           )
+					         )
+					         
+					),
 					#6) SAVE/LOAD PLOT SET PANEL
 					      tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
 					         h5(tags$u('Load or save plotset'), hlp("Savingandloadingplotsets")),
@@ -284,11 +291,12 @@ shinyUI(
 						      checkboxInput('pty_batch', 'Keep 1:1 aspect ratio in batch mode', TRUE),
 						      checkboxInput('pty', 'Always keep 1:1 aspect ratio', FALSE),
 						      checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE),
+						      checkboxInput("raster", "Use raster bitmap to plot heatmaps", TRUE),
+						      checkboxInput("ggplot", "Use ggplot2 graphics package for heatmaps [EXPERIMENTAL]", FALSE),
 						      conditionalPanel( condition = tolower(as.character(Sys.getenv("SHINY_SERVER_VERSION") == '')),
 						        checkboxInput('setup_multithread', 'Use multithreading for calculations', .Platform$OS.type != 'windows')
 						      )
 						      
-						                     
 						    )
 
 						),
