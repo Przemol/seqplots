@@ -1,3 +1,12 @@
+#fileUploadModal .modal-dialog  {
+  width: 97%;
+}
+
+#calcModal .modal-dialog  {
+  width: 97%;
+}
+
+
 #downloadBatchColLineplot{
   margin-top: 10px;
 }
@@ -84,19 +93,6 @@
 
 #progressModal {
 	 /* border: 5px solid navy; */
-}
-
-#myModal {
-  width:1200px; 
-  text-align: left; 
-  top: 10px; 
-/*left: 10px; 
-  margin-left: 0px; */
-  margin-left: -600px;
-}
-
-#myModal > .modal-body {
-	max-height: 1200px !important;
 }
 
 #plot_upstream, #plot_downstream, #anchored_downstream, #plot_type, .fTable {
@@ -260,14 +256,15 @@ th > span > span > span {
 .letter-container {
 /* 	border-bottom: 0px dashed rgba(0,0,0,0.3); */
 /* 	border-top: 0px dashed rgba(0,0,0,0.3); */
-	padding: 10px;
+
 	height: 60px;
 	width: auto;
-	margin: 20px auto;
+	margin: 3px auto;
 }
 .letter-container h2 {
 	text-align: left;
 	font-family: 'MyFont', Arial, serif;
+  margin: 0px;
 	
 	
 	/* text-transform: uppercase; */

@@ -146,7 +146,7 @@ sendToCalc = function() {
   Shiny.shinyapp.sendInput({"f_tracks":t_sel});
   Shiny.shinyapp.sendInput({"f_features":f_sel});
 	Shiny.shinyapp.sendInput({"TR_calculate":new Date().getTime()}); 
-	$("#myModal").modal("hide"); 
+	$("#calcModal").modal("hide"); 
 	$("#progressModal").modal("show");
 
 }
@@ -170,7 +170,7 @@ rmSelctedFiles = function() {
 }
 
 $(function() {
-  $("#myModal").on("shown", function(e) { 
+  $("#calcModal").on("shown", function(e) { 
     if($.fn.dataTable.fnTables().length > 0) {
       $.each($.fn.dataTable.fnTables(), function(i, v) { $(v).dataTable().fnAdjustColumnSizing(); } )
     }

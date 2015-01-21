@@ -1,7 +1,7 @@
 #File management modal
 tagList(
   singleton(tags$head(tags$script(src = "js/modal_events.js"))),	
-  div(id="myModal", class="modal hide fade", tabindex="-1", role="dialog",
+  div(id="calcModal", class="modal fade", tabindex="-1", role="dialog", div(class="modal-dialog", div(class="modal-content", 
       div( class="modal-body",
            tags$p(tags$span(class="label label-info", 'Info'), 'Choose file by clicking on file name.  Chosen files will be highlighted. Click file name again to cancel choice. At least one signal track or motif and one feature file must be selected.'),
            tabsetPanel(
@@ -47,5 +47,5 @@ tagList(
            )
            
       )
-  )
+  )))
 )

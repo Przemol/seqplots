@@ -53,11 +53,20 @@ shinyUI(
 						singleton(tags$script(src = "js/DataTables/DT_bootstrap.js")),
 						singleton(tags$script(src = "js/DataTables/dataTables.tableTools.min.js")),
 						singleton(tags$script(src = "js/DataTables/DT_filter.js")),
+						singleton(tags$link(rel="stylesheet", type="text/css", href="upload/css/jquery.fileupload-ui.css")),
 						
 						## My scripts
 						singleton(tags$script(src = "js/color.js")),
 						singleton(tags$script(src = "js/js_addons.js")),
 						singleton(tags$script(src = "js/load_finished.js")),
+            
+						singleton(tags$script(src = "upload/js/vendor/jquery.ui.widget.js"))
+						,singleton(tags$script(src = "upload/js/jquery.iframe-transport.js"))
+						,singleton(tags$script(src = "upload/js/jquery.fileupload.js"))  	
+						,singleton(tags$script(src = "upload/js/jquery.fileupload-fp.js"))
+						,singleton(tags$script(src = "upload/js/jquery.fileupload-ui.js"))
+						,singleton(tags$script(src = "upload/js/md5.js"))
+						,singleton(tags$script(src = "upload/js/main.js")),
 						
 						# Title
 						tags$title('SeqPlots')
@@ -65,8 +74,15 @@ shinyUI(
 ###############################################################################
 # Modals      
 ###############################################################################
+#Animated header
+tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">SeqPlots</a></h2>')),
+
+
         #Page loading modal and mask, pops out just after page loads, removed after all JS loads, stays on JQuery error
-        includeHTML( file.path(Sys.getenv("web", '.'), 'ui/loadModal.html') ),     
+        includeHTML( file.path(Sys.getenv("web", '.'), 'ui/loadModal.html') ), 
+
+        #File upload modal
+        includeHTML(file.path(Sys.getenv("web", '.'), 'www/upload/upload.html')),
 
         #Calculation progress modal
         div(id="progressModal", class="modal hide", 'data-backdrop'="false", 'data-keyboard'="false", tabindex=-1,
@@ -77,8 +93,7 @@ shinyUI(
         ##File management modal
         eval(parse( file.path(Sys.getenv("web", '.'), 'ui/FileManagementModal.R') )),
 
-		#Animated header
-		tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">SeqPlots</a></h2>')),
+		
 				
 			
 ###############################################################################
@@ -107,8 +122,8 @@ shinyUI(
 						),
 						div(class='row-fluid',
 						    div(class='span2', 'Preview '),
-						    div(class='span4', tags$a(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-picture"), 'Line plot' ))),
-						    div(class='span4', tags$a(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-normal', tags$span(tags$i(class="icon-th"), 'Heatmap' ))), 
+						    div(class='span4', tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(tags$i(class="icon-picture"), 'Line plot' ))),
+						    div(class='span4', tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-info', tags$span(tags$i(class="icon-th"), 'Heatmap' ))), 
 						    div(class='span2', actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large")) )),
 						    tags$hr()
 						)
@@ -120,13 +135,13 @@ shinyUI(
 								tabPanel(value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plot set/Upload files") #, "New"
 										,h5('Upload files:', hlp("Addingandmanagingfiles"))
 										,helpText( "Add signal tracks (bigWig, wig or bedGraph) and feature files (GFF and BED) to the file collection.") # TIP: You can add multiple files at once.
-		  								,HTML('<a href="#fileUploadModal" role="button" class="btn btn-success" data-toggle="modal"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</a>')
+		  								,HTML('<button type="button" data-toggle="modal" data-target="#fileUploadModal" class="btn btn-success"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</button>')
                       ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES, selected = 'ce10', selectize = FALSE)) #This should stay for clonning, unless I can figure out something better using JS
                     ,tags$hr()
                     
 										,h5('Create new plot array:', hlp("Runningtheplot-setjobs"))
 										,helpText( "Choose signal tracks and feature files from the collection to use for calculating average plots and heat maps.")
-										,a(href="#myModal", role="button", class="btn btn-primary", 'data-toggle'="modal", tags$i(class="icon-magic icon-large icon-white"), "New plot set")
+										,HTML('<button type="button" data-toggle="modal" data-target="#calcModal" class="btn btn-primary"><i class="icon-magic icon-large icon-white"></i> New plot set</button>')
 										,uiOutput('plot_message')
 										,if (Sys.getenv("SHINY_SERVER_VERSION") != '') {div(
 											tags$hr(), h5('Soft restart the server session', hlp("Advancedoptions")),
@@ -305,15 +320,7 @@ shinyUI(
 				),
 				mainPanel(
 					#uiOutput('reactiveScripts')
-					 singleton(tags$script(src = "upload/js/vendor/jquery.ui.widget.js"))
-					,singleton(tags$script(src = "upload/js/jquery.iframe-transport.js"))
-					,singleton(tags$script(src = "upload/js/jquery.fileupload.js"))		
-					,singleton(tags$script(src = "upload/js/jquery.fileupload-fp.js"))
-					,singleton(tags$script(src = "upload/js/jquery.fileupload-ui.js"))
-					,singleton(tags$script(src = "upload/js/md5.js"))
-					,singleton(tags$script(src = "upload/js/main.js"))
-					,singleton(tags$link(rel="stylesheet", type="text/css", href="upload/css/jquery.fileupload-ui.css"))
-					,includeHTML(file.path(Sys.getenv("web", '.'), 'www/upload/upload.html')),
+					 
           
 # 					tabsetPanel(
 # 					  tabPanel("Plots selection", 
