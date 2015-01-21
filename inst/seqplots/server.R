@@ -30,6 +30,8 @@ if( Sys.getenv('root') != '' ) {
   con <- dbConnect(sqlite, dbname = 'files.sqlite')
 }
 
+shinybootstrap2::withBootstrap2({
+
 shinyServer(function(input, output, clientData, session) {
 	
   #Test if png is working, require x11 addon on newer Mac OS X if necessary
@@ -575,3 +577,5 @@ shinyServer(function(input, output, clientData, session) {
 #   })
  		#outputOptions(output, "featuretable", suspendWhenHidden = FALSE)
  })
+
+})

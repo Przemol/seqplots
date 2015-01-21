@@ -11,6 +11,8 @@ hlp <- function(target, top=-10) {
 }
 
 # Define UI
+shinybootstrap2::withBootstrap2({
+  
 shinyUI(
 		bootstrapPage(
       
@@ -339,3 +341,5 @@ shinyUI(
 				)
   )
 )
+
+})
