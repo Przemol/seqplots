@@ -5,9 +5,9 @@ tagList(
       div( class="modal-body",
            tags$p(tags$span(class="label label-info", 'Info'), 'Choose file by clicking on file name.  Chosen files will be highlighted. Click file name again to cancel choice. At least one signal track or motif and one feature file must be selected.'),
            tabsetPanel(
-             tabPanel("Tracks", 		div(class='fileMoodalInnerDiv', div("Loading...",id="tracktable")	)),
-             tabPanel("Features", 	div(class='fileMoodalInnerDiv', div("Loading...",id="featuretable")	)),
-             tabPanel("Sequence features",   div(class='row', div(class='span4', wellPanel(class='SFform', 
+             tabPanel("Tracks",   dataTableOutput('trackDT') ),
+             tabPanel("Features", dataTableOutput('featureDT') ),
+             tabPanel("Sequence features",   div(class='row', div(class='col-md-4', wellPanel(class='SFform', 
                                                                                            #selectInput("SFgenome", "Reference sequence (genmoe)", GENOMES),
                                                                                            textInput(inputId='SFpattern', label='DNA motif'),
                                                                                            numericInput(inputId='SFbin', label='Sliding window size in base pairs [bp]', value=200, min=10, step=10),
@@ -15,31 +15,31 @@ tagList(
                                                                                            checkboxInput(inputId='SFadvanced', label="Plot heatmap or error estimates", value=TRUE),
                                                                                            checkboxInput(inputId='SFrevcomp', label="Match reverse complement as well", value=FALSE),
                                                                                            actionButton('SFadd', 'Add'), actionButton('SFreset', 'Reset All'))),
-                                                 div(class='span7', style='height:450px; overflow:auto;', 'Motifs to add:', verbatimTextOutput("SFsetup") )
+                                                 div(class='col-md-7', style='height:450px; overflow:auto;', 'Motifs to add:', verbatimTextOutput("SFsetup") )
                                                  
                                                  
              ))
            )
       ),
       div( class="modal-footer",
-           div(id='modalToolbar', class='row-fluid',
-               div(class="span2", 
+           div(id='modalToolbar', class='row',
+               div(class="col-md-2", 
                    numericInput("BWbin", "Bin track @ [bp]: ", 10)
                ),
-               div(class="span2", radioButtons('plot_type', 'Choose the plot type', c( 'Point Features', 'Midpoint Features', 'Endpoint Features', 'Anchored Features' ) ) ),
-               div(class="span2", p("Additional options:"), 
+               div(class="col-md-2", radioButtons('plot_type', 'Choose the plot type', c( 'Point Features', 'Midpoint Features', 'Endpoint Features', 'Anchored Features' ) ) ),
+               div(class="col-md-2", p("Additional options:"), 
                    #conditionalPanel( condition = "input.plot_type != 'Anchored Features'", 
                    checkboxInput("ignore_strand", "Ignore strand", FALSE),
                    #), 
                    checkboxInput("rm0", "Remove zeros", FALSE),
                    checkboxInput("add_heatmap", "Calculate Heatmap", TRUE)
                ),
-               div(class="span1", style="text-align:right;", 'Plotting distances in [bp]:'),
-               div(class="span1", numericInput("plot_upstream", "Upstream:", 1000)),
-               div(class="span1" ,conditionalPanel( condition = "input.plot_type == 'Anchored Features'", id='anchoredHidabeDiv', numericInput("anchored_downstream", "Anchored:", 1000)) ),
-               div(class="span1", numericInput("plot_downstream", "Downstream:", 1000))
+               div(class="col-md-1", style="text-align:right;", 'Plotting distances in [bp]:'),
+               div(class="col-md-1", numericInput("plot_upstream", "Upstream:", 1000)),
+               div(class="col-md-1" ,conditionalPanel( condition = "input.plot_type == 'Anchored Features'", id='anchoredHidabeDiv', numericInput("anchored_downstream", "Anchored:", 1000)) ),
+               div(class="col-md-1", numericInput("plot_downstream", "Downstream:", 1000))
            ),
-           div( class="btn-toolbar",
+           div( class="pull-right", style="margin-top:25px",
                 tags$button(tags$span(tags$i(class="icon-off"), "Close"),	class="btn", 'data-dismiss'="modal"),
                 tags$button(tags$span(tags$i(class="icon-refresh icon-white"), 'Refresh'),  class="btn action-button btn-success", id="reloadgrid"),
                 tags$button(tags$span(tags$i(class="icon-trash icon-white"), 'Remove selected files'), 	class='btn btn-danger', onClick='rmSelctedFiles()'),

@@ -80,7 +80,7 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
                     "bSortable": false,
                     "mRender": function ( data, type, row ) {
                       if (row[5].length) {
-                        return '<a class="btn btn-mini no_select" rel="popover" data-content="'+ row[5] +'" data-original-title="Comment"'+ 
+                        return '<a class="btn btn-xs no_select" rel="popover" data-content="'+ row[5] +'" data-original-title="Comment"'+ 
                           'onClick="$(this).popover({trigger: \'hover\', placement: \'left\'}).popover(\'show\')">'+'<i class="icon-comment icon-large no_select"></i></a>'
                       } else {
                         return '<div style="width: 29px"></div>'
@@ -92,7 +92,7 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
                     "mData": null,
                     "bSortable": false,
                     "mRender": function ( data, type, row ) {
-                      return '<a class="btn btn-mini no_select" href="files/' + row[0] + '" target="_blank">'+'<i class="icon-download-alt icon-large no_select"></i></a>'
+                      return '<a class="btn btn-xs no_select" href="files/' + row[0] + '" target="_blank">'+'<i class="icon-download-alt icon-large no_select"></i></a>'
                     }
                   },
                   { "sTitle": '<i class="icon-trash icon-large""></i>',
@@ -100,7 +100,7 @@ Shiny.addCustomMessageHandler("jsCreatedDT", function(message) {
                     "mData": null,
                     "bSortable": false,
                     "mRender": function ( data, type, row ) {
-                      return '<button class="btn btn-mini btn-danger no_select" onClick="jsRmFile(&#39;'+row[0]+'&#39;)"><i class="icon-remove icon-large no_select"></i></button>'
+                      return '<button class="btn btn-xs btn-danger no_select" onClick="jsRmFile(&#39;'+row[0]+'&#39;)"><i class="icon-remove icon-large no_select"></i></button>'
                     }
                   }
 				]

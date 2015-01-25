@@ -34,12 +34,13 @@ shinyUI(
 						# CSS impprt						
             # singleton(tags$link(rel="stylesheet", type="text/css", href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css")),
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/style.css")),
-						singleton(tags$link(rel="stylesheet", type="text/css", href="css/DT_bootstrap.css")),
+						#singleton(tags$link(rel="stylesheet", type="text/css", href="css/DT_bootstrap.css")),
 						#singleton(tags$link(rel="stylesheet", type="text/css", href="http://cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/2/dataTables.bootstrap.css")),
-						singleton(tags$link(rel="stylesheet", type="text/css", href="css/TableTools.css")),	
-            #singleton(tags$link(rel="stylesheet", type="text/css", href="http://cdn.datatables.net/tabletools/2.2.1/css/dataTables.tableTools.css")),
+						#singleton(tags$link(rel="stylesheet", type="text/css", href="css/TableTools.css")),	
+            singleton(tags$link(rel="stylesheet", type="text/css", href="http://cdn.datatables.net/tabletools/2.2.3/css/dataTables.tableTools.css")),
 
 						singleton(tags$link(rel="stylesheet", type="text/css", href="css/font-awesome.min.css")),
+						singleton(tags$link(rel="stylesheet", type="text/css", href="upload/css/jquery.fileupload-ui.css")),
 						
 						# JS import
 						## miscellaneous libraries
@@ -49,11 +50,11 @@ shinyUI(
 						singleton(tags$script(src = "js/jquery.cookie.js")),
 						singleton(tags$script(src = "color/jscolor.js")),
 						## DataTable libraries
-						singleton(tags$script(src = "js/DataTables/jquery.dataTables.js")),
-						singleton(tags$script(src = "js/DataTables/DT_bootstrap.js")),
-						singleton(tags$script(src = "js/DataTables/dataTables.tableTools.min.js")),
+						#singleton(tags$script(src = "js/DataTables/jquery.dataTables.js")),
+						#singleton(tags$script(src = "js/DataTables/DT_bootstrap.js")),
+						singleton(tags$script(src = "http://cdn.datatables.net/tabletools/2.2.3/js/dataTables.tableTools.min.js")),
 						singleton(tags$script(src = "js/DataTables/DT_filter.js")),
-						singleton(tags$link(rel="stylesheet", type="text/css", href="upload/css/jquery.fileupload-ui.css")),
+						
 						
 						## My scripts
 						singleton(tags$script(src = "js/color.js")),

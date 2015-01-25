@@ -24,9 +24,7 @@
 #legend_pos, #legend_ext_pos, #batch_what, #batch_how {
   width: 110px;
 }
-.modal {
-    position: absolute;
-}
+
 
 .table-inside-modal tr {
     height: 32px;
@@ -41,14 +39,12 @@
 }
 
 .DTTT_container {
-  height: 20px;
+
   margin-left: 10px;
-  margin-right: 13px;
+
 }
 
-.DTTT_button {
-  height: 17px;
-}
+
 
 #title, #xlabel, #ylabel {
 		width: 85px;
@@ -134,7 +130,7 @@ label[for="hsccoef"] {
 }
 
 input#BWbin {
-	width: 48px;
+	width: 68px;
 	display: inline;
 	
 }
