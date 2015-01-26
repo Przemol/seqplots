@@ -86,10 +86,11 @@ tags$div(id="letter-container", class="letter-container", HTML('<h2><a href="#">
         includeHTML(file.path(Sys.getenv("web", '.'), 'www/upload/upload.html')),
 
         #Calculation progress modal
-        div(id="progressModal", class="modal hide", 'data-backdrop'="false", 'data-keyboard'="false", tabindex=-1,
+        div(id="progressModal", class="modal", 'data-backdrop'="false", 'data-keyboard'="false", tabindex=-1, div(class="modal-dialog", div(
+            class="modal-content",
             div(class="modal-header", tags$h3(id="progressModalLabel", 'Calculating...')),
             div(class="modal-body", verbatimTextOutput("summary2"), verbatimTextOutput("summary3"), actionButton('cancel', 'Cancel'))
-        ),
+        ))),
 
         ##File management modal
         eval(parse( file.path(Sys.getenv("web", '.'), 'ui/FileManagementModal.R') )),
