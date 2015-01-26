@@ -53,7 +53,7 @@ shinyUI(
 						#singleton(tags$script(src = "js/DataTables/jquery.dataTables.js")),
 						#singleton(tags$script(src = "js/DataTables/DT_bootstrap.js")),
 						singleton(tags$script(src = "http://cdn.datatables.net/tabletools/2.2.3/js/dataTables.tableTools.min.js")),
-						singleton(tags$script(src = "js/DataTables/DT_filter.js")),
+						#singleton(tags$script(src = "js/DataTables/DT_filter.js")),
 						
 						
 						## My scripts

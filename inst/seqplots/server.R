@@ -509,7 +509,10 @@ shinyServer(function(input, output, clientData, session) {
         pagingType="full_numbers"
       ), callback = I("function(oTable) {
           var table = $('#' + oTable.context[0].sTableId);
-          table.addClass('table-condensed')
+          var tables = table.parents('.dataTables_wrapper').find('table')
+          tables.addClass('table-condensed table-bordered');
+          oTable.draw();
+          $(tables[2]).removeClass('table-bordered');
       }")
       )
       return(out)
