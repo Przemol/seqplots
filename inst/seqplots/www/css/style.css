@@ -45,13 +45,8 @@
 }
 
 
-
-#title, #xlabel, #ylabel {
-		width: 85px;
-}
-
 #pdf_x_size, #pdf_y_size, #grid_x_size, #grid_y_size {
-  	width: 50px;
+  	width: 80px;
 }
 
 #img_clusters {
@@ -144,28 +139,30 @@ p > label {
 	
 	display: inline;
 }
-div.img {
-      height: 235px;
-}
 
-div.img > div > img { 
-      max-width: 330px;
-      position:absolute;
-      z-index:3;
-      cursor: -webkit-zoom-in; cursor: -moz-zoom-in;
+
+
+
+img {
+    margin-top: 10px;
+    width: 100%;
+    cursor: -webkit-zoom-in; 
+    cursor: -moz-zoom-in;
 }
- /*div.img > div > img:active { 
-      max-width: 100% !important;
-      cursor: -webkit-zoom-out; cursor: -moz-zoom-out;
-}*/
 
 .zoom_image { 
-      max-width: 100% !important;
+      max-width: 90% !important;
       cursor: -webkit-zoom-out !important; 
       cursor: -moz-zoom-out !important;
-      position: absolute !important;
+      position: fixed !important;
       top: 35px !important;
       left: 35px !important;
+      margin-right: 35px !important;
+      margin-bottom: 35px !important;
+      z-index:3;
+      border-style: dotted;
+      border-width: 3px;
+      border-color: grey;
 }
 
 th > span {
@@ -253,7 +250,7 @@ th > span > span > span {
 /* 	border-bottom: 0px dashed rgba(0,0,0,0.3); */
 /* 	border-top: 0px dashed rgba(0,0,0,0.3); */
 
-	height: 60px;
+	height: 85px;
 	width: auto;
 	margin: 3px auto;
 }

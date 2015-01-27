@@ -55,18 +55,17 @@ rmSelctedFiles = function() {
 }
 
 $(function() {
-  $("#calcModal").on("shown", function(e) { 
-    if($.fn.dataTable.fnTables().length > 0) {
-      $.each($.fn.dataTable.fnTables(), function(i, v) { $(v).dataTable().fnAdjustColumnSizing(); } )
-    }
-  })
+//  $("#calcModal").on("shown", function(e) { 
+//    if($.fn.dataTable.fnTables().length > 0) {
+//      $.each($.fn.dataTable.fnTables(), function(i, v) { $(v).dataTable().fnAdjustColumnSizing(); } )
+//    }
+//  })
   
-  $('div.img').click(function(e){
-    $(this).find('div > img').toggleClass('zoom_image');
+  $('#image').click(function(e){
+    $(this).find('img').toggleClass('zoom_image');
     e.preventDefault();
   });
   
-	$('#anchoredHidabeDiv').hide();
 	
 	$('#downloadLegend').tooltip({title:'Legend'});
 	$('#downloadClusters').tooltip({title:'Clusters indicates'});

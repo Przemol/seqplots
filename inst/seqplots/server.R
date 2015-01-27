@@ -130,11 +130,11 @@ shinyServer(function(input, output, clientData, session) {
 	#Rendering the image
 	output$image <- renderImage({
 	  if(is.null(values$im)) return(list(src = '',contentType = 'image/png',alt = "No image to plot just yet"))
-	  list(src = values$im,
-	       contentType = 'image/png',
-	       width = 1169,
-	       height = 782,
-	       alt = "This is alternate text")
+	  list(
+        src = values$im,
+	    contentType = 'image/png',
+	    alt = "Image cannot be displayed"
+      )
 	}, deleteFile = TRUE)
   
 	#renderin data dependant plot controles
