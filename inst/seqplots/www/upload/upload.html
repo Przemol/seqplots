@@ -13,11 +13,11 @@
  
 <div class="modal" style='width:900px'>
 -->
-
-
  
 <!-- Modal -->
-<div id="fileUploadModal" class="modal hide fade" tabindex="-1" role="dialog" style="width:1200px; margin-left: -600px">
+<div id="fileUploadModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
     <h3 id="myModalLabel">Upload files</h3>
@@ -31,7 +31,7 @@
         <noscript><input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
-            <div class="span6">
+            <div class="col-md-6">
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-success fileinput-button">
                     <i class="icon-plus icon-white"></i>
@@ -46,7 +46,7 @@
                     <i class="icon-ban-circle icon-white"></i>
                     <span>Cancel upload</span>
                 </button>
-                    <button class="btn btn-small defaults_btn" onClick="showDef(this)">
+                    <button class="btn btn-sm defaults_btn" onClick="showDef(this)">
                     <i class="icon-star icon-white"></i>
                     <span>Set defaults...</span>
                 </button>
@@ -63,7 +63,7 @@
                 -->
             </div>
             <!-- The global progress information -->
-            <div class="span5 fileupload-progress fade">
+            <div class="col-md-5 fileupload-progress fade">
                 <!-- The global progress bar -->
                 <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                     <div class="bar" style="width:0%;"></div>
@@ -76,18 +76,18 @@
         <div class="fileupload-loading"></div>
         <div class="fileupload-defaults", style="display:none;">
           <div class="row">
-            <div class="span2">
+            <div class="col-md-2">
               <div class="input-prepend"><button class="btn disabled"><i class="icon-user"> User </i></button>
 									<input name="user" class="f1_user_default" type="text" placeholder="User..." style='width:90px'></div>
             </div>
-            <div class="span3">
+            <div class="col-md-3">
               <div class="input-prepend"><button class="btn disabled"><i class="icon-info-sign"> Genome </i></button>
 									<select name="genome" class='f1_genome_default' style='width:180px'></select></div>
             </div>
-            <div class="span2">
+            <div class="col-md-2">
               <label class="checkbox" for="f1_warn_default"><input id="f1_warn_default" type="checkbox"/><span>Warn on page exit.</span></label>
             </div>
-            <div class="span3">
+            <div class="col-md-3">
                    <button class="btn" onClick="submitDef(this)"><i class="icon-ok"></i><span> Submit</span></button>
                    <button class="btn" onClick="$('.fileupload-defaults').hide()"><i class="icon-ban-circle"></i><span> Cancel</span></button>
             </div>
@@ -100,6 +100,10 @@
     </form>
   </div>
 
+</div>
+
+</div>
+  
 </div>
 
 <div> 

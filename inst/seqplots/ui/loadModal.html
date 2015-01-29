@@ -1,16 +1,26 @@
 <div class='load_div'>
-  <div id="load_modal" class="modal" data-backdrop="static" data-show="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-    <div class="modal-header">
-      <h3 id="myModalLabel">Loading...</h3>
-    </div>
-    <div class="modal-body">
-      <div class="progress progress-striped active">
-      <div class="bar" style="width: 100%;"></div>
-    </div>
-    </div>
-    <div class="modal-footer">
-      <a href="help/help.html" target="_blank" class="btn btn-success">Help</a>
-      <a href="." class="btn btn-primary">Reload</a>
-    </div>
-  </div>
+    <div class="modal" id="load_modal" data-show='true' data-backdrop='static'>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h3>Loading...</h3><br \>
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                <span class="sr-only">100% Complete</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+              <a href="help/help.html" target="_blank" class="btn btn-success">Help</a>
+              <a href="." class="btn btn-primary">Reload</a>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <script type="text/javascript">
+    $( function(){
+        $('#load_modal').modal();
+    } )
+    </script>
 </div>
+
