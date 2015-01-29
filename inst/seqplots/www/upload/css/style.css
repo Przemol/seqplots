@@ -13,3 +13,5 @@
 body{
   padding-top: 60px;
 }
+
+#fileUploadModal .modal-dialog  {width:97%;}

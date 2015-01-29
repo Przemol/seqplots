@@ -1,7 +1,7 @@
 var modalBinding = new Shiny.InputBinding();
 $.extend(modalBinding, {
   find: function(scope) {
-    return $(scope).find("#myModal");
+    return $(scope).find("#calcModal");
   },
   getValue: function(el) {
 	// no-impl
@@ -18,7 +18,7 @@ $.extend(modalBinding, {
     });
   },
   unsubscribe: function(el) {
-    $(el).off("#myModal");
+    $(el).off("#calcModal");
   }
 });
 
