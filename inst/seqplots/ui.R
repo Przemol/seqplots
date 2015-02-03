@@ -136,11 +136,11 @@ titlesAndAxis <- tabPanel(
     h5(tags$u('Title and axis'), hlp("Titlesandaxispanel"), style='margin-bottom:15px'),
     div(class='row', 
         div(class='col-md-4', textInput("title", "Title:", ""),         
-            sliderInput("title_font_size", "Title size:",   1, 48, 20, 1) ),
+            numericInput("title_font_size", "Title size:",    min=1, max=48, value=20, step=1) ), #sliderInput
         div(class='col-md-4', textInput("xlabel", "X-axis label:", ""), 
-            sliderInput("labels_font_size", "Labels size:", 1, 48, 16, 1) ),
+            numericInput("labels_font_size", "Labels size:",  min=1, max=448, value=16, step=1) ), #sliderInput
         div(class='col-md-4', textInput("ylabel", "Y-axis label:", ""), 
-            sliderInput("axis_font_size", "Axis font size:",     1, 48, 14, 1) )
+            numericInput("axis_font_size", "Axis font size:", min=1, max=448, value=14, step=1) ) #sliderInput
     ),
     checkboxInput("xauto", "Set X-axis limits", FALSE),
     conditionalPanel( condition = "input.xauto == true", fluidRow(
@@ -183,7 +183,7 @@ keysLabelsAndColors <- tabPanel(
         div(class='col-md-8',checkboxInput("legend_ext", "Show error estimate key", FALSE)),
         div(class='col-md-4',conditionalPanel( condition = "input.legend_ext == true", selectInput("legend_ext_pos", "-> position:", c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center"),  "topleft" )))
     ),
-    sliderInput("legend_font_size", "Legend font size:", 1, 48, 12, 1, ticks = TRUE)
+    numericInput("legend_font_size", "Legend font size:", min=1, max=48, value=12, step=1) #sliderInput
 )
 
 #5) Heatmap options panel ######################################################   
@@ -224,7 +224,7 @@ heatmapPanel <- tabPanel(
         condition = "input.heatmapzauto == false",
         div(class='row',
             div(class='col-md-5', tags$br(), "Color key scaling:"),
-            div(class='col-md-7', sliderInput("hsccoef", "Color key saturation:", 0, 0.1, 0.01, 0.001, ticks = TRUE)    								                      )
+            div(class='col-md-7', numericInput("hsccoef", "Color key saturation:", min=0, max=0.1, value=0.01, step=0.001)) #sliderInput   								                      )
         )                
         
     ),
@@ -382,7 +382,6 @@ shinyUI(
         eval(parse( file.path(Sys.getenv("web", '.'), 'ui/FileManagementModal.R') )),
         
         #File upload modal
-        includeHTML(file.path(Sys.getenv("web", '.'), 'www/upload/upload.html')),
-        tags$input(id='w')
+        includeHTML(file.path(Sys.getenv("web", '.'), 'www/upload/upload.html'))
     )
 )
