@@ -207,7 +207,7 @@ getPlotSetArray <- function(
         } else {
             genome_ind <- refgenome  
         }
-        pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))
+        pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))[[1]]
         suppressPackageStartupMessages(
             library(pkg, character.only = TRUE, quietly=TRUE)
         )
