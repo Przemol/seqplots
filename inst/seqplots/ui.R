@@ -21,7 +21,7 @@ head <- tags$head(
     #singleton(tags$link(rel="stylesheet", type="text/css", href="css/DT_bootstrap.css")),
     #singleton(tags$link(rel="stylesheet", type="text/css", href="http://cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/2/dataTables.bootstrap.css")),
     #singleton(tags$link(rel="stylesheet", type="text/css", href="css/TableTools.css")),	
-    singleton(tags$link(rel="stylesheet", type="text/css", href="http://cdn.datatables.net/tabletools/2.2.3/css/dataTables.tableTools.css")),
+    singleton(tags$link(rel="stylesheet", type="text/css", href="css/TableTools.css")),
     
     singleton(tags$link(rel="stylesheet", type="text/css", href="css/font-awesome.min.css")),
     singleton(tags$link(rel="stylesheet", type="text/css", href="upload/css/jquery.fileupload-ui.css")),
@@ -36,7 +36,7 @@ head <- tags$head(
     ## DataTable libraries
     #singleton(tags$script(src = "js/DataTables/jquery.dataTables.js")),
     #singleton(tags$script(src = "js/DataTables/DT_bootstrap.js")),
-    singleton(tags$script(src = "http://cdn.datatables.net/tabletools/2.2.3/js/dataTables.tableTools.min.js")),
+    singleton(tags$script(src = "js/DataTables/dataTables.tableTools.min.js")),
     #singleton(tags$script(src = "js/DataTables/DT_filter.js")),
     
     
@@ -50,6 +50,7 @@ head <- tags$head(
     ,singleton(tags$script(src = "upload/js/jquery.fileupload.js"))      
     ,singleton(tags$script(src = "upload/js/jquery.fileupload-fp.js"))
     ,singleton(tags$script(src = "upload/js/jquery.fileupload-ui.js"))
+    ,singleton(tags$script(src = "upload/js/jquery.fileupload-validate.js"))
     ,singleton(tags$script(src = "upload/js/md5.js"))
     ,singleton(tags$script(src = "upload/js/main.js")),
     
@@ -384,6 +385,6 @@ shinyUI(
         eval(parse( file.path(Sys.getenv("web", '.'), 'ui/FileManagementModal.R') )),
         
         #File upload modal
-        includeHTML(file.path(Sys.getenv("web", '.'), 'www/upload/upload.html'))
+        includeHTML( file.path(Sys.getenv("web", '.'), 'www/upload/upload.html') )
     )
 )
