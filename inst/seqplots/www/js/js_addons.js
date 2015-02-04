@@ -1,3 +1,22 @@
+//JS alert handle
+Shiny.addCustomMessageHandler("jsAlert", function(message) {
+    alert(message)
+});
+    
+//JS exec handle
+Shiny.addCustomMessageHandler("jsExec", function(message) {
+    eval(message)
+});
+    
+//JS meaages handle
+Shiny.addCustomMessageHandler("jsAssign", function(message) {
+    M = message;
+});
+Shiny.addCustomMessageHandler("jsDots", function(message) {
+    $("#summary3").text( $("#summary3").text().length < 50 ? $("#summary3").text()+"." : "." );
+});
+    
+
 animateTitle = function() {
   $("#letter-container h2 a").lettering();
 	$.each($('.letter-container h2 a span'), function(index, value) { $(this).css({

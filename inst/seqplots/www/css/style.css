@@ -151,14 +151,17 @@ img {
 }
 
 .zoom_image { 
-      max-width: 90% !important;
+      max-width: 100% !important;
+      max-height: 120% !important;
+      width: auto !important;
       cursor: -webkit-zoom-out !important; 
       cursor: -moz-zoom-out !important;
       position: fixed !important;
-      top: 35px !important;
-      left: 35px !important;
-      margin-right: 35px !important;
-      margin-bottom: 35px !important;
+      top: 10px !important;
+      left: 10px !important;
+      margin-right: 0px !important;
+      margin-bottom: 0px !important;
+      margin-top: 0px !important;
       z-index:3;
       border-style: dotted;
       border-width: 3px;
