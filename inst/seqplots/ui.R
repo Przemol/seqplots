@@ -13,17 +13,7 @@ hlp <- function(target, top=-10) {
 
 head <- tags$head(
     # JS error message
-    singleton(tags$script('var error = false; window.onerror =  function() { if (!error) {alert("JavaScript error! Some elements might not work proprely. Please reload the page."); error=true;} }')),		
-    
-    # JS alert handle
-    #singleton(tags$script('Shiny.addCustomMessageHandler("jsAlert", function(message) {alert(JSON.stringify(message));});')),
-    singleton(tags$script('Shiny.addCustomMessageHandler("jsAlert", function(message) {alert(message);});')),
-    
-    # JS exec handle
-    singleton(tags$script('Shiny.addCustomMessageHandler("jsExec", function(message) {eval(message);});')),
-    
-    # JS exec handle
-    singleton(tags$script('Shiny.addCustomMessageHandler("jsAssign", function(message) {M = message;});')),
+    singleton(tags$script('var error = false; window.onerror =  function() { if (!error) {alert("JavaScript error! Some elements might not work proprely. Please reload the page."); error=true;} }')),
     
     # CSS impprt						
     # singleton(tags$link(rel="stylesheet", type="text/css", href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css")),
@@ -72,30 +62,42 @@ head <- tags$head(
 # 0) Plot panel ############################################################
 plotPanel <- conditionalPanel(
     condition = "output.showplot",
-    p(class='pull-left', HTML("Download: &nbsp;"),
-      div(class="btn-toolbar", div(
+   
+      div(class="btn-toolbar",
+        p("Download:", class='pull-left'),
+        div(
           class="btn-group",
           downloadLink('downloadPlot',     tags$span(tags$i(class="icon-picture icon-large icon-white"), 'Line plot'),   class="btn btn-small btn-success"),
           downloadLink('downloadLegend', tags$span(tags$i(class="icon-info icon-large")), class="btn btn-small btn-success") #Legend
-      ),
-      div(
+        ),
+        div(
           class="btn-group",
           downloadLink('downloadHeatmap', tags$span(tags$i(class="icon-th icon-large icon-white"), 'Heatmap'), class="btn btn-small btn-info"),
           downloadLink('downloadClusters', tags$span(tags$i(class="icon-sitemap icon-large")), class="btn btn-small btn-info") #'Clusters indicates'
-      )
-      ),    
+        )
+      ),
       #div(class="hidden", actionButton('plotHmap', 'Plot')),
       #div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
-      imageOutput(outputId = "image", width = "100%", height = "100%")
+      
       #div(class="img", hlp("Plotting", top=0),   )
-    ),
-    div(class='row',
-        div(class='col-md-2', 'Preview '),
-        div(class='col-md-4', tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(tags$i(class="icon-picture"), 'Line plot' ))),
-        div(class='col-md-4', tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-info', tags$span(tags$i(class="icon-th"), 'Heatmap' ))), 
-        div(class='col-md-2', actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large")) )),
-        tags$hr()
-    )
+    
+    imageOutput(outputId = "image", width = "100%", height = "100%"),
+    
+    #,
+      p(div(
+          class="btn-toolbar", 
+          HTML("Preview:"),
+          tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(tags$i(class="icon-picture"), 'Line plot' )),
+          tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-info', tags$span(tags$i(class="icon-th"), 'Heatmap' )), 
+          actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"))), 
+          hlp("Plotting", 3)
+          
+      ), tags$hr())
+    
+
+    
+       
+    #)
 )
 
 # 1) New plot panel ############################################################
