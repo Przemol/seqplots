@@ -1,3 +1,23 @@
+.tabrowpar {
+      white-space:nowrap; 
+      margin-right:27px;
+      height: 24px;
+}
+
+.div_setup .form-control {
+    display: inline;
+}
+.div_separator hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+input[name='plot_this'] {
+    height: 22px; 
+    width: 22px;
+}
+    .height($(\'td p\').height()+3).width($(\'td p\').height()+3);')
+
 #fileUploadModal .modal-dialog  {
   width: 97%;
 }
