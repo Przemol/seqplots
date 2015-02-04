@@ -28,13 +28,14 @@ $(function () {
       type: 'POST',
       dataType: 'text',
       multipart: false,
+      //maxFileSize: 1000000,
       sequentialUploads: true,
-    	acceptFileTypes: '/(\.|\/)(gff|bw|wig.gz|wig|bed|gff.gz|bed.gz)$/i',
+      acceptFileTypes: /(\.|\/)(gff|bw|wig.gz|wig|bed|gff.gz|bed.gz)$/i,
       uploadTemplateId: null,
       downloadTemplateId: null,
       uploadTemplate: tmplUP('template-upload'),
       downloadTemplate: tmplUP('template-download'),
-    	submit: function (e, data) {
+      submit: function (e, data) {
     		//var input = $('#input');
     		//data.formData = {example: input.val()};
         
@@ -49,6 +50,7 @@ $(function () {
      			 //return false;
     		//}
     		if (inputs.filter('[required]').filter(function() { return $(this).val() == ""; }).first().focus().length) {
+              data.context.find('button').prop('disabled', false);
       		  return false;
     		}
     		//lastFile = inputs.serializeArray();
@@ -142,9 +144,10 @@ $(function () {
     });
   
   $('#fileupload').bind('fileuploadadded', function (e, data) {
-	  var mod = $('.f1_genome').filter(':empty').append( $('#file_genome option').clone() );
+	var mod = $('.f1_genome').filter(':empty').append( $('#file_genome option').clone() );
     mod.children().removeAttr('selected').filter('[value='+ $.cookie('genome') +']').attr('selected', 'selected');
     $('.f1_user').filter(function(){ return($(this).val() == '') }).val( $.cookie('user') );
+    $('.template-upload .btn-default').height($('.template-upload input').height());
   })
   
     $('#fileupload').bind('fileuploadadd', function (e, data) {
@@ -167,13 +170,13 @@ $(function () {
 });
 
 function copyAnnotation(e) {
-	var name = $(e).parent().children('input').prop('name');
-	var value = $(e).parent().children('input').val();
+	var name = $(e).parents('.input-group').children('input').prop('name');
+	var value = $(e).parents('.input-group').children('input').val();
 	$("input[name='"+name+"']").val(value);
 }
 function copyGenome(e) {
-	var name = $(e).parent().children('select').prop('name');
-	var value = $(e).parent().children('select').val();
+	var name = $(e).parents('.input-group').children('select').prop('name');
+	var value = $(e).parents('.input-group').children('select').val();
 	$("select[name='"+name+"']").val(value);
 }
 

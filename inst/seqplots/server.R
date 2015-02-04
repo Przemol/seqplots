@@ -351,8 +351,8 @@ shinyServer(function(input, output, clientData, session) {
           
 		  }, error = function(e) {
 		      file.remove( file.path('tmp', input$TR_addFile$name) )
-		      session$sendCustomMessage("jsExec", sprintf( '$("#%s").html(\' <span class="label label-important">ERROR</span>\')', 
-		                                                   input$TR_addFile$jobID ))
+		      session$sendCustomMessage("jsExec", sprintf( '$("#%s").html(\' <span class="label label-danger">ERROR</span> %s\')', 
+		                                                   input$TR_addFile$jobID, "File processing error..." ))
 		      session$sendCustomMessage("jsAlert", geterrmessage() )
           
 		      #values$refFileGrids <- runif(1)
