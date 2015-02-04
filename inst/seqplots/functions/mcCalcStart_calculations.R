@@ -1,15 +1,35 @@
 mcCalcStart <- quote({
   
   if( is.null(input$TR_calculate) )  return()
-  
-  values$calcID <- input$TR_calculate
-  updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
-  values$grfile <- NULL
-  
+  if( is.null( isolate(values$proc)) ) {
+    values$calcID <- input$TR_calculate
+    updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
+    values$grfile <- NULL
+    pb_max <- (length(input$f_tracks)+length(values$SFsetup))*length(input$f_features)
+    values$progress <- shiny::Progress$new(session, min=0, max=pb_max)
+  }
   do <- quote({
+      
+    on.exit(values$progress$close())
+    values$progress$set(value = 0, message = 'Calculation in progress...', detail = '')  
     session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary2').text('Initializing...').parent().find('#summary3').text('')")
-    cat3 <- function(x) { session$sendCustomMessage("jsExec", sprintf("$('#summary2').text('%s')", x)) }
-    cat4 <- function(x) { session$sendCustomMessage("jsExec", sprintf("$('#summary3').text('%s')", x)) }
+    
+    last_msg <- Sys.time()
+    cat3 <- function(x) { 
+        if(Sys.time() - last_msg > 1) {
+            session$sendCustomMessage("jsExec", sprintf("$('#summary2').text('%s')", x))
+            values$progress$set(value = as.numeric(sub('.+\\[(.+)\\/.+\\]$', '\\1', x )), message = NULL, detail = sub('.+\\[(.+)]$', '\\1', x ))
+            last_msg <<- Sys.time()
+        }
+    }
+    
+    cat4 <- function(x) { 
+        if(Sys.time() - last_msg > 1) {
+            session$sendCustomMessage("jsExec", sprintf("$('#summary3').text('%s')", x)) 
+            last_msg <<- Sys.time()
+        }
+    }
+    
     if ( length( values$SFsetup ) > 0 | length( input$f_tracks ) > 0 ) {
         
         out <- seqplots::getPlotSetArray(
@@ -24,7 +44,7 @@ mcCalcStart <- quote({
                 rm0=input$rm0,
                 ignore_strand=input$ignore_strand,
                 add_heatmap=input$add_heatmap,
-                verbose=TRUE, lvl1m=cat3, lvl2m=cat4
+                verbose=TRUE, lvl1m=cat3, lvl2m=message
             )       
         out$data 
       #procQuick(c(sort(input$f_tracks), values$SFsetup), sort(input$f_features),
@@ -48,14 +68,15 @@ mcCalcStart <- quote({
     
   } else {
     
-    mceval(do, NULL,
-           quote({ 
-             values$grfile <- res
-             session$sendCustomMessage("jsAlert", "Job done!")
-             values$plotMsg <- div(style='margin-top:10px;', id=as.character(input$TR_calculate), class="alert alert-success", 
-                                   HTML('<button type="button" class="close" data-dismiss="alert">x</button><strong>Calculation complete!</strong> You can plot or save the results in public files.')
-             ) 
-           }),
+    mceval(
+        do, 
+        quote({ 
+            session$sendCustomMessage("jsDots", ".") 
+        }),
+        quote({ 
+            values$grfile <- res
+            session$sendCustomMessage("jsAlert", "Job done!")
+        })
     )
     
 #     if (is.null(isolate(values$proc))) {

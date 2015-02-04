@@ -69,7 +69,7 @@ mcDoParallel <- quote({
     
     mceval(do, 
       quote({ 
-        session$sendCustomMessage("jsExec", "$('#summary3').text( $('#summary3').text().length < 50 ? $('#summary3').text()+'.' : '.' )") 
+        session$sendCustomMessage("jsDots", ".") 
       }),
       quote({ 
         values$im <- as.character(res$url)
