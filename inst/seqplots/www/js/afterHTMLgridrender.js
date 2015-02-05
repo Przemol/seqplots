@@ -38,7 +38,7 @@ $(".toogle-row-btn-vis").click(function() {
 });
 
 $(".rhdr").click(function() { 
-    var text = $(this).siblings().val();
+    var text = $(this).parents('.input-group-btn').siblings().val();
     var who = $(this).attr('data-who');
     if( text == '' ) text = $(this).attr('data-fname');
     if( who == 'inc' ) {
@@ -57,7 +57,7 @@ $('.rdr-numeric-auto-input').change(function() {
 
 $('.hhdr').click(function() { 
     var num = $(this).parents('th').index()+1;
-    var text = $(this).siblings().val();
+    var text = $(this).parents('.input-group-btn').siblings().val();
     var who = $(this).attr('data-who');
     if( text == '' ) text = $(this).attr('data-fname');
     if( who == 'inc' ) {

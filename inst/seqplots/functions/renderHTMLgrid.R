@@ -15,52 +15,52 @@ renderTopLeft <- function() {
         </b>'
     )
     cat('
-        <div class="hhdrs"  style="text-align: center; width: 200px;"> 
+        <div class="hhdrs"  style="width: 200px; margin-left:auto; margin-right:auto;"> 
             <div class="div_separator div_setup"  style="display:none;"><hr /></div>
             <div class="div_color div_setup form-group form-group-sm"  style="display:none">
 
-                <div class="input-group">
+                <div class="input-group" style="width: 112px;">
                     <input class="form-control" type="color" name="plot_col" class="color {hash:true}" title="Set a color for whole row." data-placement="left"/>  
                     <span class="input-group-btn">
                         <button class="btn btn-sm btn-default chdr havettp" data-who="color" href="#" title="Copy color to all" data-placement=top><i class="icon-fullscreen"></i></button>
                     </span>
                 </div>                        
-        </div> 
-        <div class="div_label div_setup form-group form-group-sm" style="display:none">
-        <div class="input-group">
-        <input class="form-control"  type="text" placeholder="All labels" title="Set a header label here." data-placement="left"/> 
-        <span class="input-group-btn">
-        <a class="btn btn-sm btn-default chdr havettp" data-who="label" href="#" title="Copy label to all" data-placement=top><i class="icon-fullscreen"></i></a>
-        <a class="btn btn-sm btn-default chdrrowcol havettp" data-who="color" href="#" title="Construct labels using row and col fields" data-placement=top>@</a>
-        <a class="btn btn-sm btn-default chdrat havettp" data-who="color" href="#" title="Set labels to default" data-placement=top>D</a>
-        <a class="btn btn-sm btn-default chdrrm havettp" data-who="color" href="#" title="Clear all labels" data-placement=top>X</a>
-        </span>
-        </div>
-        </div>
-        <div class="div_prior div_setup form-group form-group-sm" style="display:none">
-        <div class="input-group">
-        <input class="form-control"  type="number"  value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> 
-        <span class="input-group-btn">        
-            <a class="btn btn-sm btn-default chdr havettp" data-who="prior" href="#" title="Copy priority to all"><i class="icon-fullscreen"></i></a>
-        </span>
-        </div> 
-        </div> 
-        
-        <div class="div_inc div_setup form-group form-group-sm"  style="display:none; min-width:91px">
-        <div class="input-group">
-        <select title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select>
-        <span class="input-group-btn">
-            <a class="btn btn-sm btn-default chdr havettp" data-who="inc" href="#" title="Copy value to all"><i class="icon-fullscreen"></i></a>
-        </span>
-        </div> 
-        </div>
-        
-        <div class="div_min div_max div_setup form-group form-group-sm"   style="display:none; min-width:127px"">
-                            <input class="form-control"  class="chdr-numeric-auto-input" data-who="min" type="number" style="width:40px" title="Heatmap MIN for all heatmaps"/> - 
-                            <input class="form-control"  class="chdr-numeric-auto-input" data-who="max" type="number" style="width:40px" title="Heatmap MAX for all heatmaps"/>
- 
-                        </div>
-                        </div>'
+            </div> 
+            <div class="div_label div_setup form-group form-group-sm" style="display:none">
+                <div class="input-group">
+                    <input class="form-control"  type="text" placeholder="All labels" title="Set a header label here." data-placement="left"/> 
+                    <span class="input-group-btn">
+                        <a class="btn btn-sm btn-default chdr havettp" data-who="label" href="#" title="Copy label to all" data-placement=top><i class="icon-fullscreen"></i></a>
+                        <a class="btn btn-sm btn-default chdrrowcol havettp" data-who="color" href="#" title="Construct labels using row and col fields" data-placement=top>@</a>
+                        <a class="btn btn-sm btn-default chdrat havettp" data-who="color" href="#" title="Set labels to default" data-placement=top>D</a>
+                        <a class="btn btn-sm btn-default chdrrm havettp" data-who="color" href="#" title="Clear all labels" data-placement=top>X</a>
+                    </span>
+                </div>
+            </div>
+            <div class="div_prior div_setup form-group form-group-sm" style="display:none">
+                <div class="input-group" style="width: 112px;">
+                    <input class="form-control"  type="number"  value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> 
+                    <span class="input-group-btn">        
+                        <a class="btn btn-sm btn-default chdr havettp" data-who="prior" href="#" title="Copy priority to all"><i class="icon-fullscreen"></i></a>
+                    </span>
+                </div> 
+            </div> 
+            
+            <div class="div_inc div_setup form-group form-group-sm"  style="display:none; min-width:91px">
+                <div class="input-group" style="width: 112px;">
+                    <select title="Include for sorting or clustering." data-placement="left" class="form-control"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select>
+                    <span class="input-group-btn">
+                        <a class="btn btn-sm btn-default chdr havettp" data-who="inc" href="#" title="Copy value to all"><i class="icon-fullscreen"></i></a>
+                    </span>
+                </div> 
+            </div>
+            
+            <div class="div_min div_max div_setup form-group form-group-sm"   style="display:none; width:200px">
+                <input class="chdr-numeric-auto-input form-control" data-who="min" type="number" style="width:60px" title="Heatmap MIN for all heatmaps"/> - 
+                <input class="chdr-numeric-auto-input form-control" data-who="max" type="number" style="width:60px" title="Heatmap MAX for all heatmaps"/>
+     
+                            </div>
+        </div>'
     )
     
 }
@@ -72,82 +72,106 @@ renderHEADER <- function(grfile, i, j) {
     cat(names(grfile[[1]])[i])
     cat('</span></span></span>')
     cat(
-        '<div class="hhdrs"  style="text-align: center;"> 
-                        <div class="div_separator div_setup"  style="display:none;"><hr /></div>
-                        <div class="div_color div_setup form-group form-group-sm"  style="display:none">
-                            <div class="input-group">
-                                <input class="form-control"  type="color" style="width:55px" name="plot_col" class="color {hash:true}" title="Set a color for whole row." data-placement="left"/>  
-                                <a class="btn btn-sm btn-default hhdr havettp" data-who="color" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
-                            </div>                        
-                        </div> 
-                        <div class="div_label div_setup form-group form-group-sm" style="display:none">
-                            <div class="input-group">
-                                <input class="form-control"  id="hhdr_', i, '" type="text" style="width:55px" placeholder="', names(grfile[[1]])[i], '" title="Set a header label here." data-placement="left"/> 
-                                <a class="btn btn-sm btn-default hhdr havettp" data-who="label" data-fname="', names(grfile[[1]])[i], '" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
-                            </div>
-                        </div>
-                        <div class="div_prior div_setup form-group form-group-sm" style="display:none">
-                            <div class="input-group">
-                                <input class="form-control"  type="number"  style="width:55px" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> 
-                                <a class="btn btn-sm btn-default hhdr havettp" data-who="prior" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
-                            </div> 
-                        </div> 
+        '<div class="hhdrs" style="width: 100px; margin-left:auto; margin-right:auto;"> 
+            <div class="div_separator div_setup"  style="display:none;"><hr /></div>
+            
+            <div class="div_color div_setup form-group form-group-sm"  style="display:none">
+                <div class="input-group">
+                    <input class="form-control"  type="color" name="plot_col" class="color {hash:true}" title="Set a color for whole row." data-placement="left"/>  
+                    <span class="input-group-btn">
+                        <a class="btn btn-sm btn-default hhdr havettp" data-who="color" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
+                    </span>
+                </div>           
+            </div> 
+
+            <div class="div_label div_setup form-group form-group-sm" style="display:none">
+                <div class="input-group">
+                    <input class="form-control"  id="hhdr_', i, '" type="text" placeholder="', names(grfile[[1]])[i], '" title="Set a header label here." data-placement="left"/> 
+                    <span class="input-group-btn">
+                        <a class="btn btn-sm btn-default hhdr havettp" data-who="label" data-fname="', names(grfile[[1]])[i], '" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
+                    </span>
+                </div>
+            </div>
+
+            <div class="div_prior div_setup form-group form-group-sm" style="display:none">
+                <div class="input-group">
+                    <input class="form-control"  type="number" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> 
+                    <span class="input-group-btn">
+                        <a class="btn btn-sm btn-default hhdr havettp" data-who="prior" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
+                    </span>        
+                </div> 
+            </div> 
               
-                        <div class="div_inc div_setup form-group form-group-sm"  style="display:none; min-width:91px">
-                            <div class="input-group">
-                                <select  style="width:70px" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select>
-                                <a class="btn btn-sm btn-default hhdr havettp" data-who="inc" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
-                            </div> 
-                        </div>
+            <div class="div_inc div_setup form-group form-group-sm"  style="display:none;">
+                <div class="input-group">
+                    <select class="form-control" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select>
+                    <span class="input-group-btn">
+                        <a class="btn btn-sm btn-default hhdr havettp" data-who="inc" href="#" title="Copy to whole column"><i class="icon-chevron-down"></i></a>
+                    </span> 
+                </div> 
+            </div>
               
-                        <div class="div_min div_max div_setup form-group form-group-sm"   style="display:none; min-width:127px"">
-                            <input class="form-control"  class="hdr-numeric-auto-input" data-who="min" type="number" style="width:40px" title="Heatmap MIN limit for whole column"/> - 
-                            <input class="form-control"  class="hdr-numeric-auto-input" data-who="max" type="number" style="width:40px" title="Heatmap MAX limit for whole column"/>
-                        </div>
-                        </div>'
+            <div class="div_min div_max div_setup form-group form-group-sm"   style="display:none;">
+                <input class="hdr-numeric-auto-input form-control" data-who="min" type="number" style="width:43px" title="Heatmap MIN limit for whole column"/> - 
+                <input class="hdr-numeric-auto-input form-control" data-who="max" type="number" style="width:43px" title="Heatmap MAX limit for whole column"/>
+            </div>
+        </div>'
     )
 }
 
 renderROW <- function(grfile, i, j) {
-    cat('<p class="tabrowpar">
+    cat('
+    <p class="tabrowpar">
         <a class="btn btn-default btn-xs pull-left grid-row-select-btn havettp" href="#" style="margin-right: 5px" title="Toggle row selection" data-placement=left>
-                        <i class="icon-check icon-large"></i></a>',
-    names(grfile)[j], '</p>')
+            <i class="icon-check icon-large"></i>
+        </a>',
+        names(grfile)[j], 
+    '</p>')
     cat(
-    '<div class="rhdrs" style="text-align: right;">',
     '<div class="div_separator div_setup"  style="display:none; min-width:90px;"><hr /></div>
-                        <div class="div_color div_setup form-group form-group-sm"  style="display:none">
-                            <div class="input-group">
-                                <input class="form-control"  style="width:80px" type="color" name="plot_col" class="color {hash:true}" title="Set a color for whole row." data-placement="left"/>  
-                                <a class="btn btn-sm btn-default rhdr havettp" data-who="color" href="#" title="Copy to whole row"><i class="icon-chevron-right"></i></a>
-                            </div>                        
-                        </div> 
-                        <div class="div_label div_setup form-group form-group-sm" style="display:none">
-                            <div class="input-group">
-                                <input class="form-control"  id="rhdrs_', j, '"style="width:80px" type="text" placeholder="', gsub('\\..+$', '', names(grfile)[j]), '" title="Set a header label here." data-placement="left"/> 
-                                <a class="btn btn-sm btn-default rhdr havettp" data-who="label" data-fname="', gsub('\\..+$', '', names(grfile)[j]), '" href="#" title="Copy to whole row"><i class="icon-chevron-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="div_prior div_setup form-group form-group-sm" style="display:none">
-                            <div class="input-group">
-                                <input class="form-control"  style="width:80px" type="number" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> 
-                                <a class="btn btn-sm btn-default rhdr havettp" data-who="prior" href="#" title="Copy to whole row"><i class="icon-chevron-right"></i></a>
-                            </div> 
-                        </div> 
+     <div class="rhdrs" style="width: 100px; margin-left:auto; margin-right:10px;">
+    
+        <div class="div_color div_setup form-group form-group-sm"  style="display:none">
+            <div class="input-group">
+                <input class="form-control" type="color" name="plot_col" class="color {hash:true}" title="Set a color for whole row." data-placement="left"/>  
+                <span class="input-group-btn">
+                    <a class="btn btn-sm btn-default rhdr havettp" data-who="color" href="#" title="Copy to whole row"><i class="icon-chevron-right"></i></a>
+                </span>            
+            </div>                        
+        </div> 
+        
+        <div class="div_label div_setup form-group form-group-sm" style="display:none">
+            <div class="input-group">
+                <input class="form-control"  id="rhdrs_', j, '" type="text" placeholder="', gsub('\\..+$', '', names(grfile)[j]), '" title="Set a header label here." data-placement="left"/> 
+                <span class="input-group-btn">
+                    <a class="btn btn-sm btn-default rhdr havettp" data-who="label" data-fname="', gsub('\\..+$', '', names(grfile)[j]), '" href="#" title="Copy to whole row"><i class="icon-chevron-right"></i></a>
+                </span>
+            </div>
+        </div>
+        
+        <div class="div_prior div_setup form-group form-group-sm" style="display:none">
+            <div class="input-group">
+                    <input class="form-control" type="number" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> 
+                    <span class="input-group-btn">
+                        <a class="btn btn-sm btn-default rhdr havettp" data-who="prior" href="#" title="Copy to whole row"><i class="icon-chevron-right"></i></a>
+                    </span>
+            </div> 
+        </div> 
               
-                        <div class="div_inc div_setup form-group form-group-sm"  style="display:none; min-width:91px">
-                            <div class="input-group">
-                                <select style="width:90px" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select>
-                                <a class="btn btn-sm btn-default rhdr havettp" data-who="inc" href="#"  title="Copy to whole row"><i class="icon-chevron-right"></i></a>
-                            </div> 
-                        </div>
+        <div class="div_inc div_setup form-group form-group-sm"  style="display:none; min-width:91px">
+            <div class="input-group">
+                <select class="form-control" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select>
+                <span class="input-group-btn">
+                    <a class="btn btn-sm btn-default rhdr havettp" data-who="inc" href="#"  title="Copy to whole row"><i class="icon-chevron-right"></i></a>
+                </span>    
+            </div> 
+        </div>
 
-                        <div class="div_min div_max div_setup form-group form-group-sm"   style="display:none; min-width:127px"">
-                            <input class="form-control"  class="rdr-numeric-auto-input" data-who="min" type="number" style="width:40px" title="Heatmap MIN limit for whole row"/> - 
-                            <input class="form-control"  class="rdr-numeric-auto-input" data-who="max" type="number" style="width:40px" title="Heatmap MAX limit for whole row"/>
-                        </div> 
-                        </div> ',
-    '</div>')
+        <div class="div_min div_max div_setup form-group form-group-sm"   style="display:none;">
+            <input class="rdr-numeric-auto-input form-control" data-who="min" type="number" style="width:43px" title="Heatmap MIN limit for whole row"/> - 
+            <input class="rdr-numeric-auto-input form-control" data-who="max" type="number" style="width:43px" title="Heatmap MAX limit for whole row"/>
+        </div> 
+    </div> <!-- unknown lvl1 -->')
 }
 
 renderCellControlls <- function(grfile, i, j, cltab) {
@@ -164,7 +188,7 @@ renderCellControlls <- function(grfile, i, j, cltab) {
                       <input class="form-control"  type="number" id="prior_',i,'x', j,'" style="width:60px" value=0 title="Set priority here...<br />Line plots: Higher number first in legend, lower plot on top.<br />Heatmaps: Higher number left." data-placement="left"/> </div> ', sep='')
     
     cat('<div class="div_inc div_setup form-group form-group-sm"  style="display:none; min-width:91px">
-                      <select id="inc_',i,'x', j,'" style="width:85px" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select></div> ', sep='')
+                      <select class="form-control" id="inc_',i,'x', j,'" style="width:85px" title="Include for sorting or clustering." data-placement="left"><option value="true" selected="selected">Include</option><option value="false">Exclude</option></select></div> ', sep='')
     
     cat('<div class="div_min div_max div_setup form-group form-group-sm"   style="display:none; min-width:127px"">
                       <input class="form-control"  type="number"     id="min_',i,'x', j,'" style="width:40px" title="Heatmap MIN limit."/> - <input class="form-control"  type="number"     id="max_',i,'x', j,'" style="width:40px" title="Heatmap MAX limit.."/> </div> ', sep='')
