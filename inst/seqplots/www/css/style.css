@@ -1,6 +1,11 @@
+.div_min input[type="number"] {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
 .tabrowpar {
       white-space:nowrap; 
-      margin-right:27px;
+      margin-right:10px;
       height: 24px;
 }
 
