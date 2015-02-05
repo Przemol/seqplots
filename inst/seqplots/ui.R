@@ -144,7 +144,7 @@ shinyUI(
 										tags$a(class='', tags$span(class="label label-success", 'Help'), href=paste0("help/help.html"), target="_blank", 'Read documentation'),
                     ' or press ', tags$i(class="icon-question-sign icon-large", style='color:orange'), 
                     ' button to get help on specific controls. Also available as ', tags$a(class='', href=paste0("http://przemol.github.io/seqplots/SeqPlots.pdf"), target="_blank", 'print ready PDF file.'),
-										tags$em(paste0('SeqPlots v', packageVersion('seqplots'), '.'))
+										tags$em(paste0('SeqPlots v', packageVersion('seqplotsbootstrap2'), '.'))
 										
 								),
 					#3) TITLES AND AXIS PANEL

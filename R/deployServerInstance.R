@@ -17,7 +17,7 @@ deployServerInstance <- function(
     dir.create(server)
     setwd(server)
     file.copy( 
-        file.path(system.file("seqplots", package = "seqplots"), '/'), '.', 
+        file.path(system.file("seqplots", package = "seqplotsbootstrap2"), '/'), '.', 
         recursive = TRUE
     )
     file.remove('server_config.R')

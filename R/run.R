@@ -38,7 +38,7 @@ run <- function(
     
     Sys.setenv(
         root=root, 
-        web=system.file('seqplots', package='seqplots'), 
+        web=system.file('seqplots', package='seqplotsbootstrap2'), 
         seqplots_debug=debug
     )
     
