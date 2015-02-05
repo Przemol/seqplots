@@ -186,7 +186,11 @@ keysLabelsAndColors <- tabPanel(
         div(class='col-md-8',checkboxInput("legend_ext", "Show error estimate key", FALSE)),
         div(class='col-md-4',conditionalPanel( condition = "input.legend_ext == true", selectInput("legend_ext_pos", "-> position:", c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center"),  "topleft" )))
     ),
-    numericInput("legend_font_size", "Legend font size:", min=1, max=48, value=12, step=1) #sliderInput
+    div(class='row',
+        div(class='col-md-6', 
+            numericInput("legend_font_size", "Legend font size:", min=1, max=48, value=12, step=1) #sliderInput"
+        )
+    )
 )
 
 #5) Heatmap options panel ######################################################   
@@ -207,8 +211,8 @@ heatmapPanel <- tabPanel(
             conditionalPanel( 
                 condition = "input.img_clstmethod == 'ssom'", 
                 div(class='row',
-                    div(class='col-md-1'), div(class='col-md-3', numericInput("img_ssomt1", "topo_x", 2, min=1) ),
-                    div(class='col-md-2'), div(class='col-md-3', numericInput("img_ssomt2", "topo_y", 2, min=1) )
+                    div(class='col-md-6', numericInput("img_ssomt1", "Grid-X", 2, min=1) ),
+                    div(class='col-md-6', numericInput("img_ssomt2", "Grid-Y", 2, min=1) )
                 )
             )
         )
@@ -226,14 +230,17 @@ heatmapPanel <- tabPanel(
     conditionalPanel( 
         condition = "input.heatmapzauto == false",
         div(class='row',
-            div(class='col-md-5', tags$br(), "Color key scaling:"),
-            div(class='col-md-7', numericInput("hsccoef", "Color key saturation:", min=0, max=0.1, value=0.01, step=0.001)) #sliderInput   								                      )
+            div(class='col-md-6', "Color key scaling:"),
+            div(class='col-md-4', numericInput("hsccoef", NULL , min=0, max=0.1, value=0.01, step=0.001)) #sliderInput   								                      )
         )                
         
     ),
     conditionalPanel( 
         condition = "input.heatmapzauto == true",
-        p( numericInput("zmin1", "-> ", -1), numericInput("zmin2", "-", 10) )
+        div(class='form-inline', 
+            numericInput("zmin1", "-> ", -1), 
+            numericInput("zmin2", "-", 10)
+        )
     ),
     conditionalPanel( 
         condition = "input.indi == true",
@@ -267,16 +274,20 @@ loadSavePanel <- tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-l
 batchPanel <- tabPanel(
     tags$i(class="icon-gears icon-blcak icon-large", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations and setup"), #"Batch", 
     
-    h5('Output PDF paper type or size [inches]:', hlp("PDFoutputsize")), 
-    div(
-        class='row', 
-        div(class='col-md-8',  selectInput('paper', '', choices=c('A4 rotated'="a4r", 'Custom size...'="special", 'Legal rotated'="USr", 'A4'="a4", 'Letter'="letter", 'Legal'="US", 'Executive'="executive") ))
+    h5(tags$u('Output PDF paper type or size:'), hlp("PDFoutputsize")), 
+
+    selectInput(
+        'paper', NULL, width=200,
+        choices=c('A4 rotated'="a4r", 'Custom size...'="special", 'Legal rotated'="USr", 'A4'="a4", 'Letter'="letter", 'Legal'="US", 'Executive'="executive") 
     ),
+
     conditionalPanel( 
-        condition = 'input.paper == "special"', div(class='form-inline', 
-                                                    numericInput("pdf_x_size", "", 16) ,  
-                                                    numericInput("pdf_y_size", "[in] x ", 10) , '[in]'
-        )),
+        condition = 'input.paper == "special"', div(
+            class='form-inline', 
+            numericInput("pdf_x_size", NULL, 16) ,  
+            numericInput("pdf_y_size", "[in] x ", 10) , '[in]'
+        )
+    ),
     tags$hr(),
     conditionalPanel( 
         condition = 'false',
@@ -284,20 +295,28 @@ batchPanel <- tabPanel(
         downloadLink('downloadHistory',   tags$span(tags$i(class="icon-time icon-large"), 'Get plot history'),   class="btn btn-small btn-success"),
         tags$hr()
     ),
-    h5('Batch operations:', hlp("Batchoperations")),   
-    div(class='form-inline', 
-        selectInput('batch_what', 'Plot', c('lineplots', 'heatmaps') ),  
-        selectInput('batch_how', 'by', c('single', 'rows', 'columns') )                                
+    h5(tags$u('Batch operations:'), hlp("Batchoperations")),   
+    div(class='row',  
+        div(class='col-md-5', selectInput('batch_what', 'Plot', c('lineplots', 'heatmaps')) ),  
+        div(class='col-md-5', selectInput('batch_how', 'by', c('single', 'rows', 'columns')) )                        
     ),
     div(class='form-inline', 
         numericInput("grid_x_size", "Multi-plot grid: ", 1) ,  
         numericInput("grid_y_size", " x ", 1) 
-    ), 
-    div(class='form-inline', textInput('multi_name_flt', 'Filter names') ),
-    downloadLink('downloadBatchColLineplot', tags$span(tags$i(class="icon-align-justify icon-rotate-90"), tags$i(class="icon-double-angle-right icon-large"),  tags$i(class="icon-picture icon-large icon-white"), 'Get PDF'),   class="btn btn-small btn-success"),
-    tags$hr(),
+    ), tags$br(),
+    div(class='form-inline', 
+        textInput('multi_name_flt', 'Filter names: '),
+        downloadLink('downloadBatchColLineplot', 
+            tags$span(
+                tags$i(class="icon-align-justify icon-rotate-90"), 
+                tags$i(class="icon-double-angle-right icon-large"),  
+                tags$i(class="icon-picture icon-large icon-white"), 
+                'Get PDF'),   
+        class="btn btn-sm btn-success")
+    ),
+    tags$hr(style='margin-top:10px;'),
     #checkboxInput('setup_multithread', 'Use multithreading for calculations', (Sys.getenv("SHINY_SERVER_VERSION") != ''))
-    h5('Advanced options:', hlp("Advancedoptions")),
+    h5(tags$u('Advanced options:'), hlp("Advancedoptions")),
     checkboxInput('pty_batch', 'Keep 1:1 aspect ratio in batch mode', TRUE),
     checkboxInput('pty', 'Always keep 1:1 aspect ratio', FALSE),
     checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE),
