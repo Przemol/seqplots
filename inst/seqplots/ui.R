@@ -348,7 +348,7 @@ sidebar <- wellPanel(
 # MAIN ##################################################
 
 mainPanel <- div(
-    style="width: 100%; overflow-x: visible; overflow-y: scroll; padding-top:200px",
+    style="overflow-x: auto; overflow-y: auto; padding-top:200px",
 #     tabsetPanel(
 #         tabPanel(
 #           "Plots selection", 
