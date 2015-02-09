@@ -1,7 +1,7 @@
 
  <!-- Modal -->
 <div id="fileUploadModal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog" style="width: 97%;">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
@@ -91,7 +91,7 @@
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
-        <td style="max-width:250px; word-break:break-all;">
+        <td style="min-width:250px; max-width:250px; word-break:break-all;">
             <p class="name">{%=file.name%}</p>
             <strong class="error text-danger"></strong>
             <span class="preview"></span>
