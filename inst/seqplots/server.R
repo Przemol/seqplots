@@ -471,55 +471,63 @@ shinyServer(function(input, output, clientData, session) {
   
   #Generate file table for tracks and features with function
   fileSelectionDataTable <- function(type) {
-      out <- renderDataTable({
+    dt_opt <- reactive({
         values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile;
+            dat <- I(jsonlite::toJSON(as.matrix(cbind(
+                dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "'"))[,c(-1,-4)],
+            se='',  dl='',  rm=''))))
+            list(
+              ##Force client side processing, should be avoided for very long tables
+              data=dat,
+              ajax='',
+              processing=FALSE,
+              serverSide=FALSE,
+              
+              ##Other options
+              lengthMenu=I('[[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]'),
+              # "<'row'<'col-sm-6'l><'col-sm-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
+              dom="<'row'<'col-md-4'i><'.selectionsInfo col-md-1'><'col-md-6 pull-right'Tf>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
+              order=I('[[ 1, "desc" ]]'),
+              language=I('{"sLengthMenu": "_MENU_ records per page"}'),
+              columns=I( readLines(file.path(Sys.getenv("web", '.'), 'ui/FataTablesColumnSetup.js')) ),
+              oTableTools=I( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesToolsSetup.js')) ),
+              scrollY=paste0(input$tabtest, "px"),
+              scrollX="true",
+              deferRender=I("false"),
+              pageLength=10,
+              #       rowCallback=I('function( row, data ) {
+              #         console.log(data[0])
+              #         if ( $.inArray(data[0], selected) !== -1 ) {
+              #           $(row).addClass("selected");
+              #           $(row).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );
+              #         }
+              #       }'),
+              pagingType="full_numbers"
+           )
+      })
+      
+      out <- renderDataTable({
         ##Client side processing, code irrelavent
-        tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
-        if( nrow(tab) < 1 ) {return(p('No files found!'))} 
-        return(cbind(tab, se='',  dl='',  rm=''))
+            tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
+            if( nrow(tab) < 1 ) {return(p('No files found!'))} 
+            return(cbind(tab, se='',  dl='',  rm=''))
         
-      }, options = list(
-        ##Force client side processing, should be avoided for very long tables
-        data=I(jsonlite::toJSON(as.matrix(cbind(
-          dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "'"))[,c(-1,-4)],
-          se='',  dl='',  rm='')))),
-        ajax='',
-        processing=FALSE,
-        serverSide=FALSE,
-        
-        ##Other options
-        lengthMenu=I('[[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]'),
-        # "<'row'<'col-sm-6'l><'col-sm-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
-        dom="<'row'<'col-md-4'i><'.selectionsInfo col-md-1'><'col-md-6 pull-right'Tf>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
-        order=I('[[ 1, "desc" ]]'),
-        language=I('{"sLengthMenu": "_MENU_ records per page"}'),
-        columns=I( readLines(file.path(Sys.getenv("web", '.'), 'ui/FataTablesColumnSetup.js')) ),
-        oTableTools=I( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesToolsSetup.js')) ),
-        scrollY="350px",
-        scrollX="true",
-        deferRender=I("false"),
-        pageLength=10,
-        #       rowCallback=I('function( row, data ) {
-        #         console.log(data[0])
-        #         if ( $.inArray(data[0], selected) !== -1 ) {
-        #           $(row).addClass("selected");
-        #           $(row).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );
-        #         }
-        #       }'),
-        pagingType="full_numbers"
-      ), callback = I("function(oTable) {
+        }, options = dt_opt, 
+        callback = I("function(oTable) {
           var table = $('#' + oTable.context[0].sTableId);
           var tables = table.parents('.dataTables_wrapper').find('table')
           tables.addClass('table-condensed table-bordered');
+          //zzz=oTable.context[0];
           oTable.draw();
           $(tables[2]).removeClass('table-bordered');
-      }")
+        }")
       )
       return(out)
     }
   
   output$trackDT <- fileSelectionDataTable('track')
   output$featureDT <- fileSelectionDataTable('feature')
+
   
   #Server initiation actions
   observe({
