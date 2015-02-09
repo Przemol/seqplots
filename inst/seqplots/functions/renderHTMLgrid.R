@@ -71,8 +71,8 @@ renderHEADER <- function(grfile, i, j) {
     cat('<span><span><span>')
     cat(names(grfile[[1]])[i])
     cat('</span></span></span>')
-    cat(
-        '<div class="hhdrs" style="width: 100px; margin-left:auto; margin-right:auto;"> 
+    cat(sep='', '
+        <div class="hhdrs" style="width: 100px; margin-left:auto; margin-right:auto;"> 
             <div class="div_separator div_setup"  style="display:none;"><hr /></div>
             
             <div class="div_color div_setup form-group form-group-sm"  style="display:none">
@@ -120,15 +120,15 @@ renderHEADER <- function(grfile, i, j) {
 }
 
 renderROW <- function(grfile, i, j) {
-    cat('
+    cat(sep='', '
     <p class="tabrowpar">
         <a class="btn btn-default btn-xs pull-left grid-row-select-btn havettp" href="#" style="margin-right: 5px" title="Toggle row selection" data-placement=left>
             <i class="icon-check icon-large"></i>
         </a>',
         names(grfile)[j], 
     '</p>')
-    cat(
-    '<div class="div_separator div_setup"  style="display:none; min-width:90px;"><hr /></div>
+    cat(sep='', '
+    <div class="div_separator div_setup"  style="display:none; min-width:90px;"><hr /></div>
      <div class="rhdrs" style="width: 100px; margin-left:auto; margin-right:10px;">
     
         <div class="div_color div_setup form-group form-group-sm"  style="display:none">
@@ -171,7 +171,7 @@ renderROW <- function(grfile, i, j) {
             <input class="rdr-numeric-auto-input form-control" data-who="min" type="number" style="width:43px" title="Heatmap MIN limit for whole row"/> - 
             <input class="rdr-numeric-auto-input form-control" data-who="max" type="number" style="width:43px" title="Heatmap MAX limit for whole row"/>
         </div> 
-    </div> <!-- unknown lvl1 -->')
+    </div>')
 }
 
 renderCellControlls <- function(grfile, i, j, cltab) {
