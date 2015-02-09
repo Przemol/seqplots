@@ -34,8 +34,8 @@ sendToCalc = function() {
     var t_sel = [];
     var f_sel = [];
     var genomes = [];
-    $.each(TableTools.fnGetInstance( $('#trackDT table')[1].id   ).fnGetSelectedData(), function(i, v) {  t_sel[i]=v[0];  genomes.push(v[3]); } );
-    $.each(TableTools.fnGetInstance( $('#featureDT table')[1].id ).fnGetSelectedData(), function(i, v) {  f_sel[i]=v[0];  genomes.push(v[3]); } );
+    if($('#trackDT table').length)  $.each(TableTools.fnGetInstance( $($('#trackDT table')[1]).attr('id')   ).fnGetSelectedData(), function(i, v) {  t_sel[i]=v[0];  genomes.push(v[3]); } );
+    if($('#featureDT table').length) $.each(TableTools.fnGetInstance( $($('#featureDT table')[1]).attr('id') ).fnGetSelectedData(), function(i, v) {  f_sel[i]=v[0];  genomes.push(v[3]); } );
     
 	if( !(f_sel.length >= 1 & (t_sel.length >= 1 | $('#SFsetup').text().length > 10 )) ) {
 		return( alert("Select >=1 track(s) or pattern and >=1 feature(s)!") )
@@ -63,8 +63,8 @@ jsRmFile = function(x) {
 
 rmSelctedFiles = function() {
       var rm = [];
-      $.each(TableTools.fnGetInstance( 'dttracktable'   ).fnGetSelectedData(), function(i, v) { rm.push(v[0]); } );
-      $.each(TableTools.fnGetInstance( 'dtfeaturetable' ).fnGetSelectedData(), function(i, v) { rm.push(v[0]); } );
+      if($('#trackDT table').length)   $.each(TableTools.fnGetInstance( $($('#trackDT table')[1]).attr('id')   ).fnGetSelectedData(), function(i, v) { rm.push(v[0]); } );
+      if($('#featureDT table').length) $.each(TableTools.fnGetInstance( $($('#featureDT table')[1]).attr('id') ).fnGetSelectedData(), function(i, v) { rm.push(v[0]); } );
 	if(rm.length > 0) {
     if ( confirm("Delate following files:\n " + rm.toString() + "?" ) ){
         Shiny.shinyapp.sendInput({"f_delate":rm});
