@@ -52,17 +52,17 @@ test_that("Adding files works", {
     
     
     # Add files
-    remDr$findElement("css selector", 'a[href="#fileUploadModal"]')$clickElement(); Sys.sleep(1.5);
+    remDr$findElement("css selector", 'button[data-target="#fileUploadModal"]')$clickElement(); Sys.sleep(1.5);
     
-    remDr$findElement("css selector", "#ttfi")$sendKeysToElement(list(bw1))
+    remDr$findElement("css selector", 'input[type="file"]')$sendKeysToElement(list(bw1))
     remDr$findElement("css selector", "input.f1_user")$sendKeysToElement(list('me'))
     remDr$findElement("css selector", "input[name=comments]")$sendKeysToElement(list('My comment'))
     
-    remDr$findElement("css selector", "#ttfi")$sendKeysToElement(list(bed1))
+    remDr$findElement("css selector", 'input[type="file"]')$sendKeysToElement(list(bed1))
     remDr$findElements("css selector", "input.f1_user")[[2]]$sendKeysToElement(list('me'))
     remDr$findElements("css selector", "input[name=comments]")[[2]]$sendKeysToElement(list('2nd comment'))
     
-    remDr$findElement("css selector", "#ttfi")$sendKeysToElement(list(bed2))
+    remDr$findElement("css selector", 'input[type="file"]')$sendKeysToElement(list(bed2))
     remDr$findElements("css selector", "input.f1_user")[[3]]$sendKeysToElement(list('me'))
     remDr$findElements("css selector", "input[name=comments]")[[3]]$sendKeysToElement(list('3rd comment'))
     
@@ -81,26 +81,26 @@ test_that("Adding files works", {
 
 test_that("Calculation works", {
     context("Calculating")
-    remDr$findElement("css selector", 'a[href="#myModal"]')$clickElement(); Sys.sleep(1.5);
+    remDr$findElement("css selector", 'button[data-target="#calcModal"]')$clickElement(); Sys.sleep(1.5);
     
     # Select files and motifs, start to calculation
-    remDr$findElements("css selector", '#myModal a[data-toggle="tab"]')[[1]]$clickElement()
-    rows1 <- remDr$findElements("css selector", "#tracktable  tr[role='row']")
+    remDr$findElements("css selector", '#calcModal a[data-toggle="tab"]')[[1]]$clickElement()
+    rows1 <- remDr$findElements("css selector", "#trackDT  tr[role='row']")
     rows1[[3]]$clickElement(); #rows1[[4]]$clickElement(); rows1[[5]]$clickElement()
     
-    remDr$findElements("css selector", '#myModal a[data-toggle="tab"]')[[2]]$clickElement()
-    rows2 <- remDr$findElements("css selector", "#featuretable  tr[role='row']")
+    remDr$findElements("css selector", '#calcModal a[data-toggle="tab"]')[[2]]$clickElement()
+    rows2 <- remDr$findElements("css selector", "#featureDT  tr[role='row']")
     rows2[[3]]$clickElement(); rows2[[4]]$clickElement(); #rows2[[5]]$clickElement()
     
-    remDr$findElements("css selector", '#myModal a[data-toggle="tab"]')[[3]]$clickElement()
+    remDr$findElements("css selector", '#calcModal a[data-toggle="tab"]')[[3]]$clickElement()
     remDr$findElement("id", 'SFpattern')$sendKeysToElement(list('GAGA'))
     remDr$findElement("id", 'SFadd')$clickElement()
     remDr$findElement("id", 'SFpattern')$clearElement()
     remDr$findElement("id", 'SFpattern')$sendKeysToElement(list('GAGA'))
     remDr$findElement("id", 'SFadd')$clickElement()
     
-    remDr$findElement("css selector", '#myModal button[onClick="sendToCalc()"]')$highlightElement(0.25)
-    remDr$findElement("css selector", '#myModal button[onClick="sendToCalc()"]')$clickElement()
+    remDr$findElement("css selector", '#calcModal button[onClick="sendToCalc()"]')$highlightElement(0.25)
+    remDr$findElement("css selector", '#calcModal button[onClick="sendToCalc()"]')$clickElement()
     
     Sys.sleep(5);
     #This is not present on windows/in SC mode
