@@ -298,20 +298,30 @@ shinyServer(function(input, output, clientData, session) {
 	  },
 	  content = function( file ) {
 	    if(!nchar(input$clusters) & !nchar(input$sortingord)) stop('Plot heatmap with clusters or ordering first!')
-	    infile <- file.path( 'files', names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ) )
-        fcon <- file(infile); gr <- rtracklayer::import( fcon ); close(fcon);
-        elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
-	    if( length(colnames(elementMetadata(gr))) ) { colnames(elementMetadata(gr)) <- paste0('metadata_', colnames(elementMetadata(gr))) }
-	    
-      gr$OriginalOrder <- 1:length(gr); 
-      if( nchar(input$clusters) ) 
-        gr$ClusterID <- fromJSON(input$clusters)
+	    infile <- file.path(
+            'files', 
+            basename(names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ))
+        )
+        
+        if(file.exists(infile)) {
+            fcon <- file(infile); gr <- rtracklayer::import( fcon ); close(fcon);
+            elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
+	        if( length(colnames(elementMetadata(gr))) ) { colnames(elementMetadata(gr)) <- paste0('metadata_', colnames(elementMetadata(gr))) }
+            gr$OriginalOrder <- 1:length(gr); 
+        } else {
+            warning('The file "', infile, '" does not exist on local file system.')
+            gr <- data.frame( OriginalOrder=1:length(fromJSON(input$finalord)) ) 
+        }
+        
+        
+        if( nchar(input$clusters) ) 
+            gr$ClusterID <- fromJSON(input$clusters)
 	    if( nchar(input$sortingord) ) 
-        gr$SortingOrder <- order(fromJSON(input$sortingord))
+            gr$SortingOrder <- order(fromJSON(input$sortingord))
       
-      gr$FinalOrder <- order(fromJSON(input$finalord))
+        gr$FinalOrder <- order(fromJSON(input$finalord))
       
-      out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
+        out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
 	    out <- out[fromJSON(input$finalord),]
       
 	    write.csv(out, file=file, row.names = FALSE)
@@ -360,8 +370,10 @@ shinyServer(function(input, output, clientData, session) {
 		})
 	})
 	
-  #Get the list of save datasets
-  updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' ')
+    #Get the list of save datasets
+    updateSelectizeInput(
+      session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' '
+    )
   
 	#Save dataset file logic
 	observe({
@@ -376,7 +388,7 @@ shinyServer(function(input, output, clientData, session) {
 					
 			message(paste('File saved: ',input$RdataSaveName))
 			session$sendCustomMessage("jsAlert", sprintf("File saved: %s", paste0(input$RdataSaveName, '.Rdata')) )
-			updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' ')
+			updateSelectizeInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' ')
 		})
 	})
 	
@@ -387,7 +399,7 @@ shinyServer(function(input, output, clientData, session) {
 			file.remove( file.path('publicFiles', input$publicRdata) )
 			message(paste('File removed: ',input$publicRdata))
 			session$sendCustomMessage("jsAlert", sprintf("File removed: %s", input$publicRdata) )
-			updateSelectInput(session, 'publicRdata',choices = c( ' ', dir('publicFiles')), selected =  ' ')
+			updateSelectizeInput(session, 'publicRdata',choices = c( ' ', dir('publicFiles')), selected =  ' ')
 		})
 	})
   
@@ -587,7 +599,7 @@ shinyServer(function(input, output, clientData, session) {
     if(length(query$load)){
       #session$sendCustomMessage("jsAlert", sprintf('loading file: [%s]', file.path('publicFiles', query$load)) )
       values$grfile <- get(load( file.path('publicFiles', query$load) ))
-      updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  query$load)
+      updateSelectizeInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  query$load)
       #session$sendCustomMessage("jsExec", sprintf("$('#publicRdata').val('%s').change()", query$load))
     }
     
