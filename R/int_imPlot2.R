@@ -24,7 +24,7 @@ imPlot2 <- function (
     bigplot = NULL, smallplot = NULL, legend.only = FALSE, 
     col = tim.colors(nlevel), 
     lab.breaks = NULL, axis.args = NULL, legend.args = NULL, 
-    midpoint = FALSE, border = NA, lwd = 1, xinds=NULL, e=NULL) {
+    midpoint = FALSE, border = NA, lwd = 1, xinds=NULL, e=NULL, ylast=0, afs=1) {
     
     old.par <- par(no.readonly = TRUE)
     info <- imageplot.info(...)
@@ -51,10 +51,24 @@ imPlot2 <- function (
             image(..., add = add, col = col, panel.last={
                 rect(
                     par("usr")[1],par("usr")[3],par("usr")[2],
-                    par("usr")[4],col = "lightgrey")
-                if(is.null(e)) axis(1) else axis(
-                    1, at=c(min(xinds), 0,  e, max(xinds)), 
-                    labels=c(min(xinds), '0', '0', max(xinds)-e))
+                    par("usr")[4],col = "lightgrey"
+                )
+                axis(2, at=list(...)$ylim, labels=list(...)$ylim, cex.axis=afs*0.9,  col.axis='darkgrey')
+                if(is.null(e)) { 
+                    axis(
+                        1, at=c(min(xinds), 0,  max(xinds)), 
+                        labels=c(num2bp(min(xinds)), '0bp', num2bp(max(xinds))),
+                        cex.axis=afs
+                    ) 
+                } else {
+                    axis(
+                        1, at=c(min(xinds), 0,  e, max(xinds)), 
+                        labels=c(
+                            num2bp(min(xinds)), '0bp', '0bp', 
+                            num2bp(max(xinds)-e)
+                        ), cex.axis=afs
+                    )
+                }
             })
         }
         else {

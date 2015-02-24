@@ -20,13 +20,18 @@
 #'  The features will be extended or shrunk using linear approximation. 
 #'  Used only if /code{type="af"}, defaults to 1000L
 #' @param type The type of the calculation, "pf" for point features (default),
-#'  "mf" for midpoint features and "af" for anchored features, see details
+#'  "mf" for midpoint features, "ef" for endpoint features and "af" for 
+#'  anchored features, see details
 #' @param add_heatmap Add the heatmap data to output, must be on to plot
 #'  heatmap form output \code{\link{PlotSetArray}} class, defauls to TRUE
 #' @param ignore_strand If TRUE the directionality is ignored, that is all 
 #'  features' strands, regardless of annotation in GFF/BED file, are treated 
 #'  as undetermined ("*"), defaults to FALSE
 #' @param verbose Print various messages and warnings, defaults to FALSE
+#' @param lvl1m function to handle lvl 1 messages, useful when invoked 
+#'  in Shiny GUI environment, defaults to \code{\link[base]{message}}
+#' @param lvl2m function to handle lvl 2 messages, useful when invoked 
+#'  in Shiny GUI environment, defaults to \code{\link[base]{message}}
 #'  
 #' @return The \code{\link{PlotSetArray}} object.
 #' 
@@ -51,6 +56,8 @@
 #'     User chooses length of upstream and downstream sequence to plot.
 #'     \item \strong{Midpoint Features} - similar to point feature, but plot 
 #'     is centred on the midpoint of the feature.
+#'     \item \strong{Endpoint Features} - similar to point feature, but plot 
+#'     is centred on the end point (most downstream) of the feature.
 #'     \item \strong{Anchored Features} - features are anchored at start 
 #'     and stop positions and given pseudo-length chosen by the user. 
 #'     Additionally, the user chooses the length of sequence upstream of 
@@ -161,7 +168,7 @@
 getPlotSetArray <- function(
     tracks, features, refgenome, bin=10L, rm0=FALSE, ignore_strand=FALSE, 
     xmin=2000L, xmax=2000L, xanchored=1000L, type='pf', add_heatmap=TRUE, 
-    verbose=FALSE) {
+    verbose=FALSE, lvl1m=message, lvl2m=message) {
     
     old_opt <- options('warn'); on.exit(options(old_opt));
     
@@ -192,8 +199,15 @@ getPlotSetArray <- function(
     for (j in features) {
         
         #Set up genome package
-        genome_ind <- refgenome
-        pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))
+        if( class(refgenome) == "SQLiteConnection" ) {
+            genome_ind <- dbGetQuery(
+                refgenome, paste0("SELECT genome FROM files WHERE name = '", 
+                                  basename(j), "'")
+            )
+        } else {
+            genome_ind <- refgenome  
+        }
+        pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))[[1]]
         suppressPackageStartupMessages(
             library(pkg, character.only = TRUE, quietly=TRUE)
         )
@@ -208,13 +222,14 @@ getPlotSetArray <- function(
         proc <- list()
         for(i in 1:length(tracks) ) {
             
-            message(paste(
+            lvl1m(paste(
                 'Processing:', basename(j), '@', tracks[[i]][[1]], 
                 '[', k, '/',length(features)*length(tracks), ']'
             ))
             
             if (ignore_strand)                strand(sel) <- '*'
             if( type == 'mf' ) sel <- resize(sel, 1, fix='center')
+            if( type == 'ef' ) sel <- resize(sel, 1, fix='end')
             
             if( class(tracks[[i]]) == 'character' ) {
                 track <- BigWigFile( normalizePath(tracks[[i]]) )
@@ -229,9 +244,7 @@ getPlotSetArray <- function(
                 
             }
             
-            
-            
-            if ( (type == 'pf') | (type == 'mf') ) {
+            if ( (type == 'pf') | (type == 'mf') | (type == 'ef') ) {
                 
                 gr <- GenomicRanges::promoters(sel, xmin, xmax)
                 all_ind  <- seq(-xmin, xmax, by=as.numeric(bin) )
@@ -242,21 +255,16 @@ getPlotSetArray <- function(
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
                     
-                    if(verbose) message("Processing genome...")
+                    if(verbose) lvl2m("Processing genome...")
                     seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)]
                     gr <- trim(gr)
                     
                     if(verbose) 
-                        message("Searching for motif...")
+                        lvl2m("Searching for motif...")
                     M <- getSF(
                         GENOME, gr, pattern, seq_win, !add_heatmap, 
-                        revcomp=revcomp
+                        revcomp=revcomp,  nbins=length(all_ind)
                     )
-                    
-                    if(verbose) message("Binning the motif...")
-                    M <-  t(apply(M, 1, function(x) 
-                        approx(x, n=ceiling(ncol(M)/bin))$y ))        
-                    
                 }
                 
             } else if (type == 'af') {
@@ -278,49 +286,43 @@ getPlotSetArray <- function(
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
                     #MOTIF - left 
-                    if(verbose) message(paste0(
-                        "MOTIF: Processing upsterem ", pattern, " motif..."))
+                    if(verbose) lvl2m(paste0(
+                        "MOTIF: Processing upsterem ", pattern, " motif..."
+                    ))
                     gr <- flank(sel, xmin, start=TRUE)
                     seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)]
-                    M <- getSF(
+                    M.left <- getSF(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
-                        revcomp=revcomp
+                        revcomp=revcomp, nbins=length(left_ind)
                     )
-                    M.left <-  t(apply(M, 1, function(x) 
-                        approx(x, n=length(left_ind))$y ))
                     
                     #MOTIF - middle
-                    if(verbose) 
-                        message(paste0(
-                            "MOTIF: Processing middle ", pattern, " motif..."
-                        ))
+                    if(verbose) lvl2m(paste0(
+                        "MOTIF: Processing middle ", pattern, " motif..."
+                    ))
                     gr <- sel
                     seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
-                    M <- getSF(
+                    M.middle <- getSF(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
-                        revcomp=revcomp
+                        revcomp=revcomp, nbins=length(mid_ind)
                     )
-                    M.middle <- t(apply(M, 1, function(x) 
-                        approx(x, n=length(mid_ind))$y ))
                     
                     #MOTIF - right
-                    if(verbose) message(paste0(
+                    if(verbose) lvl2m(paste0(
                         "MOTIF: Processing downsteream ", pattern, " motif..."
                     ))
                     gr <- flank(sel, xmin, start=FALSE)
                     seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
-                    M <- getSF(
+                    M.right <- getSF(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap,
-                        revcomp=revcomp)
-                    M.right <-  t(apply(M, 1, function(x) 
-                        approx(x, n=length(right_ind))$y ))
-                    
+                        revcomp=revcomp, nbins=length(right_ind)
+                    )
                     M <- cbind(M.left, M.middle, M.right)
                     
                 }
             }
             
-            if(verbose) message("Calculeating means/stderr/95%CIs...")
+            if(verbose) lvl2m("Calculeating means/stderr/95%CIs...")
             if (rm0) M[M==0] <- NA
             means   <- colMeans(M, na.rm=TRUE)
             stderror<- apply(M, 2, function (n) {
@@ -333,7 +335,7 @@ getPlotSetArray <- function(
             })
             conint[is.na(conint)] <- 0
             
-            if(verbose) message("Exporting results...")
+            if(verbose) lvl2m("Exporting results...")
             proc[[i]] <- list(
                 means=means, stderror=stderror, conint=conint, all_ind=all_ind,
                 e=if (type == 'af') xanchored else NULL,

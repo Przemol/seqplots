@@ -28,8 +28,10 @@
 #'   will be still plotted, and the order of data rows will be determined by 
 #'   clustering/sorting other sub-heatmaps, defaults to NULL, which incluses all
 #'   - equivalent to \code{rep(TRUE, length(plotset))}
-#' @param sortrows If TRUE the rows of heatmap will be sorted by mean value 
-#'   across all heatmaps, defaults to FALSE
+#' @param sortrows If \code{"increasing"} or \code{"decreasing"} the rows of 
+#'  heatmap will be sorted by mean value across all heatmaps,
+#'  defaults to \code{FALSE} - not sorted. For backwards compatibility \code{TRUE} 
+#'  is synonymous to "increasing".
 #' @param main The main title of the plot, shown in top-centre part of the 
 #'   figure; defaults to NULL (not visible)
 #' @param labels The character vector giving sub-titles of heatmaps (plotted 
@@ -83,6 +85,11 @@
 #'   Useful to embed heatmap in complex layouts, see 
 #'   \code{\link[graphics]{layout}} and \code{\link[graphics]{par}} for details.
 #'   Defaults to FALSE.
+#' @param ggplot Use ggplot2 package instead of standard  R graphics, 
+#'   defaults to FALSE
+#' @param raster The bitmap raster is used to plot the heatmap image, see 
+#'   "useRaster" option in \code{\link[graphics]{image}} function and 
+#'   \code{\link[ggplot2]{geom_raster}} function for details, defaults to FALSE
 #' @param ... parameters passed to internal plotting function
 #'   
 #' @return The cluster report \code{data.frame}, giving cluster assignments and
@@ -136,7 +143,7 @@ setGeneric(
         cex.lab=12.0, cex.axis=12.0, cex.legend=12.0, xlab='', ylab="",
         autoscale=TRUE, zmin=0, zmax=10, xlim=NULL, ln.v=TRUE, s = 0.01, 
         indi=TRUE, o_min=NA, o_max=NA, colvec=NULL, clspace=NULL, pointsize=12, 
-        embed=FALSE, ...
+        embed=FALSE, ggplot=FALSE, raster=FALSE, ...
     ) standardGeneric("plotHeatmap")
 )
 
@@ -179,9 +186,15 @@ setMethod(
         finalOrd <- 1:nrow(Hclc)
         
         #Sorting
-        if(sortrows) { 
+        if(sortrows == 'decreasing' | as.character(sortrows) == "TRUE") { 
             sorting_order <- order(
                 rowMeans(Hclc, na.rm=TRUE), decreasing = TRUE
+            ) 
+            finalOrd <- finalOrd[sorting_order] 
+            Hclc <- Hclc[sorting_order,]
+        } else if(sortrows == 'increasing') { 
+            sorting_order <- order(
+                rowMeans(Hclc, na.rm=TRUE), decreasing = FALSE
             ) 
             finalOrd <- finalOrd[sorting_order] 
             Hclc <- Hclc[sorting_order,]
@@ -198,23 +211,36 @@ setMethod(
             classes <- k$cluster
             
             finalOrd <- finalOrd[cls_order]
-            clusts <- k$size
+            #clusts <- k$size
+            clusts <- table(classes)
             
         } else if(clstmethod == 'hclust') {
             
             Hcl <- Hclc; Hcl[is.na(Hcl)] <- 0
             cls <- hclust(dist(Hcl))
             cls_order <- cls$order
-            classes <- cutree(cls, clusters)
+            
+            #Awkward hack to rename class labels, so that they are in order
+            init_cut <- cutree(cls, clusters)
+            cut_map <- table(init_cut)[unique(init_cut[cls_order])]
             
             finalOrd <- finalOrd[cls_order]
-            clusts <- table(classes)
+            
+            classes <- rep(1:clusters, cut_map)[order(finalOrd)]
+            clusts <- cut_map
+            
+            #browser()
             
         } else if(clstmethod == 'ssom') {
             
             Hlist <- HLST[ include ]
             Hlist <- lapply(Hlist, function(x) {
-                x[is.na(x)] <- 0; if(sortrows) x <- x[sorting_order,]; x
+                x[is.na(x)] <- 0; 
+                if(sortrows == 'decreasing' | as.character(sortrows) == "TRUE" 
+                    | sortrows == 'increasing') {
+                    x <- x[sorting_order,]
+                }
+                return(x)
             })
             
             ssom <- supersom(
@@ -242,15 +268,31 @@ setMethod(
         
         if( nchar(main) > 0 & !embed) par(oma=c(0,0,(cex.main/12)+1,0) )
         
-        heatmapPlotWrapper( 
-            HLST, clusts, bins=plotset[[1]]$all_ind, titles=lab, 
-            e=plotset[[1]]$e, Leg=legend, cex.lab=cex.lab, cex.axis=cex.axis, 
-            cex.legend=cex.legend, xlab=xlab, ylab=ylab, autoscale=autoscale, 
-            zmin=zmin, zmax=zmax, xlim=xlim, ln.v=ln.v, s=s, indi=indi,
-            o_min=o_min, o_max=o_max, colvec=colvec, colorspace=clspace, 
-            pointsize=pointsize, embed=embed
-        )
-        title(main, outer = TRUE, cex.main=cex.main/pointsize)
+        if( ggplot ) {
+            ggHeatmapPlotWrapper( 
+                HLST, axhline=clusts, bins=plotset[[1]]$all_ind, titles=lab, 
+                e=plotset[[1]]$e, Leg=legend, cex.lab=cex.lab, cex.axis=cex.axis, 
+                cex.legend=cex.legend, xlab=xlab, ylab=ylab, autoscale=autoscale, 
+                zmin=zmin, zmax=zmax, xlim=xlim, ln.v=ln.v, s=s, indi=indi,
+                o_min=o_min, o_max=o_max, colvec=colvec, colorspace=clspace, 
+                pointsize=pointsize, embed=embed, main=main,
+                ...
+            )
+        } else {
+            heatmapPlotWrapper( 
+                HLST, axhline=clusts, bins=plotset[[1]]$all_ind, titles=lab, 
+                e=plotset[[1]]$e, Leg=legend, cex.lab=cex.lab, cex.axis=cex.axis, 
+                cex.legend=cex.legend, xlab=xlab, ylab=ylab, autoscale=autoscale, 
+                zmin=zmin, zmax=zmax, xlim=xlim, ln.v=ln.v, s=s, indi=indi,
+                o_min=o_min, o_max=o_max, colvec=colvec, colorspace=clspace, 
+                pointsize=pointsize, embed=embed, raster=raster, 
+                dendro=if(clstmethod == 'hclust') as.dendrogram(cls) else NULL,
+                ...
+            )
+            title(main, outer = TRUE, cex.main=cex.main/pointsize)
+        }
+        
+
         
         infile <- strsplit( plotset[[1]]$desc, '\n@')[[1]][[2]]
         # TODO: implement saving GenomicRanges in GetPlotSetArray
@@ -272,12 +314,13 @@ setMethod(
         #           out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
         #           out <- out[finalOrd,]
         par(opar)
-        return( invisible(data.frame(
+        out <- data.frame(
             originalOrder=1:length(finalOrd), 
-            ClusterID=classes, 
-            SortingOrder=order(sorting_order), 
-            FinalOrder=order(finalOrd)
-        )) )
+            ClusterID=classes[order(sorting_order)], 
+            SortingOrder=sorting_order, 
+            FinalOrder=finalOrd
+        )
+        return( invisible(out) )
     }
 )
 
@@ -286,12 +329,14 @@ setMethod(
 setMethod(
     "plotHeatmap", signature(plotset='PlotSetPair'),
     function(plotset, ...) {
-        plotHeatmap(list(plotset), main, labels, legend, keepratio, 
-                    plotScale, sortrows, clusters, clstmethod, 
-                    include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
-                    cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
-                    s, indi, o_min, o_max, colvec, clspace, pointsize, 
-                    embed=embed, ...)
+        plotHeatmap(
+            list(plotset), main, labels, legend, keepratio, 
+            plotScale, sortrows, clusters, clstmethod, 
+            include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
+            cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
+            s, indi, o_min, o_max, colvec, clspace, pointsize, 
+            embed, ggplot, raster, ...
+        )
     }
 )
 
@@ -300,12 +345,14 @@ setMethod(
 setMethod(
     "plotHeatmap", signature(plotset='PlotSetList'), 
     function(plotset, ...) {
-        plotHeatmap(plotset$data, main, labels, legend, keepratio, 
-                    plotScale, sortrows, clusters, clstmethod, 
-                    include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
-                    cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
-                    s, indi, o_min, o_max, colvec, clspace, pointsize, 
-                    embed=embed, ...)
+        plotHeatmap(
+            plotset$data, main, labels, legend, keepratio, 
+            plotScale, sortrows, clusters, clstmethod, 
+            include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
+            cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
+            s, indi, o_min, o_max, colvec, clspace, pointsize, 
+            embed, ggplot, raster, ...
+        )
     }
 )
 
@@ -320,7 +367,7 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embed=embed, ...
+            embed, ggplot, raster, ...
         )
     }
 )

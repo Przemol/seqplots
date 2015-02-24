@@ -1,5 +1,54 @@
+#multi_name_flt {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-left: 12px;
+    width: 80px;
+    
+}
+
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 400;
+}
+
+.div_min input[type="number"] {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.tabrowpar {
+      white-space:nowrap; 
+      margin-right:36px;
+      height: 24px;
+}
+
+.div_setup .form-control {
+    display: inline;
+}
+.div_separator hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+input[name='plot_this'] {
+    height: 22px; 
+    width: 22px;
+}
+    .height($(\'td p\').height()+3).width($(\'td p\').height()+3);')
+
+#fileUploadModal .modal-dialog  {
+  width: 97%;
+}
+
+#calcModal .modal-dialog  {
+  width: 97%;
+}
+
+
 #downloadBatchColLineplot{
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .selectionsInfo {
@@ -15,9 +64,7 @@
 #legend_pos, #legend_ext_pos, #batch_what, #batch_how {
   width: 110px;
 }
-.modal {
-    position: absolute;
-}
+
 
 .table-inside-modal tr {
     height: 32px;
@@ -32,21 +79,14 @@
 }
 
 .DTTT_container {
-  height: 20px;
+
   margin-left: 10px;
-  margin-right: 13px;
+
 }
 
-.DTTT_button {
-  height: 17px;
-}
-
-#title, #xlabel, #ylabel {
-		width: 85px;
-}
 
 #pdf_x_size, #pdf_y_size, #grid_x_size, #grid_y_size {
-  	width: 50px;
+  	width: 80px;
 }
 
 #img_clusters {
@@ -84,19 +124,6 @@
 
 #progressModal {
 	 /* border: 5px solid navy; */
-}
-
-#myModal {
-  width:1200px; 
-  text-align: left; 
-  top: 10px; 
-/*left: 10px; 
-  margin-left: 0px; */
-  margin-left: -600px;
-}
-
-#myModal > .modal-body {
-	max-height: 1200px !important;
 }
 
 #plot_upstream, #plot_downstream, #anchored_downstream, #plot_type, .fTable {
@@ -138,7 +165,7 @@ label[for="hsccoef"] {
 }
 
 input#BWbin {
-	width: 48px;
+	width: 68px;
 	display: inline;
 	
 }
@@ -152,28 +179,33 @@ p > label {
 	
 	display: inline;
 }
-div.img {
-      height: 235px;
-}
 
-div.img > div > img { 
-      max-width: 330px;
-      position:absolute;
-      z-index:3;
-      cursor: -webkit-zoom-in; cursor: -moz-zoom-in;
+
+
+
+img {
+    margin-top: 10px;
+    width: 100%;
+    cursor: -webkit-zoom-in; 
+    cursor: -moz-zoom-in;
 }
- /*div.img > div > img:active { 
-      max-width: 100% !important;
-      cursor: -webkit-zoom-out; cursor: -moz-zoom-out;
-}*/
 
 .zoom_image { 
       max-width: 100% !important;
+      max-height: 120% !important;
+      width: auto !important;
       cursor: -webkit-zoom-out !important; 
       cursor: -moz-zoom-out !important;
-      position: absolute !important;
-      top: 35px !important;
-      left: 35px !important;
+      position: fixed !important;
+      top: 10px !important;
+      left: 10px !important;
+      margin-right: 0px !important;
+      margin-bottom: 0px !important;
+      margin-top: 0px !important;
+      z-index:3;
+      border-style: dotted;
+      border-width: 3px;
+      border-color: grey;
 }
 
 th > span {
@@ -260,14 +292,15 @@ th > span > span > span {
 .letter-container {
 /* 	border-bottom: 0px dashed rgba(0,0,0,0.3); */
 /* 	border-top: 0px dashed rgba(0,0,0,0.3); */
-	padding: 10px;
-	height: 60px;
+
+	height: 85px;
 	width: auto;
-	margin: 20px auto;
+	margin: 3px auto;
 }
 .letter-container h2 {
 	text-align: left;
 	font-family: 'MyFont', Arial, serif;
+  margin: 0px;
 	
 	
 	/* text-transform: uppercase; */

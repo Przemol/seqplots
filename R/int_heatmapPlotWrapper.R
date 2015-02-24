@@ -46,6 +46,12 @@
 #'   \code{\link[grDevices]{grDevices}}
 #' @param pointsize The default font point size to be used for plots. Defaults
 #'   to 12 (1/72 inch).
+#' @param embed Configures heatmap to be used embedded plot. Defaults
+#'   to FALSE 
+#' @param raster Uses raster graphics for heatmaps. Defaults to FALSE
+#' @param ylim Y axis limits. Defaults to c(nrow(MAT[[1]]),1) 
+#' @param dendro Dendrogram object, will be plotted left to heatmaps. Defaults 
+#'   to NULL
 #'   
 #' @return \code{NULL}
 #'   
@@ -56,15 +62,16 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     cex.legend=12.0, xlab='', ylab="", Leg=TRUE, autoscale=TRUE, zmin=0, 
     zmax=10, xlim=NULL, ln.v=TRUE, e=NULL, s = 0.01, indi=TRUE,
     o_min=NA, o_max=NA, colvec=NULL, colorspace=NULL, pointsize=12,
-    embed=FALSE) {
+    embed=FALSE, raster=FALSE, ylim=c(nrow(MAT[[1]]),1), dendro=NULL, ...) {
     
     lfs  <- cex.lab / pointsize
     afs  <- cex.axis / pointsize
     lgfs <- cex.legend / pointsize
     
     datapoints <- unlist(MAT)
-    NP=length(MAT)
-    raster <- length(unique(diff(bins)))==1
+    NP <- length(MAT)
+    if(!is.null(dendro)) NP <- NP+1
+    raster <- length(unique(diff(bins)))==1 & raster
     
     #colvec[ grepl('#ffffff', colvec) ] <- NA
     ncollevel = 64
@@ -96,9 +103,26 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
         if(!embed) invisible(capture.output( set.panel(1, NP) ))
     }
     
+    if(!is.null(dendro)) {
+        #dendro  <- color_branches(dendro, k=length(axhline))
+        mar2=par()$mar; if(indi){
+            par(mar=c(12.3, 4.1, 2.6, 2.1))
+        } else {
+            par(mar=c(3.0, 4.1, 2.3, 2.1))
+        }
+        plot(dendro, horiz=TRUE, leaflab='none', ylim=ylim, main='Dendrogram')
+        par(mar=mar2)
+        #rect.dendrogram(dendro, k=length(axhline), horiz=TRUE)
+        abline(h=cumsum(axhline[-length(axhline)])+.5, lwd=2, col='red')
+        axis(2, at=ylim, labels=ylim, cex.axis=afs*0.9, col.axis='darkgrey')
+        axis(
+            2, at=cumsum(axhline)-(axhline/2)+.5, 
+            labels=paste0('C', 1:length(axhline)), las = 1, 
+            col.axis='darkred', font.axis=2, cex.axis=afs
+        )
+    }
     
-    
-    for (i in seq(NP)) {
+    for( i in seq(length(MAT)) ) {
         data <- MAT[[i]]
         
 
@@ -113,20 +137,31 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
                 )]
             image(
                 bins, 1:nrow(data), t(data), axes=TRUE, col=ColorRamp_ex, 
-                xlab=xlab, ylab=ylab, add=FALSE, ylim=c(nrow(data),1),
+                xlab=xlab, ylab=ylab, add=FALSE, ylim=ylim,
                 xlim=if (is.null(xlim)) range(bins) else xlim,
                 cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs,
-                useRaster=raster, xaxt="n", panel.first={
-                    if(is.null(e)) axis(1) 
-                    else axis(
-                        1, at=c(min(xinds), 0,  e, max(xinds)), 
-                        labels=c(min(xinds), '0', '0', max(xinds)-e)
-                    )
+                useRaster=raster, xaxt="n", yaxt="n", panel.first={
+                    axis(2, at=ylim, labels=ylim, cex.axis=afs*0.9,  col.axis='darkgrey')
+                    if(is.null(e)) { 
+                        axis(
+                            1, at=c(min(xinds), 0,  max(xinds)), 
+                            labels=c(num2bp(min(xinds)), '0bp', 
+                                     num2bp(max(xinds))), cex.axis=afs
+                        ) 
+                    } else {
+                        axis(
+                            1, at=c(min(xinds), 0,  e, max(xinds)), 
+                            labels=c(
+                                num2bp(min(xinds)), '0bp', '0bp', 
+                                num2bp(max(xinds)-e)
+                            ), cex.axis=afs
+                        )
+                    }
                     rect(
                         par("usr")[1],par("usr")[3],par("usr")[2],
                         par("usr")[4],col="lightgrey"
                     )
-                }
+                }, ...
             )
             
         } else {
@@ -155,22 +190,29 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             imPlot2(
                 bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlab, ylab=ylab, 
                 xlim=if (is.null(xlim)) range(bins) else xlim,  
-                ylim=c(nrow(data),1), zlim=keycolor_lim, col=col,
+                zlim=keycolor_lim, col=col, ylim=ylim,
                 legend.width=1, horizontal=TRUE, useRaster=raster, 
-                xinds=xinds, e=e, xaxt="n",
-                cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs
+                xinds=xinds, e=e, xaxt="n", yaxt="n",
+                cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs, 
+                ylast=nrow(data), afs=afs, ...
             )
+            
             
             
             
         }
         title( main=titles[i]); box()
         if (!is.null(axhline)){
-            hi = 0
-            for (i in axhline){
-                hi = hi+i
-                abline(hi+0.5,0,lwd=4)
-            }
+            #message(paste(axhline, collapse=', '))
+            abline(h=cumsum(axhline)+.5, lwd=4)
+            axis(
+                2, at=cumsum(axhline)-(axhline/2)+.5, 
+                labels=paste0('C', 1:length(axhline)), las = 1, 
+                col.axis='darkred', font.axis=2, cex.axis=afs
+            )
+            
+            #cumsum(axhline)
+         
         }
         if (ln.v){
             abline(v=c(0, e), lwd=2)

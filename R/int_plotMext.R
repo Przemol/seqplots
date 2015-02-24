@@ -90,8 +90,10 @@ plotMext <- function(
         }
     } else {
         par(mar=c(3.2+cex.lab, 3.2+cex.lab, 2+cex.main, 3))
+        
         for (i in 1:mm) {
             INPUT <- INPUTS[[i]]
+            xinds <- if (is.null(xlim)) range(INPUT$all_ind) else xlim
             if (i==1) { 
                 plot(
                     INPUT$all_ind, INPUT$means, type="n", main=main, xlab=xlab,
@@ -102,13 +104,21 @@ plotMext <- function(
                     length(list(...)[['xaxt']])>0, 
                     list(...)[['axes']]==FALSE )
                 )) { 
-                    if(is.null(anchor)) axis(1) 
-                    else axis(
-                        1, at=c(min(INPUT$all_ind), 0,  
-                                anchor, max(INPUT$all_ind)), 
-                        labels=c(min(INPUT$all_ind), '0', '0', 
-                                    max(INPUT$all_ind)-anchor)
-                    )
+                    if(is.null(anchor)) { 
+                        axis(
+                            1, at=c(min(xinds), 0,  max(xinds)), 
+                            labels=c(num2bp(min(xinds)), '0bp', 
+                                     num2bp(max(xinds))), cex.axis=cex.axis
+                        ) 
+                    } else {
+                        axis(
+                            1, at=c(min(xinds), 0,  anchor, max(xinds)), 
+                            labels=c(
+                                num2bp(min(xinds)), '0bp', '0bp', 
+                                num2bp(max(xinds)-anchor)
+                            ), cex.axis=cex.axis
+                        )
+                    }
                 }
             }
             if(error.estimates) { 

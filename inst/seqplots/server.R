@@ -83,6 +83,19 @@ shinyServer(function(input, output, clientData, session) {
   	str(values$SFsetup) 
   })
   
+  #Subclust logic
+  observe({
+      input$clusters; input$replot
+      if( !isolate(input$heat_seed) ) {
+          updateSelectInput(session, 'heat_subclust', choices='All clusters')
+          return()
+      }
+      if( isolate(input$heat_subclust) != "All clusters") return()
+      clusters <- fromJSON(input$clusters)
+      updateSelectInput(session, 'heat_subclust', choices = c('All clusters', sort(unique(clusters))))
+      
+  })
+  
   #Multicore calculations definictions 
   observe( mcCalcStart, quoted = TRUE, label = 'BigCalc')
   observe( mcDoParallel, quoted = TRUE, label = 'Plotting')
@@ -107,7 +120,7 @@ shinyServer(function(input, output, clientData, session) {
 	})
 	output$htmltab <- reactive({
 		if( is.null( values$grfile ) )	return('')	
-		return( renderHTMLgrid(values$grfile, TRUE, urlSetup$select, addcls=digest::digest(input$publicRdata)) )					
+		return( renderHTMLgrid(values$grfile, TRUE, urlSetup$select, addcls=digest::digest(input$publicRdata), isolate(input$subplot_options)) )					
 	})
 	
 	#Determined if plot and dataset save menu shoud be visible
@@ -117,11 +130,11 @@ shinyServer(function(input, output, clientData, session) {
 	#Rendering the image
 	output$image <- renderImage({
 	  if(is.null(values$im)) return(list(src = '',contentType = 'image/png',alt = "No image to plot just yet"))
-	  list(src = values$im,
-	       contentType = 'image/png',
-	       width = 1169,
-	       height = 782,
-	       alt = "This is alternate text")
+	  list(
+        src = values$im,
+	    contentType = 'image/png',
+	    alt = "Image cannot be displayed"
+      )
 	}, deleteFile = TRUE)
   
 	#renderin data dependant plot controles
@@ -154,7 +167,7 @@ shinyServer(function(input, output, clientData, session) {
 			co <- lapply(input$plot_this, function(x) fromJSON(x))
 			pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
 			pdf(file, width = 10.0, height = 10.0, onefile = FALSE, paper = input$paper)
-			  plotLineplot(pl=pl, type='legend')
+			  plotLineplotLocal(pl=pl, type='legend')
 			dev.off()
 		},
 		contentType = 'application/pdf'
@@ -210,9 +223,9 @@ shinyServer(function(input, output, clientData, session) {
           
           
           if (input$batch_what == "lineplots") {
-            plotLineplot(pl, title=title) 
+            plotLineplotLocal(pl, title=title) 
           } else {
-            plotHeatmap(pl, title=title) 
+            plotHeatmapLocal(pl, title=title) 
           } 
         }
       } else if(input$batch_how=="rows") {
@@ -224,9 +237,9 @@ shinyServer(function(input, output, clientData, session) {
           if(!nchar(title)) title <- gsub(input$multi_name_flt, '', unique( Map('[[', strsplit(t1, '\n@'), 2) ))
           
           if (input$batch_what == "lineplots") {
-            plotLineplot(pl, title=title) 
+            plotLineplotLocal(pl, title=title) 
           } else {
-            plotHeatmap(pl, title=title) 
+            plotHeatmapLocal(pl, title=title) 
           } 
         }
       } else if(input$batch_how=="single")  {
@@ -236,9 +249,9 @@ shinyServer(function(input, output, clientData, session) {
             title <- input[[paste0('label_',m,'x',n)]]
             if(!nchar(title)) title <- pl[[1]]$desc
             if (input$batch_what == "lineplots") {
-              plotLineplot(pl, title=title, legend=FALSE) 
+              plotLineplotLocal(pl, title=title, legend=FALSE) 
             } else {
-              plotHeatmap(pl, title=title, legend=FALSE) 
+              plotHeatmapLocal(pl, title=title, legend=FALSE) 
             } 
           }  
         }
@@ -257,7 +270,7 @@ shinyServer(function(input, output, clientData, session) {
 		  co <- lapply(input$plot_this, function(x) fromJSON(x))
 		  pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
 		  pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size), paper=input$paper)
-		    plotLineplot(pl=pl)		
+		    plotLineplotLocal(pl=pl)		
 		  dev.off()
 		  #Sys.sleep(1)
 		},
@@ -273,7 +286,7 @@ shinyServer(function(input, output, clientData, session) {
 				co <- lapply(input$plot_this, function(x) fromJSON(x))
 				pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
 				pdf(file, width = as.integer(input$pdf_x_size), height = as.integer(input$pdf_y_size), paper=input$paper)
-					plotHeatmap(pl=pl)				
+					plotHeatmapLocal(pl=pl)				
 				dev.off()
 			}
 	)
@@ -285,20 +298,30 @@ shinyServer(function(input, output, clientData, session) {
 	  },
 	  content = function( file ) {
 	    if(!nchar(input$clusters) & !nchar(input$sortingord)) stop('Plot heatmap with clusters or ordering first!')
-	    infile <- file.path( 'files', names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ) )
-        fcon <- file(infile); gr <- rtracklayer::import( fcon ); close(fcon);
-        elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
-	    if( length(colnames(elementMetadata(gr))) ) { colnames(elementMetadata(gr)) <- paste0('metadata_', colnames(elementMetadata(gr))) }
-	    
-      gr$OriginalOrder <- 1:length(gr); 
-      if( nchar(input$clusters) ) 
-        gr$ClusterID <- fromJSON(input$clusters)
+	    infile <- file.path(
+            'files', 
+            basename(names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ))
+        )
+        
+        if(file.exists(infile)) {
+            fcon <- file(infile); gr <- rtracklayer::import( fcon ); close(fcon);
+            elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
+	        if( length(colnames(elementMetadata(gr))) ) { colnames(elementMetadata(gr)) <- paste0('metadata_', colnames(elementMetadata(gr))) }
+            gr$OriginalOrder <- 1:length(gr); 
+        } else {
+            warning('The file "', infile, '" does not exist on local file system.')
+            gr <- data.frame( OriginalOrder=1:length(fromJSON(input$finalord)) ) 
+        }
+        
+        
+        if( nchar(input$clusters) ) 
+            gr$ClusterID <- fromJSON(input$clusters)
 	    if( nchar(input$sortingord) ) 
-        gr$SortingOrder <- order(fromJSON(input$sortingord))
+            gr$SortingOrder <- order(fromJSON(input$sortingord))
       
-      gr$FinalOrder <- order(fromJSON(input$finalord))
+        gr$FinalOrder <- order(fromJSON(input$finalord))
       
-      out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
+        out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
 	    out <- out[fromJSON(input$finalord),]
       
 	    write.csv(out, file=file, row.names = FALSE)
@@ -338,8 +361,8 @@ shinyServer(function(input, output, clientData, session) {
           
 		  }, error = function(e) {
 		      file.remove( file.path('tmp', input$TR_addFile$name) )
-		      session$sendCustomMessage("jsExec", sprintf( '$("#%s").html(\' <span class="label label-important">ERROR</span>\')', 
-		                                                   input$TR_addFile$jobID ))
+		      session$sendCustomMessage("jsExec", sprintf( '$("#%s").html(\' <span class="label label-danger">ERROR</span> %s\')', 
+		                                                   input$TR_addFile$jobID, "File processing error..." ))
 		      session$sendCustomMessage("jsAlert", geterrmessage() )
           
 		      #values$refFileGrids <- runif(1)
@@ -347,8 +370,10 @@ shinyServer(function(input, output, clientData, session) {
 		})
 	})
 	
-  #Get the list of save datasets
-  updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' ')
+    #Get the list of save datasets
+    updateSelectizeInput(
+      session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' '
+    )
   
 	#Save dataset file logic
 	observe({
@@ -363,7 +388,7 @@ shinyServer(function(input, output, clientData, session) {
 					
 			message(paste('File saved: ',input$RdataSaveName))
 			session$sendCustomMessage("jsAlert", sprintf("File saved: %s", paste0(input$RdataSaveName, '.Rdata')) )
-			updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' ')
+			updateSelectizeInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' ')
 		})
 	})
 	
@@ -374,7 +399,7 @@ shinyServer(function(input, output, clientData, session) {
 			file.remove( file.path('publicFiles', input$publicRdata) )
 			message(paste('File removed: ',input$publicRdata))
 			session$sendCustomMessage("jsAlert", sprintf("File removed: %s", input$publicRdata) )
-			updateSelectInput(session, 'publicRdata',choices = c( ' ', dir('publicFiles')), selected =  ' ')
+			updateSelectizeInput(session, 'publicRdata',choices = c( ' ', dir('publicFiles')), selected =  ' ')
 		})
 	})
   
@@ -434,25 +459,87 @@ shinyServer(function(input, output, clientData, session) {
   #Generating feature/track tables
   #TODO: merge in one observer
   
-	#Generate file table for tracks and features
-  observe({
-    values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile; input$delFileVar;
-    session$sendCustomMessage("jsExec", "$('#tracktable').html('Loading...')")
-    tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='track' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
-    if( nrow(tab) < 1 ) {return(p('No files found!'))} 
-    ex <- as.matrix(tab); rownames(ex) <- NULL; colnames(ex) <- NULL
-    session$sendCustomMessage("jsCreatedDT", list(tab=ex, id='tracktable'))
-  })
-  #Generate file table for features
-	observe({
-		values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile;
-		session$sendCustomMessage("jsExec", "$('#featuretable').html('Loading...')")
-		tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='feature' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
-		if( nrow(tab) < 1 ) {return(p('No files found!'))}
-		ex <- as.matrix(tab); rownames(ex) <- NULL; colnames(ex) <- NULL
-		session$sendCustomMessage("jsCreatedDT", list(tab=ex, id='featuretable'))
+# 	#Generate file table for tracks and features
+#   observe({
+#     values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile; input$delFileVar;
+#     session$sendCustomMessage("jsExec", "$('#tracktable').html('Loading...')")
+#     tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='track' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
+#     if( nrow(tab) < 1 ) {return(p('No files found!'))} 
+#     ex <- as.matrix(tab); rownames(ex) <- NULL; colnames(ex) <- NULL
+#     session$sendCustomMessage("jsCreatedDT", list(tab=ex, id='tracktable'))
+#   })
+#   
+#   #Generate file table for features
+# 	observe({
+# 		values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile;
+# 		session$sendCustomMessage("jsExec", "$('#featuretable').html('Loading...')")
+# 		tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='feature' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
+# 		if( nrow(tab) < 1 ) {return(p('No files found!'))}
+# 		ex <- as.matrix(tab); rownames(ex) <- NULL; colnames(ex) <- NULL
+# 		session$sendCustomMessage("jsCreatedDT", list(tab=ex, id='featuretable'))
+# 
+# 	})
+  
+  
+  #Generate file table for tracks and features with function
+  fileSelectionDataTable <- function(type) {
+    dt_opt <- reactive({
+        values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile;
+            dat <- I(jsonlite::toJSON(as.matrix(cbind(
+                dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "'"))[,c(-1,-4)],
+            se='',  dl='',  rm=''))))
+            list(
+              ##Force client side processing, should be avoided for very long tables
+              data=dat,
+              ajax='',
+              processing=FALSE,
+              serverSide=FALSE,
+              
+              ##Other options
+              lengthMenu=I('[[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]'),
+              # "<'row'<'col-sm-6'l><'col-sm-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
+              dom="<'row'<'col-md-4'i><'.selectionsInfo col-md-1'><'col-md-6 pull-right'Tf>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
+              order=I('[[ 1, "desc" ]]'),
+              language=I('{"sLengthMenu": "_MENU_ records per page"}'),
+              columns=I( readLines(file.path(Sys.getenv("web", '.'), 'ui/FataTablesColumnSetup.js')) ),
+              oTableTools=I( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesToolsSetup.js')) ),
+              scrollY=paste0(input$tabtest, "px"),
+              scrollX="true",
+              deferRender=I("false"),
+              pageLength=10,
+              #       rowCallback=I('function( row, data ) {
+              #         console.log(data[0])
+              #         if ( $.inArray(data[0], selected) !== -1 ) {
+              #           $(row).addClass("selected");
+              #           $(row).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );
+              #         }
+              #       }'),
+              pagingType="full_numbers"
+           )
+      })
+      
+      out <- renderDataTable({
+        ##Client side processing, code irrelavent
+            tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
+            if( nrow(tab) < 1 ) {return(p('No files found!'))} 
+            return(cbind(tab, se='',  dl='',  rm=''))
+        
+        }, options = dt_opt, 
+        callback = I("function(oTable) {
+          var table = $('#' + oTable.context[0].sTableId);
+          var tables = table.parents('.dataTables_wrapper').find('table')
+          tables.addClass('table-condensed table-bordered');
+          //zzz=oTable.context[0];
+          oTable.draw();
+          $(tables[2]).removeClass('table-bordered');
+        }")
+      )
+      return(out)
+    }
+  
+  output$trackDT <- fileSelectionDataTable('track')
+  output$featureDT <- fileSelectionDataTable('feature')
 
-	})
   
   #Server initiation actions
   observe({
@@ -487,6 +574,7 @@ shinyServer(function(input, output, clientData, session) {
     if( is.null( input$exitconfirmed )) {
       session$sendCustomMessage("jsExec", 'confirm("Are you sure you want to exit!?") ? Shiny.shinyapp.sendInput({"exitconfirmed":true}) : console.log("Exit canceled")')
     } else { 
+      session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = null;")
       session$sendCustomMessage("jsExec", "window.onbeforeunload = function(){}; window.open('','_self').close();")
       stopApp(returnValue = 'Stopped by user!' )
     }
@@ -501,16 +589,21 @@ shinyServer(function(input, output, clientData, session) {
       session$sendCustomMessage("jsExec", sprintf("$('#file_genome').children().removeAttr('selected').filter('[value=%s]').attr('selected', 'selected')", query$genome))
     }
     
+    for(n in names(query)[!names(query) %in% c('load', 'select', 'genome')] ){
+        session$sendInputMessage(n, list(
+            value = unlist(strsplit(query[[n]], ',')) 
+        ) )
+        
+    }
+    
     if(length(query$load)){
       #session$sendCustomMessage("jsAlert", sprintf('loading file: [%s]', file.path('publicFiles', query$load)) )
       values$grfile <- get(load( file.path('publicFiles', query$load) ))
-      updateSelectInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  query$load)
+      updateSelectizeInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  query$load)
       #session$sendCustomMessage("jsExec", sprintf("$('#publicRdata').val('%s').change()", query$load))
     }
-    for(n in names(query)[!names(query) %in% c('load', 'select', 'genome')] ){
-      session$sendInputMessage(n, list(value = query[[n]]) )
-      
-    }
+    
+
     if( is.character(query$select) ) {
       #session$sendCustomMessage("jsAlert", sprintf('Selecting plots: [%s]', query$select) )
       sel <- do.call( rbind, strsplit(strsplit(query$select, ';')[[1]], ',') )

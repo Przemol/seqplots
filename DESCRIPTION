@@ -1,9 +1,9 @@
 Package: seqplots
 Maintainer: Przemyslaw Stempor <ps562@cam.ac.uk>
 Author: Przemyslaw Stempor
-Version: 1.0.0
+Version: 1.2.0
 License: GPL-3
-Title: SeqPlots - An interactive tool for visualizing NGS signals and sequence
+Title: An interactive tool for visualizing NGS signals and sequence
     motif densities along genomic features using average plots and heatmaps.
 Description: SeqPlots is a tool for plotting next generation sequencing (NGS)
     based experiments' signal tracks, e.g. reads coverage from ChIP-seq,
@@ -30,6 +30,7 @@ Description: SeqPlots is a tool for plotting next generation sequencing (NGS)
     annotations.
 URL: http://github.com/przemol/seqplots
 BugReports: http://github.com/przemol/seqplots/issues
+biocViews: ChIPSeq, RNASeq, Sequencing, Software, Visualization
 Depends:
     R (>= 3.1.0)
 Imports:
@@ -40,7 +41,7 @@ Imports:
     rtracklayer,
     GenomicRanges,
     Biostrings,
-    shiny,
+    shiny (>= 0.11.0),
     DBI,
     RSQLite,
     RJSONIO,
@@ -52,7 +53,10 @@ Imports:
     parallel,
     GenomeInfoDb,
     class,
-    S4Vectors
+    S4Vectors,
+    ggplot2,
+    reshape2,
+    gridExtra
 Type: Package
 Date: 2014-09-15
 LazyLoad: yes
@@ -66,9 +70,12 @@ Collate:
     'PlotSetPair-class.R'
     'PlotSetArray-class.R'
     'PlotSetList-class.R'
+    'deployServerInstance.R'
     'generic_methods.R'
     'getPlotSetArray.R'
+    'helper_functions.R'
     'int_getSF.R'
+    'int_ggHeatmapPlotWrapper.R'
     'int_heatmapPlotWrapper.R'
     'int_imPlot2.R'
     'int_plotMext.R'
@@ -77,4 +84,3 @@ Collate:
     'run.R'
     'seqplots-package.R'
     'zzz.R'
-biocViews: ChIPSeq, RNASeq, Sequencing, Software, Visualization
