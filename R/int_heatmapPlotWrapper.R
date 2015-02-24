@@ -194,14 +194,15 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
                 legend.width=1, horizontal=TRUE, useRaster=raster, 
                 xinds=xinds, e=e, xaxt="n", yaxt="n",
                 cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs, 
-                ylast=nrow(data), afs=afs, ...
+                ylast=nrow(data), afs=afs, 
+                axis.args=list(cex.axis=afs), ...
             )
             
             
             
             
         }
-        title( main=titles[i]); box()
+        title( main=titles[i], cex.main=lfs ); box()
         if (!is.null(axhline)){
             #message(paste(axhline, collapse=', '))
             abline(h=cumsum(axhline)+.5, lwd=4)
