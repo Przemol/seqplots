@@ -261,7 +261,12 @@ heatmapPanel <- tabPanel(
 # 6) Save/load panel ################################################## 
 loadSavePanel <- tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
          h5(tags$u('Load or save plotset'), hlp("Savingandloadingplotsets")),
-         selectInput('publicRdata', 'Load saved plot set:', ' ', ' '),
+         selectizeInput(
+             'publicRdata', 'Load saved plot set:', ' ', ' ', 
+             options=list(
+                 placeholder = 'Type to filter'
+             )
+         ),
          conditionalPanel("input.publicRdata !== ' '", 
                           actionButton('RdataRemoveButton', 'Remove dataset', icon=icon('trash-o')) ,
                           downloadButton('RdataDoenloadButton', 'Download dataset') 
