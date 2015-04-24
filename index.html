@@ -71,9 +71,20 @@ colleagues, who can adjust their plotting parameters without loading actual
 tracks and recalculating numeric values.</p>
 
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a id="mac-os-x-bundle-app" class="anchor" href="#mac-os-x-bundle-app" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run as Mac OS X bundle app</h2>
 
-<p>Install develpment version from Bioconductor:</p>
+<p>Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains R binaries pre-installed Bioconductor dependencies. Additionally, the reference genome for <em>Caenorhabditis elegans</em> is included. The sequences for other popular model organisms can be downloaded using graphical user interface.</p>
+
+<p><strong>Download the current version here:
+<a href="https://github.com/Przemol/seqplots_osx/releases/latest">https://github.com/Przemol/seqplots_osx/releases/latest</a></strong></p>
+
+<p>The bundle requires OS X 10.6 (Snow Leopard) and above with X11 installed. X11 was included with OS X up to version 10.7 (Lion). OS X 10.8 (Mountain Lion) and above require installation of Xquartz package, see more here: <a href="http://support.apple.com/en-us/HT201341">http://support.apple.com/en-us/HT201341</a></p>
+
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install as R package</h2>
+
+<p>Install in R from Bioconductor:</p>
 
 <div class="highlight highlight-r"><pre>source(<span class="pl-s"><span class="pl-pds">"</span>http://bioconductor.org/biocLite.R<span class="pl-pds">"</span></span>)
 biocLite(<span class="pl-s"><span class="pl-pds">"</span>seqplots<span class="pl-pds">"</span></span>)</pre></div>
@@ -94,16 +105,6 @@ run()</pre></div>
 <p>To start with R scripting mode:</p>
 
 <div class="highlight highlight-r"><pre>?<span class="pl-smi">getPlotSetArry</span></pre></div>
-
-<h2>
-<a id="mac-os-x-bundle-app" class="anchor" href="#mac-os-x-bundle-app" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mac OS X bundle app</h2>
-
-<p>Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains R binaries pre-installed Bioconductor dependencies. Additionally, the reference genome for <em>Caenorhabditis elegans</em> is included. The sequences for other popular model organisms can be downloaded using graphical user interface.</p>
-
-<p><strong>Download the current version here:
-<a href="https://github.com/Przemol/seqplots_osx/releases/latest">https://github.com/Przemol/seqplots_osx/releases/latest</a></strong></p>
-
-<p>The bundle requires OS X 10.6 (Snow Leopard) and above with X11 installed. X11 was included with OS X up to version 10.7 (Lion). OS X 10.8 (Mountain Lion) and above require installation of Xquartz package, see more here: <a href="http://support.apple.com/en-us/HT201341">http://support.apple.com/en-us/HT201341</a></p>
 
 <h2>
 <a id="references" class="anchor" href="#references" aria-hidden="true"><span class="octicon octicon-link"></span></a>References</h2>
