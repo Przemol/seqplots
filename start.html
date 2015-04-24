@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>SeqPlots by Przemol</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Get SeqPlots</h1>
+        
+        <p>
+          Install <b>Bioconductor</b> package:
+          <a href="http://www.bioconductor.org/packages/release/bioc/html/seqplots.html">
+            <img src="http://www.bioconductor.org/images/logo_bioconductor.gif" border="0" class="masthead_logo" height="78" width="260" alt="Bioconductor - open source software for bioinformatics">
+          </a>
+        </p>
+        
+        Get <b>Mac OS X boundle</b>:
+        <ul>
+          <li><a href="https://github.com/Przemol/seqplots_osx/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/Przemol/seqplots_osx/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/Przemol/seqplots_osx">View On <strong>GitHub</strong></a></li>
+        </ul>
+        
+  
+        <p class="view"><a href="https://github.com/Przemol/seqplots">View the Main Project on GitHub <small>przemol/seqplots</small></a></p>
+        <p class="visit"><a href="https://github.com/Przemol/seqplots/wiki">Visit Wiki Pages <small>przemol/seqplots</small></a></p>
+        <p class="docs"><a href="help.html">Read documentation <small><a href="SeqPlots.pdf">...also as PDF file</a></small></a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a id="" class="anchor" href="#" aria-hidden="true"><span class="octicon octicon-link"></span></a><img src="https://github.com/Przemol/seqplots/wiki/img/LogoSeqPlotsLabeled.png" alt="SeqPlots">
+</h1>
+
+<blockquote>
+<p>An interactive tool for visualizing track signals and sequence motif densities along genomic features using average plots and heatmaps</p>
+</blockquote>
+
+<p><img src="https://github.com/Przemol/seqplots/wiki/img/00_IntroS.png" alt="Examples of Seq Plots interface and outputs"></p>
+
+<h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>The SeqPlots is universal, web browser based tool for plotting
+average track signal (e.g. reads coverage) and sequence motif density over
+user specified genomic features. The data are visualized on linear plot,
+with error estimates as fields, or as series of heatmaps that can be sorted
+and clustered. The dual-purpose implementation allows running the software
+locally on desktop or deploying it on server. The unique features of our
+software are collaboration and data sharing capabilities, as well as
+ability to store pre-calculated result matrixes, that combine many
+sequencing experiments and in-silico generated tracks with multiple
+different features. These binaries can be further used to generate new
+combination plots on fly, run automated batch operations or share with
+colleagues, who can adjust their plotting parameters without loading actual
+tracks and recalculating numeric values.</p>
+
+<h2>
+<a id="mac-os-x-bundle-app" class="anchor" href="#mac-os-x-bundle-app" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run as Mac OS X bundle app</h2>
+
+<p>Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains R binaries pre-installed Bioconductor dependencies. Additionally, the reference genome for <em>Caenorhabditis elegans</em> is included. The sequences for other popular model organisms can be downloaded using graphical user interface.</p>
+
+<p><strong>Download the current version here:
+<a href="https://github.com/Przemol/seqplots_osx/releases/latest">https://github.com/Przemol/seqplots_osx/releases/latest</a></strong></p>
+
+<p>The bundle requires OS X 10.6 (Snow Leopard) and above with X11 installed. X11 was included with OS X up to version 10.7 (Lion). OS X 10.8 (Mountain Lion) and above require installation of Xquartz package, see more here: <a href="http://support.apple.com/en-us/HT201341">http://support.apple.com/en-us/HT201341</a></p>
+
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install as R package</h2>
+
+<p>Install in R from Bioconductor:</p>
+
+<div class="highlight highlight-r"><pre>source(<span class="pl-s"><span class="pl-pds">"</span>http://bioconductor.org/biocLite.R<span class="pl-pds">"</span></span>)
+biocLite(<span class="pl-s"><span class="pl-pds">"</span>seqplots<span class="pl-pds">"</span></span>)</pre></div>
+
+<p>To install GitHub vesrion (in order to solve dependencies install from Bioconductor first):</p>
+
+<div class="highlight highlight-r"><pre><span class="pl-k">if</span> (<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>devtools<span class="pl-pds">"</span></span>)) install.packages(<span class="pl-s"><span class="pl-pds">"</span>devtools<span class="pl-pds">"</span></span>)
+<span class="pl-e">devtools</span><span class="pl-k">::</span>install_github(<span class="pl-s"><span class="pl-pds">'</span>przemol/seqplots<span class="pl-pds">'</span></span>, <span class="pl-v">build_vignettes</span><span class="pl-k">=</span><span class="pl-c1">FALSE</span>)</pre></div>
+
+<h2>
+<a id="quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick start</h2>
+
+<p>To start web browser GUI:</p>
+
+<div class="highlight highlight-r"><pre>library(<span class="pl-smi">seqplots</span>)
+run()</pre></div>
+
+<p>To start with R scripting mode:</p>
+
+<div class="highlight highlight-r"><pre>?<span class="pl-smi">getPlotSetArry</span></pre></div>
+
+<h2>
+<a id="references" class="anchor" href="#references" aria-hidden="true"><span class="octicon octicon-link"></span></a>References</h2>
+
+<p><strong>R project and Bioconductor</strong></p>
+
+<ul>
+<li>  R Core Team (2014). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL <a href="http://www.R-project.org/">http://www.R-project.org/</a>.</li>
+<li>  Bioconductor: Open software development for computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others 2004, Genome Biology, Vol. 5, R80.  URL <a href="http://www.bioconductor.org/">http://www.bioconductor.org/</a>.</li>
+<li>RStudio and Inc. (2014). shiny: Web Application Framework for R. R package version 0.10.1. <a href="http://shiny.rstudio.com/">http://shiny.rstudio.com/</a>
+</li>
+<li>
+<strong>Other CRAN packages:</strong> digest, DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, Cairo and parallel</li>
+<li>
+<strong>Bioconductor packages:</strong> IRanges, BSgenome, Rsamtools, rtracklayer, GenomicRanges and Biostrings </li>
+</ul>
+
+<p><strong>JavaScript and CSS</strong></p>
+
+<ul>
+<li>jQuery framework - <a href="http://jquery.com">http://jquery.com</a>
+</li>
+<li>Bootstrap - <a href="http://getbootstrap.com">http://getbootstrap.com</a>
+</li>
+<li>DataTables, Table plug-in for jQuery - <a href="http://www.datatables.net">http://www.datatables.net</a>
+</li>
+<li>jQuery File Upload Plugin - <a href="https://github.com/blueimp/jQuery-File-Upload">https://github.com/blueimp/jQuery-File-Upload</a>
+</li>
+<li>jQuery throttle - <a href="http://benalman.com/projects/jquery-throttle-debounce-plugin/">http://benalman.com/projects/jquery-throttle-debounce-plugin/</a>
+</li>
+<li>jQuery Cookie Plugin - <a href="https://github.com/carhartl/jquery-cookie">https://github.com/carhartl/jquery-cookie</a>
+</li>
+<li>Modernizer JS library - <a href="http://modernizr.com">http://modernizr.com</a>
+</li>
+<li>JavaScript Templates - <a href="https://github.com/blueimp/JavaScript-Templates">https://github.com/blueimp/JavaScript-Templates</a>
+</li>
+<li>JavaScript Color Picker - <a href="http://jscolor.com">http://jscolor.com</a>
+</li>
+<li>md5-js - <a href="https://github.com/wbond/md5-js">https://github.com/wbond/md5-js</a>
+</li>
+<li>Font Awesome - <a href="http://fortawesome.github.io/Font-Awesome">http://fortawesome.github.io/Font-Awesome</a>
+</li>
+<li>Google Fonts - <a href="https://www.google.com/fonts">https://www.google.com/fonts</a>
+</li>
+<li>jQuery user interface - <a href="http://jqueryui.com">http://jqueryui.com</a> (documentation)</li>
+<li>jquery.tocify.js: jQuery Table of Contents - <a href="https://github.com/gfranko/jquery.tocify.js">https://github.com/gfranko/jquery.tocify.js</a> (documentation)</li>
+<li>Strapdown <a href="https://github.com/arturadib/strapdown">https://github.com/arturadib/strapdown</a> (documentation)</li>
+<li>Bootswatch themes - <a href="http://bootswatch.com">http://bootswatch.com</a> (documentation)</li>
+<li>google-code-prettify - <a href="https://code.google.com/p/google-code-prettify">https://code.google.com/p/google-code-prettify</a> (documentation)</li>
+<li>marked - <a href="https://github.com/chjj/marked">https://github.com/chjj/marked</a> (documentation)</li>
+</ul>
+
+<p><strong>Important conceptual contribution to the project</strong></p>
+
+<ul>
+<li>Liu T, Ortiz J, Taing L, Meyer C, Lee B, Zhang Y, Shin H, Wong S, Ma J, Lei Y, et al. 2011. <a href="http://www.ncbi.nlm.nih.gov/pubmed/21859476">Cistrome: an integrative platform for transcriptional regulation studies.</a> Genome Biology 12: R83.</li>
+<li>Thomas Williams, Colin Kelley and others (2010). Gnuplot 4.4: an interactive plotting program. URL <a href="http://www.R-project.org/">http://www.R-project.org/</a>.</li>
+<li>Kent, W.J., Sugnet, C.W., Furey, T.S., Roskin, K.M., Pringle, T.H., Zahler, A.M. and Haussler, a. D. (2002). <a href="http://www.ncbi.nlm.nih.gov/pubmed/12045153">The Human Genome Browser at UCSC</a>. Genome Research. 12:996–1006.</li>
+<li>Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. (2010). <a href="http://www.ncbi.nlm.nih.gov/pubmed/20639541">BigWig and BigBed: enabling browsing of large distributed datasets.</a> Bioinformatics. 1;26(17):2204-7</li>
+<li>Nicol, J.W., Helt, G.A., Blanchard, S.G., Raja, A. and Loraine, A.E. (2009). <a href="http://www.ncbi.nlm.nih.gov/pubmed/19654113">The Integrated Genome Browser: free software for distribution and exploration of genome-scale datasets.</a> Bioinformatics (Oxford, England). 25:2730–1.</li>
+<li>Thorvaldsdóttir, H., Robinson, J.T. and Mesirov, J.P. (2012). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22517427">Integrative Genomics Viewer (IGV): high-performance genomics data visualization and exploration.</a> Briefings in bioinformatics. bbs017</li>
+</ul>
+
+<p><strong>Server deployment</strong></p>
+
+<ul>
+<li>Shiny Server - <a href="https://github.com/rstudio/shiny-server">https://github.com/rstudio/shiny-server</a>
+</li>
+<li>ShinyApps - <a href="https://github.com/rstudio/shinyapps">https://github.com/rstudio/shinyapps</a>
+</li>
+</ul>
+
+<p><strong>Publications containing figures made by SeqPlots</strong></p>
+
+<ul>
+<li>Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J. <a href="http://www.ncbi.nlm.nih.gov/pubmed/24653213">Extreme HOT regions are CpG-dense promoters in C. elegans and humans.</a> Genome Res 24(7):1138-1146 Jul 2014</li>
+<li>Latorre I, Chesney MA, Garrigues JM, Stempor P et al. <a href="http://www.ncbi.nlm.nih.gov/pubmed/25737279">The DREAM complex promotes gene body H2A.Z for target repression</a>. Genes Dev 2015 Mar 1;29(5):495-500.</li>
+</ul>
+
+        <h2>
+<a id="live-demo" class="anchor" href="#live-demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Live demo</h2>
+
+<p>The working demonstration preview of SeqPlots is available on ShinyApps.io:
+<strong><a href="https://seqplots.shinyapps.io/seqplots/">https://seqplots.shinyapps.io/seqplots/</a></strong></p>
+<small>
+<p>Demo limits:</p>
+
+<ul>
+<li>  the application contains some pre-loaded data (<em>C. elegans</em> genes and histone modifications)</li>
+<li>  size of uploaded files is limited to 30MB, please bin or subset your tracks to fit within the limit (due to ShinyApps beta upload limitations)</li>
+<li>  only <em>C. elegans</em> genome is available (due ShinyApps beta space limits)</li>
+<li>  uploaded files will be deleted after some time</li>
+</ul>
+</small>
+
+      </section>
+      <footer>
+
+        <p><strong>Live demo</strong><small> - a demonstration preview of SeqPlots on ShinyApps.io:</small>
+          <strong><a href="https://seqplots.shinyapps.io/seqplots/">https://seqplots.shinyapps.io/seqplots/</a></strong>
+        <br/><small>See <a href="#live-demo">here</a> for demo limitations.</small>
+        </p>
+
+        <p>Project status: <br/>
+          <a href="https://travis-ci.org/Przemol/seqplots"><img src="https://travis-ci.org/Przemol/seqplots.svg?branch=master" alt="Build Status"></a>
+        </p>
+
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-48467041-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
