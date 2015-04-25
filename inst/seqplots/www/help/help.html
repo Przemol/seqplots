@@ -78,141 +78,50 @@ div[data-unique] {
 
 Welcome to **SeqPlots**
 =======================
+> SeqPlots - An interactive tool for visualizing NGS signals and sequence motif densities along genomic features using average plots and heatmaps.
 
-> An interactive tool for visualizing track signals and sequence motif
-> densities along genomic features using average plots and heatmaps.
-
-![Examples of Seq Plots interfce and outputs](img/01_01.png)
+![Examples of Seq Plots interface and outputs](img/SeqPlots_fig1_web.png)
 
 Summary
 -------
-
-SeqPlots is a web browser tool for plotting average track signals (e.g.
-read coverage) and sequence motif densities over user specified genomic
-features. The data can be visualized in linear plots with error
-estimates or as series of heatmaps that can be sorted and clustered. The
-software can be run locally on a desktop or deployed on a server and
-allows easy data sharing. SeqPlots pre-calculates and stores binary
-result matrices, allowing rapid plot generation. Plots can also be run
-in batch.
+SeqPlots is a web browser tool for plotting average track signals (e.g. read coverage) and sequence motif densities over user specified genomic features. The data can be visualized in linear plots with error estimates or as series of heatmaps that can be sorted and clustered. The software can be run locally on a desktop or deployed on a server and allows easy data sharing.  SeqPlots pre-calculates and stores binary result matrices, allowing rapid plot generation.  Plots can also be run in batch.   
 
 Availability
 ------------
+SeqPlots is primarily distributed as R package available on platforms and operating systems supported by R project. Standalone SeqPlot bundle, combing R and all required packages, is available as for Mac OS X (10.6 or higher). SeqPlots can also be deployed on a server using free and open sourced (GPL licensed) Shiny Server (https://github.com/rstudio/shiny-server).
 
-SeqPlots is primarily distributed as R package available on platforms
-and operating systems supported by R project. Standalone SeqPlot bundle,
-combing R and all required packages, is available as for Mac OS X (10.6
-or higher). SeqPlots can also be deployed on a server using free and
-open sourced (GPL licensed) Shiny Server
-(https://github.com/rstudio/shiny-server), making it available for
-multiple clients. To deploy server version, clone the core\_master
-branch of SeqPlots repository into your Shiny Server application
-directory.
+- [SeqPlots Bioconductor R package](http://www.bioconductor.org/packages/release/bioc/html/seqplots.html)
+- [SeqPlots OSX App](Install_OSX)
+- [SeqPlots Server](Install_server)
 
--   [SeqPlots Bioconductor R
-    package](http://www.bioconductor.org/packages/release/bioc/html/seqplots.html)
--   [SeqPlots OSX App](https://github.com/Przemol/seqplots/_osx/releases/latest)
+Live demo
+---------
+
+The working demonstration preview of SeqPlots is available on ShinyApps.io:
+**https://seqplots.shinyapps.io/seqplots/**
+
+Demo limits:
+-   the application contains some pre-loaded data (*C. elegans* genes and histone modifications)
+-	size of uploaded files is limited to 30MB, please bin or subset your tracks to fit within the limit (due to ShinyApps beta upload limitations)
+-	only *C. elegans* genome is available (due ShinyApps beta space limits)
+-	uploaded files will be deleted after some time
+ 
 
 Key features
 ------------
+-    Easy to use web interface (R or shell expertise not required)
+-	Web server or desktop versions
+-	Generates publication quality plots out of the box
+-	Plots average signals or heatmaps
+-	Accepts Wiggle, BedGraph, BigWiggle, and GFF and BED formats
+-	Calculates motif density from reference genome packages
+-	Tracks and features are searchable and old calculations stored
+-	Converts tracks to binary BigWiggle format for rapid data extraction and efficient storage
+-	Implemented using Shiny R framework providing internet browser reactive GUI and session based connectivity (websocets)
 
--   Easy to use web interface (R or shell expertise not required)
--   Web server or desktop versions
--   Generates publication quality plots out of the box
--   Plots average signals or heatmaps
--   Accepts Wiggle, BedGraph, BigWiggle, and GFF and BED formats
--   Calculates motif density from reference genome packages
--   Tracks and features are searchable and old calculations stored
--   Converts tracks to binary BigWiggle format for rapid data extraction
-    and efficient storage
--   Implemented using Shiny R framework providing internet browser
-    reactive GUI and session based connectivity (websocets)
-
-References
-----------
-
-**R project and Bioconductor**
-
--   R Core Team (2014). R: A language and environment for statistical
-    computing. R Foundation for Statistical Computing, Vienna, Austria.
-    URL http://www.R-project.org/.
--   Bioconductor: Open software development for computational biology
-    and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates,
-    B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and
-    others 2004, Genome Biology, Vol. 5, R80. URL
-    http://www.bioconductor.org/.
--   RStudio and Inc. (2014). shiny: Web Application Framework for R. R
-    package version 0.10.1. http://shiny.rstudio.com/
--   **Other CRAN packages:** digest, DBI,RSQLite, RJSONIO, plotrix,
-    fields, grid, kohonen, Cairo and parallel
--   **Bioconductor packages:** IRanges, BSgenome, Rsamtools,
-    rtracklayer, GenomicRanges and Biostrings
-
-**JavaScript and CSS**
-
--   jQuery framework - http://jquery.com
--   Bootstrap - http://getbootstrap.com
--   DataTables, Table plug-in for jQuery - http://www.datatables.net
--   jQuery File Upload Plugin -
-    https://github.com/blueimp/jQuery-File-Upload
--   jQuery throttle -
-    http://benalman.com/projects/jquery-throttle-debounce-plugin/
--   jQuery Cookie Plugin - https://github.com/carhartl/jquery-cookie
--   Modernizer JS library - http://modernizr.com
--   JavaScript Templates -
-    https://github.com/blueimp/JavaScript-Templates
--   JavaScript Color Picker - http://jscolor.com
--   md5-js - https://github.com/wbond/md5-js
--   Font Awesome - http://fortawesome.github.io/Font-Awesome
--   Google Fonts - https://www.google.com/fonts
--   jQuery user interface - http://jqueryui.com (documentation)
--   jquery.tocify.js: jQuery Table of Contents -
-    https://github.com/gfranko/jquery.tocify.js (documentation)
--   Strapdown https://github.com/arturadib/strapdown (documentation)
--   Bootswatch themes - http://bootswatch.com (documentation)
--   google-code-prettify -
-    https://code.google.com/p/google-code-prettify (documentation)
--   marked - https://github.com/chjj/marked (documentation)
-
-**Important conceptual contribution to the project**
-
--   Liu T, Ortiz J, Taing L, Meyer C, Lee B, Zhang Y, Shin H, Wong S, Ma
-    J, Lei Y, et al. 2011. [Cistrome: an integrative platform for
-    transcriptional regulation
-    studies.](http://www.ncbi.nlm.nih.gov/pubmed/21859476) Genome
-    Biology 12: R83.
--   Thomas Williams, Colin Kelley and others (2010). Gnuplot 4.4: an
-    interactive plotting program. URL http://www.R-project.org/.
--   Kent, W.J., Sugnet, C.W., Furey, T.S., Roskin, K.M., Pringle, T.H.,
-    Zahler, A.M. and Haussler, a. D. (2002). [The Human Genome Browser
-    at UCSC](http://www.ncbi.nlm.nih.gov/pubmed/12045153). Genome
-    Research. 12:996–1006.
--   Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. (2010).
-    [BigWig and BigBed: enabling browsing of large distributed
-    datasets.](http://www.ncbi.nlm.nih.gov/pubmed/20639541)
-    Bioinformatics. 1;26(17):2204-7
--   Nicol, J.W., Helt, G.A., Blanchard, S.G., Raja, A. and Loraine, A.E.
-    (2009). [The Integrated Genome Browser: free software for
-    distribution and exploration of genome-scale
-    datasets.](http://www.ncbi.nlm.nih.gov/pubmed/19654113)
-    Bioinformatics (Oxford, England). 25:2730–1.
--   Thorvaldsdóttir, H., Robinson, J.T. and Mesirov, J.P. (2012).
-    [Integrative Genomics Viewer (IGV): high-performance genomics data
-    visualization and
-    exploration.](http://www.ncbi.nlm.nih.gov/pubmed/22517427) Briefings
-    in bioinformatics. bbs017
-
-**Server deployment**
-
--   Shiny Server - https://github.com/rstudio/shiny-server
--   ShinyApps - https://github.com/rstudio/shinyapps
-
-**Publications containing figures made by SeqPlots**
-
--   Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J.
-    [Extreme HOT regions are CpG-dense promoters in C. elegans and
-    humans.](http://www.ncbi.nlm.nih.gov/pubmed/24653213) Genome Res
-    24(7):1138-1146 Jul 2014 
+Issues and bugs
+---------------
+Please visit [**issue tracker**](../issues) to view currently know issues. To report a new issue/bug/feature request please click [**here**](../issues/new). If the issue is connected to file upload please attach the file in the form.
     
 Quick start guide 
 =================
@@ -1648,8 +1557,8 @@ Glossary
 
 <div class="navbar navbar-fixed-top" style="display:none;" id="top">
   <div class="navbar-inner">
-    <a class="brand" href="#" style="margin-left: 50px; padding-bottom: 0px;">
-      <img src="img/icos.png" style="position: absolute; left:25px; top:-8px;"> SeqPlots help
+    <a class="brand" href="#" style="margin-left: 150px; padding-bottom: 0px;">
+      <img src="img/ico_full.png" style="height:35px; position: absolute; left:25px; top:-6px;">
     </a>
 
     <ul class="nav">
