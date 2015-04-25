@@ -345,10 +345,10 @@ getPlotSetArray <- function(
             )
             k <- k+1
         }
-        names(proc) <- basename( sapply(tracks, '[[', 1) )
+        names(proc) <- sub("\\.(bw|BW)$", "", basename( sapply(tracks, '[[', 1) ))
         TSS[[n]] <- proc
         n <- n+1
     }
-    names(TSS) <- features
+    names(TSS) <- sub("\\.(gff|GFF|bed|BED)$", "", basename( features ))
     return( PlotSetArray(data=TSS) )
 }
