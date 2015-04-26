@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 
-<title>SeqPlots help</title>
+<title>SeqPlots</title>
+
+<link rel="shortcut icon" href="favicon.ico">
+
 <style>
 /*
  * jquery.tocify.css 1.9.0
@@ -78,141 +81,315 @@ div[data-unique] {
 
 Welcome to **SeqPlots**
 =======================
+> An interactive tool for visualizing NGS signals and sequence motif densities along genomic features using average plots and heatmaps.
 
-> An interactive tool for visualizing track signals and sequence motif
-> densities along genomic features using average plots and heatmaps.
-
-![Examples of Seq Plots interfce and outputs](SeqPlots_fig1_web.png)
+![Examples of Seq Plots interface and outputs](img/ico_full_color.png)
+![Examples of Seq Plots interface and outputs](img/SeqPlots_fig1_web.png)
 
 Summary
 -------
-
-SeqPlots is a web browser tool for plotting average track signals (e.g.
-read coverage) and sequence motif densities over user specified genomic
-features. The data can be visualized in linear plots with error
-estimates or as series of heatmaps that can be sorted and clustered. The
-software can be run locally on a desktop or deployed on a server and
-allows easy data sharing. SeqPlots pre-calculates and stores binary
-result matrices, allowing rapid plot generation. Plots can also be run
-in batch.
+SeqPlots is a web browser tool for plotting average track signals (e.g. read coverage) and sequence motif densities over user specified genomic features. The data can be visualized in linear plots with error estimates or as series of heatmaps that can be sorted and clustered. The software can be run locally on a desktop or deployed on a server and allows easy data sharing.  SeqPlots pre-calculates and stores binary result matrices, allowing rapid plot generation.  Plots can also be run in batch.   
 
 Availability
 ------------
+SeqPlots is primarily distributed as [Bioconductor package](http://www.bioconductor.org/packages/release/bioc/html/seqplots.html) available on platforms and operating systems supported by R project. Standalone [SeqPlot OS X bundle](https://github.com/Przemol/seqplots_osx/zipball/master), combing R and all required packages, is available as for Mac OS X (10.6 or higher). SeqPlots can also be deployed on a server using free and open sourced (GPL licensed) Shiny Server.
 
-SeqPlots is primarily distributed as R package available on platforms
-and operating systems supported by R project. Standalone SeqPlot bundle,
-combing R and all required packages, is available as for Mac OS X (10.6
-or higher). SeqPlots can also be deployed on a server using free and
-open sourced (GPL licensed) Shiny Server
-(https://github.com/rstudio/shiny-server), making it available for
-multiple clients. To deploy server version, clone the core\_master
-branch of SeqPlots repository into your Shiny Server application
-directory.
+Live demo
+---------
+The working demonstration preview of SeqPlots is available on ShinyApps.io:
+**https://seqplots.shinyapps.io/seqplots/**
 
--   [SeqPlots Bioconductor R
-    package](http://www.bioconductor.org/packages/release/bioc/html/seqplots.html)
--   [SeqPlots OSX App](https://github.com/Przemol/seqplots/_osx/releases/latest)
+Demo limits:
+
+-   application contains some pre-loaded data (*C. elegans* genes and histone modifications)
+-	size of uploaded files is limited to 30MB, please bin or subset your tracks to fit within the limit (due to ShinyApps upload limitations)
+-	only *C. elegans* genome is available (due ShinyApps space limits)
+-	uploaded files will be deleted after some time
+ 
 
 Key features
 ------------
-
 -   Easy to use web interface (R or shell expertise not required)
--   Web server or desktop versions
--   Generates publication quality plots out of the box
--   Plots average signals or heatmaps
--   Accepts Wiggle, BedGraph, BigWiggle, and GFF and BED formats
--   Calculates motif density from reference genome packages
--   Tracks and features are searchable and old calculations stored
--   Converts tracks to binary BigWiggle format for rapid data extraction
-    and efficient storage
--   Implemented using Shiny R framework providing internet browser
-    reactive GUI and session based connectivity (websocets)
+-	Web server or desktop versions
+-	Generates publication quality plots out of the box
+-	Plots average signals or heatmaps
+-	Accepts Wiggle, BedGraph, BigWiggle, and GFF and BED formats
+-	Calculates motif density from reference genome packages
+-	Tracks and features are searchable and old calculations stored
+-	Converts tracks to binary BigWiggle format for rapid data extraction and efficient storage
+-	Implemented using Shiny R framework providing internet browser reactive GUI and session based connectivity (websocets)
 
-References
-----------
+Issues and bugs
+---------------
+Please visit [**issue tracker**](https://github.com/Przemol/seqplots/issues) to view currently know issues. To report a new issue/bug/feature request please click [**here**](https://github.com/Przemol/seqplots/issues/new). If the issue is connected to file upload please attach the file in the form.
+    
 
-**R project and Bioconductor**
+Installation - Mac OS X app
+==========================
 
--   R Core Team (2014). R: A language and environment for statistical
-    computing. R Foundation for Statistical Computing, Vienna, Austria.
-    URL http://www.R-project.org/.
--   Bioconductor: Open software development for computational biology
-    and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates,
-    B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and
-    others 2004, Genome Biology, Vol. 5, R80. URL
-    http://www.bioconductor.org/.
--   RStudio and Inc. (2014). shiny: Web Application Framework for R. R
-    package version 0.10.1. http://shiny.rstudio.com/
--   **Other CRAN packages:** digest, DBI,RSQLite, RJSONIO, plotrix,
-    fields, grid, kohonen, Cairo and parallel
--   **Bioconductor packages:** IRanges, BSgenome, Rsamtools,
-    rtracklayer, GenomicRanges and Biostrings
+> The Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains all R binaries and packages that SeqPlots depends on. Additionally, the reference sequences for *Caenorhabditis elegans* is included. The sequences for other popular model organisms can be downloaded using a graphical user interface.
 
-**JavaScript and CSS**
+**System requirements**
 
--   jQuery framework - http://jquery.com
--   Bootstrap - http://getbootstrap.com
--   DataTables, Table plug-in for jQuery - http://www.datatables.net
--   jQuery File Upload Plugin -
-    https://github.com/blueimp/jQuery-File-Upload
--   jQuery throttle -
-    http://benalman.com/projects/jquery-throttle-debounce-plugin/
--   jQuery Cookie Plugin - https://github.com/carhartl/jquery-cookie
--   Modernizer JS library - http://modernizr.com
--   JavaScript Templates -
-    https://github.com/blueimp/JavaScript-Templates
--   JavaScript Color Picker - http://jscolor.com
--   md5-js - https://github.com/wbond/md5-js
--   Font Awesome - http://fortawesome.github.io/Font-Awesome
--   Google Fonts - https://www.google.com/fonts
--   jQuery user interface - http://jqueryui.com (documentation)
--   jquery.tocify.js: jQuery Table of Contents -
-    https://github.com/gfranko/jquery.tocify.js (documentation)
--   Strapdown https://github.com/arturadib/strapdown (documentation)
--   Bootswatch themes - http://bootswatch.com (documentation)
--   google-code-prettify -
-    https://code.google.com/p/google-code-prettify (documentation)
--   marked - https://github.com/chjj/marked (documentation)
+* Mac OS X 10.6 (Snow Leopard) or higher
+* Xquartz package for OS X 10.8 (Mountain Lion) and above: http://xquartz.macosforge.org/landing/ 
 
-**Important conceptual contribution to the project**
+    > More info:  http://support.apple.com/en-us/HT201341
 
--   Liu T, Ortiz J, Taing L, Meyer C, Lee B, Zhang Y, Shin H, Wong S, Ma
-    J, Lei Y, et al. 2011. [Cistrome: an integrative platform for
-    transcriptional regulation
-    studies.](http://www.ncbi.nlm.nih.gov/pubmed/21859476) Genome
-    Biology 12: R83.
--   Thomas Williams, Colin Kelley and others (2010). Gnuplot 4.4: an
-    interactive plotting program. URL http://www.R-project.org/.
--   Kent, W.J., Sugnet, C.W., Furey, T.S., Roskin, K.M., Pringle, T.H.,
-    Zahler, A.M. and Haussler, a. D. (2002). [The Human Genome Browser
-    at UCSC](http://www.ncbi.nlm.nih.gov/pubmed/12045153). Genome
-    Research. 12:996–1006.
--   Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. (2010).
-    [BigWig and BigBed: enabling browsing of large distributed
-    datasets.](http://www.ncbi.nlm.nih.gov/pubmed/20639541)
-    Bioinformatics. 1;26(17):2204-7
--   Nicol, J.W., Helt, G.A., Blanchard, S.G., Raja, A. and Loraine, A.E.
-    (2009). [The Integrated Genome Browser: free software for
-    distribution and exploration of genome-scale
-    datasets.](http://www.ncbi.nlm.nih.gov/pubmed/19654113)
-    Bioinformatics (Oxford, England). 25:2730–1.
--   Thorvaldsdóttir, H., Robinson, J.T. and Mesirov, J.P. (2012).
-    [Integrative Genomics Viewer (IGV): high-performance genomics data
-    visualization and
-    exploration.](http://www.ncbi.nlm.nih.gov/pubmed/22517427) Briefings
-    in bioinformatics. bbs017
+How to install
+--------------
 
-**Server deployment**
+1.  Download the compressed application from
+    https://github.com/Przemol/seqplots_osx/zipball/master
 
--   Shiny Server - https://github.com/rstudio/shiny-server
--   ShinyApps - https://github.com/rstudio/shinyapps
+2. Double-click on downloaded file to unzip the contents of archive
 
-**Publications containing figures made by SeqPlots**
+3. Drag and drop SeqPlots.app to Applications folder
 
--   Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J.
-    [Extreme HOT regions are CpG-dense promoters in C. elegans and
-    humans.](http://www.ncbi.nlm.nih.gov/pubmed/24653213) Genome Res
-    24(7):1138-1146 Jul 2014 
+How to start
+------------
+
+Start SeqPlots from Applications. If run for the first time the operating system security notice might be shown.
+
+> ![Seq1](img/03_01a.png)
+
+To run the application right-click on SeqPlots icon and choose "Open", followed by clicking "Open" button in popup window.
+
+> ![Seq2](img/03_01b.png)
+
+After starting SeqPlots the welcome screen displays the software version, the currently installed genomes and the data folder location. 
+
+> ![SeqPlots Mac OS X bindle - the welcome screen](img/03_02.png)
+
+This screen allows you to set up following options:
+
+* Change your data location folder (by default your home directory will be used)
+* Install new genomes (requires internet connection). The correct genome packages need to be installed before before uploading files for plotting. A full list of supported genomes is available here: http://www.bioconductor.org/packages/release/BiocViews.html#___BSgenome
+
+    > ![Genomic packages installer window](img/03_03.png)
+
+Press the **`START`** button to initiate SeqPlots. If initiation was successful the user interface should open in your default web browser.
+
+For further usage please refer to <b>Quick start guide</b> or specific chapters of this document.
+
+The window in the background allows you to assess if SeqPlots is running properly and exit the application at any moment.
+
+> ![SeqPlots Mac OS X bindle - the diagnostic window](img/03_04.png)
+
+The "moving" animation progress bar indicates that SeqPlots is running. Press "Cancel" to stop it. Pressing "Details" will reveal a small text window that displays diagnostic and error messages.
+
+Package content
+---------------
+
+* Platypus (http://www.sveinbjorn.org/platypus) wrapper
+* R (http://www.r-project.org/) branch 3.1 for Snow leopard (http://r.research.att.com/snowleopard/R-3.1-branch/R-3.1-branch-snowleopard-sa-x86_64.tar.gz)
+* SeqPlots dependency packages (including Shiny, rtracklayer and BSgenome)
+* Full genome sequences for Caenorhabditis elegans (UCSC version ce10) - BSgenome.Celegans.UCSC.ce10 R package
+* SeqPlots package
+
+
+Installation - Bioconductor package
+=======================
+
+> The Bioconductor package runs SeqPlots locally on desktop computers from R 
+environment. It is available for Windows, GNU/Linux and Mac OS X operating 
+systems. For further help information please refer to SeqPlots Bioconductor webpage:
+http://www.bioconductor.org/packages/release/bioc/html/seqplots.html
+
+
+**System requirements:**
+
+-   [R 3.1 or higher](http://www.r-project.org/)
+
+How to install
+--------------
+
+To install SeqPlots package, start R and enter:
+
+```
+source("http://bioconductor.org/biocLite.R")
+biocLite("seqplots")`
+```
+
+How to start
+------------
+
+To start SeqPlots web interface, start R and enter:
+
+```
+library(seqplots) 
+run()
+```
+
+After a successful initiation the user interface will be opened in your
+default web browser. For further usage please refer to
+**Quick start guide** or specific chapters.
+
+The `run` function accepts "root" argument, which allows to change
+the data location folder (by default your home directory will be used),
+e.g.:
+
+`run(root='/path/to/data/location')`
+
+**To start with R scripting mode:**
+
+`?getPlotSetArry`
+
+### Additional genome packages
+
+Genomic packages can be installed using standard bioconductor installer
+(Internet connection is required). For example, to instal human reference
+genome (hg19):
+
+```
+source("http://bioconductor.org/biocLite.R") 
+biocLite("BSgenome.Hsapiens.UCSC.hg19")
+```
+
+Genome packages are required before uploading files for plotting. Full
+list of supported genomes is avilable here:
+http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
+
+
+Installation - Deployment on the server
+======================================
+
+> The server version allows the sharing of signal and feature files by a
+> group of users and for remote calculation and file storage. This is
+> the ideal method for providing a shared SeqPlots service to a group.
+
+**System requirements:**
+
+-   R 3.1 or higher
+-   Shiny Server 1.0 or higher
+
+Installation
+------------
+
+1\. Install and configure the Shiny Server by following the instructions
+on https://github.com/rstudio/shiny-server
+
+2\. Install SeqPlots R package and dependences by following the
+instruction in **Installation: R package**.
+
+3\. Copy SeqPlots files to Shiny Server application folder:
+
+`cp -r $(Rscript -e "cat(system.file('seqplots', package='seqplots'))") /srv/shiny-server/`
+
+4\. Set up SeqPlots **data location** by running from R:
+
+`run(root='/path/to/data/location')`
+
+5\. Edit first line of `/srv/shiny-server/shiny/server_config.R`, so the
+environment variable `root` matches the **data location**; for example:
+
+`Sys.setenv('root'='/var/shiny-server/DATA')`
+
+Usage
+-----
+
+After successful installation the SeqPlost web GUI will be available at
+`your_server_name:3838/seqplots/`.
+
+For further usage please refer to **Quick start guide** or
+specific chapters.
+
+### Additional genome packages
+
+Genomic packages can be installed using standard bioconductor installer
+(Internet connection required). For example, to instal human reference
+genome (hg19):
+
+```
+source("http://bioconductor.org/biocLite.R") 
+biocLite("BSgenome.Hsapiens.UCSC.hg19")
+```
+
+Corresponding genome packages are required before uploading the files
+for plotting. Full list of supported genomes is avilable here:
+http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
+
+Alternative installation
+------------------------
+
+SeqPlots can be directly cloned into Shiny Server application folder
+from git repository by using
+`git clone https://github.com/Przemol/seqplots.git`. The data location
+can be set up with following R code:
+
+```
+root <- /data/location dir.create(root) setwd(root) require(RSQLite) 
+
+sqlite <- dbDriver("SQLite") con <- dbConnect(sqlite, dbname = "files.sqlite") 
+dbGetQuery(con, "CREATE TABLE files (id INTEGER PRIMARY KEY ASC, name TEXT UNIQUE,    ctime TEXT, type TEXT, format TEXT, genome TEXT, user TEXT, comment TEXT)") 
+if (!dbListTables(con) == "files")      
+    warning("Database not created!")    
+dbDisconnect(con) 
+
+if (!all(sapply(c("removedFiles", "files", "publicFiles", "tmp"), dir.create)))      
+    warning("Folders not created!") 
+
+message("\nData loaction: ", root)
+```
+
+The following dependencies must be installed in R:
+
+                  package  version
+    1              shiny   0.10.0
+    2             fields      7.1
+    3           parallel    3.1.0
+    4          multicore      0.2
+    5           BSgenome   1.32.0
+    6      GenomicRanges   1.16.3
+    7            plotrix    3.5-7
+    8        rtracklayer   1.24.2
+    9            RJSONIO  1.2-0.2
+    10           RSQLite   0.11.4
+    11           kohonen   2.0.14
+    12             Cairo    1.5-5
+    13            digest    0.6.4
+    14           methods    3.1.0
+    15             tools    3.1.0
+    16             utils    3.1.0
+    17            httpuv    1.3.0
+    18           caTools     1.17
+    19            xtable    1.7-3
+    20         htmltools    0.2.4
+    21            bitops    1.0-6
+    22              Rcpp   0.11.2
+    23              spam   0.41-0
+    24              maps    2.3-7
+    25              grid    3.1.0
+    26         grDevices    3.1.0
+    27      BiocGenerics   0.10.0
+    28           IRanges   1.22.9
+    29        Biostrings   2.32.0
+    30           XVector    0.4.0
+    31         Rsamtools   1.16.1
+    32          graphics    3.1.0
+    33             stats    3.1.0
+    34          zlibbioc   1.10.0
+    35      GenomeInfoDb    1.0.2
+    36            stats4    3.1.0
+    37               XML 3.98-1.1
+    38             RCurl 1.95-4.1
+    39 GenomicAlignments    1.0.1
+    40      BiocParallel    0.6.1
+    41           foreach    1.4.2
+    42         BatchJobs      1.2
+    43            BBmisc      1.7
+    44               DBI    0.2-7
+    45         sendmailR    1.1-2
+    46              brew    1.0-6
+    47              plyr    1.8.1
+    48           stringr    0.6.2
+    49              fail      1.2
+    50         checkmate      1.0
+    51         codetools    0.2-8
+    52         iterators    1.0.7
+    53         base64enc    0.1-1
+    54             class   7.3-10
+    55              MASS   7.3-33
     
 Quick start guide 
 =================
@@ -310,260 +487,6 @@ Quick start guide
 
     ![Heatmap example](img/01_QuickStart/01_QuickStart_12.png)
 
-Installation: Mac OS X app
-==========================
-
-> The Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users.
-> It contains all R binaries and packages that SeqPlots depends on.
-> Additionally, the reference sequences for *Caenorhabditis elegans* is
-> included. The sequences for other popular model organisms can be
-> downloaded using a graphical user interface.
-
-**System requirements**
-
--   Mac OS X Snow Leopard (10.6) or higher
--   Xquartz package for OS X 10.8 (Mountain Lion) and above:
-    http://xquartz.macosforge.org/landing/
-
-    > More info: http://support.apple.com/en-us/HT201341
-
-Installation
-------------
-
-1.  Downaload the installation disk image from
-    https://github.com/Przemol/seqplots/_osx/releases/latest
-
-2.  Double-click on DMG file to mount the image or unzip the contents of
-    ZIP archive
-
-3.  Drag and drop SeqPlots.app to applications
-
-    > ![DMG image mounted in OS X](img/03_01.png)
-
-Usage
------
-
-After starting SeqPlots the welcome screen displays the software
-version, the currently installed genomes and the data folder location.
-
-> ![SeqPlots Mac OS X bindle - the welcome screen](img/03_02.png)
-
-This screen allows you to set up following options:
-
--   Change your data location folder (by default your home directory
-    will be used)
--   Install new genomes (requires internet connection). The correct
-    genome packages need to be installed before before uploading files
-    for plotting. A full list of supported genomes is available here:
-    http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
-
-    > ![Genomic packages installer window](img/03_03.png)
-
-Press the **`START`** button to initiate SeqPlots. If initiation was
-successful the user interface should open in your default web browser.
-
-For further usage please refer to **Quick start guide** or
-specific chapters of this documentation.
-
-The window in the background allows you to assess if SeqPlots is running
-properly and exit the application at any moment.
-
-> ![SeqPlots Mac OS X bindle - the diagnostic window](img/03_04.png)
-
-The "moving" animation progress bar indicates that SeqPlots is running.
-Press "Cancel" to stop it. Pressing "Details" will reveal a small text
-window that displays diagnostic and error messages.
-
-Package content
----------------
-
--   Platypus (http://www.sveinbjorn.org/platypus) wrapper
--   R (http://www.r-project.org/) branch 3.1 for Snow leopard
-    (http://r.research.att.com/snowleopard/R-3.1-branch/R-3.1-branch-snowleopard-sa-x86\_64.tar.gz)
--   SeqPlots dependency packages (including Shiny, rtracklayer and
-    BSgenome)
--   Full genome sequences for Caenorhabditis elegans (UCSC version ce10)
-    - BSgenome.Celegans.UCSC.ce10 R package
--   SeqPlots package
-
-Installation: R package
-=======================
-
-> The R package will run SeqPlots locally on desktop computers running
-> Windows or Linux operating systems. The R package is also recommended
-> for R users running Mac OS X machines.
-
-**System requirements:**
-
--   [R 3.1 or higher](http://www.r-project.org/)
-
-Installation
-------------
-
-Install seqplots from from Bioconductor:
-
-`source("http://bioconductor.org/biocLite.R") biocLite("seqplots")`
-
-To use GitHub development version (in order to solve dependencies
-install from Bioconductor first):
-
-`if (!require("devtools")) install.packages("devtools") devtools::install_github('przemol/seqplots', build_vignettes=FALSE)`
-
-Usage
------
-
-**To start web browser GUI:**
-
-`library(seqplots) run()`
-
-After a successful initiation the user interface will be opened in your
-default web browser. For further usage please refer to
-**Quick start guide** or specific chapters.
-
-The `seqplots` function accepts "root" argument, which allows to change
-the data location folder (by default your home directory will be used),
-e.g.:
-
-`run(root='/path/to/data/location')`
-
-**To start with R scripting mode:**
-
-`?getPlotSetArry`
-
-### Additional genome packages
-
-Genomic packages can be installed using standard bioconductor installer
-(Internet connection required). For example, to instal human reference
-genome (hg19):
-
-`source("http://bioconductor.org/biocLite.R") biocLite("BSgenome.Hsapiens.UCSC.hg19")`
-
-Genome packages are required before uploading files for plotting. Full
-list of supported genomes is avilable here:
-http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
-Installation: Deployment on the server
-======================================
-
-> The server version allows the sharing of signal and feature files by a
-> group of users and for remote calculation and file storage. This is
-> the ideal method for providing a shared SeqPlots service to a group.
-
-**System requirements:**
-
--   R 3.1 or higher
--   Shiny Server 1.0 or higher
-
-Installation
-------------
-
-1\. Install and configure the Shiny Server by following the instructions
-on https://github.com/rstudio/shiny-server
-
-2\. Install SeqPlots R package and dependences by following the
-instruction in **Installation: R package**.
-
-3\. Copy SeqPlots files to Shiny Server application folder:
-
-`{bash eval=FALSE} cp -r $(Rscript -e "cat(system.file('seqplots', package='seqplots'))") /srv/shiny-server/`
-
-4\. Set up SeqPlots **data location** by running from R:
-
-`seqplots(root='/path/to/data/location')`
-
-5\. Edit first line of `/srv/shiny-server/shiny/server_config.R`, so the
-environment variable `root` matches the **data location**; for example:
-
-`Sys.setenv('root'='/var/shiny-server/DATA')`
-
-Usage
------
-
-After successful installation the SeqPlost web GUI will be available at
-`your_server_name:3838/seqplots/`.
-
-For further usage please refer to **Quick start guide** or
-specific chapters.
-
-### Additional genome packages
-
-Genomic packages can be installed using standard bioconductor installer
-(Internet connection required). For example, to instal human reference
-genome (hg19):
-
-`source("http://bioconductor.org/biocLite.R") biocLite("BSgenome.Hsapiens.UCSC.hg19")`
-
-Corresponding genome packages are required before uploading the files
-for plotting. Full list of supported genomes is avilable here:
-http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
-
-Alternative installation
-------------------------
-
-SeqPlots can be directly cloned into Shiny Server application folder
-from git repository by using
-`git clone https://github.com/Przemol/seqplots.git`. The data location
-can be set up with following R code:
-
-`root <- /data/location dir.create(root) setwd(root) require(RSQLite) sqlite <- dbDriver("SQLite") con <- dbConnect(sqlite, dbname = "files.sqlite") dbGetQuery(con, "CREATE TABLE files (id INTEGER PRIMARY KEY ASC, name TEXT UNIQUE,    ctime TEXT, type TEXT, format TEXT, genome TEXT, user TEXT, comment TEXT)") if (!dbListTables(con) == "files")      warning("Database not created!") dbDisconnect(con) if (!all(sapply(c("removedFiles", "files", "publicFiles", "tmp"), dir.create)))      warning("Folders not created!") message("\nData loaction: ", root)`
-
-The following dependencies must be installed in R:
-
-                  package  version
-    1              shiny   0.10.0
-    2             fields      7.1
-    3           parallel    3.1.0
-    4          multicore      0.2
-    5           BSgenome   1.32.0
-    6      GenomicRanges   1.16.3
-    7            plotrix    3.5-7
-    8        rtracklayer   1.24.2
-    9            RJSONIO  1.2-0.2
-    10           RSQLite   0.11.4
-    11           kohonen   2.0.14
-    12             Cairo    1.5-5
-    13            digest    0.6.4
-    14           methods    3.1.0
-    15             tools    3.1.0
-    16             utils    3.1.0
-    17            httpuv    1.3.0
-    18           caTools     1.17
-    19            xtable    1.7-3
-    20         htmltools    0.2.4
-    21            bitops    1.0-6
-    22              Rcpp   0.11.2
-    23              spam   0.41-0
-    24              maps    2.3-7
-    25              grid    3.1.0
-    26         grDevices    3.1.0
-    27      BiocGenerics   0.10.0
-    28           IRanges   1.22.9
-    29        Biostrings   2.32.0
-    30           XVector    0.4.0
-    31         Rsamtools   1.16.1
-    32          graphics    3.1.0
-    33             stats    3.1.0
-    34          zlibbioc   1.10.0
-    35      GenomeInfoDb    1.0.2
-    36            stats4    3.1.0
-    37               XML 3.98-1.1
-    38             RCurl 1.95-4.1
-    39 GenomicAlignments    1.0.1
-    40      BiocParallel    0.6.1
-    41           foreach    1.4.2
-    42         BatchJobs      1.2
-    43            BBmisc      1.7
-    44               DBI    0.2-7
-    45         sendmailR    1.1-2
-    46              brew    1.0-6
-    47              plyr    1.8.1
-    48           stringr    0.6.2
-    49              fail      1.2
-    50         checkmate      1.0
-    51         codetools    0.2-8
-    52         iterators    1.0.7
-    53         base64enc    0.1-1
-    54             class   7.3-10
-    55              MASS   7.3-33
 
 Adding and managing files
 =========================
@@ -1641,6 +1564,62 @@ Glossary
 
 -----------
 
+References
+==========
+
+> This section lists R, JavaScript and CSS libraries used by SeqPlots, important conceptual contributions to the software, and publication, where figures generated by SeqPlots are featured. 
+
+**R project and Bioconductor**
+
+-   R Core Team (2014). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL http://www.R-project.org/.
+-   Bioconductor: Open software development for computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others 2004, Genome Biology, Vol. 5, R80.  URL http://www.bioconductor.org/.
+- RStudio and Inc. (2014). shiny: Web Application Framework for R. R package version 0.10.1. http://shiny.rstudio.com/
+- **Other CRAN packages:** digest, DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, ggplot2, Cairo and parallel
+- **Bioconductor packages:** IRanges, BSgenome, Rsamtools, rtracklayer, GenomicRanges and Biostrings 
+
+**JavaScript and CSS**
+
+- jQuery framework - http://jquery.com
+- Bootstrap - http://getbootstrap.com
+- DataTables, Table plug-in for jQuery - http://www.datatables.net
+- jQuery File Upload Plugin - https://github.com/blueimp/jQuery-File-Upload
+- jQuery throttle - http://benalman.com/projects/jquery-throttle-debounce-plugin/
+- jQuery Cookie Plugin - https://github.com/carhartl/jquery-cookie
+- Modernizer JS library - http://modernizr.com
+- JavaScript Templates - https://github.com/blueimp/JavaScript-Templates
+- JavaScript Color Picker - http://jscolor.com
+- md5-js - https://github.com/wbond/md5-js
+- Font Awesome - http://fortawesome.github.io/Font-Awesome
+- Google Fonts - https://www.google.com/fonts
+- jQuery user interface - http://jqueryui.com (documentation)
+- jquery.tocify.js: jQuery Table of Contents - https://github.com/gfranko/jquery.tocify.js (documentation)
+- Strapdown https://github.com/arturadib/strapdown (documentation)
+- Bootswatch themes - http://bootswatch.com (documentation)
+- google-code-prettify - https://code.google.com/p/google-code-prettify (documentation)
+- marked - https://github.com/chjj/marked (documentation)
+
+**Important conceptual contribution to the project**
+
+- Liu T, Ortiz J, Taing L, Meyer C, Lee B, Zhang Y, Shin H, Wong S, Ma J, Lei Y, et al. 2011. [Cistrome: an integrative platform for transcriptional regulation studies.](http://www.ncbi.nlm.nih.gov/pubmed/21859476) Genome Biology 12: R83.
+- Thomas Williams, Colin Kelley and others (2010). Gnuplot 4.4: an interactive plotting program. URL http://www.R-project.org/.
+- Kent, W.J., Sugnet, C.W., Furey, T.S., Roskin, K.M., Pringle, T.H., Zahler, A.M. and Haussler, a. D. (2002). [The Human Genome Browser at UCSC](http://www.ncbi.nlm.nih.gov/pubmed/12045153). Genome Research. 12:996–1006.
+- Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. (2010). [BigWig and BigBed: enabling browsing of large distributed datasets.](http://www.ncbi.nlm.nih.gov/pubmed/20639541) Bioinformatics. 1;26(17):2204-7
+- Nicol, J.W., Helt, G.A., Blanchard, S.G., Raja, A. and Loraine, A.E. (2009). [The Integrated Genome Browser: free software for distribution and exploration of genome-scale datasets.](http://www.ncbi.nlm.nih.gov/pubmed/19654113) Bioinformatics (Oxford, England). 25:2730–1.
+- Thorvaldsdóttir, H., Robinson, J.T. and Mesirov, J.P. (2012). [Integrative Genomics Viewer (IGV): high-performance genomics data visualization and exploration.](http://www.ncbi.nlm.nih.gov/pubmed/22517427) Briefings in bioinformatics. bbs017
+
+
+**Server deployment**
+
+- Shiny Server - https://github.com/rstudio/shiny-server
+- ShinyApps - https://github.com/rstudio/shinyapps
+
+
+**Publications containing figures made by SeqPlots**
+
+- Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J. [Extreme HOT regions are CpG-dense promoters in C. elegans and humans.](http://www.ncbi.nlm.nih.gov/pubmed/24653213) Genome Res 24(7):1138-1146 Jul 2014
+- Latorre I, Chesney MA, Garrigues JM, Stempor P et al. [The DREAM complex promotes gene body H2A.Z for target repression](http://www.ncbi.nlm.nih.gov/pubmed/25737279). Genes Dev 2015 Mar 1;29(5):495-500.
+
+
 
 
 
@@ -1648,18 +1627,18 @@ Glossary
 
 <div class="navbar navbar-fixed-top" style="display:none;" id="top">
   <div class="navbar-inner">
-    <a class="brand" href="#" style="margin-left: 50px; padding-bottom: 0px;">
-      <img src="img/icos.png" style="position: absolute; left:25px; top:-8px;"> SeqPlots help
+    <a class="brand" href="#" style="margin-left: 310px; padding-bottom: 0px;">
+      <img src="img/ico_full.png" style="height:35px; position: absolute; left:100px; top:-6px;">
     </a>
 
     <ul class="nav">
-      <li><a href="http://www.bioconductor.org/packages/release/bioc/html/seqplots.html">Get R package</a></li>
-      <li><a href="https://github.com/Przemol/seqplots_osx/releases/latest">Get Mac OS X boundle</a></li>
-      <li><a href="http://przemol.github.io/seqplots/SeqPlots.pdf">PDF documentation</a></li>
-      <li><a href="https://github.com/Przemol/seqplots">Project home</a></li>
-      <li><a href="https://github.com/Przemol/seqplots/wiki">Wiki pages</a></li>
+      <li><a href="http://www.bioconductor.org/packages/release/bioc/html/seqplots.html">SeqPlots on Bioconductor</a></li>
+      <li><a href="https://github.com/Przemol/seqplots">SeqPlots on GitHub</a></li>
       <li><a href="https://github.com/Przemol/seqplots/issues">Known issues</a></li>
       <li><a href="https://github.com/Przemol/seqplots/issues/new">Report an issue</a></li>
+      <!--
+      <li><a href="http://przemol.github.io/seqplots/SeqPlots.pdf">PDF user guide</a></li>
+      
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select theme<b class="caret"></b></a>
         <ul class="dropdown-menu">
@@ -1679,6 +1658,7 @@ Glossary
           <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">bootstrap</a></li>
         </ul>
       </li>
+      -->
     </ul>
   </div>
 </div>
