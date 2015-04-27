@@ -76,7 +76,7 @@ div[data-unique] {
 }
 
 </style>
-      
+
 <xmp theme="united" style="display:none;" id="md">
 
 Welcome to **SeqPlots**
@@ -88,11 +88,15 @@ Welcome to **SeqPlots**
 
 Summary
 -------
-SeqPlots is a web browser tool for plotting average track signals (e.g. read coverage) and sequence motif densities over user specified genomic features. The data can be visualized in linear plots with error estimates or as series of heatmaps that can be sorted and clustered. The software can be run locally on a desktop or deployed on a server and allows easy data sharing.  SeqPlots pre-calculates and stores binary result matrices, allowing rapid plot generation.  Plots can also be run in batch.   
+SeqPlots is a web browser tool for plotting average track signals (e.g. read coverage) and sequence motif densities over user specified genomic features. The data can be visualized in linear plots with error estimates or as series of heatmaps that can be sorted and clustered. The software can be run locally on a desktop or deployed on a server and allows easy data sharing.  SeqPlots pre-calculates and stores binary result matrices, allowing rapid plot generation.  Plots can also be run in batch.
 
 Availability
 ------------
 SeqPlots is primarily distributed as [Bioconductor package](http://www.bioconductor.org/packages/release/bioc/html/seqplots.html) available on platforms and operating systems supported by R project. Standalone [SeqPlot OS X bundle](https://github.com/Przemol/seqplots_osx/zipball/master), combing R and all required packages, is available as for Mac OS X (10.6 or higher). SeqPlots can also be deployed on a server using free and open sourced (GPL licensed) Shiny Server.
+
+Video presentation
+------------------
+<iframe width="853" height="480" src="https://www.youtube.com/embed/e29CMRriROM?VQ=HD720&amp;rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
 
 Live demo
 ---------
@@ -105,7 +109,7 @@ Demo limits:
 -	size of uploaded files is limited to 30MB, please bin or subset your tracks to fit within the limit (due to ShinyApps upload limitations)
 -	only *C. elegans* genome is available (due ShinyApps space limits)
 -	uploaded files will be deleted after some time
- 
+
 
 Key features
 ------------
@@ -122,7 +126,7 @@ Key features
 Issues and bugs
 ---------------
 Please visit [**issue tracker**](https://github.com/Przemol/seqplots/issues) to view currently know issues. To report a new issue/bug/feature request please click [**here**](https://github.com/Przemol/seqplots/issues/new). If the issue is connected to file upload please attach the file in the form.
-    
+
 
 Installation - Mac OS X app
 ==========================
@@ -132,7 +136,7 @@ Installation - Mac OS X app
 **System requirements**
 
 * Mac OS X 10.6 (Snow Leopard) or higher
-* Xquartz package for OS X 10.8 (Mountain Lion) and above: http://xquartz.macosforge.org/landing/ 
+* Xquartz package for OS X 10.8 (Mountain Lion) and above: http://xquartz.macosforge.org/landing/
 
     > More info:  http://support.apple.com/en-us/HT201341
 
@@ -157,7 +161,7 @@ To run the application right-click on SeqPlots icon and choose "Open", followed 
 
 > ![Seq2](img/03_01b.png)
 
-After starting SeqPlots the welcome screen displays the software version, the currently installed genomes and the data folder location. 
+After starting SeqPlots the welcome screen displays the software version, the currently installed genomes and the data folder location.
 
 > ![SeqPlots Mac OS X bindle - the welcome screen](img/03_02.png)
 
@@ -191,8 +195,8 @@ Package content
 Installation - Bioconductor package
 =======================
 
-> The Bioconductor package runs SeqPlots locally on desktop computers from R 
-environment. It is available for Windows, GNU/Linux and Mac OS X operating 
+> The Bioconductor package runs SeqPlots locally on desktop computers from R
+environment. It is available for Windows, GNU/Linux and Mac OS X operating
 systems. For further help information please refer to SeqPlots Bioconductor webpage:
 http://www.bioconductor.org/packages/release/bioc/html/seqplots.html
 
@@ -217,7 +221,7 @@ How to start
 To start SeqPlots web interface, start R and enter:
 
 ```
-library(seqplots) 
+library(seqplots)
 run()
 ```
 
@@ -242,7 +246,7 @@ Genomic packages can be installed using standard bioconductor installer
 genome (hg19):
 
 ```
-source("http://bioconductor.org/biocLite.R") 
+source("http://bioconductor.org/biocLite.R")
 biocLite("BSgenome.Hsapiens.UCSC.hg19")
 ```
 
@@ -301,7 +305,7 @@ Genomic packages can be installed using standard bioconductor installer
 genome (hg19):
 
 ```
-source("http://bioconductor.org/biocLite.R") 
+source("http://bioconductor.org/biocLite.R")
 biocLite("BSgenome.Hsapiens.UCSC.hg19")
 ```
 
@@ -318,16 +322,16 @@ from git repository by using
 can be set up with following R code:
 
 ```
-root <- /data/location dir.create(root) setwd(root) require(RSQLite) 
+root <- /data/location dir.create(root) setwd(root) require(RSQLite)
 
-sqlite <- dbDriver("SQLite") con <- dbConnect(sqlite, dbname = "files.sqlite") 
-dbGetQuery(con, "CREATE TABLE files (id INTEGER PRIMARY KEY ASC, name TEXT UNIQUE,    ctime TEXT, type TEXT, format TEXT, genome TEXT, user TEXT, comment TEXT)") 
-if (!dbListTables(con) == "files")      
-    warning("Database not created!")    
-dbDisconnect(con) 
+sqlite <- dbDriver("SQLite") con <- dbConnect(sqlite, dbname = "files.sqlite")
+dbGetQuery(con, "CREATE TABLE files (id INTEGER PRIMARY KEY ASC, name TEXT UNIQUE,    ctime TEXT, type TEXT, format TEXT, genome TEXT, user TEXT, comment TEXT)")
+if (!dbListTables(con) == "files")
+    warning("Database not created!")
+dbDisconnect(con)
 
-if (!all(sapply(c("removedFiles", "files", "publicFiles", "tmp"), dir.create)))      
-    warning("Folders not created!") 
+if (!all(sapply(c("removedFiles", "files", "publicFiles", "tmp"), dir.create)))
+    warning("Folders not created!")
 
 message("\nData loaction: ", root)
 ```
@@ -390,8 +394,8 @@ The following dependencies must be installed in R:
     53         base64enc    0.1-1
     54             class   7.3-10
     55              MASS   7.3-33
-    
-Quick start guide 
+
+Quick start guide
 =================
 
 1.  Start the SeqPlots. Refer to installation guides for platform
@@ -607,7 +611,7 @@ window:
     intervals within the plotting range will be summarized by
     calculating the mean. Higher values increases the speed of
     calculation and produces smoother plots, but decreases resolution.
-    
+
 2.  **`Choose the plot type`** - there are three options:
     -   *`Point Features`* - anchor plot on the start of a feature. By
         default, plot will be directional if strand information is
@@ -1058,7 +1062,7 @@ example below:
 > ![Batch plot usage example - multiple average plots aranged in 6x2
 > plot grid](img/09_04.png)
 
-Saving and loading  plotsets 
+Saving and loading  plotsets
 ============================
 
 If desired, SeqPlots will save plot sets as binary R files, allowing you
@@ -1178,7 +1182,7 @@ Error messages
 
 ```
 Problem with line N: "line_text" [internal_error]
-``` 
+```
 
 > The import of feature file (GFF or BED) was not successful due to mis-formatted file.
 
@@ -1186,8 +1190,8 @@ Problem with line N: "line_text" [internal_error]
 
 
 ```
-Chromosome names provided in the file does not match ones defined in reference genome. 
-INPUT: [chr3R, chr2L, chr2R, chr3L] 
+Chromosome names provided in the file does not match ones defined in reference genome.
+INPUT: [chr3R, chr2L, chr2R, chr3L]
 GENOME: [chrI, chrII, chrIII, chrIV, chrV, ...]
 ```
 
@@ -1209,11 +1213,11 @@ File already exists, change the name or remove old one.
 ```
 ERROR: solving row 300: negative widths are not allowed
 ```
-> The the row 300 have end coordinate smaller than beginning, hence the width in negative. To fix it the start and stop indicates should be swapped. This error often happens when negative strand (-) ranges are misformatted. 
+> The the row 300 have end coordinate smaller than beginning, hence the width in negative. To fix it the start and stop indicates should be swapped. This error often happens when negative strand (-) ranges are misformatted.
 
 -----------------
 
- 
+
 
 Version history
 ===============
@@ -1567,7 +1571,7 @@ Glossary
 References
 ==========
 
-> This section lists R, JavaScript and CSS libraries used by SeqPlots, important conceptual contributions to the software, and publication, where figures generated by SeqPlots are featured. 
+> This section lists R, JavaScript and CSS libraries used by SeqPlots, important conceptual contributions to the software, and publication, where figures generated by SeqPlots are featured.
 
 **R project and Bioconductor**
 
@@ -1575,7 +1579,7 @@ References
 -   Bioconductor: Open software development for computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others 2004, Genome Biology, Vol. 5, R80.  URL http://www.bioconductor.org/.
 - RStudio and Inc. (2014). shiny: Web Application Framework for R. R package version 0.10.1. http://shiny.rstudio.com/
 - **Other CRAN packages:** digest, DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, ggplot2, Cairo and parallel
-- **Bioconductor packages:** IRanges, BSgenome, Rsamtools, rtracklayer, GenomicRanges and Biostrings 
+- **Bioconductor packages:** IRanges, BSgenome, Rsamtools, rtracklayer, GenomicRanges and Biostrings
 
 **JavaScript and CSS**
 
@@ -1638,7 +1642,7 @@ References
       <li><a href="https://github.com/Przemol/seqplots/issues/new">Report an issue</a></li>
       <!--
       <li><a href="http://przemol.github.io/seqplots/SeqPlots.pdf">PDF user guide</a></li>
-      
+
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select theme<b class="caret"></b></a>
         <ul class="dropdown-menu">
