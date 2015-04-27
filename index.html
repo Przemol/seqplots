@@ -3,7 +3,7 @@
 
 <title>SeqPlots</title>
 
-<link rel="shortcut icon" href="favicon.ico">
+<link rel="shortcut icon" href="fav.ico">
 
 <style>
 /*
@@ -75,7 +75,7 @@ div[data-unique] {
     margin-top: -50px;
 }
 
-hr {
+hr.sectionend {
     padding: 0;
     border: none;
     border-top: medium double #333 !important;
@@ -83,8 +83,8 @@ hr {
     text-align: center;
 }
 
-hr:after {
-    content: "§";
+hr.sectionend:after {
+    content: url(fav.ico);
     display: inline-block;
     position: relative;
     top: -0.7em;
@@ -145,7 +145,7 @@ Issues and bugs
 ---------------
 Please visit [**issue tracker**](https://github.com/Przemol/seqplots/issues) to view currently know issues. To report a new issue/bug/feature request please click [**here**](https://github.com/Przemol/seqplots/issues/new). If the issue is connected to file upload please attach the file in the form.
 
-<hr />
+<hr class="sectionend" />
 
 Installation - Mac OS X app
 ==========================
@@ -210,7 +210,7 @@ Package content
 * Full genome sequences for Caenorhabditis elegans (UCSC version ce10) - BSgenome.Celegans.UCSC.ce10 R package
 * SeqPlots package
 
-<hr />
+<hr class="sectionend" />
 
 Installation - Bioconductor package
 =======================
@@ -274,7 +274,7 @@ Genome packages are required before uploading files for plotting. Full
 list of supported genomes is avilable here:
 http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
 
-<hr />
+<hr class="sectionend" />
 
 Installation - Deployment on the server
 ======================================
@@ -416,7 +416,7 @@ The following dependencies must be installed in R:
     54             class   7.3-10
     55              MASS   7.3-33
 
-<hr />
+<hr class="sectionend" />
 
 Quick start guide
 =================
@@ -514,7 +514,7 @@ Quick start guide
 
     ![Heatmap example](img/01_QuickStart/01_QuickStart_12.png)
 
-<hr />
+<hr class="sectionend" />
 
 Adding and managing files
 =========================
@@ -595,7 +595,7 @@ of file table removes a single file from the collection, while
 
 > ![The file collection window](img/05_04.png)
 
-<hr />
+<hr class="sectionend" />
 
 Running the plot-set jobs
 =========================
@@ -722,7 +722,7 @@ refer to the error section for further information.
 
 > ![The plot array](img/06/06_04.png)
 
-<hr />
+<hr class="sectionend" />
 
 Plotting
 ========
@@ -982,7 +982,7 @@ provide a list of these inputs.
     -   `Legend font size` - control the font size of common color key,
         inactive if heatmaps have individual color keys; 12 default
 
-<hr />
+<hr class="sectionend" />
 
 Getting PDFs and cluster info
 =============================
@@ -1052,7 +1052,7 @@ changed using the drop-down list to following settings:
 > ![The view on top part of batch operation and setup
 > panel](img/09_02.png)
 
-<hr />
+<hr class="sectionend" />
 
 Batch operations
 ================
@@ -1094,7 +1094,7 @@ example below:
 > ![Batch plot usage example - multiple average plots aranged in 6x2
 > plot grid](img/09_04.png)
 
-<hr />
+<hr class="sectionend" />
 
 Saving and loading  plotsets
 ============================
@@ -1193,7 +1193,7 @@ List of 2
 
 ```
 
-<hr />
+<hr class="sectionend" />
 
 Advanced options
 ================
@@ -1212,7 +1212,7 @@ Some additional SeqPlots options are located at very bottom of the `Batch operat
 
 * `Use ggplot2 graphics package for heatmaps` - uses GGplot2 (http://ggplot2.org/) graphics system to draw the heatmaps. This feature is experimental.
 
-<hr />
+<hr class="sectionend" />
 
 Error messages
 ==============
@@ -1254,7 +1254,7 @@ ERROR: solving row 300: negative widths are not allowed
 
 -----------------
 
-<hr />
+<hr class="sectionend" />
 
 Version history
 ===============
@@ -1553,7 +1553,7 @@ CHANGES IN VERSION 0.5.0
 
 -   Initial test and alpha releases
 
-<hr />
+<hr class="sectionend" />
 
 Glossary
 ========
@@ -1607,7 +1607,7 @@ Glossary
 
 -----------
 
-<hr />
+<hr class="sectionend" />
 
 References
 ==========
@@ -1665,7 +1665,7 @@ References
 - Latorre I, Chesney MA, Garrigues JM, Stempor P et al. [The DREAM complex promotes gene body H2A.Z for target repression](http://www.ncbi.nlm.nih.gov/pubmed/25737279). Genes Dev 2015 Mar 1;29(5):495-500.
 
 
-
+<hr class="sectionend" />
 
 
 </xmp>
