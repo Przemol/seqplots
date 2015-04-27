@@ -75,6 +75,24 @@ div[data-unique] {
     margin-top: -50px;
 }
 
+hr {
+    padding: 0;
+    border: none;
+    border-top: medium double #333 !important;
+    color: #333 !important;
+    text-align: center;
+}
+
+hr:after {
+    content: "§";
+    display: inline-block;
+    position: relative;
+    top: -0.7em;
+    font-size: 1.5em;
+    padding: 0 0.25em;
+    background: white;
+}
+
 </style>
 
 <xmp theme="united" style="display:none;" id="md">
@@ -127,6 +145,7 @@ Issues and bugs
 ---------------
 Please visit [**issue tracker**](https://github.com/Przemol/seqplots/issues) to view currently know issues. To report a new issue/bug/feature request please click [**here**](https://github.com/Przemol/seqplots/issues/new). If the issue is connected to file upload please attach the file in the form.
 
+<hr />
 
 Installation - Mac OS X app
 ==========================
@@ -191,6 +210,7 @@ Package content
 * Full genome sequences for Caenorhabditis elegans (UCSC version ce10) - BSgenome.Celegans.UCSC.ce10 R package
 * SeqPlots package
 
+<hr />
 
 Installation - Bioconductor package
 =======================
@@ -254,6 +274,7 @@ Genome packages are required before uploading files for plotting. Full
 list of supported genomes is avilable here:
 http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
 
+<hr />
 
 Installation - Deployment on the server
 ======================================
@@ -395,6 +416,8 @@ The following dependencies must be installed in R:
     54             class   7.3-10
     55              MASS   7.3-33
 
+<hr />
+
 Quick start guide
 =================
 
@@ -491,6 +514,7 @@ Quick start guide
 
     ![Heatmap example](img/01_QuickStart/01_QuickStart_12.png)
 
+<hr />
 
 Adding and managing files
 =========================
@@ -570,6 +594,8 @@ of file table removes a single file from the collection, while
 `Remove selected files` button will erase all selected files.
 
 > ![The file collection window](img/05_04.png)
+
+<hr />
 
 Running the plot-set jobs
 =========================
@@ -695,6 +721,8 @@ of error an informative error pop-up will explain the problem. Please
 refer to the error section for further information.
 
 > ![The plot array](img/06/06_04.png)
+
+<hr />
 
 Plotting
 ========
@@ -954,6 +982,8 @@ provide a list of these inputs.
     -   `Legend font size` - control the font size of common color key,
         inactive if heatmaps have individual color keys; 12 default
 
+<hr />
+
 Getting PDFs and cluster info
 =============================
 
@@ -1022,6 +1052,8 @@ changed using the drop-down list to following settings:
 > ![The view on top part of batch operation and setup
 > panel](img/09_02.png)
 
+<hr />
+
 Batch operations
 ================
 
@@ -1061,6 +1093,8 @@ example below:
 
 > ![Batch plot usage example - multiple average plots aranged in 6x2
 > plot grid](img/09_04.png)
+
+<hr />
 
 Saving and loading  plotsets
 ============================
@@ -1159,6 +1193,8 @@ List of 2
 
 ```
 
+<hr />
+
 Advanced options
 ================
 
@@ -1176,6 +1212,7 @@ Some additional SeqPlots options are located at very bottom of the `Batch operat
 
 * `Use ggplot2 graphics package for heatmaps` - uses GGplot2 (http://ggplot2.org/) graphics system to draw the heatmaps. This feature is experimental.
 
+<hr />
 
 Error messages
 ==============
@@ -1217,7 +1254,7 @@ ERROR: solving row 300: negative widths are not allowed
 
 -----------------
 
-
+<hr />
 
 Version history
 ===============
@@ -1516,6 +1553,8 @@ CHANGES IN VERSION 0.5.0
 
 -   Initial test and alpha releases
 
+<hr />
+
 Glossary
 ========
 
@@ -1567,6 +1606,8 @@ Glossary
     Also known as `pileups`.
 
 -----------
+
+<hr />
 
 References
 ==========
