@@ -44,7 +44,6 @@ Imports:
     shiny (>= 0.11.0),
     DBI,
     RSQLite,
-    RJSONIO,
     plotrix,
     fields,
     grid,
