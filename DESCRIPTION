@@ -56,7 +56,8 @@ Imports:
     S4Vectors,
     ggplot2,
     reshape2,
-    gridExtra
+    gridExtra,
+    jsonlite
 Type: Package
 Date: 2014-09-15
 LazyLoad: yes
