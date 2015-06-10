@@ -63,20 +63,7 @@ head <- tags$head(
 # 0) Plot panel ############################################################
 plotPanel <- conditionalPanel(
     condition = "output.showplot",
-   
-      div(class="btn-toolbar",
-        p("Download:", class='pull-left'),
-        div(
-          class="btn-group",
-          downloadLink('downloadPlot',     tags$span(tags$i(class="icon-picture icon-large icon-white"), 'Line plot'),   class="btn btn-small btn-success"),
-          downloadLink('downloadLegend', tags$span(tags$i(class="icon-info icon-large")), class="btn btn-small btn-success") #Legend
-        ),
-        div(
-          class="btn-group",
-          downloadLink('downloadHeatmap', tags$span(tags$i(class="icon-th icon-large icon-white"), 'Heatmap'), class="btn btn-small btn-info"),
-          downloadLink('downloadClusters', tags$span(tags$i(class="icon-sitemap icon-large")), class="btn btn-small btn-info") #'Clusters indicates'
-        )
-      ),
+  
       #div(class="hidden", actionButton('plotHmap', 'Plot')),
       #div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
       
@@ -334,6 +321,24 @@ batchPanel <- tabPanel(
     
 )
 
+btnToolbar <-  conditionalPanel(
+    condition = "output.showplot",
+        div(
+        class="btn-toolbar",
+        p("Download:", class='pull-left'),
+        div(
+            class="btn-group",
+            downloadLink('downloadPlot',     tags$span(tags$i(class="icon-picture icon-large icon-white"), 'Line plot'),   class="btn btn-small btn-success"),
+            downloadLink('downloadLegend', tags$span(tags$i(class="icon-info icon-large")), class="btn btn-small btn-success") #Legend
+        ),
+        div(
+            class="btn-group",
+            downloadLink('downloadHeatmap', tags$span(tags$i(class="icon-th icon-large icon-white"), 'Heatmap'), class="btn btn-small btn-info"),
+            downloadLink('downloadClusters', tags$span(tags$i(class="icon-sitemap icon-large")), class="btn btn-small btn-info") #'Clusters indicates'
+        )
+    )
+)
+
 # SIDEBAR  ##################################################
 sidebar <- wellPanel(
     plotPanel,
@@ -347,6 +352,8 @@ sidebar <- wellPanel(
         loadSavePanel,
         batchPanel
     ),
+    tags$hr(),
+    btnToolbar,
     div( class='hidden', textInput('clusters', 'Clusters'), textInput('sortingord', 'Sorting'), textInput('finalord', 'Sorting') )
 )
 
