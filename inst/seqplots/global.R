@@ -2,7 +2,7 @@
   suppressPackageStartupMessages({
     require(parallel)
     require(shiny)
-    require(RJSONIO)
+    require(jsonlite)
     require(RSQLite)
     require(rtracklayer)
     require(BSgenome)
