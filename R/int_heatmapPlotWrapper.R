@@ -74,7 +74,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     raster <- length(unique(diff(bins)))==1 & raster
     
     #colvec[ grepl('#ffffff', colvec) ] <- NA
-    ncollevel = 64
+    ncollevel = 1024
     if(length(colorspace)) {
         gcol <- colorRampPalette(colorspace)
     }else {
@@ -182,9 +182,15 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             if( is.na(o_max[i]) ) keycolor_lim[2] <- zmax 
                 else keycolor_lim[2] <- o_max[i]
             
-            col <- if( is.character(colvec[i]) ) 
-                    colorRampPalette(c('white', colvec[i]))(ncollevel) 
-                else gcol(ncollevel)
+            col <- if( is.character(colvec[[i]]) & !any(is.na(colvec[[i]])) ) {
+                if( length(colvec[[i]]) == 1 )    
+                    colorRampPalette(c('white', colvec[[i]]))(ncollevel)
+                else 
+                    colorRampPalette(colvec[[i]])(ncollevel)
+                    
+            } else {
+                gcol(ncollevel)
+            }
             
             
             imPlot2(
@@ -205,7 +211,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
         title( main=titles[i], cex.main=lfs ); box()
         if (!is.null(axhline)){
             #message(paste(axhline, collapse=', '))
-            abline(h=cumsum(axhline)+.5, lwd=4)
+            abline(h=cumsum(axhline)+.5, lwd=2)
             axis(
                 2, at=cumsum(axhline)-(axhline/2)+.5, 
                 labels=paste0('C', 1:length(axhline)), las = 1, 
@@ -216,7 +222,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
          
         }
         if (ln.v){
-            abline(v=c(0, e), lwd=2)
+            abline(v=c(0, e), lwd=0.5)
         }
         
         if(embed) break()
