@@ -56,7 +56,8 @@ Imports:
     ggplot2,
     reshape2,
     gridExtra,
-    jsonlite
+    jsonlite,
+    DT
 Type: Package
 Date: 2014-09-15
 LazyLoad: yes

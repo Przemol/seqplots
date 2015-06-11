@@ -21,3 +21,5 @@ if( length(GENOMES) )
 if(Sys.getenv('root') == '' ) {
   source('server_config.R')
 }
+
+options(shiny.deprecation.messages=FALSE)
