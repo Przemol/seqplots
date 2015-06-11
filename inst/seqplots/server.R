@@ -124,12 +124,15 @@ shinyServer(function(input, output, clientData, session) {
 	})
 	
 	#Determined if plot and dataset save menu shoud be visible
-	output$showplot <- reactive({ !is.null(input$plot_this) })
-	outputOptions(output, "showplot", suspendWhenHidden = FALSE)
+	observe({
+	    updateCheckboxInput(session, "showplot", value = !is.null(values$grfile))
+	})
 	
 	#Rendering the image
 	output$image <- renderImage({
-	  if(is.null(values$im)) return(list(src = '',contentType = 'image/png',alt = "No image to plot just yet"))
+	  if(is.null(values$im)) return(
+	      list(src = '', contentType = 'image/png',alt = "Select feature/track pair(s) and pres plot button")
+	  )
 	  list(
         src = values$im,
 	    contentType = 'image/png',
@@ -137,22 +140,21 @@ shinyServer(function(input, output, clientData, session) {
       )
 	}, deleteFile = TRUE)
   
-	#renderin data dependant plot controles
-  #outputOptions(output, "plotUI", suspendWhenHidden = FALSE)
+	#rendering data dependant plot controles
 	observe({
-				 if(!is.null(values$grfile)) {
-				   
-				   rn  <- range( values$grfile[[1]][[1]]$all_ind )
-				   rnY <- extendrange( sapply( unlist(values$grfile, recursive=FALSE, use.names=FALSE), '[[', 'means'), f=.1 )
-           
-				   updateNumericInput(session, 'xmin1', value = rn[1], min = rn[1], max = rn[2], step = 1L)
-				   updateNumericInput(session, 'xmin2', value = rn[2], min = rn[1], max = rn[2], step = 1L)
-           
-				   updateNumericInput(session, 'ymin1', value = rnY[1], step = 1L)
-				   updateNumericInput(session, 'ymin2', value = rnY[2], step = 1L)
-           
-					 #sliderInput('xlim', 'X-axis limits:', min=rn[1], max=rn[2], value=c(rn[1], rn[2]), step=1)
-				 }
+	    if(!is.null(values$grfile)) {
+	        
+	        rn  <- range( values$grfile[[1]][[1]]$all_ind )
+	        rnY <- extendrange( sapply( unlist(values$grfile, recursive=FALSE, use.names=FALSE), '[[', 'means'), f=.1 )
+	        
+	        updateNumericInput(session, 'xmin1', value = rn[1], min = rn[1], max = rn[2], step = 1L)
+	        updateNumericInput(session, 'xmin2', value = rn[2], min = rn[1], max = rn[2], step = 1L)
+	        
+	        updateNumericInput(session, 'ymin1', value = rnY[1], step = 1L)
+	        updateNumericInput(session, 'ymin2', value = rnY[2], step = 1L)
+	        
+	        #sliderInput('xlim', 'X-axis limits:', min=rn[1], max=rn[2], value=c(rn[1], rn[2]), step=1)
+	    }
 	})
 	
 

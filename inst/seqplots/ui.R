@@ -62,7 +62,7 @@ head <- tags$head(
 
 # 0) Plot panel ############################################################
 plotPanel <- conditionalPanel(
-    condition = "output.showplot",
+    condition = "input.showplot",
   
       #div(class="hidden", actionButton('plotHmap', 'Plot')),
       #div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
@@ -314,6 +314,7 @@ batchPanel <- tabPanel(
     checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE),
     checkboxInput("raster", "Use raster bitmap to plot heatmaps", TRUE),
     checkboxInput("ggplot", "Use ggplot2 graphics package for heatmaps [EXPERIMENTAL]", FALSE),
+    div(class='hidden', checkboxInput("showplot", "Show plot buttons", FALSE)),
     conditionalPanel(
         condition = tolower(as.character(Sys.getenv("SHINY_SERVER_VERSION") == '')),
         checkboxInput('setup_multithread', 'Use multithreading for calculations', .Platform$OS.type != 'windows')
@@ -322,7 +323,7 @@ batchPanel <- tabPanel(
 )
 
 btnToolbar <-  conditionalPanel(
-    condition = "output.showplot",
+    condition = "input.showplot",
         div(
         class="btn-toolbar",
         p("Download:", class='pull-left'),
@@ -335,7 +336,8 @@ btnToolbar <-  conditionalPanel(
             class="btn-group",
             downloadLink('downloadHeatmap', tags$span(tags$i(class="icon-th icon-large icon-white"), 'Heatmap'), class="btn btn-small btn-info"),
             downloadLink('downloadClusters', tags$span(tags$i(class="icon-sitemap icon-large")), class="btn btn-small btn-info") #'Clusters indicates'
-        )
+        ),
+        hlp("GettingPDFsandclusterinfo", 3)
     )
 )
 
