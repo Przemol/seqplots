@@ -106,7 +106,8 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     if(!is.null(dendro)) {
         #dendro  <- color_branches(dendro, k=length(axhline))
         mar2=par()$mar; if(indi){
-            par(mar=c(12.3, 4.1, 2.6, 2.1))
+            if(NP>2) par(mar=c(12.3, 4.1, 2.6, 2.1))
+            else par(mar=c(8.4, 4.1, 3.3, 2.1))
         } else {
             par(mar=c(3.0, 4.1, 2.3, 2.1))
         }
