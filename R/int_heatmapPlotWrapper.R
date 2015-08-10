@@ -73,7 +73,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     if(!is.null(dendro)) NP <- NP+1
     raster <- length(unique(diff(bins)))==1 & raster
     
-    #colvec[ grepl('#ffffff', colvec) ] <- NA
+    if( !is.null(colvec) ) colvec[ grepl('#FFFFFF', colvec) ] <- NA
     ncollevel = 1024
     if(length(colorspace)) {
         gcol <- colorRampPalette(colorspace)
