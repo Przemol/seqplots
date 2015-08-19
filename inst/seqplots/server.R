@@ -112,8 +112,8 @@ shinyServer(function(input, output, clientData, session) {
 	#Rendering plot table	
 	observe({
 		if( is.null(input$publicRdata) ) { return() }		
-		if( input$publicRdata == ' ' & is.null(values$calcID) )   { values$grfile <- NULL; return() }
-		if( input$publicRdata == ' ' | !nchar(input$publicRdata) )  { return() }
+		if( input$publicRdata == '' & is.null(values$calcID) )   { values$grfile <- NULL; return() }
+		if( input$publicRdata == '' | !nchar(input$publicRdata) )  { return() }
 		message('Loading Rdata file: "', input$publicRdata, '"')
 		values$grfile <- get(load( file.path('publicFiles', input$publicRdata )))
 		values$calcID <- NULL
@@ -376,7 +376,7 @@ shinyServer(function(input, output, clientData, session) {
 	
     #Get the list of save datasets
     updateSelectizeInput(
-      session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' '
+      session, 'publicRdata', choices = c( '', dir('publicFiles'))
     )
   
 	#Save dataset file logic
@@ -392,7 +392,7 @@ shinyServer(function(input, output, clientData, session) {
 					
 			message(paste('File saved: ',input$RdataSaveName))
 			session$sendCustomMessage("jsAlert", sprintf("File saved: %s", paste0(input$RdataSaveName, '.Rdata')) )
-			updateSelectizeInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' ')
+			updateSelectizeInput(session, 'publicRdata', choices = c( '', dir('publicFiles')))
 		})
 	})
 	
@@ -403,7 +403,7 @@ shinyServer(function(input, output, clientData, session) {
 			file.remove( file.path('publicFiles', input$publicRdata) )
 			message(paste('File removed: ',input$publicRdata))
 			session$sendCustomMessage("jsAlert", sprintf("File removed: %s", input$publicRdata) )
-			updateSelectizeInput(session, 'publicRdata',choices = c( ' ', dir('publicFiles')), selected =  ' ')
+			updateSelectizeInput(session, 'publicRdata',choices = c( '', dir('publicFiles')))
 		})
 	})
   
@@ -603,7 +603,7 @@ shinyServer(function(input, output, clientData, session) {
     if(length(query$load)){
       #session$sendCustomMessage("jsAlert", sprintf('loading file: [%s]', file.path('publicFiles', query$load)) )
       values$grfile <- get(load( file.path('publicFiles', query$load) ))
-      updateSelectizeInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  query$load)
+      updateSelectizeInput(session, 'publicRdata', choices = c( '', dir('publicFiles')), selected =  query$load)
       #session$sendCustomMessage("jsExec", sprintf("$('#publicRdata').val('%s').change()", query$load))
     }
     

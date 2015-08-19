@@ -1,5 +1,5 @@
 #if( !'seqplots' %in% .packages() ) {
-  suppressPackageStartupMessages({
+suppressPackageStartupMessages({
     require(parallel)
     require(shiny)
     require(jsonlite)
@@ -10,8 +10,9 @@
     require(Cairo)
     require(plotrix)
     require(fields)
+    library(RColorBrewer) 
     library(seqplots)
-  })
+})
 #}
 
 GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
