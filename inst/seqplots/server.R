@@ -131,7 +131,9 @@ shinyServer(function(input, output, clientData, session) {
 	#Rendering the image
 	output$image <- renderImage({
 	  if(is.null(values$im)) return(
-	      list(src = '', contentType = 'image/png',alt = "Select feature/track pair(s) and pres plot button")
+        list(src = '', contentType = 'image/png', 
+	         alt = 'Select feature/track pair(s) and press "Line plot" or "Heatmap" button'
+	    )
 	  )
 	  list(
         src = values$im,

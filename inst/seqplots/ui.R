@@ -63,16 +63,8 @@ head <- tags$head(
 # 0) Plot panel ############################################################
 plotPanel <- conditionalPanel(
     condition = "input.showplot",
-  
-      #div(class="hidden", actionButton('plotHmap', 'Plot')),
-      #div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
-      
-      #div(class="img", hlp("Plotting", top=0),   )
-    
     imageOutput(outputId = "image", width = "100%", height = "100%"),
-    
-    #,
-      p(div(
+    p(div(
           class="btn-toolbar", 
           HTML("Preview:"),
           tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(tags$i(class="icon-picture"), 'Line plot' )),
@@ -80,12 +72,7 @@ plotPanel <- conditionalPanel(
           actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"))), 
           hlp("Plotting", 3)
           
-      ), tags$hr())
-    
-
-    
-       
-    #)
+    ), tags$hr())
 )
 
 # 1) New plot panel ############################################################
@@ -322,11 +309,12 @@ batchPanel <- tabPanel(
     
 )
 
-btnToolbar <-  conditionalPanel(
+# DOWNLOAD BUTTONS  ##################################################
+
+btnToolbar <- conditionalPanel(
     condition = "input.showplot",
-        div(
-        class="btn-toolbar",
-        p("Download:", class='pull-left'),
+    div("Download:", class='pull-left', style="margin-top: 6px"),
+    div(class="btn-toolbar", 
         div(
             class="btn-group",
             downloadLink('downloadPlot',     tags$span(tags$i(class="icon-picture icon-large icon-white"), 'Line plot'),   class="btn btn-small btn-success"),
@@ -386,6 +374,8 @@ mainPanel <- div(
         )
     }
 )	
+
+
 
 # LAYOUT  ##################################################
 
