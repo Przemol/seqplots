@@ -3,7 +3,7 @@ mcCalcStart <- quote({
   if( is.null(input$TR_calculate) )  return()
   if( is.null( isolate(values$proc)) ) {
     values$calcID <- input$TR_calculate
-    updateSelectInput(session, 'publicRdata', 'Load public file', c( ' ', dir('publicFiles')), ' ')
+    updateSelectInput(session, 'publicRdata', 'Load public file', c( '', dir('publicFiles')))
     values$grfile <- NULL
     pb_max <- (length(input$f_tracks)+length(values$SFsetup))*length(input$f_features)
     values$progress <- shiny::Progress$new(session, min=0, max=pb_max)

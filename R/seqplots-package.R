@@ -137,7 +137,7 @@
 #' @import rtracklayer GenomicRanges BSgenome Biostrings IRanges GenomeInfoDb
 #' @import DBI RSQLite parallel Cairo jsonlite
 #' @import grid methods digest methods
-#' @import ggplot2 reshape2 gridExtra DT
+#' @import ggplot2 reshape2 gridExtra DT RColorBrewer
 #' @importFrom fields image.plot set.panel imageplot.info imageplot.setup 
 #' tim.colors poly.image
 #' @importFrom kohonen supersom

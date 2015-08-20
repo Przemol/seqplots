@@ -333,6 +333,9 @@ getPlotSetArray <- function(
             conint  <- apply(M, 2, function (n) {
                 qt(0.975,sum(!is.na(n)))*sd(n,na.rm=TRUE)/sqrt(sum(!is.na(n)))
             })
+            #conint  <- apply(M, 2, function (n) {
+            #    quantile(n, .975, na.rm = TRUE)*mad(n, na.rm = TRUE)/sqrt(sum(!is.na(n)))
+            #})
             conint[is.na(conint)] <- 0
             
             if(verbose) lvl2m("Exporting results...")
