@@ -570,6 +570,56 @@ shinyServer(function(input, output, clientData, session) {
 
   })
   
+  observe({
+      if( !input$genomes_uninstall ) return()
+      isolate({
+          progress <- shiny::Progress$new(session, min=1, max=3)
+          on.exit(progress$close())
+          progress$set('Uninstalling packages: ', paste0(input$inst_genomes, collapse = '  '), value = 2)
+          sapply(.libPaths(), function(lib) 
+              try(remove.packages(input$inst_genomes, lib = lib))
+          )
+          updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
+          GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+          if( length(GENOMES) ) 
+              names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+      })
+  })
+  
+  observe({
+      if( is.null(input$genomes_file) ) return()
+      isolate({
+          progress <- shiny::Progress$new(session, min=1, max=3)
+          on.exit(progress$close())
+          progress$set('Installing packages from file ', value = 2)
+          install.packages(
+              input$genomes_file$datapath, repos = NULL, 
+              lib=file.path(Sys.getenv('root'), 'genomes'), type='source'
+          )
+          updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
+          GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+          if( length(GENOMES) ) 
+              names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+      })
+  })
+  
+  observe({
+      if( !input$genomes_install ) return()
+      isolate({
+          progress <- shiny::Progress$new(session, min=1, max=3)
+          on.exit(progress$close())
+          progress$set('Installing packages: ', paste0(input$avil_geneomes, collapse = '  '), value = 2)
+          BiocInstaller::biocLite(
+              input$avil_geneomes, suppressUpdates=TRUE, ask=FALSE, 
+              lib=file.path(Sys.getenv('root'), 'genomes')
+          )
+          updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
+          GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+          if( length(GENOMES) ) 
+              names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+      })
+  })
+  
   #Exit button logic
   observe({
     if( Sys.getenv("SHINY_SERVER_VERSION") != '') return()

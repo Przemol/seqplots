@@ -322,6 +322,28 @@ batchPanel <- tabPanel(
     
 )
 
+#8) Genomes panel  ##################################################
+genomesPanel <- tabPanel(
+    tags$i(class="fa fa-paw fa-lg", 'data-placement'="right", 'data-toggle'="tooltip", title="Manage reference genomes"), #"Batch", 
+    h5(tags$u('Manage reference genomes'), hlp("Genomes")), 
+    
+    checkboxGroupInput('inst_genomes', 'Installed genomes:', installed.genomes()),
+    actionButton('genomes_uninstall', label = 'Uninstall selected', icon = icon('remove'), class='btn-danger'),
+    tags$hr(),
+    selectizeInput(
+        'avil_geneomes', "Available genomes:", available.genomes(), 
+        multiple = TRUE, options = list(
+            plugins = list('remove_button'),
+            placeholder = 'Select genomes (type to filter)'
+        ) 
+    ),
+    # plugins = list('remove_button', 'drag_drop') => includeScript("www/jquery-ui.js")
+    actionButton('genomes_install', label = 'Install selected', icon = icon('plus'), class='btn-success'),
+    tags$hr(),
+    fileInput('genomes_file', 'Install from file:')
+    
+)
+
 # DOWNLOAD BUTTONS  ##################################################
 
 btnToolbar <- conditionalPanel(
@@ -353,7 +375,8 @@ sidebar <- wellPanel(
         keysLabelsAndColors,
         heatmapPanel,
         loadSavePanel,
-        batchPanel
+        batchPanel,
+        genomesPanel
     ),
     tags$hr(),
     btnToolbar,
