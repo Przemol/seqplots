@@ -44,6 +44,22 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
         ylim <- rev(range(which(fromJSON(input$clusters)[fromJSON(input$finalord)]==n)))
     }
     
+    if( !nchar(input$heat_colorspace)) {
+        colorspace <- NULL
+    } else if(input$heat_colorspace == 'Custom') {
+        colorspace <- c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max)
+    } else if(input$heat_colorspace %in% rownames(brewer.pal.info)) {
+        colorspace <- brewer.pal(brewer.pal.info[input$heat_colorspace,1], input$heat_colorspace)
+    } else if(input$heat_colorspace == 'jet') {
+        colorspace <- c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000") 
+    } else if( grepl('\\.', input$heat_colorspace) ) {
+        colorspace <- get(input$heat_colorspace)(11)
+    } else {
+        colorspace <- NULL
+    }
+    
+    if( input$heat_colorspace_rev ) colorspace <- rev(colorspace)
+    
     out <- seqplots::plotHeatmap(
         pl, 
         main = title, 
@@ -74,7 +90,7 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
         indi = input$indi, 
         s = input$hsccoef,
         colvec=if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL,
-        clspace=if(input$heat_colorspace) c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max) else NULL,
+        clspace=colorspace,
         raster=input$raster,
         ggplot=input$ggplot,
         ylim=ylim

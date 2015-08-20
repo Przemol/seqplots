@@ -1,5 +1,5 @@
 #if( !'seqplots' %in% .packages() ) {
-  suppressPackageStartupMessages({
+suppressPackageStartupMessages({
     require(parallel)
     require(shiny)
     require(jsonlite)
@@ -10,16 +10,19 @@
     require(Cairo)
     require(plotrix)
     require(fields)
+    library(RColorBrewer) 
     library(seqplots)
-  })
+})
 #}
 
-GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-if( length(GENOMES) ) 
-  names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
 
 if(Sys.getenv('root') == '' ) {
   source('server_config.R')
 }
+.libPaths(c( .libPaths(), file.path(Sys.getenv('root'), 'genomes') ))
+
+GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+if( length(GENOMES) ) 
+    names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
 
 options(shiny.deprecation.messages=FALSE)

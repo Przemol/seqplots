@@ -112,8 +112,8 @@ shinyServer(function(input, output, clientData, session) {
 	#Rendering plot table	
 	observe({
 		if( is.null(input$publicRdata) ) { return() }		
-		if( input$publicRdata == ' ' & is.null(values$calcID) )   { values$grfile <- NULL; return() }
-		if( input$publicRdata == ' ' | !nchar(input$publicRdata) )  { return() }
+		if( input$publicRdata == '' & is.null(values$calcID) )   { values$grfile <- NULL; return() }
+		if( input$publicRdata == '' | !nchar(input$publicRdata) )  { return() }
 		message('Loading Rdata file: "', input$publicRdata, '"')
 		values$grfile <- get(load( file.path('publicFiles', input$publicRdata )))
 		values$calcID <- NULL
@@ -131,7 +131,9 @@ shinyServer(function(input, output, clientData, session) {
 	#Rendering the image
 	output$image <- renderImage({
 	  if(is.null(values$im)) return(
-	      list(src = '', contentType = 'image/png',alt = "Select feature/track pair(s) and pres plot button")
+        list(src = '', contentType = 'image/png', 
+	         alt = 'Select feature/track pair(s) and press "Line plot" or "Heatmap" button'
+	    )
 	  )
 	  list(
         src = values$im,
@@ -374,7 +376,7 @@ shinyServer(function(input, output, clientData, session) {
 	
     #Get the list of save datasets
     updateSelectizeInput(
-      session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' '
+      session, 'publicRdata', choices = c( '', dir('publicFiles'))
     )
   
 	#Save dataset file logic
@@ -390,7 +392,7 @@ shinyServer(function(input, output, clientData, session) {
 					
 			message(paste('File saved: ',input$RdataSaveName))
 			session$sendCustomMessage("jsAlert", sprintf("File saved: %s", paste0(input$RdataSaveName, '.Rdata')) )
-			updateSelectizeInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  ' ')
+			updateSelectizeInput(session, 'publicRdata', choices = c( '', dir('publicFiles')))
 		})
 	})
 	
@@ -401,7 +403,7 @@ shinyServer(function(input, output, clientData, session) {
 			file.remove( file.path('publicFiles', input$publicRdata) )
 			message(paste('File removed: ',input$publicRdata))
 			session$sendCustomMessage("jsAlert", sprintf("File removed: %s", input$publicRdata) )
-			updateSelectizeInput(session, 'publicRdata',choices = c( ' ', dir('publicFiles')), selected =  ' ')
+			updateSelectizeInput(session, 'publicRdata',choices = c( '', dir('publicFiles')))
 		})
 	})
   
@@ -568,6 +570,56 @@ shinyServer(function(input, output, clientData, session) {
 
   })
   
+  observe({
+      if( !input$genomes_uninstall ) return()
+      isolate({
+          progress <- shiny::Progress$new(session, min=1, max=3)
+          on.exit(progress$close())
+          progress$set('Uninstalling packages: ', paste0(input$inst_genomes, collapse = '  '), value = 2)
+          sapply(.libPaths(), function(lib) 
+              try(remove.packages(input$inst_genomes, lib = lib))
+          )
+          updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
+          GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+          if( length(GENOMES) ) 
+              names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+      })
+  })
+  
+  observe({
+      if( is.null(input$genomes_file) ) return()
+      isolate({
+          progress <- shiny::Progress$new(session, min=1, max=3)
+          on.exit(progress$close())
+          progress$set('Installing packages from file ', value = 2)
+          install.packages(
+              input$genomes_file$datapath, repos = NULL, 
+              lib=file.path(Sys.getenv('root'), 'genomes'), type='source'
+          )
+          updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
+          GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+          if( length(GENOMES) ) 
+              names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+      })
+  })
+  
+  observe({
+      if( !input$genomes_install ) return()
+      isolate({
+          progress <- shiny::Progress$new(session, min=1, max=3)
+          on.exit(progress$close())
+          progress$set('Installing packages: ', paste0(input$avil_geneomes, collapse = '  '), value = 2)
+          BiocInstaller::biocLite(
+              input$avil_geneomes, suppressUpdates=TRUE, ask=FALSE, 
+              lib=file.path(Sys.getenv('root'), 'genomes')
+          )
+          updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
+          GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+          if( length(GENOMES) ) 
+              names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+      })
+  })
+  
   #Exit button logic
   observe({
     if( Sys.getenv("SHINY_SERVER_VERSION") != '') return()
@@ -601,7 +653,7 @@ shinyServer(function(input, output, clientData, session) {
     if(length(query$load)){
       #session$sendCustomMessage("jsAlert", sprintf('loading file: [%s]', file.path('publicFiles', query$load)) )
       values$grfile <- get(load( file.path('publicFiles', query$load) ))
-      updateSelectizeInput(session, 'publicRdata', choices = c( ' ', dir('publicFiles')), selected =  query$load)
+      updateSelectizeInput(session, 'publicRdata', choices = c( '', dir('publicFiles')), selected =  query$load)
       #session$sendCustomMessage("jsExec", sprintf("$('#publicRdata').val('%s').change()", query$load))
     }
     

@@ -63,16 +63,8 @@ head <- tags$head(
 # 0) Plot panel ############################################################
 plotPanel <- conditionalPanel(
     condition = "input.showplot",
-  
-      #div(class="hidden", actionButton('plotHmap', 'Plot')),
-      #div(class="img hidden", plotOutput(outputId = "plot", width = "1240px", height = "720px") ),
-      
-      #div(class="img", hlp("Plotting", top=0),   )
-    
     imageOutput(outputId = "image", width = "100%", height = "100%"),
-    
-    #,
-      p(div(
+    p(div(
           class="btn-toolbar", 
           HTML("Preview:"),
           tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(tags$i(class="icon-picture"), 'Line plot' )),
@@ -80,12 +72,7 @@ plotPanel <- conditionalPanel(
           actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"))), 
           hlp("Plotting", 3)
           
-      ), tags$hr())
-    
-
-    
-       
-    #)
+    ), tags$hr())
 )
 
 # 1) New plot panel ############################################################
@@ -233,9 +220,22 @@ heatmapPanel <- tabPanel(
         condition = "input.indi == true",
         checkboxInput('heat_min_max', 'Set individual color key limits', FALSE)
     ),
-    checkboxInput('heat_colorspace', 'Set default colorspace', FALSE),
+    div(class='row',
+        div(class='col-md-9',
+            selectizeInput(
+                'heat_colorspace', 'Set colorspace', c(
+                    '', 'Custom', rownames(RColorBrewer::brewer.pal.info),
+                    'Jet colors'='jet', 'Topo colors'='topo.colors',
+                    'Terrain colors'='terrain.colors', 'Heat colors'='heat.colors'
+                ), selected = NULL, options = list(placeholder = 'Select colorspace (type to filter)')
+            )
+        ),
+        div(class='col-md-3',
+            tags$br(), checkboxInput('heat_colorspace_rev', 'Reverse', FALSE)
+        )
+    ),
     conditionalPanel( 
-        condition = "input.heat_colorspace == true",
+        condition = "input.heat_colorspace == 'Custom'",
         div(class='row', 
             div(class='col-md-4', HTML('Min: <input type="color" class="color {hash:true}" id="heat_csp_min" value="#FFFFFF" style="width:40px;" title=""/>')),
             div(class='col-md-4', HTML('Mid: <input type="color" class="color {hash:true}" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
@@ -249,12 +249,12 @@ heatmapPanel <- tabPanel(
 loadSavePanel <- tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
          h5(tags$u('Load or save plotset'), hlp("Savingandloadingplotsets")),
          selectizeInput(
-             'publicRdata', 'Load saved plot set:', ' ', ' ', 
+             'publicRdata', 'Load saved plot set:', '', 
              options=list(
-                 placeholder = 'Type to filter'
+                 placeholder = 'Select dataset (type to filter)'
              )
          ),
-         conditionalPanel("input.publicRdata !== ' '", 
+         conditionalPanel("input.publicRdata !== ''", 
                           actionButton('RdataRemoveButton', 'Remove dataset', icon=icon('trash-o')) ,
                           downloadButton('RdataDoenloadButton', 'Download dataset') 
          ), tags$hr(),
@@ -322,11 +322,34 @@ batchPanel <- tabPanel(
     
 )
 
-btnToolbar <-  conditionalPanel(
+#8) Genomes panel  ##################################################
+genomesPanel <- tabPanel(
+    tags$i(class="fa fa-paw fa-lg", 'data-placement'="right", 'data-toggle'="tooltip", title="Manage reference genomes"), #"Batch", 
+    h5(tags$u('Manage reference genomes'), hlp("Genomes")), 
+    
+    checkboxGroupInput('inst_genomes', 'Installed genomes:', installed.genomes()),
+    actionButton('genomes_uninstall', label = 'Uninstall selected', icon = icon('remove'), class='btn-danger'),
+    tags$hr(),
+    selectizeInput(
+        'avil_geneomes', "Available genomes:", available.genomes(), 
+        multiple = TRUE, options = list(
+            plugins = list('remove_button'),
+            placeholder = 'Select genomes (type to filter)'
+        ) 
+    ),
+    # plugins = list('remove_button', 'drag_drop') => includeScript("www/jquery-ui.js")
+    actionButton('genomes_install', label = 'Install selected', icon = icon('plus'), class='btn-success'),
+    tags$hr(),
+    fileInput('genomes_file', 'Install from file:')
+    
+)
+
+# DOWNLOAD BUTTONS  ##################################################
+
+btnToolbar <- conditionalPanel(
     condition = "input.showplot",
-        div(
-        class="btn-toolbar",
-        p("Download:", class='pull-left'),
+    div("Download:", class='pull-left', style="margin-top: 6px"),
+    div(class="btn-toolbar", 
         div(
             class="btn-group",
             downloadLink('downloadPlot',     tags$span(tags$i(class="icon-picture icon-large icon-white"), 'Line plot'),   class="btn btn-small btn-success"),
@@ -352,7 +375,8 @@ sidebar <- wellPanel(
         keysLabelsAndColors,
         heatmapPanel,
         loadSavePanel,
-        batchPanel
+        batchPanel,
+        genomesPanel
     ),
     tags$hr(),
     btnToolbar,
@@ -386,6 +410,8 @@ mainPanel <- div(
         )
     }
 )	
+
+
 
 # LAYOUT  ##################################################
 
