@@ -21,8 +21,4 @@ if(Sys.getenv('root') == '' ) {
 }
 .libPaths(c( .libPaths(), file.path(Sys.getenv('root'), 'genomes') ))
 
-GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-if( length(GENOMES) ) 
-    names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
-
 options(shiny.deprecation.messages=FALSE)

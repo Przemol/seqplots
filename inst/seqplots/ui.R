@@ -81,7 +81,7 @@ newPlotPanel <-  tabPanel(
     ,h5('Upload files:', hlp("adding-and-managing-files"))
     ,helpText( "Add signal tracks (bigWig, wig or bedGraph) and feature files (GFF and BED) to the file collection.") # TIP: You can add multiple files at once.
     ,HTML('<button type="button" data-toggle="modal" data-target="#fileUploadModal" class="btn btn-success"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</button>')
-    ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES, selected = 'ce10', selectize = FALSE)) #This should stay for clonning, unless I can figure out something better using JS
+    ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", NULL, selectize = FALSE)) #This should stay for clonning, unless I can figure out something better using JS
     ,tags$hr()
     
     ,h5('Create new plot array:', hlp("running-the-plot-set-jobs"))

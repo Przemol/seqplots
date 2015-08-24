@@ -30,6 +30,8 @@ if( Sys.getenv('root') != '' ) {
   con <- dbConnect(sqlite, dbname = 'files.sqlite')
 }
 
+
+
 shinyServer(function(input, output, clientData, session) {
 	
   #Test if png is working, require x11 addon on newer Mac OS X if necessary
@@ -38,7 +40,10 @@ shinyServer(function(input, output, clientData, session) {
   #Reactive values definition
   subplotSetup <- reactiveValues( )
   urlSetup <- reactiveValues( )
-  values <- reactiveValues( grfile=NULL, calcID=NULL, plotMsg=NULL, refFileGrids=NULL, proc=NULL, im=NULL, clusters=NULL, SFsetup=list(), plotHistory=list() )
+  GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+  if( length(GENOMES) ) 
+      names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+  values <- reactiveValues( grfile=NULL, calcID=NULL, plotMsg=NULL, refFileGrids=NULL, proc=NULL, im=NULL, clusters=NULL, SFsetup=list(), plotHistory=list(), genomes=GENOMES )
   
   #Source functions
   if( Sys.getenv('web') != '' ) setwd(Sys.getenv('web'))
@@ -57,6 +62,10 @@ shinyServer(function(input, output, clientData, session) {
 	    isolate( eval(parse(text=input$debug_cmd)) )
 	  })
   }
+    observe({
+        updateSelectInput(session, "file_genome", choices = values$genomes)
+    })
+  
 	
   #Add [S]equence [F]eature setup and reset observers
   observe({
@@ -583,6 +592,8 @@ shinyServer(function(input, output, clientData, session) {
           GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
           if( length(GENOMES) ) 
               names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+          values$genomes <- GENOMES
+          #updateSelectInput(session, "file_genome", choices = GENOMES)
       })
   })
   
@@ -600,6 +611,8 @@ shinyServer(function(input, output, clientData, session) {
           GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
           if( length(GENOMES) ) 
               names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+          values$genomes <- GENOMES
+          
       })
   })
   
@@ -617,6 +630,7 @@ shinyServer(function(input, output, clientData, session) {
           GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
           if( length(GENOMES) ) 
               names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+          values$genomes <- GENOMES
       })
   })
   
