@@ -325,7 +325,7 @@ batchPanel <- tabPanel(
 #8) Genomes panel  ##################################################
 genomesPanel <- tabPanel(
     tags$i(class="fa fa-paw fa-lg", 'data-placement'="right", 'data-toggle'="tooltip", title="Manage reference genomes"), #"Batch", 
-    h5(tags$u('Manage reference genomes'), hlp("genomes-mamagment")), 
+    h5(tags$u('Manage reference genomes'), hlp("genomes-managment")), 
     
     checkboxGroupInput('inst_genomes', 'Installed genomes:', installed.genomes()),
     actionButton('genomes_uninstall', label = 'Uninstall selected', icon = icon('remove'), class='btn-danger'),
