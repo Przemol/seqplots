@@ -70,7 +70,7 @@ plotPanel <- conditionalPanel(
           tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(tags$i(class="icon-picture"), 'Line plot' )),
           tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-info', tags$span(tags$i(class="icon-th"), 'Heatmap' )), 
           actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"))), 
-          hlp("Plotting", 3)
+          hlp("plotting", 3)
           
     ), tags$hr())
 )
@@ -78,18 +78,18 @@ plotPanel <- conditionalPanel(
 # 1) New plot panel ############################################################
 newPlotPanel <-  tabPanel(
     value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plot set/Upload files") #, "New"
-    ,h5('Upload files:', hlp("Addingandmanagingfiles"))
+    ,h5('Upload files:', hlp("adding-and-managing-files"))
     ,helpText( "Add signal tracks (bigWig, wig or bedGraph) and feature files (GFF and BED) to the file collection.") # TIP: You can add multiple files at once.
     ,HTML('<button type="button" data-toggle="modal" data-target="#fileUploadModal" class="btn btn-success"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</button>')
-    ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", GENOMES, selected = 'ce10', selectize = FALSE)) #This should stay for clonning, unless I can figure out something better using JS
+    ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", NULL, selectize = FALSE)) #This should stay for clonning, unless I can figure out something better using JS
     ,tags$hr()
     
-    ,h5('Create new plot array:', hlp("Runningtheplot-setjobs"))
+    ,h5('Create new plot array:', hlp("running-the-plot-set-jobs"))
     ,helpText( "Choose signal tracks and feature files from the collection to use for calculating average plots and heat maps.")
     ,HTML('<button type="button" data-toggle="modal" data-target="#calcModal" class="btn btn-primary"><i class="icon-magic icon-large icon-white"></i> New plot set</button>')
     ,uiOutput('plot_message')
     ,if (Sys.getenv("SHINY_SERVER_VERSION") != '') {div(
-        tags$hr(), h5('Soft restart the server session', hlp("Advancedoptions")),
+        tags$hr(), h5('Soft restart the server session', hlp("advanced-options")),
         helpText( "The button will perform soft reset of the server. 
                                              This means a new session will be created for you and other active users will use their existing session(s) until they close the web browser.
                                              Use this option if you experience performance issues or errors."),
@@ -110,7 +110,7 @@ newPlotPanel <-  tabPanel(
 titlesAndAxis <- tabPanel(
     value = 'panel3', 
     title=tags$i(class="icon-font icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Title and axis"),
-    h5(tags$u('Title and axis'), hlp("Titlesandaxispanel"), style='margin-bottom:15px'),
+    h5(tags$u('Title and axis'), hlp("titles-and-axis-panel"), style='margin-bottom:15px'),
     div(class='row', 
         div(class='col-md-4', textInput("title", "Title:", ""),         
             numericInput("title_font_size", "Title size:",    min=1, max=48, value=20, step=1) ), #sliderInput
@@ -135,7 +135,7 @@ titlesAndAxis <- tabPanel(
 guideLinesAndDataScaling <- tabPanel(
     value = 'panel4', 
     title=tags$i(class="icon-tags icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Guide lines and data scaling"),# "Setup", 
-    h5(tags$u('Guide lines and data scaling'), hlp("Guidelinesanddatascaling")),
+    h5(tags$u('Guide lines and data scaling'), hlp("guide-lines-and-data-scaling")),
     selectInput('scale_signal', 'Transform signal:', c( 'Do not transform', 'Log2 transform')), #, 'Z-score transform')),
     checkboxInput("lnv", "Show vertical guide line", TRUE),
     div(class='row',  
@@ -149,7 +149,7 @@ guideLinesAndDataScaling <- tabPanel(
 keysLabelsAndColors <- tabPanel(
     value = 'panel5', 
     title=tags$i(class="icon-list-ol icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Keys, labels and colors"), #"Subplots",
-    h5(tags$u('Keys, labels and colors'), hlp("Keys,labelsandcolorspanel")),
+    h5(tags$u('Keys, labels and colors'), hlp("keys-labels-and-colors-panel")),
     checkboxGroupInput('subplot_options', 'Set sub-plot specific:', c('Colors'='color', 'Label'='label', 'Priority/Order'='prior'), selected = NULL),
     
     div(class='row',  
@@ -171,7 +171,7 @@ keysLabelsAndColors <- tabPanel(
 heatmapPanel <- tabPanel(
     value = 'panel6', 
     title=tags$i(class="icon-th icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Heatmap setup"), #("Sizes", 
-    h5(tags$u('Heatmap setup'), hlp("Heatmapsetuptab")),
+    h5(tags$u('Heatmap setup'), hlp("heatmaps")),
     div( class='hidden', checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]") ), 
     #checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
     selectInput("img_sort", "Sort heatmap rows by mean signal", c('do not sort', "increasing", "decreasing"), 
@@ -247,7 +247,7 @@ heatmapPanel <- tabPanel(
 
 # 6) Save/load panel ################################################## 
 loadSavePanel <- tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-large icon-blcak",  'data-placement'="right", 'data-toggle'="tooltip", title="Load/manage saved plotset"), #"Saved",										
-         h5(tags$u('Load or save plotset'), hlp("Savingandloadingplotsets")),
+         h5(tags$u('Load or save plotset'), hlp("saving-and-loading-plotsets")),
          selectizeInput(
              'publicRdata', 'Load saved plot set:', '', 
              options=list(
@@ -266,7 +266,7 @@ loadSavePanel <- tabPanel(value = 'panel2', title=tags$i(class="icon-save icon-l
 batchPanel <- tabPanel(
     tags$i(class="icon-gears icon-blcak icon-large", 'data-placement'="right", 'data-toggle'="tooltip", title="Batch operations and setup"), #"Batch", 
     
-    h5(tags$u('Output PDF paper type or size:'), hlp("PDFoutputsize")), 
+    h5(tags$u('Output PDF paper type or size:'), hlp("pdf-output-size")), 
 
     selectInput(
         'paper', NULL, width=200,
@@ -287,7 +287,7 @@ batchPanel <- tabPanel(
         downloadLink('downloadHistory',   tags$span(tags$i(class="icon-time icon-large"), 'Get plot history'),   class="btn btn-small btn-success"),
         tags$hr()
     ),
-    h5(tags$u('Batch operations:'), hlp("Batchoperations")),   
+    h5(tags$u('Batch operations:'), hlp("batch-operations")),   
     div(class='row',  
         div(class='col-md-5', selectInput('batch_what', 'Plot', c('lineplots', 'heatmaps')) ),  
         div(class='col-md-5', selectInput('batch_how', 'by', c('single', 'rows', 'columns')) )                        
@@ -308,7 +308,7 @@ batchPanel <- tabPanel(
     ),
     tags$hr(style='margin-top:10px;'),
     #checkboxInput('setup_multithread', 'Use multithreading for calculations', (Sys.getenv("SHINY_SERVER_VERSION") != ''))
-    h5(tags$u('Advanced options:'), hlp("Advancedoptions")),
+    h5(tags$u('Advanced options:'), hlp("advanced-options")),
     checkboxInput('pty_batch', 'Keep 1:1 aspect ratio in batch mode', TRUE),
     checkboxInput('pty', 'Always keep 1:1 aspect ratio', FALSE),
     checkboxInput("reactive", "Reactive plotting [ctrl+R]", FALSE),
@@ -325,7 +325,7 @@ batchPanel <- tabPanel(
 #8) Genomes panel  ##################################################
 genomesPanel <- tabPanel(
     tags$i(class="fa fa-paw fa-lg", 'data-placement'="right", 'data-toggle'="tooltip", title="Manage reference genomes"), #"Batch", 
-    h5(tags$u('Manage reference genomes'), hlp("Genomes")), 
+    h5(tags$u('Manage reference genomes'), hlp("genomes-managment")), 
     
     checkboxGroupInput('inst_genomes', 'Installed genomes:', installed.genomes()),
     actionButton('genomes_uninstall', label = 'Uninstall selected', icon = icon('remove'), class='btn-danger'),
@@ -360,7 +360,7 @@ btnToolbar <- conditionalPanel(
             downloadLink('downloadHeatmap', tags$span(tags$i(class="icon-th icon-large icon-white"), 'Heatmap'), class="btn btn-small btn-info"),
             downloadLink('downloadClusters', tags$span(tags$i(class="icon-sitemap icon-large")), class="btn btn-small btn-info") #'Clusters indicates'
         ),
-        hlp("GettingPDFsandclusterinfo", 3)
+        hlp("getting-pdfs-and-cluster-info", 3)
     )
 )
 

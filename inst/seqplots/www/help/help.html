@@ -1,1739 +1,1385 @@
 <!DOCTYPE html>
-<html>
 
-<title>SeqPlots</title>
-
-<link rel="shortcut icon" href="fav.ico">
-
-<style>
-/*
- * jquery.tocify.css 1.9.0
- * Author: @gregfranko
- */
-
-/* The Table of Contents container element */
-.tocify {
-    width: 20%;
-    max-height: 90%;
-    overflow: auto;
-    overflow-x: hidden;
-    margin-left: 2%;
-    position: fixed;
-    border: 1px solid #ccc;
-    webkit-border-radius: 6px;
-    moz-border-radius: 6px;
-    border-radius: 6px;
-}
-
-/* The Table of Contents is composed of multiple nested unordered lists.  These styles remove the default styling of an unordered list because it is ugly. */
-.tocify ul, .tocify li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border: none;
-    line-height: 30px;
-}
-
-/* Top level header elements */
-.tocify-header {
-    text-indent: 10px;
-}
-
-/* Top level subheader elements.  These are the first nested items underneath a header element. */
-.tocify-subheader {
-    text-indent: 20px;
-    display: none;
-}
-
-/* Makes the font smaller for all subheader elements. */
-.tocify-subheader li {
-    font-size: 12px;
-}
-
-/* Further indents second level subheader elements. */
-.tocify-subheader .tocify-subheader {
-    text-indent: 30px;
-}
-
-/* Further indents third level subheader elements. You can continue this pattern if you have more nested elements. */
-.tocify-subheader .tocify-subheader .tocify-subheader {
-    text-indent: 40px;
-}
-
-/* Twitter Bootstrap Override Style */
-.nav-list > li > a, .nav-list .nav-header {
-    margin: 0px;
-}
-
-/* Twitter Bootstrap Override Style */
-.nav-list > li > a {
-    padding: 5px;
-}
-
-div[data-unique] {
-    padding-top: 50px;
-    margin-top: -50px;
-}
-
-hr.sectionend {
-    padding: 0;
-    border: none;
-    border-top: medium double #333 !important;
-    color: #333 !important;
-    text-align: center;
-}
-
-hr.sectionend:after {
-    content: url(fav.ico);
-    display: inline-block;
-    position: relative;
-    top: -0.7em;
-    font-size: 1.5em;
-    padding: 0 0.25em;
-    background: white;
-}
-
-</style>
-
-<xmp theme="united" style="display:none;" id="md">
-
-Welcome to **SeqPlots**
-=======================
-> An interactive tool for visualizing NGS signals and sequence motif densities along genomic features using average plots and heatmaps.
-
-![Examples of Seq Plots interface and outputs](img/ico_full_color.png)
-![Examples of Seq Plots interface and outputs](img/SeqPlots_fig1_web.png)
-
-Summary
--------
-SeqPlots is a web browser tool for plotting average track signals (e.g. read coverage) and sequence motif densities over user specified genomic features. The data can be visualized in linear plots with error estimates or as series of heatmaps that can be sorted and clustered. The software can be run locally on a desktop or deployed on a server and allows easy data sharing.  SeqPlots pre-calculates and stores binary result matrices, allowing rapid plot generation.  Plots can also be run in batch.
-
-Availability
-------------
-SeqPlots is primarily distributed as [Bioconductor package](http://www.bioconductor.org/packages/release/bioc/html/seqplots.html) available on platforms and operating systems supported by R project. Standalone [SeqPlot OS X bundle](https://github.com/Przemol/seqplots_osx/zipball/master), combing R and all required packages, is available as for Mac OS X (10.6 or higher). SeqPlots can also be deployed on a server using free and open sourced (GPL licensed) Shiny Server.
-
-Video presentation
-------------------
-<iframe width="853" height="480" src="https://www.youtube.com/embed/e29CMRriROM?VQ=HD720&amp;rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
-
-Live demo
----------
-The working demonstration preview of SeqPlots is available on ShinyApps.io:
-**https://seqplots.shinyapps.io/seqplots/**
-
-Demo limits:
-
--   application contains some pre-loaded data (*C. elegans* genes and histone modifications)
--    size of uploaded files is limited to 30MB, please bin or subset your tracks to fit within the limit (due to ShinyApps upload limitations)
--	only *C. elegans* genome is available (due ShinyApps space limits)
--	uploaded files will be deleted after some time
-
-
-Key features
-------------
--   Easy to use web interface (R or shell expertise not required)
--	Web server or desktop versions
--	Generates publication quality plots out of the box
--	Plots average signals or heatmaps
--	Accepts Wiggle, BedGraph, BigWiggle, and GFF and BED formats
--	Calculates motif density from reference genome packages
--	Tracks and features are searchable and old calculations stored
--	Converts tracks to binary BigWiggle format for rapid data extraction and efficient storage
--	Implemented using Shiny R framework providing internet browser reactive GUI and session based connectivity (websocets)
-
-Issues and bugs
----------------
-Please visit [**issue tracker**](https://github.com/Przemol/seqplots/issues) to view currently know issues. To report a new issue/bug/feature request please click [**here**](https://github.com/Przemol/seqplots/issues/new). If the issue is connected to file upload please attach the file in the form.
-
-<hr class="sectionend" />
-
-Installation - Mac OS X app
-==========================
-
-> The Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains all R binaries and packages that SeqPlots depends on. Additionally, the reference sequences for *Caenorhabditis elegans* is included. The sequences for other popular model organisms can be downloaded using a graphical user interface.
-
-**System requirements**
-
-* Mac OS X 10.6 (Snow Leopard) or higher
-* Xquartz package for OS X 10.8 (Mountain Lion) and above: http://xquartz.macosforge.org/landing/
-
-    > More info:  http://support.apple.com/en-us/HT201341
-
-How to install
---------------
-
-1.  Download the compressed application from
-    https://github.com/Przemol/seqplots_osx/zipball/master
-
-2. Double-click on downloaded file to unzip the contents of archive
-
-3. Drag and drop SeqPlots.app to Applications folder
-
-How to start
-------------
-
-Start SeqPlots from Applications. If run for the first time the operating system security notice might be shown.
-
-> ![Seq1](img/03_01a.png)
-
-To run the application right-click on SeqPlots icon and choose "Open", followed by clicking "Open" button in popup window.
-
-> ![Seq2](img/03_01b.png)
-
-After starting SeqPlots the welcome screen displays the software version, the currently installed genomes and the data folder location.
-
-> ![SeqPlots Mac OS X bindle - the welcome screen](img/03_02.png)
-
-This screen allows you to set up following options:
-
-* Change your data location folder (by default your home directory will be used)
-* Install new genomes (requires internet connection). The correct genome packages need to be installed before before uploading files for plotting. A full list of supported genomes is available here: http://www.bioconductor.org/packages/release/BiocViews.html#___BSgenome
-
-    > ![Genomic packages installer window](img/03_03.png)
-
-Press the **`START`** button to initiate SeqPlots. If initiation was successful the user interface should open in your default web browser.
-
-For further usage please refer to <b>Quick start guide</b> or specific chapters of this document.
-
-The window in the background allows you to assess if SeqPlots is running properly and exit the application at any moment.
-
-> ![SeqPlots Mac OS X bindle - the diagnostic window](img/03_04.png)
-
-The "moving" animation progress bar indicates that SeqPlots is running. Press "Cancel" to stop it. Pressing "Details" will reveal a small text window that displays diagnostic and error messages.
-
-Package content
----------------
-
-* Platypus (http://www.sveinbjorn.org/platypus) wrapper
-* R (http://www.r-project.org/) branch 3.1 for Snow leopard (http://r.research.att.com/snowleopard/R-3.1-branch/R-3.1-branch-snowleopard-sa-x86_64.tar.gz)
-* SeqPlots dependency packages (including Shiny, rtracklayer and BSgenome)
-* Full genome sequences for Caenorhabditis elegans (UCSC version ce10) - BSgenome.Celegans.UCSC.ce10 R package
-* SeqPlots package
-
-<hr class="sectionend" />
-
-Installation - Bioconductor package
-=======================
-
-> The Bioconductor package runs SeqPlots locally on desktop computers from R
-environment. It is available for Windows, GNU/Linux and Mac OS X operating
-systems. For further help information please refer to SeqPlots Bioconductor webpage:
-http://www.bioconductor.org/packages/release/bioc/html/seqplots.html
-
-
-**System requirements:**
-
--   [R 3.1 or higher](http://www.r-project.org/)
-
-How to install
---------------
-
-To install SeqPlots package, start R and enter:
-
-```
-source("http://bioconductor.org/biocLite.R")
-biocLite("seqplots")`
-```
-
-How to start
-------------
-
-To start SeqPlots web interface, start R and enter:
-
-```
-library(seqplots)
-run()
-```
-
-After a successful initiation the user interface will be opened in your
-default web browser. For further usage please refer to
-**Quick start guide** or specific chapters.
-
-The `run` function accepts "root" argument, which allows to change
-the data location folder (by default your home directory will be used),
-e.g.:
-
-`run(root='/path/to/data/location')`
-
-**To start with R scripting mode:**
-
-`?getPlotSetArry`
-
-### Additional genome packages
-
-Genomic packages can be installed using standard bioconductor installer
-(Internet connection is required). For example, to instal human reference
-genome (hg19):
-
-```
-source("http://bioconductor.org/biocLite.R")
-biocLite("BSgenome.Hsapiens.UCSC.hg19")
-```
-
-Genome packages are required before uploading files for plotting. Full
-list of supported genomes is avilable here:
-http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
-
-<hr class="sectionend" />
-
-Installation - Deployment on the server
-======================================
-
-> The server version allows the sharing of signal and feature files by a
-> group of users and for remote calculation and file storage. This is
-> the ideal method for providing a shared SeqPlots service to a group.
-
-**System requirements:**
-
--   R 3.1 or higher
--   Shiny Server 1.0 or higher
-
-Installation
-------------
-
-1\. Install and configure the Shiny Server by following the instructions
-on https://github.com/rstudio/shiny-server
-
-2\. Install SeqPlots R package and dependences by following the
-instruction in **Installation: R package**.
-
-3\. Copy SeqPlots files to Shiny Server application folder:
-
-`cp -r $(Rscript -e "cat(system.file('seqplots', package='seqplots'))") /srv/shiny-server/`
-
-4\. Set up SeqPlots **data location** by running from R:
-
-`run(root='/path/to/data/location')`
-
-5\. Edit first line of `/srv/shiny-server/shiny/server_config.R`, so the
-environment variable `root` matches the **data location**; for example:
-
-`Sys.setenv('root'='/var/shiny-server/DATA')`
-
-Usage
------
-
-After successful installation the SeqPlost web GUI will be available at
-`your_server_name:3838/seqplots/`.
-
-For further usage please refer to **Quick start guide** or
-specific chapters.
-
-### Additional genome packages
-
-Genomic packages can be installed using standard bioconductor installer
-(Internet connection required). For example, to instal human reference
-genome (hg19):
-
-```
-source("http://bioconductor.org/biocLite.R")
-biocLite("BSgenome.Hsapiens.UCSC.hg19")
-```
-
-Corresponding genome packages are required before uploading the files
-for plotting. Full list of supported genomes is avilable here:
-http://www.bioconductor.org/packages/release/BiocViews.html\#\_\_\_BSgenome
-
-Alternative installation
-------------------------
-
-SeqPlots can be directly cloned into Shiny Server application folder
-from git repository by using
-`git clone https://github.com/Przemol/seqplots.git`. The data location
-can be set up with following R code:
-
-```
-root <- /data/location dir.create(root) setwd(root) require(RSQLite)
-
-sqlite <- dbDriver("SQLite") con <- dbConnect(sqlite, dbname = "files.sqlite")
-dbGetQuery(con, "CREATE TABLE files (id INTEGER PRIMARY KEY ASC, name TEXT UNIQUE,    ctime TEXT, type TEXT, format TEXT, genome TEXT, user TEXT, comment TEXT)")
-if (!dbListTables(con) == "files")
-    warning("Database not created!")
-dbDisconnect(con)
-
-if (!all(sapply(c("removedFiles", "files", "publicFiles", "tmp"), dir.create)))
-    warning("Folders not created!")
-
-message("\nData loaction: ", root)
-```
-
-The following dependencies must be installed in R:
-
-                  package  version
-    1              shiny   0.10.0
-    2             fields      7.1
-    3           parallel    3.1.0
-    4          multicore      0.2
-    5           BSgenome   1.32.0
-    6      GenomicRanges   1.16.3
-    7            plotrix    3.5-7
-    8        rtracklayer   1.24.2
-    9            RJSONIO  1.2-0.2
-    10           RSQLite   0.11.4
-    11           kohonen   2.0.14
-    12             Cairo    1.5-5
-    13            digest    0.6.4
-    14           methods    3.1.0
-    15             tools    3.1.0
-    16             utils    3.1.0
-    17            httpuv    1.3.0
-    18           caTools     1.17
-    19            xtable    1.7-3
-    20         htmltools    0.2.4
-    21            bitops    1.0-6
-    22              Rcpp   0.11.2
-    23              spam   0.41-0
-    24              maps    2.3-7
-    25              grid    3.1.0
-    26         grDevices    3.1.0
-    27      BiocGenerics   0.10.0
-    28           IRanges   1.22.9
-    29        Biostrings   2.32.0
-    30           XVector    0.4.0
-    31         Rsamtools   1.16.1
-    32          graphics    3.1.0
-    33             stats    3.1.0
-    34          zlibbioc   1.10.0
-    35      GenomeInfoDb    1.0.2
-    36            stats4    3.1.0
-    37               XML 3.98-1.1
-    38             RCurl 1.95-4.1
-    39 GenomicAlignments    1.0.1
-    40      BiocParallel    0.6.1
-    41           foreach    1.4.2
-    42         BatchJobs      1.2
-    43            BBmisc      1.7
-    44               DBI    0.2-7
-    45         sendmailR    1.1-2
-    46              brew    1.0-6
-    47              plyr    1.8.1
-    48           stringr    0.6.2
-    49              fail      1.2
-    50         checkmate      1.0
-    51         codetools    0.2-8
-    52         iterators    1.0.7
-    53         base64enc    0.1-1
-    54             class   7.3-10
-    55              MASS   7.3-33
-
-<hr class="sectionend" />
-
-Quick start guide
-=================
-
-1.  Start the SeqPlots. Refer to installation guides for platform
-    specific information. After successful initiation the web interface
-    should automatically open in your default web browser. If you are
-    web server user just navigate your browser to server address.
-
-    ![The SeqPlots interface in web
-    browser](img/01_QuickStart/01_QuickStart_01.png)
-
-2.  Upload some feature (BED or GFF) and track (BigWig or WIG) files.
-    They can be gzip compressed (e.g. file1.bed.gz). Press green "Add
-    files..." button or just drag and drop files into the window. The
-    ready to upload files will show up in upload window, where you
-    select user name, reference genome and optionally add some comments.
-
-    ![File upload panel](img/01_QuickStart/01_QuickStart_02.png)
-
-3.  When all is done press blue "Start upload" button. After upload and
-    processing is done the green "SUCCESS" label should show. It means
-    that file is on the registered and ready to use. Occasionally the
-    file might be mot formatted properly or chromosome names might not
-    agree with reference genome. In such case a verbose error will
-    window appears and file as labeled as "ERROR". For further
-    information please refer to **Explanations** chapter.
-
-    ![File upload progress
-    infoermation](img/01_QuickStart/01_QuickStart_03.png)
-
-4.  Dismiss upload window and press blue "New plot set" button on side
-    panel. This will bring up file management window. In file management
-    window select at least one file from "Features" tab and either one
-    or more file from "Tracks" file or sequence motif(s). The sequence
-    motifs and tracks can be processed and plotted together.
-
-    ![File management panel](img/01_QuickStart/01_QuickStart_04.png)
-
-5.  When you decided which files/motifs to plot it is time to set up the
-    processing options. You can find these in the button of plotting
-    window. For first plot you should do just fine with default options.
-
-    ![Plot set calculation
-    options](img/01_QuickStart/01_QuickStart_05.png)
-
-6.  After options are set up press blue "Run calculation" button. This
-    will dismiss the file management window and show processing message.
-    Here you can observe the progress of the task and optionally cancel
-    it if no longer required or you forgot to add some very important
-    file to the plot-set (cancel available only in multi process mode).
-
-    ![Plot set calculation progress
-    window](img/01_QuickStart/01_QuickStart_06.png)
-
-7.  After some time the calculation will finish (fingers crossed,
-    without the error) and you will be able to see plot set array. In
-    here you can choose which feature-track or feature-motif pairs to
-    plot. Choose one or more checkboxes and press grey "Line plot"
-    button (or hit RETURN from your keyboard). You can also check
-    "Reactive plotting" checkbook in the bottom of "Batch operations and
-    setup" tab - it will automatically apply changes to plots as soon as
-    you changed any plot-related option.
-
-    ![The plot selection grid](img/01_QuickStart/01_QuickStart_07.png)
-
-8.  Congratulation! Your First plot is complete, you can see the preview
-    of it on the side panel.
-
-    ![The plot preview panel](img/01_QuickStart/01_QuickStart_08.png)
-
-9.  You are able to set up labels, titles, font sizes, legends and many
-    more on side panel tabs, take a look at **Plotting**
-    chapter.
-
-    ![Plot settings tabs](img/01_QuickStart/01_QuickStart_09.png)
-
-10. By clicking the plot preview you can enlarge it for better view.
-    When everything is ready you can get the plot as PDF by clicking
-    green "Line plot" button just on the top of side panel.
-
-    ![Average plot example](img/01_QuickStart/01_QuickStart_10.png)
-
-11. You can also visualize the signal as a heatmap. Please note that
-    heatmap plotting is possible only for single feature file or files
-    containing exactly the same number of genomic ranges (which will
-    become the rows of heat map). For heatmap you can choose to sort
-    and/or cluster it using k-means.
-
-    ![Heatmap settings tab](img/01_QuickStart/01_QuickStart_11.png)
-
-12. Similarly to line plot you can grab the heatmap PDF using 'Heatmap'
-    button just on the top of side panel. Just attached to it, there is
-    small button allowing you to get cluster definitions.
-
-    ![Heatmap example](img/01_QuickStart/01_QuickStart_12.png)
-
-<hr class="sectionend" />
-
-Adding and managing files
-=========================
-
-Supported file formats
-----------------------
-
-Tracks:
-
--   BigWig (.bw) - http://genome.ucsc.edu/FAQ/FAQformat.html\#format6.1
--   Wiggle (.wig) - http://genome.ucsc.edu/goldenPath/help/wiggle.html
--   BedGraph (.bdg) -
-    http://genome.ucsc.edu/goldenPath/help/bedgraph.html
-
-Features:
-
--   BED - http://genome.ucsc.edu/FAQ/FAQformat.html\#format1
--   GFF - http://genome.ucsc.edu/FAQ/FAQformat.html\#format3
--   GTF (with .gff extension) -
-    http://genome.ucsc.edu/FAQ/FAQformat.html\#format4
-
-Files must be formatted according to UCSC guidelines. All widely used
-chromosome names conventions are accepted, e.g. for human files either
-'chr1' or '1' can be used, however these conventions should not be mixed
-within single files.
-
-Adding files
-------------
-
-Press the `Add files` button to bring up the **file upload panel**.
-
-> ![File upload panel](img/05_01.png)
-
-You can drag and drop files here or press the `Add files...` button to
-open a file selection menu. Before starting the upload the following
-mandatory information must be provided about each file:
-
--   User ID
--   Reference genome - drop-down menu containing reference genome
-    package currently installed in R
-
-Comments are optional.
-
-The contents of the text field can be copied to all files by clicking
-the icon at the left of the field. The default values can be set using
-`Set defaults...` button. Default values are stored using the browser
-cookies, and the settings will be remembered across different sessions
-as long as the same web browser is used. File extensions that are not
-supported will raise an error.
-
-> ![File upload panel with 4 files selected](img/05_02.png)
-
-Individual files can be uploaded by pressing 'start' next to the file
-name or all files can be uploaded at once by pressing the `Start upload`
-button at the top of **file upload panel**.
-
-During the upload process a progress bar is displayed. After upload
-SeqPlots gives a message that upload was successful or or gives an error
-message. Common errors are misformatted file formats or chromosome names
-do not matched the reference genome. For more information please refer
-to **Errors explanations** chapter.
-
-> ![A feedback on successfully upload files](img/05_03.png)
-
-To dismiss the upload window, click on `X` or outside the window.
-
-Downloading and removing files
-------------------------------
-
-Clicking the `New plot set` button brings up the **file collection
-window**. The primary function of this window is to choose signal tracks
-and feature files to use for calculating the plots. However, it also
-provides basic file management capabilities. Information on files can be
-reviewed and files can be downloaded or deleted. Fields can be searched,
-filtered and sorted by any column. The red `x` button on the right site
-of file table removes a single file from the collection, while
-`Remove selected files` button will erase all selected files.
-
-> ![The file collection window](img/05_04.png)
-
-<hr class="sectionend" />
-
-Running the plot-set jobs
-=========================
-
-Pressing the `New plot set` button brings up the **file collection
-window** from which you can choose signal tracks and feature files to
-calculate average plots and heat maps. The **file collection
-window** has three tabs:
-
--   `Tracks` - signal files, i.e., Wiggle, BigWiggle and BedGraph files.
--   `Features` - genomic feature files, i.e., BED, GFF and GTF files
--   `Sequence features` - input any motif of interest that you want to
-    plot.
-
-> ![The file collection modal](img/06/06_01.png)
-
-Selecting files
----------------
-
-The `Tracks` and `Features` tabs displays information about the files
-and allows you to filter and sort by any column. The "Search:" dialog
-allows you to find any keyword in any field, while dropdowns below the
-file grid allow for more advanced filtering on specific columns.
-
-Select files by clicking on the file name or any other part of the row
-beside `Show comment` and `Download` or `Remove` buttons. Chosen files
-are highlighted in light blue. Clicking the file name again will cancel
-the selection. At least one signal track or motif and one feature file
-must be selected before starting the calculation.
-
-Setting up plot options
------------------------
-
-Options controlling the plot settings is found below the file selection
-window:
-
-1.  **`Bin track @ [bp]:`** - this numeric input determines the
-    resolution of data acquisition; the default value 10 means that 10bp
-    intervals within the plotting range will be summarized by
-    calculating the mean. Higher values increases the speed of
-    calculation and produces smoother plots, but decreases resolution.
-
-2.  **`Choose the plot type`** - there are three options:
-    -   *`Point Features`* - anchor plot on the start of a feature. By
-        default, plot will be directional if strand information is
-        present (i.e, use start position and plot on positive strand for
-        + strand features and use end position and plot on negative
-        strand for minus strand features). If strand information is not
-        present in the feature file (or if the "ignore strand" option is
-        chosen), plot will use start position of feature and be plotted
-        on the positive strand. User chooses
-        length of upstream and downstream sequence to plot.
-    -   *`Midpoint Features`* - similar to point feature, but plot is
-        centered on the midpoint of the feature.
-    -   *`Anchored Features`* - features are anchored at start and stop
-        positions and given pseudo-length chosen by the user.
-        Additionally, the user chooses the length of sequence upstream
-        of the start and downstream of the end to plot.
-
-3.  **`Ignore strand`** - the directionality (strand) will be ignored
-    all features plotted on the positive strand.
-4.  **`Ignore zeros`** - signal values of 0 in the track will be be
-    excluded from calculations
-5.  **`Calculate heatmap`** - selecting this generates and saves a heat
-    map matrix. Select if you wish to generate heatmap; uncheck if you
-    only wish to generate average plots, as this will speed
-    calculations.\
-6.  **`Plotting distances in [bp]`** - the distances in to be plotted:
-    -   *`Upstream`* - the plotting distance in base pairs upstream to
-        the feature
-    -   *`Anchored`* - the pseudo-length, to which the features will be
-        extended or shrunk using linear approximation (only for anchored
-        plots)
-    -   *`Downstream`* - the plotting distance in base pairs downstream
-        to the feature
-
-Plotting sequence motif density
--------------------------------
-
-The `Sequence features` tab allows you to calculate and plot the density
-of any user-defined motif around the chosen genomic feature using the
-reference sequence package. Motif plots can be mixed with track files'
-signal plots. The following options can be set:
-
-1.  **`DNA motif`** - the DNA motif
-2.  **`Sliding window size in base pairs [bp]`** - the size of the
-    sliding window for motif calculation. The value (number of matching
-    motifs within the window) is reported in the middle of the window,
-    e.g. if window is set to 200bp, DNA motif is "GC" and there are 8
-    CpGs in first 200 bp of the chromosome the value 8 will be reported
-    at 100th bp.
-3.  **`Display name`** - The name of the motif that will be shown in key
-    and heatmap labels. Leave blank to use `DNA motif` value.
-4.  **`Plot heatmap or error estimates`** - this checkbox determines if
-    heatmap matrix and error estimates should be calculated. If
-    unchecked much faster algorithm will be used for motif density
-    calculation, but only the average plot without the error estimates
-    will be available.
-5.  **`Match reverse complement as well`** - select if reverse
-    complement motif should be reported as well. For example the TATA
-    motif will report both TATA and ATAT with this option selected.
-
-> ![Sequence motifs selection tab](img/06/06_02.png)
-
-Clicking `Add` button adds the motif to plot set, while `Reset All`
-clears the motif selection. On the right side of the motif setting panel
-gives a list summary of included motifs.
-
-Starting the plot set calculation
----------------------------------
-
-The option are executed by pressing `Run calculation` button. This
-dismisses the **file collection window** and brings up the calculation
-dialog, which shows the progress. On Linux and Mac OS X (systems
-supporting fork based parallelization) the calculation can be stopped
-using the `Cancel` button - this will bring back all settings in **file
-collection window**.
-
-> ![The calculation progress dialog](img/06/06_03.png)
-
-After the successful execution the **plot array** will appear. In case
-of error an informative error pop-up will explain the problem. Please
-refer to the error section for further information.
-
-> ![The plot array](img/06/06_04.png)
-
-<hr class="sectionend" />
-
-Plotting
-========
-
-> This section focuses on average (line) plots and options common
-> between these and heatmaps. For heatmap options please refer to
-> heatmap documentation.
-
-Previewing plot
----------------
-
-After calculating or loading a plot set, a **plot array** of checkboxes
-is displayed to select the desired pairs of features and tracks/motifs.
-Clicking on the column name (tracks/motifs) or row name (features)
-selects/deselects the whole column or row. Clicking on top-left most
-cell of **plot array** toggles the selection of whole array.
-
-> ![Plot preview plus `Line plot`, `Heatmap` and `refresh`
-> buttons](img/07_01.png)
-
-If at least one pair on **plot array** is selected pressing the
-`Line plot` button produces an average plot preview and the `Heatmap`
-button produces a heatmap preview. Alternatively, pressing the [RETURN]
-key will also produce the new selection and options. These operations
-are done automatically in `reactive mode` (see **Advanced options**). Plots can be
-downloaded as PDF files using the Line plot and Heatmap buttons next to
-Download (at the top of the panel).
-
-> ![The tab selection area - icons represnts seven
-> panels](img/07_02.png)
-
-Below the plotting buttons are options for labeling plots and setting
-axes. On application start the first panel responsible for bringing file
-upload, management and plot set calculation modals is active. The
-further three panels hold common plot settings.
-
-Titles and axis panel
----------------------
-
-This panel groups settings influencing the plot main title, axis labels,
-various font sizes plus vertical and horizontal plot limits.
-
--   `Title` - The main title of the plot, shown in top-center part of
-    the figure; default empty
--   `X-axis label` - Label shown below horizontal axis; default empty
--   `Y-axis label` - Label shown below vertical axis; default empty
--   `Title font size` - Font size of the title in points (point = \~1/72
-    an inch for standard A4 output); default 20 points
--   `Labels font size` - Font size of axis labels in points; default 16
-    points
--   `Axis font size` - Controls axis ticks font size, that is size of
-    the numbers indicating position in base pairs on X-axis and means
-    signal value on X-axis; default 14 points
--   `Set X-axis limits` - Set hard plotting limits for X-axis; default
-    values are whole range chosen during plot set calculation
--   `Set Y-axis limits` - Set hard plotting limits for Y-axis; default
-    values are a range between lowest and highest mean signal extended
-    by error estimate
-
-> ![The view on titles and axis panel](img/07_03.png)
-
-Guide lines and data scaling
-----------------------------
-
-Controls in this panel controls the display of guide lines and error
-estimates, and allows to log scale the signal prior to plotting.
-
--   `Transform signal` - if set to *`Log2 transform`* performs log2
-    transformation of the signal prior to plotting; default setting is
-    *`Do not transform`*
--   `Show vertical guide line` - show the vertical line at point 0 -
-    beginning of the feature or midpoint and end of the pseudo-length
-    scaled features (only for anchored plots); turn on by default
--   `Show horizontal guide line` - show the horizontal line at user
-    determined height; turn off by default
--   `Show error estimates` - show error standard error and 95%
-    confidence interval as fields, if turned off only the line
-    representing the mean signal is shown; turn on by default
-
-> ![The view on guide lines and data scaling](img/07_04.png)
-
-Keys, labels and colors panel
------------------------------
-
-This panel groups two types of controls. `Colors`, `Label` and
-`Priority/Order` are a checkboxes revealing further controls on **plot
-set grid**, specific for a feature-track pair or sub-heatmap.
-`Show plot key`, `Show error estimate key` and `Legend font size` re
-global controls specific for average plots. Inputs on **plot set grid**
-do not have specific labels, but the tooltip explaining their meaning is
-shown on mouse cursor hover.
-
--   `Colors` - checkboxes revealing a color picker on **plot set grid**.
-    This input allows to control the colors of specific feature-track
-    pair average plots or sub-heatmaps. In browser supporting the color
-    picker 'e.g Chrome' the system dialog will show up. In other
-    browsers (e.g. Firefox) the javaScript color picker will be
-    initialized.
--   `Label` - checkboxes revealing a label text input **plot set grid**.
-    This controls the names shown on the **key** with average plots or
-    the heatmap top labels.
--   `Priority/Order` - checkboxes revealing numeric input on **plot set
-    grid**. These number determine the order of average plots and
-    hetamaps. Feature-track pair with the highest priority will be
-    listed on the top of **key** for average plots and left-most for
-    heatmaps.
--   `Show plot key` - shows the key giving the color to feature-track
-    pair label mapping. If turned on the additional drop-down allows to
-    choose the position on the plot, top-right by default
--   `Show error estimate key` - shows the key gexplaining the meaning of
-    error fields. If turnedon the additional drop-down allows to choose
-    the position on the plot, top-left by default
--   `Legend font size` - set the size of font used to plot the keys; 12
-    default
-
-> ![The view on keys, labels and colors panel (left). Color picker,
-> label text input and Priority/Order checkboxes reviled on plot set
-> grid (right).](img/07_05_06.png)
-
-Plotting and setting up heatmaps
-================================
-
-Heatmaps are often more informative than average plots. If there is
-variability in signal along individual instances of a given genomic
-feature (e.g., because there are different biological classes), an
-average plot might not represent the behavior of any individual feature
-and could even give a misleading picture. SeqPlots plots track-feature
-pairs as sub-heatmaps horizontally aligned on single figure. All
-sub-heatmaps must have the same number of data rows, hence in single
-plot mode simultaneous plotting is possible only on single features or
-feature files containing exact same number of rows. The heatmaps can be
-sorted and clustered by k-means, hierarchical clustering or super self
-organising maps (SupreSOM).
-
-> ![An example of heatmap plot](img/08_01.png)
-
-Heatmap setup tab
------------------
-
-This tab has heatmap specific options for data processing and display.
-
-> ![The view on Heatmap setup tab (left). Color picker, Label text
-> input, Priority/Order checkboxes, Choose individual heatmaps for
-> sorting/clustering control and Set individual color key limits numric
-> inputs reviled on plot set grid (right).](img/08_02.png)
-
--   **`Sort heatmap rows by mean signal`** - sorts the heatmap rows
-    based on the mean value of each row across included sub-heatmps. Can
-    be set to increasing or decreasing order. Turned off by default.
-
--   **`Clustering algorithm`** - choose clustering algorithm (k-means,
-    hierarchical or SupreSOM). If clustering is not desired, choose
-    *`do not cluster`*, which uses the feature file in the uploaded
-    order . K-means by default.
-
--   **`Make cluster calculation repeatable`** - enforces, that
-    clustering with non-deterministic algorithms, like k-means or
-    SupreSOM will generate the same results as most recently plotted
-    heatmap. This is achieved by re-using R random number generator
-    seed.
-
--   **`Plot cluster only selected`** - this option is available only if
-    `Make cluster calculation repeatable` is turned on. Allows to select
-    one of the clusters and zoom it to whole plot height. Plot all
-    clusters by default.
-
--   **`Choose individual heatmaps for sorting/clustering`** - this
-    checkbox brings up a new control panel on the **plot set grid** to
-    determine if a given sub-heatmap should be included in plotting
-    and/or clustering. The excluded sub-plots will be plotted in the
-    order of the other sub-heatmaps, but their values will not influence
-    the clustering/sorting. By default all sub-heatmaps are included.
-    Following example shows hierarchical clustering on both heatmaps
-    included (left) and second heatmap excluded (right):
-
-    > ![`Choose individual heatmaps for sorting/clustering` usage
-    > example: hierarchical clustering on both heatmaps included (left)
-    > and second heatmap excluded (right)](img/08_03.png)
-
--   **`Heatmaps have individual color keys`** - this option determines
-    if each sub-heatmap should have a separate color key (plotted below
-    the heatmap) or a single, common key should be calculated for all
-    sub-plots (plotted rightmost). By default all sub-heatmap have their
-    own color keys. The example below show the difference between
-    separate (left) and common (right) color keys:
-
-    > ![`Heatmaps have individual color keys` usage example: separate
-    > (left) and common (right) color keys](img/08_04.png)
-
--   **`Set default color key limits`** - this option determines the
-    limits in mapping the numerical values to the colors. The range of
-    colors generated is dependent on these options. Values lower or
-    higher than the given limits will be plotted in the limit value
-    color. If this checkbox is not selected, limits are auto-generated
-    using **`Color key scaling`** parameter. If this option it turned
-    off two numerical fields, **`min`** and **`max`**, are shown to
-    manually set the limits.
-
-    -   **`Color key scaling`** - this slider influences how color key
-        limits are generated. For example, 0.01 (default value)
-        calculates limits using data ranging from 1-99 percentile of
-        available data points. 0.1 uses data ranging from 10-90
-        percentile. The general formula for limit is: [quantile(data,
-        `Color key scaling`); quantile(data, 1-`Color key scaling`)]
-    -   **`min`** and **`max`** numeric inputs - enter values to
-        manually specify color key limits as numeric values.
--   **`Set individual color key limits`** - this option is similar to
-    manual set up of color key limits, but this allows one to specify
-    different values for individual sub-heatmaps. When this checkbox is
-    selected **`min`** and **`max`** numeric input menu is shown on the
-    **plot set grid**
--   **`Set default colorspace`** - When this option is selected three
-    color pickers are shown to set up custom color mappings for
-    heatmaps. The following example below shows standard jet colors
-    (left), default blue color mapping after selecting the checkbox
-    (middle) and custom color selection (right):
-
-> ![`Set default colorspace` usage example: standard jet colors (left),
-> default blue color mapping after selecting the checkbox (middle) and
-> custom color selection (right)](img/08_05.png)
-
-Other options controlling heatmap appearance
---------------------------------------------
-
-The heatmap output shares many display options from other tabs. Here we
-provide a list of these inputs.
-
--   **Titles and axis panel**
-    -   `X-axis label` - Label shown below horizontal axis, drawn
-        separately for each sub-heatmap; default empty
-    -   `Y-axis label` - Label shown next to vertical axis, drawn
-        separately for each sub-heatmap; default empty
-    -   `Labels font size` - Font size for axis labels and main labels
-        of sub-heatmaps; default 16 points
-    -   `Axis font size` - Controls axis ticks font size; default 14
-        points
-    -   `Set X-axis limits` - Set hard plotting limits for X-axis;
-        default values are whole range chosen during plot set
-        calculation
--   **Guide lines and data scaling panel**
-    -   `Transform signal` - if set to *`Log2 transform`* performs log2
-        transformation of the signal prior to plotting; default setting
-        is *`Do not transform`*
-    -   `Show vertical guide line` - show the vertical line at point 0 -
-        beginning of the feature or midpoint and end of the
-        pseudo-length scaled features (only for anchored plots); turn on
-        by default
--   **Keys, labels and colors panel**
-    -   `Colors` - for hetmaps this input allows to control the color
-        mapping of specific sub-heatmaps. The map starts with white (for
-        low color key limit) and finishes with selected color (for high
-        color key limit).
-    -   `Label` - allows to set up custom sub-heatmap top labels
-    -   `Priority/Order` - Use this to place heatmaps in your desired
-        order. The feature-track pairs with the highest priority will be
-        plotted as left-most sub-heatmaps.
-    -   `Legend font size` - control the font size of common color key,
-        inactive if heatmaps have individual color keys; 12 default
-
-<hr class="sectionend" />
-
-Getting PDFs and cluster info
-=============================
-
-Plots can be downladed as PDFs by clicking `Line plot` or `Heatmap`
-buttons in the "Download:" section of the **tool panel** (above the plot
-preview).
-
-> ![Download:" section of tool panel with `Line plot` and `Heatmap`
-> buttons](img/09_01.png)
-
-The small buttons next to `Line plot` and `Heatmap` produce additional
-output files:
-
--   the `i` button next to `Line plot` downloads the PDF containing
-    average plot keys
--   `cluster diagram` button next to `Heatmap` downloads a cluster
-    report giving cluster assignments and sorting order for each feature
-    as a comma separated value (CSV) spreadsheet.
-
-The cluster report contains following columns:
-
--   `chromosome` - the name of chromosome, contig or scaffold
--   `start` - start of the feature (1 based chromosomal coordinate)
--   `end` - end of the feature (1 based chromosomal coordinate)\
--   `width` - width of the feature in base pairs
--   `strand` - strand of the feature
--   `metadata_...` - annotation columns present in the original GFF/BED
-    e.g. gene name, score, group
--   `originalOrder` - number of feature (row) in GFF/BED, can be used to
-    restore original order after sorting on cluster ID
--   `ClusterID` - the numeric ID of the cluster. The topmost cluster on
-    the heatmap is annotated with 1, and the bottom cluster with k,
-    where k equals to number of clusters selected, exported only if
-    clustering is enabled
--   `SortingOrder` - the order imposed on heatmap by sorting by mean
-    row(s) values, exported only if sorting is enabled
--   `FinalOrder` - the final order of heatmap's rows, this can be
-    influenced by sorting and clustering; 1 indicates topmost row
-
-Sample report:
-
-    chromosome  start   end     width   strand  metadata_group  originalOrder   ClusterID   SortingOrder    FinalOrder
-    chrI        9065087 9070286 5200    +       g1              1               1           3               3
-    chrI        5171285 5175522 4238    -       g1              2               3           50              43
-    chrI        9616508 9618109 1602    -       g1              3               3           13              43
-    chrI        3608395 3611844 3450    +       g1              4               3           11              12
-
-
-PDF output size
----------------
-
-The last tab (`Batch operation and setup`) on the **tool panel**
-includes batch operations and various other settings including PDF
-output size. By default the output PDF will be A4 landscape. This can be
-changed using the drop-down list to following settings:
-
--   `user defined` - this option reveals two numeric inputs that allows
-    to set output PDF width and height. The values must be given in
-    inches.
--   `Legal rotated` - US Legal landscape: 14" by 8.5"
--   `A4` - A4 portrait: - 8.27" × 11.69"
--   `Letter` - US Letter portrait: 8.5" × 11"
--   `Legal` - US Legal portrait: 8.5" × 14"
--   `Executive` - a.k.a Monarch paper: 7.25 × 10.5"
-
-> ![The view on top part of batch operation and setup
-> panel](img/09_02.png)
-
-<hr class="sectionend" />
-
-Batch operations
-================
-
-Controls to plot multiple plots at once are located on the
-`Batch operation and setup` tab, just below PDF paper options. It is
-possible to output the plots to multipage PDF, plot an array of plots on
-a single page (for average plots) or mix these options together.
-
-> ![The view on bottom part of batch operation and setup
-> panel](img/09_03.png)
-
-The first drop-down controls the type of the plot - either average or
-heatmap. The second drop down determines the strategy to traverse the
-**plot grid**. The options include:
-
--   `single` - every single feature-track pair will be plotted on
-    separate plot
--   `rows` - the **plot grid** will be traversed by rows, which means
-    one plot that contains all tracks per feature will be prepared
--   `columns` - the **plot grid** will be traversed by columns, which
-    means one plot that contains all features per tracks will be
-    prepared
-
-The `multi plot grid` option controls how many plots will be placed on
-each page of the PDF output, e.g. 1x1 means one plot per one page, while
-3x4 means 3 columns and 4 rows of plots. If number of plots exceeds the
-number of slots on page the new page will be added to the PDF.
-
-`Filter names` will apply a filter to plot titles, which are based on on
-uploaded file names. For example, if you uploaded 100 files starting
-with a prefix of "my\_experiment\_", you can remove this fragment from
-each plot title and/or heatmap caption by putting this string in
-`Filter names`.
-
-Finally, pressing `Get PDF` produces the final output file. Please see
-example below:
-
-> ![Batch plot usage example - multiple average plots aranged in 6x2
-> plot grid](img/09_04.png)
-
-<hr class="sectionend" />
-
-Saving and loading  plotsets
-============================
-
-If desired, SeqPlots will save plot sets as binary R files, allowing you
-to quickly load the pre-calculated set for replotting. Saved plot sets
-can also be shared with other SeqPlots users.
-
-Load or save plotset
---------------------
-
-Controls available on the "Load or save plotset" panel:
-
--   **`Load saved plot set`** - drop-down list to select a plotset. Once
-    the Rdata binary file is selected the **plot grid** will be
-    displayed. Selecting the file reveals two additional buttons:
-    -   **`Remove dataset`** - this button deletes the selected saved
-        plot set from user data.
-    -   **`Download plotset`** - this button saves a copy of the plotset
-        in selected location.
--   **`Save current plot set`** - Enter desired name and press the
-    `Save` button (appears after input of name). It is also possible to
-    save a copy of loaded plot sets. The plot set binary files can be
-    renamed simply by loading them, saving a copy and deleting original
-    source file.
-
-All saved dataset can be found in `data location`/publicFiles. Any
-SeqPlots Rdata binaries put in the folder will become available for
-loading in **`Load saved plot set`** control.
-
-> ![The view on the "Load or save plotset" panel](img/10_00.png)
-
-Plot set files structure
-------------------------
-
-The plot sets files can be also directly loaded in R. This allows
-further processing and customization of the plots. Data structure is a
-nested list, which elements be accessed by `[[` R operator. The nesting
-goes as follow:
-
--   **`feature`** - R list
-    -   **`track`** - R list
-        -   `means` - numeric vector giving mean signal value for each
-            (binned) genomic position
-        -   `stderror` - numeric vector giving standard error for each
-            (binned) genomic position
-        -   `conint` - numeric vector giving 95% confidence interval for
-            each (binned) genomic position
-        -   `all_ind` - numeric vector giving the genomic position in
-            base pairs
-        -   `e` - character string giveing numeric vector giving the
-            indicates of anchored distance, NULL for point features
-            plots
-        -   `desc` - auto generated title of the plot
-        -   `heatmap` - numeric matrix, (binned) signal values for each
-            genomic position (columns) and each feature (rows)
-
-The example structure:
-
-```
-List of 2
- $ HTZ1_Differential_genes_TOP100_v2.gff:List of 2
-  ..$ HTZ1_JA00001_IL1andIL2_F_N2_L3_NORM_linear_1bp_IL010andIL009_averaged.bw    :List of 7
-  .. ..$ means   : num [1:501] 2.52 2.52 2.52 2.53 2.54 ...
-  .. ..$ stderror: num [1:501] 0.114 0.112 0.111 0.11 0.109 ...
-  .. ..$ conint  : num [1:501] 0.226 0.223 0.221 0.218 0.217 ...
-  .. ..$ all_ind : num [1:501] -1000 -995 -990 -985 -980 -975 -970 -965 -960 -955 ...
-  .. ..$ e       : NULL
-  .. ..$ desc    : chr "HTZ1_JA00001_IL1andIL2...\n@HTZ1_Differential_genes_TOP100_v2"
-  .. ..$ heatmap : num [1:100, 1:501] 2.36 5.25 2.2 3.48 4.32 ...
-  ..$ HTZ1_JA00001_IL3andIIL5_F_lin35_L3_NORM_linear_1bp_IL008andIL011_averaged.bw:List of 7
-  .. ..$ means   : num [1:501] 2.36 2.35 2.35 2.36 2.38 ...
-  .. ..$ stderror: num [1:501] 0.126 0.125 0.125 0.126 0.125 ...
-  .. ..$ conint  : num [1:501] 0.249 0.249 0.247 0.251 0.249 ...
-  .. ..$ all_ind : num [1:501] -1000 -995 -990 -985 -980 -975 -970 -965 -960 -955 ...
-  .. ..$ e       : NULL
-  .. ..$ desc    : chr "HTZ1_JA00001_IL3andIIL5...\n@HTZ1_Differential_genes_TOP100_v2"
-  .. ..$ heatmap : num [1:100, 1:501] 2.61 3.17 1.42 2.46 4.26 ...
- $ HTZ1_Differential_genes_BOTTOM100.gff:List of 2
-  ..$ HTZ1_JA00001_IL1andIL2_F_N2_L3_NORM_linear_1bp_IL010andIL009_averaged.bw    :List of 7
-  .. ..$ means   : num [1:501] 1.57 1.57 1.58 1.6 1.62 ...
-  .. ..$ stderror: num [1:501] 0.0996 0.0985 0.1003 0.1022 0.1018 ...
-  .. ..$ conint  : num [1:501] 0.198 0.195 0.199 0.203 0.202 ...
-  .. ..$ all_ind : num [1:501] -1000 -995 -990 -985 -980 -975 -970 -965 -960 -955 ...
-  .. ..$ e       : NULL
-  .. ..$ desc    : chr "HTZ1_JA00001_IL1andIL2...n@HTZ1_Differential_genes_BOTTOM100"
-  .. ..$ heatmap : num [1:100, 1:501] 1.64 1.37 1.61 1.77 1.86 ...
-  ..$ HTZ1_JA00001_IL3andIIL5_F_lin35_L3_NORM_linear_1bp_IL008andIL011_averaged.bw:List of 7
-  .. ..$ means   : num [1:501] 1.94 1.94 1.95 1.96 1.97 ...
-  .. ..$ stderror: num [1:501] 0.123 0.123 0.124 0.126 0.128 ...
-  .. ..$ conint  : num [1:501] 0.244 0.245 0.246 0.251 0.253 ...
-  .. ..$ all_ind : num [1:501] -1000 -995 -990 -985 -980 -975 -970 -965 -960 -955 ...
-  .. ..$ e       : NULL
-  .. ..$ desc    : chr "HTZ1_JA00001_IL3andIIL5...\n@HTZ1_Differential_genes_BOTTOM100"
-  .. ..$ heatmap : num [1:100, 1:501] 1.61 1.37 1.29 3.04 3.77 ...
-
-```
-
-<hr class="sectionend" />
-
-Advanced options
-================
-
-Some additional SeqPlots options are located at very bottom of the `Batch operation and setup` tab:
-
-> ![The view on 'Advanced options' section of the batch operation and setup panel](img/10_01.png)
-
-* `Keep 1:1 aspect ratio in batch mode` - This option guarantee that the ratio between X- and Y-axis height will be 1, hence the produced plots will be square in batch mode. This prevents stretching the plots while fitting single rows or columns to one page. Turned on by default.
-
-* `Always keep 1:1 aspect ratio` - This checkbox extends the 1:1 aspect ratio option to single plots. Turned off by default.
-
-* `Reactive plotting` - When selected, all plotting operations are executed upon selection and will be visible in preview. `Reactive plotting` might be useful for exploratory data analysis using plots, but it is not recommended for heatmap plots because speed is decreased. Select/delelect from keyboard by pressing [ctrl/cmd+R]. Turned off by default.
-
-* `Use multithreading for calculations` - This option is available only on desktop instances of SeqPlots under Mac OS X and Linux. While turned off R will not fork the child processes for plotting and plot set calculations. It is useful for debugging, since in single process mode all warning/errors will be directly printed to R console. Also might increase the performance for plotting small average plots. Turned off by default.
-
-* `Use ggplot2 graphics package for heatmaps` - uses GGplot2 (http://ggplot2.org/) graphics system to draw the heatmaps. This feature is experimental.
-
-<hr class="sectionend" />
-
-Error messages
-==============
-
-```
-Problem with line N: "line_text" [internal_error]
-```
-
-> The import of feature file (GFF or BED) was not successful due to mis-formatted file.
-
------------------
-
-
-```
-Chromosome names provided in the file does not match ones defined in reference genome.
-INPUT: [chr3R, chr2L, chr2R, chr3L]
-GENOME: [chrI, chrII, chrIII, chrIV, chrV, ...]
-```
-
-> There are unexpected chromosome names in input file. Following genomes: *Arabidopsis thaliana, Caenorhabditis elegans, Cyanidioschyzon_merolae, Drosophila melanogaster, Homo sapiens, Oryza sativa, Populus trichocarpa, Saccharomyces cerevisiae and Zea mays* support chromosome names remapping between different naming conventions, including: AGPv2, ASM9120v1, Ensembl, JGI2_0, MSU6, NCBI, TAIR10 and UCSC. If you see above error in one of these genomes there are still unexpected names after the correction.
-The problematic chromosome names are given in the error message. Remove GFF/BED lines corresponding to them or upgrade the genome to one containing proper naming. Alternatively set genome to NA.
-
------------------
-
-
-```
-File already exists, change the name or remove old one.
-```
-
-> File named like this already exists in the database, it is impossible to have two files sharing same filename.
-
------------------
-
-
-```
-ERROR: solving row 300: negative widths are not allowed
-```
-> The the row 300 have end coordinate smaller than beginning, hence the width in negative. To fix it the start and stop indicates should be swapped. This error often happens when negative strand (-) ranges are misformatted.
-
------------------
-
-<hr class="sectionend" />
-
-Version history
-===============
-
-CHANGES IN VERSION 1.2.0
-------------------------
-
-PACKAGE:
-
--   plot a dendrogram as first panel on heatmap plot clustered with
-    hierarchical clustering
--   heatmap can be plotted as vector graphics (default for R scripting)
-    or raster graphics (default for web GUI)
--   heatmaps can be sorted in increasing or decreasing order
--   y-axis is annotated with cluster IDs and number of data rows
-    (heatmap)
--   x-axis is annotated with base pairs, e.g. 10bp, 1kb, 1.2Mb, etc.
--   heatmaps can be plotted using GGplot2 package instead of R base
-    graphics system
--   speed-up in motif plots thanks to faster, vectored implementation of
-    motif density data acquisition
--   code simplification - seqplots in Shiny GUI mode use all functions
-    from package core
-
-GUI:
-
--   feature-track pairs selection grid have UI elements to multi-select
-    and batch change labels/colors/etc.
--   option to make a clustering repeatable (works by reusing a
-    .Random.seed)
--   option to plot selected cluster only as heatmap
--   SeqPlots GUI updated to work with Bootstrap v3.3.1
-
-BUGFIX:
-
--   lines separating the clusters are drawn in correct places on
-    grDevices::quartz devices
--   proper positioning of 3' ends of anchored region in motif plot
--   fixed error with anchored plots and genomic feature width equals 1bp
--   y-axis does respect cex.axis parameter
--   GUI fixed to work with shiny 0.11.0 and above
-
-CHANGES IN VERSION 1.0.0
-------------------------
-
-PACKAGE:
-
--   plotHeatmap function returns cluster report as GRanges structure
--   redundant parameters removed from plotting functions
--   plotHeatmap function have "embed" parameter for plotHeatmap - allows
-    to plot 1st heatmap without using grid system, intended to use with
-    complex plots
-
-BUGFIX:
-
--   motif plot orientation properly dependents on strand
--   GUI - reordering the heatmap respects previously set include/exclude
-    parameters
-
-CHANGES IN VERSION 0.99.1
--------------------------
-
-PACKAGE:
-
--   heatmap plotting function returns cluster report ad data.table
--   getPlotSetArray function have "verbose" parameter that controls
-    messages and warnings output
--   references added to documentation
-
-BUGFIX:
-
--   plotHeatmap and plotAverage generic methods for SeqPlots-classes
-    respect the parameters
--   package passes tests and check on 32bit Windows (plotting only,
-    because no rtrackalyer::BigWigFile support for Win32)
-
-CHANGES IN VERSION 0.99
------------------------
-
-GENERAL:
-
--   Anchored plots and heatmaps uses [downstream]--0--0--[upstream]
-    X-axis coordinate system instead
-    [downstream]--0--[anchored]-[upstream+anchored]
-
-PACKAGE:
-
--   package really on reference class system including MotifSetup,
-    PlotSetArray, PlotSetList and PlotSetPair
--   generic subset and data manipulation methods for SeqPlots-classes
-    including '[', "[[" and "unlist", which allows to switch between
-    classes
--   automatic tests for class system, calculations and plotting
-    functions
--   documentation for all functions and classes
--   PDF vignette engine replaced by HTML one
--   QuickStart vignette added
-
-GUI:
-
--   automated GUI tests using Rselenium package
-
-BUGFIX:
-
--   issue \#1: some server instances loads empty .Rdata file on startup
-
-CHANGES IN VERSION 0.9.3
-------------------------
-
--   The web GUI and R package projects merged into singe project
-    distributed as Bioconductor compatible R package
--   The command line interface have the same capabilities as GUI version
--   Web GUI vignette added
-
-CHANGES IN VERSION 0.9.2
-------------------------
-
-GENERAL:
-
--   use Cairo package for plotting, X11 installation no longer required
--   colors in plot grid are initiated automatically (same color palette
-    as for auto-generated average plots), white color is allowed
--   more informative error messages during file upload
--   documentation is integrated with SeqPlots GUI help
--   Web GUI debug console added
--   Exit button, that closes web interface and background R process
-
-BUGFIX:
-
--   fixed errors reporting in singe core/Windows mode
--   the custom color gradient controls for hetmap (three color pickers)
-    work correctly now
--   heatmap main title no longer overlaps with sub-plot labels
-
-CHANGES IN VERSION 0.9.1
-------------------------
-
-GENERAL:
-
--   inputs and features sorted alphabetically
--   DataTables v1.10.0 with pagination, selection number indicator and
-    infinite row selections
--   buttons for heatmap and lineplots, PDF default sizes,
--   changes in GUI layout
--   default PDF output paper size set to A4 horizontal,
--   Font sizes are in points
--   preview is compatible with A4 PDF output (at 100 DPI)
--   color key for heatmap are always generated using image.plot function
-    that provides better labeling
--   batch plots do not override individual labels if set
--   option to keep 1:1 aspect ratio (default for batch plots)
--   miscellaneous options renamed for clarity
-
-CHANGES IN VERSION 0.9.0
-------------------------
-
-FEATURES:
-
--   Multi-plot grid option in batch mode - many line plots on single
-    page
-
-GENERAL:
-
--   R 3.1 and BioC 2.14 compatibility
--   faster BigWig signal retrieval, no need for modified rtracklayer C
-    code in the package
--   warning message if JS File API is not supported (old browsers)
--   improved the performance of heatmap plotting by using list of
-    matrices instead concatenated matrix
-
-BUGFIX:
-
--   application start properly without any BSGenome genomic packages
-    installed
--   cluster report - the final order agrees with cluster indicates
-
-CHANGES IN VERSION 0.8.2
-------------------------
-
-FEATURES:
-
--   Hierarchical and super self-organizing network clustering added for
-    heatmaps
--   Anchored motif plots
--   The row order of the heatmap is exported along with cluster report
-
-GENERAL:
-
--   JS color picker added for browsers, that do not support select input
-    type="color" i.e. Firefox (checked with modernizr.js library)
--   Single process mode and Microsoft Windows compatibility (running
-    without fork parallelization)
--   Shiny 0.9.1 compatibility
--   Saved datasets can be downloaded for local usage
--   Clicking row or column name in plot grid toggles the checkboxes
--   Minor GUI changes
-
-CHANGES IN VERSION 0.8.1
-------------------------
-
-GENERAL:
-
--   GUI redesign: plot matrix incorporates sub-plot/heatmap specific
-    controls, all heatmap options gathered in single tab
--   warning before closing/refreshing a webpage with active session
--   cookie based default options: user, genome and deactivate page exit
-    warning
--   heat-map clusters provided as cluster report - a CSV file containing
-    original features, annotations and cluster information, see more:
-    https://bitbucket.org/przemol/seqplots/wiki/Heatmaps\#markdown-header-cluster-report
--   Wiggle files processing: correct for multiple header definitions and
-    roman/arabic chromosome names correction
--   Optimised keyboard shortcuts: plot - RETUTRN or ctrl/cmd+SPACE,
-    switch heatmap - ctrl/cmd+H, switch reactive plotting - ctrl/cmd+R
--   minor speed improvement
-
-BUGFIX:
-
--   Motif density plots and heatmaps: flip rows on (-) strand
-
-CHANGES IN VERSION 0.8.0
-------------------------
-
-GENERAL:
-
--   GUI redesign, option partitioned to more tabs
--   preview plot is zoomed on click rather than on mouse hover
--   possibility to remove multiple files
--   comments visible as popup in file managmed window
--   all chromosome naming conventions (most notably chrX/X and variants
-    of chrM/M/MtDNA/MT etc.) are accepted
-    (http://www.bioconductor.org/packages/release/data/annotation/html/seqnames.db.html)
--   incoming featurefiles (GFF and BED) are not processed, just chacked
-    for errors
--   explicit error handling for incoming flies, the line with problem or
-    unexpected chromosome(s) are indentified to the user
--   motif density tracks can be binned (defoult at 10bp)
--   tracks amd motif densities cna be mixed together in plots
-
-SERVER:
-
--   server\_config.R added - a configuration file that allows to set up
-    server varaiables, e.g. the user data location
-
-MAC OS X APP:
-
--   interface to insrall new genomes from Bioconductor and local
-    resources (R BSgemome format:
-    http://www.bioconductor.org/packages/release/bioc/html/BSgenome.html)
--   option to set up data location
-
-CHANGES IN VERSION 0.7.0
-------------------------
-
--   SeqPlots for Mac OS X relesed - an user frienddly wrapper app
-    containig R, packages and SeqPlots coede
--   heatmap plotting added
--   motif denstty plotting added for lineplot and heatmap
--   minior interface redesign
--   reactive interface can be turn off for plottting, user plots on
-    demend
--   adding files from jQuery File Upload
-    (http://blueimp.github.io/jQuery-File-Upload/) is handled directly
-    by R eliminating additional node.js server application and making
-    proper file handling for desktop version
--   computationally expensive operations (calculating plot matrix and
-    plotting) are handeled by new R process (parallel R library) - many
-    proces can run simmutainously in same Shiny instance, user can get
-    fedback from the calcualtion can be cancelled
-
-CHANGES IN VERSION 0.6.0
-------------------------
-
--   Shiny (https://github.com/rstudio/shiny) used as R web fraimwork,
-    support for Rserver/EXT JS version dropped
--   support for 145 genomes from UCSC database (via user provideing
-    valid genome symbol)
--   new reactive user interface
--   new plot type: midpoint features - it calculates the middle of given
-    features and centres the summary on it
--   the option to ignore the strand (plot always in the same direction)
--   the option to remove the zeros (0 value of score in Wiggle track)
-    from mean and error estimate calculations
--   the support for BED feature files (in addition to GFF, Wiggle (all
-    variants), BigWiggle)
--   automatic chromosome name correction for C. elegans genomes (I =\>
-    chrI, MtDNA =\> chrM, etc.)
--   accepts wiggle with overlapping ranges (e.g. microarray experiments
-    processed using MA2C)
--   basic user management for uploaded files
--   option to download the features and track files directly from
-    application
-
-CHANGES IN VERSION 0.5.0
-------------------------
-
--   Initial test and alpha releases
-
-<hr class="sectionend" />
-
-Glossary
-========
-
------------
-
--   "**feature**" - a genomic interval defined by **chromosome** name,
-    **start** and **end** positions and the **directionality** (strand).
-    The end must always be a bigger number than start, so the width of
-    the range is not negative. Start and end means here the numeric
-    start of the interval and should not be confused with TSS and TTS.
-
-    For example, in BED format this information is stored in following
-    text tab delimited format: `chr7    127471196  127472363  .  .  +`
-
------------
-
--   "**directionality**" - the strand of genomic feature, determining if
-    the plotting range should be anchored around the star or and, and
-    the direction in which signal is being processed to create the
-    average track or heatmap. Unknown directionality is marked by `*`
-    and treated as `+` for calculations.
-
------------
-
--   "**track**" - the file assigning the continuous signal (score) to
-    genomic locations across the chromosomes. The signal usually comes
-    from sequencing experiments, like ChIP-seq, RNA-seq, DNase-seq,
-    MNase-seq, or from computational tools, for example nucleosome
-    occupancy prediction, CpG density.
-
-    For example, in BedGraph format this information is stored in
-    following text tab delimited format: `chr19 49302300 49302600 -0.75`
-
------------
-
--   "**reference genome package**" - the R BSgemome package containing
-    the full reference sequence for given species. It is also used to
-    provide universal chromosome names and chromosome lengths taht are
-    used as plotting boundaries.
-
------------
-
--   "**reads coverage**" - The basic way to calculate the signal from
-    sequencing based assays. The numeric representation shows how much
-    reads was aligned to given genomic location. This can be a proxy to
-    protein-DNA binding (ChIP-seq) or the expression (RNA-seq). Can be
-    calculated using BedTools:
-    http://bedtools.readthedocs.org/en/latest/content/tools/genomecov.html
-    Also known as `pileups`.
-
------------
-
-<hr class="sectionend" />
-
-References
-==========
-
-> This section lists R, JavaScript and CSS libraries used by SeqPlots, important conceptual contributions to the software, and publication, where figures generated by SeqPlots are featured.
-
-**R project and Bioconductor**
-
--   R Core Team (2014). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL http://www.R-project.org/.
--   Bioconductor: Open software development for computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others 2004, Genome Biology, Vol. 5, R80.  URL http://www.bioconductor.org/.
-- RStudio and Inc. (2014). shiny: Web Application Framework for R. R package version 0.10.1. http://shiny.rstudio.com/
-- **Other CRAN packages:** digest, DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, ggplot2, Cairo and parallel
-- **Bioconductor packages:** IRanges, BSgenome, Rsamtools, rtracklayer, GenomicRanges and Biostrings
-
-**JavaScript and CSS**
-
-- jQuery framework - http://jquery.com
-- Bootstrap - http://getbootstrap.com
-- DataTables, Table plug-in for jQuery - http://www.datatables.net
-- jQuery File Upload Plugin - https://github.com/blueimp/jQuery-File-Upload
-- jQuery throttle - http://benalman.com/projects/jquery-throttle-debounce-plugin/
-- jQuery Cookie Plugin - https://github.com/carhartl/jquery-cookie
-- Modernizer JS library - http://modernizr.com
-- JavaScript Templates - https://github.com/blueimp/JavaScript-Templates
-- JavaScript Color Picker - http://jscolor.com
-- md5-js - https://github.com/wbond/md5-js
-- Font Awesome - http://fortawesome.github.io/Font-Awesome
-- Google Fonts - https://www.google.com/fonts
-- jQuery user interface - http://jqueryui.com (documentation)
-- jquery.tocify.js: jQuery Table of Contents - https://github.com/gfranko/jquery.tocify.js (documentation)
-- Strapdown https://github.com/arturadib/strapdown (documentation)
-- Bootswatch themes - http://bootswatch.com (documentation)
-- google-code-prettify - https://code.google.com/p/google-code-prettify (documentation)
-- marked - https://github.com/chjj/marked (documentation)
-
-**Important conceptual contribution to the project**
-
-- Liu T, Ortiz J, Taing L, Meyer C, Lee B, Zhang Y, Shin H, Wong S, Ma J, Lei Y, et al. 2011. [Cistrome: an integrative platform for transcriptional regulation studies.](http://www.ncbi.nlm.nih.gov/pubmed/21859476) Genome Biology 12: R83.
-- Thomas Williams, Colin Kelley and others (2010). Gnuplot 4.4: an interactive plotting program. URL http://www.R-project.org/.
-- Kent, W.J., Sugnet, C.W., Furey, T.S., Roskin, K.M., Pringle, T.H., Zahler, A.M. and Haussler, a. D. (2002). [The Human Genome Browser at UCSC](http://www.ncbi.nlm.nih.gov/pubmed/12045153). Genome Research. 12:996–1006.
-- Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. (2010). [BigWig and BigBed: enabling browsing of large distributed datasets.](http://www.ncbi.nlm.nih.gov/pubmed/20639541) Bioinformatics. 1;26(17):2204-7
-- Nicol, J.W., Helt, G.A., Blanchard, S.G., Raja, A. and Loraine, A.E. (2009). [The Integrated Genome Browser: free software for distribution and exploration of genome-scale datasets.](http://www.ncbi.nlm.nih.gov/pubmed/19654113) Bioinformatics (Oxford, England). 25:2730–1.
-- Thorvaldsdóttir, H., Robinson, J.T. and Mesirov, J.P. (2012). [Integrative Genomics Viewer (IGV): high-performance genomics data visualization and exploration.](http://www.ncbi.nlm.nih.gov/pubmed/22517427) Briefings in bioinformatics. bbs017
-
-
-**Server deployment**
-
-- Shiny Server - https://github.com/rstudio/shiny-server
-- ShinyApps - https://github.com/rstudio/shinyapps
-
-
-**Publications containing figures made by SeqPlots**
-
-- Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J. [Extreme HOT regions are CpG-dense promoters in C. elegans and humans.](http://www.ncbi.nlm.nih.gov/pubmed/24653213) Genome Res 24(7):1138-1146 Jul 2014
-- Latorre I, Chesney MA, Garrigues JM, Stempor P et al. [The DREAM complex promotes gene body H2A.Z for target repression](http://www.ncbi.nlm.nih.gov/pubmed/25737279). Genes Dev 2015 Mar 1;29(5):495-500.
-
-
-<hr class="sectionend" />
-
-
-</xmp>
-
-<div class="navbar navbar-fixed-top" style="display:none;" id="top">
-  <div class="navbar-inner">
-    <a class="brand" href="#" style="margin-left: 310px; padding-bottom: 0px;">
-      <img src="img/ico_full.png" style="height:35px; position: absolute; left:100px; top:-6px;">
-    </a>
-
-    <ul class="nav">
-      <li><a href="http://www.bioconductor.org/packages/release/bioc/html/seqplots.html">SeqPlots on Bioconductor</a></li>
-      <li><a href="https://github.com/Przemol/seqplots">SeqPlots on GitHub</a></li>
-      <li><a href="https://github.com/Przemol/seqplots/issues">Known issues</a></li>
-      <li><a href="https://github.com/Przemol/seqplots/issues/new">Report an issue</a></li>
-      <!--
-      <li><a href="http://przemol.github.io/seqplots/SeqPlots.pdf">PDF user guide</a></li>
-
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select theme<b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li class="nav-header">Themes</li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">amelia</a></li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">cerulean</a></li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">journal</a></li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">readable</a></li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">simplex</a></li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">slate</a></li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">spacelab</a></li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">spruce</a></li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">superhero</a></li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">united</a></li>
-          <li class="divider"></li>
-          <li class="nav-header">Classsic</li>
-          <li><a href="#" onClick=" $('link[href]').first().attr('href', 'themes/' + $(this).html() + '.min.css').change(); ">bootstrap</a></li>
-        </ul>
-      </li>
-      -->
-    </ul>
-  </div>
-</div>
-
-<div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span3" style="display:none;" id='right'>
-       <div id="toc" class="tocify" style="margin-left: 0px;"></div>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+  
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="pandoc" />
+    
+    <link rel="shortcut icon" href="img/fav.ico">
+    
+    <!-- <link href="http://getbootstrap.com/assets/css/docs.min.css" rel="stylesheet"> -->
+    
+        
+        
+    <title>SeqPlots</title>
+    
+          <script src="index_files/jquery-1.11.0/jquery.min.js"></script>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link href="index_files/bootstrap-3.3.1/css/united.min.css" rel="stylesheet" />
+      <script src="index_files/bootstrap-3.3.1/js/bootstrap.min.js"></script>
+      <script src="index_files/bootstrap-3.3.1/shim/html5shiv.min.js"></script>
+      <script src="index_files/bootstrap-3.3.1/shim/respond.min.js"></script>
+          <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <a class="btn btn-lg navbar-toggle collapsed" href="#toc1" style="color: #ffffff; padding-top: 5px; padding-bottom: 4px;">
+              <span class="glyphicon glyphicon-list-alt"></span>
+            </a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+      
+            <a class="navbar-brand" href="#" style="padding-top: 3px; padding-bottom: 3px;">
+              <img src="img/ico_full.png" style="height:44px">
+            </a>
+          </div>
+          
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              
+              <li><a href="http://www.bioconductor.org/packages/release/bioc/html/seqplots.html">Bioconductor</a></li>
+              <li><a href="https://github.com/Przemol/seqplots">GitHub</a></li>
+              <li><a href="https://github.com/Przemol/seqplots/issues">Known issues</a></li>
+              <li><a href="https://github.com/Przemol/seqplots/issues/new">Report an issue</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right hidden-md hidden-lg hidden-xs">
+              <li>
+                  <a class="btn btn-lg navbar-toggle collapsed" href="#toc1" style="color: #ffffff; padding-top: 6px; padding-bottom: 6px;">
+                    <span class="glyphicon glyphicon-list-alt"></span>
+                  </a>
+              </li>
+            </ul>
+                
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+        
+        
+          <style type="text/css">code{white-space: pre;}</style>
+      <style type="text/css">
+        table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+          margin: 0; padding: 0; vertical-align: baseline; border: none; }
+        table.sourceCode { width: 100%; line-height: 100%; }
+        td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+        td.sourceCode { padding-left: 5px; }
+        code > span.kw { color: #007020; font-weight: bold; }
+        code > span.dt { color: #902000; }
+        code > span.dv { color: #40a070; }
+        code > span.bn { color: #40a070; }
+        code > span.fl { color: #40a070; }
+        code > span.ch { color: #4070a0; }
+        code > span.st { color: #4070a0; }
+        code > span.co { color: #60a0b0; font-style: italic; }
+        code > span.ot { color: #007020; }
+        code > span.al { color: #ff0000; font-weight: bold; }
+        code > span.fu { color: #06287e; }
+        code > span.er { color: #ff0000; font-weight: bold; }
+      </style>
+      <style type="text/css">
+        pre:not([class]) {
+          background-color: white;
+        }
+      </style>
+        
+          <link rel="stylesheet" href="style.css" type="text/css" />
+        
+          <style type = "text/css">
+        .main-container {
+          max-width: 940px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        code {
+          color: inherit;
+          background-color: rgba(0, 0, 0, 0.04);
+        }
+        img { 
+          max-width:100%; 
+          height: auto; 
+        }
+      </style>
+        
+  </head>
+
+  <body data-spy="scroll" data-target="#sidebar">
+
+    <div class="container">
+      
+            
+      <div class="row">
+        <div class="col-md-4 hidden-print hidden-md hidden-lg">
+                      <h1 id='toc1' ></h1>
+            <nav class="">
+              <ul>
+              <li><a href="#welcome-to-seqplots">Welcome to <strong>SeqPlots</strong></a><ul>
+              <li><a href="#summary">Summary</a></li>
+              <li><a href="#availability">Availability</a></li>
+              <li><a href="#key-features">Key features</a></li>
+              <li><a href="#video-presentation">Video presentation</a></li>
+              <li><a href="#issues-and-bugs">Issues and bugs</a></li>
+              </ul></li>
+              <li><a href="#installation---mac-os-x-app">Installation - Mac OS X app</a><ul>
+              <li><a href="#how-to-install">How to install</a></li>
+              <li><a href="#how-to-start">How to start</a></li>
+              <li><a href="#package-content">Package content</a></li>
+              </ul></li>
+              <li><a href="#installation---rbioconductor">Installation - R/Bioconductor</a><ul>
+              <li><a href="#how-to-install-1">How to install</a></li>
+              <li><a href="#how-to-start-1">How to start</a></li>
+              </ul></li>
+              <li><a href="#installation---server-deployment">Installation - Server deployment</a><ul>
+              <li><a href="#installation">Installation</a></li>
+              <li><a href="#usage">Usage</a></li>
+              <li><a href="#alternative-installation">Alternative installation</a></li>
+              </ul></li>
+              <li><a href="#quick-start-demo">Quick start demo</a></li>
+              <li><a href="#adding-and-managing-files">Adding and managing files</a><ul>
+              <li><a href="#supported-file-formats">Supported file formats</a></li>
+              <li><a href="#adding-files">Adding files</a></li>
+              <li><a href="#downloading-and-removing-files">Downloading and removing files</a></li>
+              </ul></li>
+              <li><a href="#running-the-plot-set-jobs">Running the plot-set jobs</a><ul>
+              <li><a href="#selecting-files">Selecting files</a></li>
+              <li><a href="#setting-up-plot-options">Setting up plot options</a></li>
+              <li><a href="#plotting-sequence-motif-density">Plotting sequence motif density</a></li>
+              <li><a href="#starting-the-plot-set-calculation">Starting the plot set calculation</a></li>
+              </ul></li>
+              <li><a href="#plotting">Plotting</a><ul>
+              <li><a href="#previewing-plot">Previewing plot</a></li>
+              <li><a href="#titles-and-axis-panel">Titles and axis panel</a></li>
+              <li><a href="#guide-lines-and-data-scaling">Guide lines and data scaling</a></li>
+              <li><a href="#keys-labels-and-colors-panel">Keys, labels and colors panel</a></li>
+              </ul></li>
+              <li><a href="#heatmaps">Heatmaps</a><ul>
+              <li><a href="#heatmap-setup-tab">Heatmap setup tab</a></li>
+              <li><a href="#other-options-controlling-heatmap-appearance">Other options controlling heatmap appearance</a></li>
+              </ul></li>
+              <li><a href="#getting-pdfs-and-cluster-info">Getting PDFs and cluster info</a><ul>
+              <li><a href="#pdf-output-size">PDF output size</a></li>
+              </ul></li>
+              <li><a href="#batch-operations">Batch operations</a></li>
+              <li><a href="#saving-and-loading-plotsets">Saving and loading plotsets</a><ul>
+              <li><a href="#load-or-save-plotset">Load or save plotset</a></li>
+              <li><a href="#plot-set-files-structure">Plot set files structure</a></li>
+              </ul></li>
+              <li><a href="#advanced-options">Advanced options</a></li>
+              <li><a href="#genomes-managment">Genomes managment</a></li>
+              <li><a href="#error-messages">Error messages</a></li>
+              <li><a href="#version-history">Version history</a><ul>
+              <li><a href="#changes-in-version-1.2.0">CHANGES IN VERSION 1.2.0</a></li>
+              <li><a href="#changes-in-version-1.0.0">CHANGES IN VERSION 1.0.0</a></li>
+              <li><a href="#changes-in-version-0.99.1">CHANGES IN VERSION 0.99.1</a></li>
+              <li><a href="#changes-in-version-0.99">CHANGES IN VERSION 0.99</a></li>
+              <li><a href="#changes-in-version-0.9.3">CHANGES IN VERSION 0.9.3</a></li>
+              <li><a href="#changes-in-version-0.9.2">CHANGES IN VERSION 0.9.2</a></li>
+              <li><a href="#changes-in-version-0.9.1">CHANGES IN VERSION 0.9.1</a></li>
+              <li><a href="#changes-in-version-0.9.0">CHANGES IN VERSION 0.9.0</a></li>
+              <li><a href="#changes-in-version-0.8.2">CHANGES IN VERSION 0.8.2</a></li>
+              <li><a href="#changes-in-version-0.8.1">CHANGES IN VERSION 0.8.1</a></li>
+              <li><a href="#changes-in-version-0.8.0">CHANGES IN VERSION 0.8.0</a></li>
+              <li><a href="#changes-in-version-0.7.0">CHANGES IN VERSION 0.7.0</a></li>
+              <li><a href="#changes-in-version-0.6.0">CHANGES IN VERSION 0.6.0</a></li>
+              <li><a href="#changes-in-version-0.5.0">CHANGES IN VERSION 0.5.0</a></li>
+              </ul></li>
+              <li><a href="#explanations">Explanations</a></li>
+              <li><a href="#references">References</a></li>
+              </ul>
+            </nav>
+            <hr class="sectionend" />
+                  </div>
+        
+       <div class="col-md-8">
+          <div id="welcome-to-seqplots" class="section level1">
+          <h1>Welcome to <strong>SeqPlots</strong></h1>
+          <blockquote>
+          <p>An interactive tool for visualizing NGS signals and sequence motif densities along genomic features using average plots and heatmaps.</p>
+          </blockquote>
+          <p><img src="img/ico_full_color.png" alt="Examples of Seq Plots interface and outputs" /> <img src="img/SeqPlots_fig1_web.png" alt="Examples of Seq Plots interface and outputs" /></p>
+          <div id="summary" class="section level2">
+          <h2>Summary</h2>
+          <p>SeqPlots is a web browser tool for plotting average track signals (e.g. read coverage) and sequence motif densities over user specified genomic features. The data can be visualized in linear plots with error estimates or as series of heatmaps that can be sorted and clustered. The software can be run locally on a desktop or deployed on a server and allows easy data sharing. SeqPlots pre-calculates and stores binary result matrices, allowing rapid plot generation. Plots can also be run in batch.</p>
+          </div>
+          <div id="availability" class="section level2">
+          <h2>Availability</h2>
+          <p>SeqPlots is distributed as <a href="http://www.bioconductor.org/packages/release/bioc/html/seqplots.html">Bioconductor package</a> available on platforms and operating systems supported by R project. A standalone <a href="https://github.com/Przemol/seqplots_osx/zipball/master">SeqPlot OS X bundle</a>, combing R and all required packages, is available as for Mac OS X (10.6 or higher). SeqPlots can also be deployed on a server using free and open sourced (GPL licensed) <a href="https://github.com/rstudio/shiny-server">Shiny Server</a>.</p>
+          </div>
+          <div id="key-features" class="section level2">
+          <h2>Key features</h2>
+          <ul>
+          <li>Easy to use web interface (R or shell expertise not required)</li>
+          <li>Web server or desktop versions</li>
+          <li>Generates publication quality plots out of the box</li>
+          <li>Plots average signals or heatmaps</li>
+          <li>Accepts Wiggle, BedGraph, BigWiggle, and GFF and BED formats</li>
+          <li>Calculates motif density from reference genome packages</li>
+          <li>Tracks and features are searchable and old calculations stored</li>
+          <li>Converts tracks to binary BigWiggle format for rapid data extraction and efficient storage</li>
+          <li>Implemented using Shiny R framework providing internet browser reactive GUI and session based connectivity (websocets)</li>
+          </ul>
+          </div>
+          <div id="video-presentation" class="section level2">
+          <h2>Video presentation</h2>
+          <div class="embed-responsive embed-responsive-16by9">
+          <iframe width="853" height="480" src="https://www.youtube.com/embed/e29CMRriROM?VQ=HD720&amp;rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+          </div>
+          <p><br /></p>
+          </div>
+          <div id="issues-and-bugs" class="section level2">
+          <h2>Issues and bugs</h2>
+          <p>Please visit <a href="https://github.com/Przemol/seqplots/issues"><strong>issue tracker</strong></a> to view currently know issues. To report a new issue/bug/feature request please click <a href="https://github.com/Przemol/seqplots/issues/new"><strong>here</strong></a>. If the issue is connected to file upload please attach the file in the form.</p>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          <div id="installation---mac-os-x-app" class="section level1">
+          <h1>Installation - Mac OS X app</h1>
+          <blockquote>
+          <p>The Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains all R binaries and packages that SeqPlots depends on. Additionally, reference sequences for <em>Caenorhabditis elegans</em> is included. Sequences for other popular model organisms can be downloaded using a graphical user interface.</p>
+          </blockquote>
+          <p><strong>System requirements</strong></p>
+          <ul>
+          <li>Mac OS X 10.6 (Snow Leopard) or higher</li>
+          <li><p>Xquartz package for OS X 10.8 (Mountain Lion) and above: <a href="http://xquartz.macosforge.org/landing/" class="uri">http://xquartz.macosforge.org/landing/</a></p>
+          <blockquote>
+          <p>More info: <a href="http://support.apple.com/en-us/HT201341" class="uri">http://support.apple.com/en-us/HT201341</a></p>
+          </blockquote></li>
+          </ul>
+          <div id="how-to-install" class="section level2">
+          <h2>How to install</h2>
+          <ol style="list-style-type: decimal">
+          <li>Download the compressed application from <a href="https://github.com/Przemol/seqplots_osx/zipball/master" class="uri">https://github.com/Przemol/seqplots_osx/zipball/master</a></li>
+          <li>Double-click on downloaded file to unzip the contents of archive</li>
+          <li>Drag and drop SeqPlots.app to Applications folder</li>
+          </ol>
+          </div>
+          <div id="how-to-start" class="section level2">
+          <h2>How to start</h2>
+          <p>Start SeqPlots from Applications. If run for the <em>first time</em> the operating system security notice might be shown.</p>
+          <blockquote>
+          <p><img src="img/03_01a.png" alt="Seq1" /></p>
+          </blockquote>
+          <p>To run the application right-click on SeqPlots icon and choose “Open”, followed by clicking “Open” button in popup window. This need to be done only once, later SeqPlots can be started as usual Mac OS X application.</p>
+          <blockquote>
+          <p><img src="img/03_01b.png" alt="Seq2" /></p>
+          </blockquote>
+          <p>After starting SeqPlots the welcome screen displays the software version, the currently installed genomes and the data folder location.</p>
+          <blockquote>
+          <p><img src="img/03_02.png" alt="SeqPlots Mac OS X bindle - the welcome screen" /></p>
+          </blockquote>
+          <p>This screen allows you to set up following options:</p>
+          <ul>
+          <li>Change your data location folder (by default your home directory will be used)</li>
+          <li><p>Install new genomes (requires internet connection). The correct genome packages need to be installed before before uploading files for plotting. A full list of supported genomes is available here: <a href="http://www.bioconductor.org/packages/release/BiocViews.html#___BSgenome" class="uri">http://www.bioconductor.org/packages/release/BiocViews.html#___BSgenome</a></p>
+          <blockquote>
+          <p><img src="img/03_03.png" alt="Genomic packages installer window" /></p>
+          </blockquote></li>
+          </ul>
+          <p>Press the <strong><code>START</code></strong> button to initiate SeqPlots. If initiation was successful the user interface should open in your default web browser.</p>
+          <p>For SeqPlots usage instructions please refer to <b>Quick start demo</b> or specific chapters of this document.</p>
+          <p>The window in the background allows you to assess if SeqPlots is running properly and exit the application at any moment.</p>
+          <blockquote>
+          <p><img src="img/03_04.png" alt="SeqPlots Mac OS X bindle - the diagnostic window" /></p>
+          </blockquote>
+          <p>The “moving” animation progress bar indicates that SeqPlots is running. Press “Cancel” to stop it. Pressing “Details” will reveal a small text window that displays diagnostic and error messages.</p>
+          </div>
+          <div id="package-content" class="section level2">
+          <h2>Package content</h2>
+          <ul>
+          <li>Platypus (<a href="http://www.sveinbjorn.org/platypus" class="uri">http://www.sveinbjorn.org/platypus</a>) wrapper</li>
+          <li>R (<a href="http://www.r-project.org/" class="uri">http://www.r-project.org/</a>) branch 3.1 for Snow leopard (<a href="http://r.research.att.com/snowleopard/R-3.1-branch/R-3.1-branch-snowleopard-sa-x86_64.tar.gz" class="uri">http://r.research.att.com/snowleopard/R-3.1-branch/R-3.1-branch-snowleopard-sa-x86_64.tar.gz</a>)</li>
+          <li>SeqPlots dependency packages (including Shiny, rtracklayer and BSgenome)</li>
+          <li>Full genome sequences for Caenorhabditis elegans (UCSC version ce10) - BSgenome.Celegans.UCSC.ce10 R package</li>
+          <li>SeqPlots package</li>
+          </ul>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          <div id="installation---rbioconductor" class="section level1">
+          <h1>Installation - R/Bioconductor</h1>
+          <blockquote>
+          <p>The Bioconductor package runs SeqPlots locally on desktop computers from the R environment. It is available for Windows, GNU/Linux and Mac OS X operating systems. For further information please refer to <a href="http://www.bioconductor.org/packages/release/bioc/html/seqplots.html">SeqPlots Bioconductor webpage</a>.</p>
+          </blockquote>
+          <p><strong>System requirements:</strong></p>
+          <ul>
+          <li><a href="http://www.r-project.org/">R 3.1 or higher</a></li>
+          </ul>
+          <div id="how-to-install-1" class="section level2">
+          <h2>How to install</h2>
+          <p>To install SeqPlots package, start R and enter:</p>
+          <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;http://bioconductor.org/biocLite.R&quot;</span>)
+          <span class="kw">biocLite</span>(<span class="st">&quot;seqplots&quot;</span>)</code></pre>
+          </div>
+          <div id="how-to-start-1" class="section level2">
+          <h2>How to start</h2>
+          <p>To start SeqPlots web interface, start R and enter:</p>
+          <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(seqplots)
+          <span class="kw">run</span>()</code></pre>
+          <p>After a successful initiation the user interface will be opened in your default web browser. For further usage please refer to <strong>Quick start guide</strong> or specific chapters.</p>
+          <p>The <code>run</code> function accepts “root” argument, which allows to change the data location folder (by default your home directory will be used), e.g.:</p>
+          <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">run</span>(<span class="dt">root=</span><span class="st">&#39;/path/to/data/location&#39;</span>)</code></pre>
+          <div id="additional-genome-packages" class="section level3">
+          <h3>Additional genome packages</h3>
+          <p>Genomic packages can be installed using standard bioconductor installer (Internet connection is required). For example, to instal human reference genome (hg19):</p>
+          <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;http://bioconductor.org/biocLite.R&quot;</span>)
+          <span class="kw">biocLite</span>(<span class="st">&quot;BSgenome.Hsapiens.UCSC.hg19&quot;</span>)</code></pre>
+          <p>Genome packages are required before uploading files for plotting. Full list of supported genomes is avilable here: <a href="http://www.bioconductor.org/packages/release/BiocViews.html#___BSgenome" class="uri">http://www.bioconductor.org/packages/release/BiocViews.html#___BSgenome</a></p>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          </div>
+          <div id="installation---server-deployment" class="section level1">
+          <h1>Installation - Server deployment</h1>
+          <blockquote>
+          <p>The server version allows the sharing of signal and feature files by a group of users and for remote calculation and file storage. This is the ideal method for providing a shared SeqPlots service to a group.</p>
+          </blockquote>
+          <p><strong>System requirements:</strong></p>
+          <ul>
+          <li>R 3.1 or higher</li>
+          <li>Shiny Server 1.0 or higher</li>
+          </ul>
+          <div id="installation" class="section level2">
+          <h2>Installation</h2>
+          <p>1. Install and configure the Shiny Server by following the instructions on <a href="https://github.com/rstudio/shiny-server" class="uri">https://github.com/rstudio/shiny-server</a></p>
+          <p>2. Install SeqPlots R package and dependences by following the instruction <a href="Installation%20-%20R%20package">here</a></p>
+          <p>3. Copy SeqPlots files to Shiny Server application folder:</p>
+          <pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cp</span> -r <span class="ot">$(</span><span class="kw">Rscript</span> -e <span class="st">&quot;cat(system.file(&#39;seqplots&#39;, package=&#39;seqplots&#39;))&quot;</span><span class="ot">)</span> /srv/shiny-server/</code></pre>
+          <p>4. Set up SeqPlots <strong>data location</strong> by running from R:</p>
+          <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">seqplots</span>(<span class="dt">root=</span><span class="st">&#39;/path/to/data/location&#39;</span>)</code></pre>
+          <p>5. Edit first line of <code>/srv/shiny-server/shiny/server_config.R</code>, so the environment variable <code>root</code> matches the <strong>data location</strong>; for example:</p>
+          <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Sys.setenv</span>(<span class="st">&#39;root&#39;</span>=<span class="st">&#39;/var/shiny-server/DATA&#39;</span>)</code></pre>
+          </div>
+          <div id="usage" class="section level2">
+          <h2>Usage</h2>
+          <p>After successful installation the SeqPlost web GUI will be available at <code>your_server_name:3838/seqplots/</code>.</p>
+          <p>For further usage please refer to <a href="Quick%20start">quick start guide</a> or specific chapters of <a href="..">documentation</a>.</p>
+          <div id="additional-genome-packages-1" class="section level3">
+          <h3>Additional genome packages</h3>
+          <p>Genomic packages can be installed using standard bioconductor installer (Internet connection required). For example, to instal human reference genome (hg19):</p>
+          <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;http://bioconductor.org/biocLite.R&quot;</span>)
+          <span class="kw">biocLite</span>(<span class="st">&quot;BSgenome.Hsapiens.UCSC.hg19&quot;</span>)</code></pre>
+          <p>Corresponding genome packages are required before uploading the files for plotting. Full list of supported genomes is avilable here: <a href="http://www.bioconductor.org/packages/release/BiocViews.html#___BSgenome" class="uri">http://www.bioconductor.org/packages/release/BiocViews.html#___BSgenome</a></p>
+          </div>
+          </div>
+          <div id="alternative-installation" class="section level2">
+          <h2>Alternative installation</h2>
+          <p>SeqPlots can be directly cloned into Shiny Server application folder from git repository by using <code>git clone https://github.com/Przemol/seqplots.git</code>. The data location can be set up with following R code:</p>
+          <pre class="sourceCode r"><code class="sourceCode r">root &lt;-<span class="st"> &quot;/data/location&quot;</span>
+          <span class="kw">dir.create</span>(root)
+          <span class="kw">setwd</span>(root)
+          <span class="kw">require</span>(RSQLite)
+          sqlite &lt;-<span class="st"> </span><span class="kw">dbDriver</span>(<span class="st">&quot;SQLite&quot;</span>)
+          con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(sqlite, <span class="dt">dbname =</span> <span class="st">&quot;files.sqlite&quot;</span>)
+          <span class="kw">dbGetQuery</span>(con, <span class="st">&quot;CREATE TABLE files (id INTEGER PRIMARY KEY ASC, name TEXT UNIQUE, </span>
+          <span class="st">  ctime TEXT, type TEXT, format TEXT, genome TEXT, user TEXT, comment TEXT)&quot;</span>)
+          if (!<span class="kw">dbListTables</span>(con) ==<span class="st"> &quot;files&quot;</span>) 
+              <span class="kw">warning</span>(<span class="st">&quot;Database not created!&quot;</span>)
+          <span class="kw">dbDisconnect</span>(con)
+          if (!<span class="kw">all</span>(<span class="kw">sapply</span>(<span class="kw">c</span>(<span class="st">&quot;removedFiles&quot;</span>, <span class="st">&quot;files&quot;</span>, <span class="st">&quot;publicFiles&quot;</span>, <span class="st">&quot;tmp&quot;</span>), dir.create))) 
+              <span class="kw">warning</span>(<span class="st">&quot;Folders not created!&quot;</span>)
+          <span class="kw">message</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Data loaction: &quot;</span>, root)</code></pre>
+          <p>The following dependencies must be installed in R:</p>
+          <pre><code>              package  version
+          1              shiny   0.10.0
+          2             fields      7.1
+          3           parallel    3.1.0
+          4          multicore      0.2
+          5           BSgenome   1.32.0
+          6      GenomicRanges   1.16.3
+          7            plotrix    3.5-7
+          8        rtracklayer   1.24.2
+          9            RJSONIO  1.2-0.2
+          10           RSQLite   0.11.4
+          11           kohonen   2.0.14
+          12             Cairo    1.5-5
+          13            digest    0.6.4
+          14           methods    3.1.0
+          15             tools    3.1.0
+          16             utils    3.1.0
+          17            httpuv    1.3.0
+          18           caTools     1.17
+          19            xtable    1.7-3
+          20         htmltools    0.2.4
+          21            bitops    1.0-6
+          22              Rcpp   0.11.2
+          23              spam   0.41-0
+          24              maps    2.3-7
+          25              grid    3.1.0
+          26         grDevices    3.1.0
+          27      BiocGenerics   0.10.0
+          28           IRanges   1.22.9
+          29        Biostrings   2.32.0
+          30           XVector    0.4.0
+          31         Rsamtools   1.16.1
+          32          graphics    3.1.0
+          33             stats    3.1.0
+          34          zlibbioc   1.10.0
+          35      GenomeInfoDb    1.0.2
+          36            stats4    3.1.0
+          37               XML 3.98-1.1
+          38             RCurl 1.95-4.1
+          39 GenomicAlignments    1.0.1
+          40      BiocParallel    0.6.1
+          41           foreach    1.4.2
+          42         BatchJobs      1.2
+          43            BBmisc      1.7
+          44               DBI    0.2-7
+          45         sendmailR    1.1-2
+          46              brew    1.0-6
+          47              plyr    1.8.1
+          48           stringr    0.6.2
+          49              fail      1.2
+          50         checkmate      1.0
+          51         codetools    0.2-8
+          52         iterators    1.0.7
+          53         base64enc    0.1-1
+          54             class   7.3-10
+          55              MASS   7.3-33</code></pre>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          <div id="quick-start-demo" class="section level1">
+          <h1>Quick start demo</h1>
+          <ol style="list-style-type: decimal">
+          <li><p>Start SeqPlots. Refer to <strong>installation guides</strong> for platform specific information. After successful initiation the web interface should automatically open in your default web browser. If you are using web server version just navigate your browser to the server address.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_01.png" alt="The SeqPlots interface in web browser" /></p></li>
+          <li><p>Upload feature (BED or GFF) and track (BigWig or WIG) files. They can be gzip compressed (e.g. file1.bed.gz). Press green “Add files…” button or just drag and drop files into the window. The ready to upload files will show up in upload window, where you select user name, reference genome and optionally add some comments.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_02.png" alt="File upload panel" /></p></li>
+          <li><p>When all is done press blue “Start upload” button. After upload and processing is done the green “SUCCESS” label should show. It means that file is on the registered and ready to use. Occasionally the file might be mot formatted properly or chromosome names might not agree with reference genome. In such case a verbose error will window appears and file as labeled as “ERROR”. For further information please refer to <a href="Errors"><strong>errors chapter</strong></a>.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_03.png" alt="File upload progress infoermation" /></p></li>
+          <li><p>Dismiss upload window and press blue “New plot set” button on side panel. This will bring up file management window. In file management window select at least one file from “Features” tab and at least one file from “Tracks” or sequence motif(s). The sequence motifs and tracks can be processed and plotted together. Select files by clicking on file name, selected files will be highlighted.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_04.png" alt="File management panel" /></p></li>
+          <li><p>After choosing files/motifs to plot, set up the processing options. You can find these in the button of plotting window.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_05.png" alt="Plot set calculation options" /></p></li>
+          <li><p>After options are set up press blue “Run calculation” button. This will dismiss the file management window and show processing message. Here you can observe the progress of the task and optionally cancel it if no longer required or you forgot to add some important file to the plot-set.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_06.png" alt="Plot set calculation progress window" /></p></li>
+          <li><p>After some time the calculation will finish (fingers crossed, without the error) and you will be able to see plot set array. In here you can choose which feature-track or feature-motif pairs to plot. Choose one or more checkboxes and press grey “Line plot” button (or hit RETURN from your keyboard).</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_07.png" alt="The plot selection grid" /></p></li>
+          <li><p>Congratulation! Your First plot is complete, you can see the preview of it on the side panel.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_08.png" alt="The plot preview panel" /></p></li>
+          <li><p>You are able to set up labels, titles, font sizes, legends and many more on control panel tabs - please see <strong>Plotting</strong> chapter for details.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_09.png" alt="Plot settings tabs" /></p></li>
+          <li><p>By clicking the plot preview you can enlarge it for better view. When everything is ready you can get the plot as PDF by clicking green “Line plot” button just on the top of side panel.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_10.png" alt="Average plot example" /></p></li>
+          <li><p>You can also visualize the signal as a heatmap. Please note that heatmap plotting is possible only for a single feature file. It is possible to sort heatmaps based on mean row signals and/or cluster them using k-means algorithm, hierarchical clustering or self organising maps. To learn more about heatmaps see <strong>Heatmaps</strong> chapter.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_11.png" alt="Heatmap settings tab" /></p></li>
+          <li><p>Heatmaps can be downloaded sa PDFs using ‘Heatmap’ button just on the bottom of setup panel. The small button, at the right sied of ‘Heatmap’ button downloads cluster definition and sorting order.</p>
+          <p><img src="img/01_QuickStart/01_QuickStart_12.png" alt="Heatmap example" /></p></li>
+          </ol>
+          <hr class="sectionend" />
+          </div>
+          <div id="adding-and-managing-files" class="section level1">
+          <h1>Adding and managing files</h1>
+          <div id="supported-file-formats" class="section level2">
+          <h2>Supported file formats</h2>
+          <p>Tracks:</p>
+          <ul>
+          <li>BigWig (.bw) - <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format6.1" class="uri">http://genome.ucsc.edu/FAQ/FAQformat.html#format6.1</a></li>
+          <li>Wiggle (.wig) - <a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html" class="uri">http://genome.ucsc.edu/goldenPath/help/wiggle.html</a></li>
+          <li>BedGraph (.bdg) - <a href="http://genome.ucsc.edu/goldenPath/help/bedgraph.html" class="uri">http://genome.ucsc.edu/goldenPath/help/bedgraph.html</a></li>
+          </ul>
+          <p>Features:</p>
+          <ul>
+          <li>BED - <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format1" class="uri">http://genome.ucsc.edu/FAQ/FAQformat.html#format1</a></li>
+          <li>GFF - <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format3" class="uri">http://genome.ucsc.edu/FAQ/FAQformat.html#format3</a></li>
+          <li>GTF (with .gff extension) - <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format4" class="uri">http://genome.ucsc.edu/FAQ/FAQformat.html#format4</a></li>
+          </ul>
+          <p>Files must be formatted according to UCSC guidelines. All widely used chromosome names conventions are accepted, e.g. for human files either ‘chr1’ or ‘1’ can be used, however these conventions should not be mixed within single files.</p>
+          </div>
+          <div id="adding-files" class="section level2">
+          <h2>Adding files</h2>
+          <p>Press the <code>Add files</code> button to bring up the <strong>file upload panel</strong>.</p>
+          <blockquote>
+          <p><img src="img/05_01.png" alt="File upload panel" /></p>
+          </blockquote>
+          <p>You can drag and drop files here or press the <code>Add files...</code> button to open a file selection menu. Before starting the upload the following mandatory information must be provided about each file:</p>
+          <ul>
+          <li>User ID</li>
+          <li>Reference genome - drop-down menu containing reference genome package currently installed in R</li>
+          </ul>
+          <p>Comments are optional.</p>
+          <p>The contents of the text field can be copied to all files by clicking the icon at the left of the field. The default values can be set using <code>Set defaults...</code> button. Default values are stored using the browser cookies, and the settings will be remembered across different sessions as long as the same web browser is used. File extensions that are not supported will raise an error.</p>
+          <blockquote>
+          <p><img src="img/05_02.png" alt="File upload panel with 4 files selected" /></p>
+          </blockquote>
+          <p>Individual files can be uploaded by pressing ‘start’ next to the file name or all files can be uploaded at once by pressing the <code>Start upload</code> button at the top of <strong>file upload panel</strong>.</p>
+          <p>During the upload process a progress bar is displayed. After upload SeqPlots gives a message that upload was successful or or gives an error message. Common errors are misformatted file formats or chromosome names do not matched the reference genome. For more information please refer to <em>Error explained</em> chapter.</p>
+          <blockquote>
+          <p><img src="img/05_03.png" alt="A feedback on successfully upload files" /></p>
+          </blockquote>
+          <p>To dismiss the upload window, click on <code>X</code> or outside the window.</p>
+          </div>
+          <div id="downloading-and-removing-files" class="section level2">
+          <h2>Downloading and removing files</h2>
+          <p>Clicking the <code>New plot set</code> button brings up the <strong>file collection window</strong>. The primary function of this window is to choose signal tracks and feature files to use for calculating the plots. However, it also provides basic file management capabilities. Information on files can be reviewed and files can be downloaded or deleted. Fields can be searched, filtered and sorted by any column. The red <code>x</code> button on the right site of file table removes a single file from the collection, while <code>Remove selected files</code> button will erase all selected files.</p>
+          <blockquote>
+          <p><img src="img/06/06_01.png" alt="The file collection window" /></p>
+          </blockquote>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          <div id="running-the-plot-set-jobs" class="section level1">
+          <h1>Running the plot-set jobs</h1>
+          <p>Pressing the <code>New plot set</code> button brings up the <strong>file collection window</strong> from which you can choose signal tracks and feature files to calculate average plots and heat maps. If you wish to upload more files please refer to <a href="Adding%20and%20managing%20files">adding new files documentation</a>. The <strong>file collection window</strong> has three tabs:</p>
+          <ul>
+          <li><code>Tracks</code> - signal files, i.e., Wiggle, BigWiggle and BedGraph files.</li>
+          <li><code>Features</code> - genomic feature files, i.e., BED, GFF and GTF files</li>
+          <li><code>Sequence features</code> - input any motif of interest that you want to plot.</li>
+          </ul>
+          <blockquote>
+          <p><img src="img/06/06_01.png" alt="The file collection modal" /></p>
+          </blockquote>
+          <div id="selecting-files" class="section level2">
+          <h2>Selecting files</h2>
+          <p>The <code>Tracks</code> and <code>Features</code> tabs displays information about the files and allows you to filter and sort by any column. The “Search:” dialog allows you to find any keyword in any field, while dropdowns below the file grid allow for more advanced filtering on specific columns.</p>
+          <p>Select files by clicking on the file name or any other part of the row beside <code>Show comment</code> and <code>Download</code> or <code>Remove</code> buttons. Chosen files are highlighted in light blue. Clicking the file name again will cancel the selection. At least one signal track or motif and one feature file must be selected before starting the calculation.</p>
+          </div>
+          <div id="setting-up-plot-options" class="section level2">
+          <h2>Setting up plot options</h2>
+          <p>Options controlling the plot settings is found below the file selection window:</p>
+          <ol style="list-style-type: decimal">
+          <li><strong><code>Bin track @ [bp]:</code></strong> - this numeric input determines the resolution of data acquisition; the default value 10 means that 10bp intervals within the plotting range will be summarized by calculating the mean. Higher values increases the speed of calculation, but decreases resolution. See the <a href="Terms">explanations</a>.</li>
+          <li><strong><code>Choose the plot type</code></strong> - there are three options:
+          <ul>
+          <li><em><code>Point Features</code></em> - anchor plot on the start of a feature. By default, plot will be directional if strand information is present (i.e, use start position and plot on positive strand for + strand features and use end position and plot on negative strand for minus strand features). If strand information is not present in the feature file (or if the “ignore strand” option is chosen), plot will use start position of feature and be plotted on the positive strand (see <a href="Terms">explanations</a>). User chooses length of upstream and downstream sequence to plot.</li>
+          <li><em><code>Midpoint Features</code></em> - similar to point feature, but plot is centered on the midpoint of the feature.</li>
+          <li><em><code>Endpoint Features</code></em> - similar to point feature, but plot is centered on the end of the feature. Strand information is used by default to determine the end side.</li>
+          <li><em><code>Anchored Features</code></em> - features are anchored at start and stop positions and given pseudo-length chosen by the user. Additionally, the user chooses the length of sequence upstream of the start and downstream of the end to plot.</li>
+          </ul></li>
+          <li><strong><code>Ignore strand</code></strong> - the directionality (strand) will be ignored all features plotted on the positive strand.</li>
+          <li><strong><code>Ignore zeros</code></strong> - signal values of 0 in the track will be be excluded from calculations</li>
+          <li><strong><code>Calculate heatmap</code></strong> - selecting this generates and saves a heat map matrix. Select if you wish to generate heatmap; uncheck if you only wish to generate average plots, as this will speed calculations.</li>
+          <li><strong><code>Plotting distances in [bp]</code></strong> - the distances in to be plotted:
+          <ul>
+          <li><em><code>Upstream</code></em> - the plotting distance in base pairs upstream to the feature</li>
+          <li><em><code>Anchored</code></em> - the pseudo-length, to which the features will be extended or shrunk using linear approximation (only for anchored plots)</li>
+          <li><em><code>Downstream</code></em> - the plotting distance in base pairs downstream to the feature</li>
+          </ul></li>
+          </ol>
+          </div>
+          <div id="plotting-sequence-motif-density" class="section level2">
+          <h2>Plotting sequence motif density</h2>
+          <p>The <code>Sequence features</code> tab allows you to calculate and plot the density of any user-defined motif around the chosen genomic feature using the reference sequence package. Motif plots can be mixed with track files’ signal plots. The following options can be set:</p>
+          <ol style="list-style-type: decimal">
+          <li><strong><code>DNA motif</code></strong> - the DNA motif</li>
+          <li><strong><code>Sliding window size in base pairs [bp]</code></strong> - the size of the sliding window for motif calculation. The value (number of matching motifs within the window) is reported in the middle of the window, e.g. if window is set to 200bp, DNA motif is “GC” and there are 8 CpGs in first 200 bp of the chromosome the value 8 will be reported at 100th bp.</li>
+          <li><strong><code>Display name</code></strong> - The name of the motif that will be shown in key and heatmap labels. Leave blank to use <code>DNA motif</code> value.</li>
+          <li><strong><code>Plot heatmap or error estimates</code></strong> - this checkbox determines if heatmap matrix and error estimates should be calculated. If unchecked much faster algorithm will be used for motif density calculation, but only the average plot without the error estimates will be available.</li>
+          <li><strong><code>Match reverse complement as well</code></strong> - select if reverse complement motif should be reported as well. For example the TATA motif will report both TATA and ATAT with this option selected.</li>
+          </ol>
+          <blockquote>
+          <p><img src="img/06/06_02.png" alt="Sequence motifs selection tab" /></p>
+          </blockquote>
+          <p>Clicking <code>Add</code> button adds the motif to plot set, while <code>Reset All</code> clears the motif selection. On the right side of the motif setting panel gives a list summary of included motifs.</p>
+          </div>
+          <div id="starting-the-plot-set-calculation" class="section level2">
+          <h2>Starting the plot set calculation</h2>
+          <p>The options are executed by pressing the <code>Run calculation</code> button. This dismisses the <strong>file collection window</strong> and brings up the calculation dialog, which shows the progress. On Linux and Mac OS X (systems supporting fork based parallelization) the calculation can be stopped using the <code>Cancel</code> button - this will bring back all settings in <strong>file collection window</strong>.</p>
+          <blockquote>
+          <p><img src="img/06/06_03.png" alt="The calculation progress dialog" /></p>
+          </blockquote>
+          <p>After successful execution the <strong>plot array</strong> and <strong>plot preview panel</strong> will appear. In case of error an informative error pop-up will explain the problem. Please refer to the error section for further information.</p>
+          <blockquote>
+          <p><img src="img/06/06_04.png" alt="The plot array" /></p>
+          </blockquote>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          <div id="plotting" class="section level1">
+          <h1>Plotting</h1>
+          <blockquote>
+          <p>This section focuses on average (line) plots and options common between these and heatmaps. For heatmap options please refer to heatmap documentation.</p>
+          </blockquote>
+          <div id="previewing-plot" class="section level2">
+          <h2>Previewing plot</h2>
+          <p>After calculating or loading a plot set, a <strong>plot array</strong> of checkboxes is displayed to select the desired pairs of features and tracks/motifs. Clicking on the column name (tracks/motifs) or row name (features) selects/deselects the whole column or row. Clicking on top-left most cell of <strong>plot array</strong> toggles the selection of whole array.</p>
+          <blockquote>
+          <p><img src="img/01_QuickStart/01_QuickStart_08.png" alt="Plot preview plus Line plot, Heatmap and refresh buttons" /></p>
+          </blockquote>
+          <p>If at least one pair on <strong>plot array</strong> is selected pressing the <code>Line plot</code> button produces an average plot preview and the <code>Heatmap</code> button produces a heatmap preview. Alternatively, pressing the [RETURN] key will also produce the new selection and options. These operations are done automatically in reactive mode (see <strong>Advanced options</strong> chapter). Plots can be downloaded as PDF files using the Line plot and Heatmap buttons next to Download (at the top of the panel).</p>
+          <p>Below the plotting buttons are options for labeling plots and setting axes. On application start the first panel responsible for bringing file upload, management and plot set calculation modals is active. The further three panels hold common plot settings.</p>
+          </div>
+          <div id="titles-and-axis-panel" class="section level2">
+          <h2>Titles and axis panel</h2>
+          <blockquote>
+          <p><img src="img/07_03.png" alt="The view on titles and axis panel" /></p>
+          </blockquote>
+          <p>This panel groups settings influencing the plot main title, axis labels, various font sizes plus vertical and horizontal plot limits.</p>
+          <ul>
+          <li><code>Title</code> - The main title of the plot, shown in top-center part of the figure; default empty</li>
+          <li><code>X-axis label</code> - Label shown below horizontal axis; default empty</li>
+          <li><code>Y-axis label</code> - Label shown below vertical axis; default empty</li>
+          <li><code>Title font size</code> - Font size of the title in points (point = ~1/72 an inch for standard A4 output); default 20 points</li>
+          <li><code>Labels font size</code> - Font size of axis labels in points; default 16 points</li>
+          <li><code>Axis font size</code> - Controls axis ticks font size, that is size of the numbers indicating position in base pairs on X-axis and means signal value on X-axis; default 14 points</li>
+          <li><code>Set X-axis limits</code> - Set hard plotting limits for X-axis; default values are whole range chosen during plot set calculation</li>
+          <li><code>Set Y-axis limits</code> - Set hard plotting limits for Y-axis; default values are a range between lowest and highest mean signal extended by error estimate</li>
+          </ul>
+          </div>
+          <div id="guide-lines-and-data-scaling" class="section level2">
+          <h2>Guide lines and data scaling</h2>
+          <blockquote>
+          <p><img src="img/07_04.png" alt="The view on guide lines and data scaling" /></p>
+          </blockquote>
+          <p>Controls in this panel controls the display of guide lines and error estimates, and allows to log scale the signal prior to plotting.</p>
+          <ul>
+          <li><code>Transform signal</code> - if set to <em><code>Log2 transform</code></em> performs log2 transformation of the signal prior to plotting; default setting is <em><code>Do not transform</code></em></li>
+          <li><code>Show vertical guide line</code> - show the vertical line at point 0 - beginning of the feature or midpoint and end of the pseudo-length scaled features (only for anchored plots); turn on by default</li>
+          <li><code>Show horizontal guide line</code> - show the horizontal line at user determined height; turn off by default</li>
+          <li><code>Show error estimates</code> - show error standard error and 95% confidence interval as fields, if turned off only the line representing the mean signal is shown; turn on by default</li>
+          </ul>
+          </div>
+          <div id="keys-labels-and-colors-panel" class="section level2">
+          <h2>Keys, labels and colors panel</h2>
+          <blockquote>
+          <p><img src="img/07_05_06.png" alt="The view on keys, labels and colors panel (left). Color picker, label text input and Priority/Order checkboxes reviled on plot set grid (right)." /></p>
+          </blockquote>
+          <p>This panel groups two types of controls. <code>Colors</code>, <code>Label</code> and <code>Priority/Order</code> are a checkboxes revealing further controls on <strong>plot set grid</strong>, specific for a feature-track pair or sub-heatmap. <code>Show plot key</code>, <code>Show error estimate key</code> and <code>Legend font size</code> re global controls specific for average plots. Inputs on <strong>plot set grid</strong> do not have specific labels, but the tooltip explaining their meaning is shown on mouse cursor hover.</p>
+          <ul>
+          <li><code>Colors</code> - checkboxes revealing a color picker on <strong>plot set grid</strong>. This input allows to control the colors of specific feature-track pair average plots or sub-heatmaps. In browser supporting the color picker ‘e.g Chrome’ the system dialog will show up. In other browsers (e.g. Firefox) the javaScript color picker will be initialized.</li>
+          <li><code>Label</code> - checkboxes revealing a label text input <strong>plot set grid</strong>. This controls the names shown on the <strong>key</strong> with average plots or the heatmap top labels.</li>
+          <li><code>Priority/Order</code> - checkboxes revealing numeric input on <strong>plot set grid</strong>. These number determine the order of average plots and hetamaps. Feature-track pair with the highest priority will be listed on the top of <strong>key</strong> for average plots and left-most for heatmaps.</li>
+          <li><code>Show plot key</code> - shows the key giving the color to feature-track pair label mapping. If turned on the additional drop-down allows to choose the position on the plot, top-right by default</li>
+          <li><code>Show error estimate key</code> - shows the key gexplaining the meaning of error fields. If turnedon the additional drop-down allows to choose the position on the plot, top-left by default</li>
+          <li><code>Legend font size</code> - set the size of font used to plot the keys; 12 default</li>
+          </ul>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          <div id="heatmaps" class="section level1">
+          <h1>Heatmaps</h1>
+          <p>Heatmaps are often more informative than average plots. If there is variability in signal along individual instances of a given genomic feature (e.g., because there are different biological classes), an average plot might not represent the behavior of any individual feature and could even give a misleading picture. SeqPlots plots track-feature pairs as sub-heatmaps horizontally aligned on single figure. All sub-heatmaps must have the same number of data rows, hence in single plot mode simultaneous plotting is possible only on single features or feature files containing exact same number of rows. The heatmaps can be sorted and clustered by k-means, hierarchical clustering or super self organising maps (SupreSOM).</p>
+          <div id="heatmap-setup-tab" class="section level2">
+          <h2>Heatmap setup tab</h2>
+          <p>This tab has heatmap specific options for data processing and display.</p>
+          <blockquote>
+          <p><img src="img/08_02.png" alt="The view on Heatmap setup tab (left). Color picker, Label text input, Priority/Order checkboxes, Choose individual heatmaps for sorting/clustering control and Set individual color key limits numric inputs reviled on plot set grid (right)." /></p>
+          </blockquote>
+          <ul>
+          <li><p><strong><code>Sort heatmap rows by mean signal</code></strong> - sorts the heatmap rows based on the mean value of each row across included sub-heatmps. Can be set to increasing or decreasing order. Turned off by default.</p></li>
+          <li><p><strong><code>Clustering algorithm</code></strong> - choose clustering algorithm (k-means, hierarchical or SupreSOM). If clustering is not desired, choose <em><code>do not cluster</code></em>, which uses the feature file in the uploaded order . K-means by default.</p></li>
+          <li><p><strong><code>Make cluster calculation repeatable</code></strong> - enforces, that clustering with non-deterministic algorithms, like k-means or SupreSOM will generate the same results as most recently plotted heatmap. This is achieved by re-using R random number generator seed.</p></li>
+          <li><p><strong><code>Plot selected cluster</code></strong> - this option is available only if <code>Make cluster calculation repeatable</code> is turned on. Allows to select one of the clusters and zoom it to whole plot height. Plot all clusters by default.</p></li>
+          <li><p><strong><code>Choose individual heatmaps for sorting/clustering</code></strong> - this checkbox brings up a new control panel on the <strong>plot set grid</strong> to determine if a given sub-heatmap should be included in plotting and/or clustering. The excluded sub-plots will be plotted in the order of the other sub-heatmaps, but their values will not influence the clustering/sorting. By default all sub-heatmaps are included.</p></li>
+          <li><p><strong><code>Heatmaps have individual color keys</code></strong> - by default all sub-heatmap have their own color keys. This option determines if each sub-heatmap should have a separate color key (plotted below the heatmap) or a single, common key should be calculated for all sub-plots (plotted rightmost). The example below show the difference between separate (left) and common (right) color keys:</p>
+          <blockquote>
+          <p><img src="img/08_04.png" alt="Heatmaps have individual color keys usage example: separate (left) and common (right) color keys" /></p>
+          </blockquote></li>
+          <li><p><strong><code>Set default color key limits</code></strong> - this option determines the limits in mapping the numerical values to the colors. The range of colors generated is dependent on these options. Values lower or higher than the given limits will be plotted in the limit value color. If this checkbox is not selected, limits are auto-generated using <strong><code>Color key scaling</code></strong> parameter. If this option it turned off two numerical fields, <strong><code>min</code></strong> and <strong><code>max</code></strong>, are shown to manually set the limits.</p>
+          <ul>
+          <li><strong><code>Color key scaling</code></strong> - this slider influences how color key limits are generated. For example, 0.01 (default value) calculates limits using data ranging from 1-99 percentile of available data points. 0.1 uses data ranging from 10-90 percentile. The general formula for limit is: [quantile(data, <code>Color key scaling</code>); quantile(data, 1-<code>Color key scaling</code>)]</li>
+          <li><strong><code>min</code></strong> and <strong><code>max</code></strong> numeric inputs - enter values to manually specify color key limits as numeric values.</li>
+          </ul></li>
+          <li><strong><code>Set individual color key limits</code></strong> - this option is similar to manual set up of color key limits, but this allows one to specify different values for individual sub-heatmaps. When this checkbox is selected <strong><code>min</code></strong> and <strong><code>max</code></strong> numeric input menu is shown on the <strong>plot set grid</strong></li>
+          <li><p><strong><code>Set default colorspace</code></strong> - When this option is selected three color pickers are shown to set up custom color mappings for heatmaps. The following example below shows standard jet colors (left), default blue color mapping after selecting the checkbox (middle) and custom color selection (right):</p></li>
+          </ul>
+          <blockquote>
+          <p><img src="img/08_05.png" alt="Set default colorspace usage example: standard jet colors (left), default blue color mapping after selecting the checkbox (middle) and custom color selection (right)" /></p>
+          </blockquote>
+          </div>
+          <div id="other-options-controlling-heatmap-appearance" class="section level2">
+          <h2>Other options controlling heatmap appearance</h2>
+          <p>The heatmap output shares many display options from other tabs. Here we provide a list of these inputs, please refer to <a href="Viewing%20and%20manipulating%20plots">“Viewing and manipulating plots”</a> for further reference.</p>
+          <ul>
+          <li><strong>Titles and axis panel</strong>
+          <ul>
+          <li><code>X-axis label</code> - Label shown below horizontal axis, drawn separately for each sub-heatmap; default empty</li>
+          <li><code>Y-axis label</code> - Label shown next to vertical axis, drawn separately for each sub-heatmap; default empty</li>
+          <li><code>Labels font size</code> - Font size for axis labels and main labels of sub-heatmaps; default 16 points</li>
+          <li><code>Axis font size</code> - Controls axis ticks font size; default 14 points</li>
+          <li><code>Set X-axis limits</code> - Set hard plotting limits for X-axis; default values are whole range chosen during plot set calculation</li>
+          </ul></li>
+          <li><strong>Guide lines and data scaling panel</strong>
+          <ul>
+          <li><code>Transform signal</code> - if set to <em><code>Log2 transform</code></em> performs log2 transformation of the signal prior to plotting; default setting is <em><code>Do not transform</code></em></li>
+          <li><code>Show vertical guide line</code> - show the vertical line at point 0 - beginning of the feature or midpoint and end of the pseudo-length scaled features (only for anchored plots); turn on by default</li>
+          </ul></li>
+          <li><strong>Keys, labels and colors panel</strong>
+          <ul>
+          <li><code>Colors</code> - for hetmaps this input allows to control the color mapping of specific sub-heatmaps. The map starts with white (for low color key limit) and finishes with selected color (for high color key limit).</li>
+          <li><code>Label</code> - allows to set up custom sub-heatmap top labels</li>
+          <li><code>Priority/Order</code> - Use this to place heatmaps in your desired order. The feature-track pairs with the highest priority will be plotted as left-most sub-heatmaps.</li>
+          <li><code>Legend font size</code> - control the font size of common color key, inactive if heatmaps have individual color keys; 12 default</li>
+          </ul></li>
+          </ul>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          <div id="getting-pdfs-and-cluster-info" class="section level1">
+          <h1>Getting PDFs and cluster info</h1>
+          <p>Plots can be downladed as PDFs by clicking <code>Line plot</code> or <code>Heatmap</code> buttons in the “Download:” section of the <strong>tool panel</strong> (above the plot preview).</p>
+          <blockquote>
+          <p><img src="img/09_01.png" alt="Download:&quot; section of tool panel with Line plot and Heatmap buttons" /></p>
+          </blockquote>
+          <p>The small buttons next to <code>Line plot</code> and <code>Heatmap</code> produce additional output files:</p>
+          <ul>
+          <li>the <code>i</code> button next to <code>Line plot</code> downloads the PDF containing average plot keys</li>
+          <li><code>cluster diagram</code> button next to <code>Heatmap</code> downloads a cluster report giving cluster assignments and sorting order for each feature as a comma separated value (CSV) spreadsheet.</li>
+          </ul>
+          <p>The cluster report contains following columns:</p>
+          <ul>
+          <li><code>chromosome</code> - the name of chromosome, contig or scaffold</li>
+          <li><code>start</code> - start of the feature (1 based chromosomal coordinate)</li>
+          <li><code>end</code> - end of the feature (1 based chromosomal coordinate)<br /></li>
+          <li><code>width</code> - width of the feature in base pairs</li>
+          <li><code>strand</code> - strand of the feature</li>
+          <li><code>metadata_...</code> - annotation columns present in the original GFF/BED e.g. gene name, score, group</li>
+          <li><code>originalOrder</code> - number of feature (row) in GFF/BED, can be used to restore original order after sorting on cluster ID</li>
+          <li><code>ClusterID</code> - the numeric ID of the cluster. The topmost cluster on the heatmap is annotated with 1, and the bottom cluster with k, where k equals to number of clusters selected, exported only if clustering is enabled</li>
+          <li><code>SortingOrder</code> - the order imposed on heatmap by sorting by mean row(s) values, exported only if sorting is enabled</li>
+          <li><code>FinalOrder</code> - the final order of heatmap’s rows, this can be influenced by sorting and clustering; 1 indicates topmost row</li>
+          </ul>
+          <p>Sample report: </p>
+          <pre><code>chromosome  start   end     width   strand  metadata_group  originalOrder   ClusterID   SortingOrder    FinalOrder
+          chrI        9065087 9070286 5200    +       g1              1               1           3               3
+          chrI        5171285 5175522 4238    -       g1              2               3           50              43
+          chrI        9616508 9618109 1602    -       g1              3               3           13              43
+          chrI        3608395 3611844 3450    +       g1              4               3           11              12</code></pre>
+          <p></p>
+          <p>Table view: </p>
+          <table>
+          <thead>
+          <tr class="header">
+          <th align="left">chromosome</th>
+          <th align="left">start</th>
+          <th align="left">end</th>
+          <th align="left">width</th>
+          <th align="left">strand</th>
+          <th align="left">metadata_group</th>
+          <th align="left">originalOrder</th>
+          <th align="left">ClusterID</th>
+          <th align="left">SortingOrder</th>
+          <th align="left">FinalOrder</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="odd">
+          <td align="left">chrI</td>
+          <td align="left">9065087</td>
+          <td align="left">9070286</td>
+          <td align="left">5200</td>
+          <td align="left">+</td>
+          <td align="left">g1</td>
+          <td align="left">1</td>
+          <td align="left">1</td>
+          <td align="left">3</td>
+          <td align="left">3</td>
+          </tr>
+          <tr class="even">
+          <td align="left">chrI</td>
+          <td align="left">5171285</td>
+          <td align="left">5175522</td>
+          <td align="left">4238</td>
+          <td align="left">-</td>
+          <td align="left">g1</td>
+          <td align="left">2</td>
+          <td align="left">3</td>
+          <td align="left">50</td>
+          <td align="left">43</td>
+          </tr>
+          <tr class="odd">
+          <td align="left">chrI</td>
+          <td align="left">9616508</td>
+          <td align="left">9618109</td>
+          <td align="left">1602</td>
+          <td align="left">-</td>
+          <td align="left">g1</td>
+          <td align="left">3</td>
+          <td align="left">3</td>
+          <td align="left">13</td>
+          <td align="left">43</td>
+          </tr>
+          <tr class="even">
+          <td align="left">chrI</td>
+          <td align="left">3608395</td>
+          <td align="left">3611844</td>
+          <td align="left">3450</td>
+          <td align="left">+</td>
+          <td align="left">g1</td>
+          <td align="left">4</td>
+          <td align="left">3</td>
+          <td align="left">11</td>
+          <td align="left">12</td>
+          </tr>
+          </tbody>
+          </table>
+          <p></p>
+          <div id="pdf-output-size" class="section level2">
+          <h2>PDF output size</h2>
+          <p>The last tab (<code>Batch operation and setup</code>) on the <strong>tool panel</strong> includes batch operations and various other settings including PDF output size. By default the output PDF will be A4 landscape. This can be changed using the drop-down list to following settings:</p>
+          <ul>
+          <li><code>user defined</code> - this option reveals two numeric inputs that allows to set output PDF width and height. The values must be given in inches.</li>
+          <li><code>Legal rotated</code> - US Legal landscape: 14&quot; by 8.5&quot;</li>
+          <li><code>A4</code> - A4 portrait: - 8.27&quot; × 11.69&quot;</li>
+          <li><code>Letter</code> - US Letter portrait: 8.5&quot; × 11&quot;</li>
+          <li><code>Legal</code> - US Legal portrait: 8.5&quot; × 14&quot;</li>
+          <li><code>Executive</code> - a.k.a Monarch paper: 7.25 × 10.5&quot;</li>
+          </ul>
+          <blockquote>
+          <p><img src="img/09_02.png" alt="The view on top part of batch operation and setup panel" /></p>
+          </blockquote>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          <div id="batch-operations" class="section level1">
+          <h1>Batch operations</h1>
+          <p>Controls to plot multiple plots at once are located on the <code>Batch operation and setup</code> tab, just below PDF paper options. It is possible to output the plots to multipage PDF, plot an array of plots on a single page (for average plots) or mix these options together.</p>
+          <blockquote>
+          <p><img src="img/09_03.png" alt="The view on bottom part of batch operation and setup panel" /></p>
+          </blockquote>
+          <p>The first drop-down controls the type of the plot - either average or heatmap. The second drop down determines the strategy to traverse the <strong>plot grid</strong>. The options include:</p>
+          <ul>
+          <li><code>single</code> - every single feature-track pair will be plotted on separate plot</li>
+          <li><code>rows</code> - the <strong>plot grid</strong> will be traversed by rows, which means one plot that contains all tracks per feature will be prepared</li>
+          <li><code>columns</code> - the <strong>plot grid</strong> will be traversed by columns, which means one plot that contains all features per tracks will be prepared</li>
+          </ul>
+          <p>The <code>multi plot grid</code> option controls how many plots will be placed on each page of the PDF output, e.g. 1x1 means one plot per one page, while 3x4 means 3 columns and 4 rows of plots. If number of plots exceeds the number of slots on page the new page will be added to the PDF.</p>
+          <p><code>Filter names</code> will apply a filter to plot titles, which are based on on uploaded file names. For example, if you uploaded 100 files starting with a prefix of “my_experiment_”, you can remove this fragment from each plot title and/or heatmap caption by putting this string in <code>Filter names</code>.</p>
+          <p>Finally, pressing <code>Get PDF</code> produces the final output file. Please see example below:</p>
+          <blockquote>
+          <p><img src="img/09_04.png" alt="Batch plot usage example - multiple average plots aranged in 6x2 plot grid" /></p>
+          </blockquote>
+          <hr class="sectionend" />
+          </div>
+          <div id="saving-and-loading-plotsets" class="section level1">
+          <h1>Saving and loading plotsets</h1>
+          <p>If desired, SeqPlots will save plot sets as binary R files, allowing you to quickly load the pre-calculated set for replotting. Saved plot sets can also be shared with other SeqPlots users.</p>
+          <div id="load-or-save-plotset" class="section level2">
+          <h2>Load or save plotset</h2>
+          <p>Controls available on the “Load or save plotset” panel:</p>
+          <ul>
+          <li><strong><code>Load saved plot set</code></strong> - drop-down list to select a plotset. Once the Rdata binary file is selected the <strong>plot grid</strong> will be displayed. Selecting the file reveals two additional buttons:
+          <ul>
+          <li><strong><code>Remove dataset</code></strong> - this button deletes the selected saved plot set from user data.</li>
+          <li><strong><code>Download plotset</code></strong> - this button saves a copy of the plotset in selected location.</li>
+          </ul></li>
+          <li><strong><code>Save current plot set</code></strong> - Enter desired name and press the <code>Save</code> button (appears after input of name). It is also possible to save a copy of loaded plot sets. The plot set binary files can be renamed simply by loading them, saving a copy and deleting original source file.</li>
+          </ul>
+          <p>All saved dataset can be found in <code>data location</code>/publicFiles. Any SeqPlots Rdata binaries put in the folder will become available for loading in <strong><code>Load saved plot set</code></strong> control.</p>
+          <blockquote>
+          <p><img src="img/10_00.png" alt="The view on the Load or save plotset panel" /></p>
+          </blockquote>
+          </div>
+          <div id="plot-set-files-structure" class="section level2">
+          <h2>Plot set files structure</h2>
+          <p>The plot sets files can be also directly loaded in R. This allows further processing and customization of the plots. Data structure is a nested list, which elements be accessed by <code>[[</code> R operator. The nesting goes as follow:</p>
+          <ul>
+          <li><strong><code>feature</code></strong> - R list
+          <ul>
+          <li><strong><code>track</code></strong> - R list
+          <ul>
+          <li><code>means</code> - numeric vector giving mean signal value for each (binned) genomic position</li>
+          <li><code>stderror</code> - numeric vector giving standard error for each (binned) genomic position</li>
+          <li><code>conint</code> - numeric vector giving 95% confidence interval for each (binned) genomic position</li>
+          <li><code>all_ind</code> - numeric vector giving the genomic position in base pairs</li>
+          <li><code>e</code> - character string giveing numeric vector giving the indicates of anchored distance, NULL for point features plots</li>
+          <li><code>desc</code> - auto generated title of the plot</li>
+          <li><code>heatmap</code> - numeric matrix, (binned) signal values for each genomic position (columns) and each feature (rows)</li>
+          </ul></li>
+          </ul></li>
+          </ul>
+          <p>The example structure:</p>
+          <pre class="sourceCode r"><code class="sourceCode r">List of <span class="dv">2</span>
+           $<span class="st"> </span>HTZ1_Differential_genes_TOP100_v2.gff:List of <span class="dv">2</span>
+            ..$<span class="st"> </span>HTZ1_JA00001_IL1andIL2_F_N2_L3_NORM_linear_1bp_IL010andIL009_averaged.bw    :List of <span class="dv">7</span>
+            .. ..$<span class="st"> </span>means   :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">2.52</span> <span class="fl">2.52</span> <span class="fl">2.52</span> <span class="fl">2.53</span> <span class="fl">2.54</span> ...
+            .. ..$<span class="st"> </span>stderror:<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">0.114</span> <span class="fl">0.112</span> <span class="fl">0.111</span> <span class="fl">0.11</span> <span class="fl">0.109</span> ...
+            .. ..$<span class="st"> </span>conint  :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">0.226</span> <span class="fl">0.223</span> <span class="fl">0.221</span> <span class="fl">0.218</span> <span class="fl">0.217</span> ...
+            .. ..$<span class="st"> </span>all_ind :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] -<span class="dv">1000</span> -<span class="dv">995</span> -<span class="dv">990</span> -<span class="dv">985</span> -<span class="dv">980</span> -<span class="dv">975</span> -<span class="dv">970</span> -<span class="dv">965</span> -<span class="dv">960</span> -<span class="dv">955</span> ...
+            .. ..$<span class="st"> </span>e       :<span class="st"> </span><span class="ot">NULL</span>
+            .. ..$<span class="st"> </span>desc    :<span class="st"> </span>chr <span class="st">&quot;HTZ1_JA00001_IL1andIL2...</span><span class="ch">\n</span><span class="st">@HTZ1_Differential_genes_TOP100_v2&quot;</span>
+            .. ..$<span class="st"> </span>heatmap :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">100</span>, <span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">2.36</span> <span class="fl">5.25</span> <span class="fl">2.2</span> <span class="fl">3.48</span> <span class="fl">4.32</span> ...
+            ..$<span class="st"> </span>HTZ1_JA00001_IL3andIIL5_F_lin35_L3_NORM_linear_1bp_IL008andIL011_averaged.bw:List of <span class="dv">7</span>
+            .. ..$<span class="st"> </span>means   :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">2.36</span> <span class="fl">2.35</span> <span class="fl">2.35</span> <span class="fl">2.36</span> <span class="fl">2.38</span> ...
+            .. ..$<span class="st"> </span>stderror:<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">0.126</span> <span class="fl">0.125</span> <span class="fl">0.125</span> <span class="fl">0.126</span> <span class="fl">0.125</span> ...
+            .. ..$<span class="st"> </span>conint  :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">0.249</span> <span class="fl">0.249</span> <span class="fl">0.247</span> <span class="fl">0.251</span> <span class="fl">0.249</span> ...
+            .. ..$<span class="st"> </span>all_ind :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] -<span class="dv">1000</span> -<span class="dv">995</span> -<span class="dv">990</span> -<span class="dv">985</span> -<span class="dv">980</span> -<span class="dv">975</span> -<span class="dv">970</span> -<span class="dv">965</span> -<span class="dv">960</span> -<span class="dv">955</span> ...
+            .. ..$<span class="st"> </span>e       :<span class="st"> </span><span class="ot">NULL</span>
+            .. ..$<span class="st"> </span>desc    :<span class="st"> </span>chr <span class="st">&quot;HTZ1_JA00001_IL3andIIL5...</span><span class="ch">\n</span><span class="st">@HTZ1_Differential_genes_TOP100_v2&quot;</span>
+            .. ..$<span class="st"> </span>heatmap :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">100</span>, <span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">2.61</span> <span class="fl">3.17</span> <span class="fl">1.42</span> <span class="fl">2.46</span> <span class="fl">4.26</span> ...
+           $<span class="st"> </span>HTZ1_Differential_genes_BOTTOM100.gff:List of <span class="dv">2</span>
+            ..$<span class="st"> </span>HTZ1_JA00001_IL1andIL2_F_N2_L3_NORM_linear_1bp_IL010andIL009_averaged.bw    :List of <span class="dv">7</span>
+            .. ..$<span class="st"> </span>means   :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">1.57</span> <span class="fl">1.57</span> <span class="fl">1.58</span> <span class="fl">1.6</span> <span class="fl">1.62</span> ...
+            .. ..$<span class="st"> </span>stderror:<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">0.0996</span> <span class="fl">0.0985</span> <span class="fl">0.1003</span> <span class="fl">0.1022</span> <span class="fl">0.1018</span> ...
+            .. ..$<span class="st"> </span>conint  :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">0.198</span> <span class="fl">0.195</span> <span class="fl">0.199</span> <span class="fl">0.203</span> <span class="fl">0.202</span> ...
+            .. ..$<span class="st"> </span>all_ind :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] -<span class="dv">1000</span> -<span class="dv">995</span> -<span class="dv">990</span> -<span class="dv">985</span> -<span class="dv">980</span> -<span class="dv">975</span> -<span class="dv">970</span> -<span class="dv">965</span> -<span class="dv">960</span> -<span class="dv">955</span> ...
+            .. ..$<span class="st"> </span>e       :<span class="st"> </span><span class="ot">NULL</span>
+            .. ..$<span class="st"> </span>desc    :<span class="st"> </span>chr <span class="st">&quot;HTZ1_JA00001_IL1andIL2...n@HTZ1_Differential_genes_BOTTOM100&quot;</span>
+            .. ..$<span class="st"> </span>heatmap :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">100</span>, <span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">1.64</span> <span class="fl">1.37</span> <span class="fl">1.61</span> <span class="fl">1.77</span> <span class="fl">1.86</span> ...
+            ..$<span class="st"> </span>HTZ1_JA00001_IL3andIIL5_F_lin35_L3_NORM_linear_1bp_IL008andIL011_averaged.bw:List of <span class="dv">7</span>
+            .. ..$<span class="st"> </span>means   :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">1.94</span> <span class="fl">1.94</span> <span class="fl">1.95</span> <span class="fl">1.96</span> <span class="fl">1.97</span> ...
+            .. ..$<span class="st"> </span>stderror:<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">0.123</span> <span class="fl">0.123</span> <span class="fl">0.124</span> <span class="fl">0.126</span> <span class="fl">0.128</span> ...
+            .. ..$<span class="st"> </span>conint  :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">0.244</span> <span class="fl">0.245</span> <span class="fl">0.246</span> <span class="fl">0.251</span> <span class="fl">0.253</span> ...
+            .. ..$<span class="st"> </span>all_ind :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">501</span>] -<span class="dv">1000</span> -<span class="dv">995</span> -<span class="dv">990</span> -<span class="dv">985</span> -<span class="dv">980</span> -<span class="dv">975</span> -<span class="dv">970</span> -<span class="dv">965</span> -<span class="dv">960</span> -<span class="dv">955</span> ...
+            .. ..$<span class="st"> </span>e       :<span class="st"> </span><span class="ot">NULL</span>
+            .. ..$<span class="st"> </span>desc    :<span class="st"> </span>chr <span class="st">&quot;HTZ1_JA00001_IL3andIIL5...</span><span class="ch">\n</span><span class="st">@HTZ1_Differential_genes_BOTTOM100&quot;</span>
+            .. ..$<span class="st"> </span>heatmap :<span class="st"> </span>num [<span class="dv">1</span>:<span class="dv">100</span>, <span class="dv">1</span>:<span class="dv">501</span>] <span class="fl">1.61</span> <span class="fl">1.37</span> <span class="fl">1.29</span> <span class="fl">3.04</span> <span class="fl">3.77</span> ...</code></pre>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          <div id="advanced-options" class="section level1">
+          <h1>Advanced options</h1>
+          <p>Some additional SeqPlots options are located at very bottom of the <code>Batch operation and setup</code> tab:</p>
+          <blockquote>
+          <p><img src="img/10_01.png" alt="The view on Advanced options section of the batch operation and setup panel" /></p>
+          </blockquote>
+          <ul>
+          <li><p><code>Keep 1:1 aspect ratio in batch mode</code> - This option guarantee that the ratio between X- and Y-axis height will be 1, hence the produced plots will be square in batch mode. This prevents stretching the plots while fitting single rows or columns to one page. Turned on by default.</p></li>
+          <li><p><code>Always keep 1:1 aspect ratio</code> - This checkbox extends the 1:1 aspect ratio option to single plots. Turned off by default.</p></li>
+          <li><p><code>Reactive plotting</code> - When selected, all plotting operations are executed upon selection and will be visible in preview. <code>Reactive plotting</code> might be useful for exploratory data analysis using plots, but it is not recommended for heatmap plots because speed is decreased. Select/delelect from keyboard by pressing [ctrl/cmd+R]. Turned off by default.</p></li>
+          <li><p><code>Use multithreading for calculations</code> - This option is available only on desktop instances of SeqPlots under Mac OS X and Linux. While turned off R will not fork the child processes for plotting and plot set calculations. It is useful for debugging, since in single process mode all warning/errors will be directly printed to R console. Also might increase the performance for plotting small average plots. Turned off by default.</p></li>
+          <li><p><code>Use ggplot2 graphics package for heatmaps</code> - uses GGplot2 (<a href="http://ggplot2.org/" class="uri">http://ggplot2.org/</a>) graphics system to draw the heatmaps. This feature is experimental.</p></li>
+          </ul>
+          <hr class="sectionend" />
+          </div>
+          <div id="genomes-managment" class="section level1">
+          <h1>Genomes managment</h1>
+          <p>The <code>Manage reference genomes</code> tab allows to add or remove reference genomes installed with SeqPlots. New genomes are added to user data folder, so they can be easily moved along with data and would not be removed when updating R or SeqPlots. User can choose to install standard genomes package available with Bioconductor or install forged genomic package from local file.</p>
+          <blockquote>
+          <p><img src="img/11_01.png" alt="The view on Manage reference genomes panel" /></p>
+          </blockquote>
+          <hr class="sectionend" />
+          </div>
+          <div id="error-messages" class="section level1">
+          <h1>Error messages</h1>
+          <pre><code>Problem with line N: &quot;line_text&quot; [internal_error]</code></pre>
+          <blockquote>
+          <p>The import of feature file (GFF or BED) was not successful due to mis-formatted file.</p>
+          </blockquote>
+          <hr />
+          <pre><code>Chromosome names provided in the file does not match ones defined in reference genome. 
+          INPUT: [chr3R, chr2L, chr2R, chr3L] 
+          GENOME: [chrI, chrII, chrIII, chrIV, chrV, ...]</code></pre>
+          <blockquote>
+          <p>There are unexpected chromosome names in input file. Following genomes: <em>Arabidopsis thaliana, Caenorhabditis elegans, Cyanidioschyzon_merolae, Drosophila melanogaster, Homo sapiens, Oryza sativa, Populus trichocarpa, Saccharomyces cerevisiae and Zea mays</em> support chromosome names remapping between different naming conventions, including: AGPv2, ASM9120v1, Ensembl, JGI2_0, MSU6, NCBI, TAIR10 and UCSC. If you see above error in one of these genomes there are still unexpected names after the correction. The problematic chromosome names are given in the error message. Remove GFF/BED lines corresponding to them or upgrade the genome to one containing proper naming. Alternatively set genome to NA.</p>
+          </blockquote>
+          <hr />
+          <pre><code>File already exists, change the name or remove old one.</code></pre>
+          <blockquote>
+          <p>File named like this already exists in the database, it is impossible to have two files sharing same filename.</p>
+          </blockquote>
+          <hr />
+          <pre><code>ERROR: solving row 300: negative widths are not allowed</code></pre>
+          <blockquote>
+          <p>The the row 300 have end coordinate smaller than beginning, hence the width in negative. To fix it the start and stop indicates should be swapped. This error often happens when negative strand (-) ranges are misformatted.</p>
+          </blockquote>
+          <hr />
+          <hr class="sectionend" />
+          </div>
+          <div id="version-history" class="section level1">
+          <h1>Version history</h1>
+          <p><br /></p>
+          <div id="changes-in-version-1.2.0" class="section level2">
+          <h2>CHANGES IN VERSION 1.2.0</h2>
+          <p>PACKAGE:</p>
+          <ul>
+          <li>plot a dendrogram as first panel on heatmap plot clustered with hierarchical clustering</li>
+          <li>heatmap can be plotted as vector graphics (default for R scripting) or raster graphics (default for web GUI)</li>
+          <li>heatmaps can be sorted in increasing or decreasing order</li>
+          <li>y-axis is annotated with cluster IDs and number of data rows (heatmap)</li>
+          <li>x-axis is annotated with base pairs, e.g. 10bp, 1kb, 1.2Mb, etc.</li>
+          <li>heatmaps can be plotted using GGplot2 package instead of R base graphics system</li>
+          <li>speed-up in motif plots thanks to faster, vectored implementation of motif density data acquisition</li>
+          <li>code simplification - seqplots in Shiny GUI mode use all functions from package core</li>
+          </ul>
+          <p>GUI:</p>
+          <ul>
+          <li>feature-track pairs selection grid have UI elements to multi-select and batch change labels/colors/etc.</li>
+          <li>option to make a clustering repeatable (works by reusing a .Random.seed)</li>
+          <li>option to plot selected cluster only as heatmap</li>
+          <li>SeqPlots GUI updated to work with Bootstrap v3.3.1</li>
+          </ul>
+          <p>BUGFIX:</p>
+          <ul>
+          <li>lines separating the clusters are drawn in correct places on grDevices::quartz devices</li>
+          <li>proper positioning of 3’ ends of anchored region in motif plot</li>
+          <li>fixed error with anchored plots and genomic feature width equals 1bp</li>
+          <li>y-axis does respect cex.axis parameter</li>
+          <li>GUI fixed to work with shiny 0.11.0 and above</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-1.0.0" class="section level2">
+          <h2>CHANGES IN VERSION 1.0.0</h2>
+          <p>PACKAGE:</p>
+          <ul>
+          <li>plotHeatmap function returns cluster report as GRanges structure</li>
+          <li>redundant parameters removed from plotting functions</li>
+          <li>plotHeatmap function have “embed” parameter for plotHeatmap - allows to plot 1st heatmap without using grid system, intended to use with complex plots</li>
+          </ul>
+          <p>BUGFIX:</p>
+          <ul>
+          <li>motif plot orientation properly dependents on strand</li>
+          <li>GUI - reordering the heatmap respects previously set include/exclude parameters</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.99.1" class="section level2">
+          <h2>CHANGES IN VERSION 0.99.1</h2>
+          <p>PACKAGE:</p>
+          <ul>
+          <li>heatmap plotting function returns cluster report ad data.table</li>
+          <li>getPlotSetArray function have “verbose” parameter that controls messages and warnings output</li>
+          <li>references added to documentation</li>
+          </ul>
+          <p>BUGFIX:</p>
+          <ul>
+          <li>plotHeatmap and plotAverage generic methods for SeqPlots-classes respect the parameters</li>
+          <li>package passes tests and check on 32bit Windows (plotting only, because no rtrackalyer::BigWigFile support for Win32)</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.99" class="section level2">
+          <h2>CHANGES IN VERSION 0.99</h2>
+          <p>GENERAL:</p>
+          <ul>
+          <li>Anchored plots and heatmaps uses [downstream]–0–0–[upstream] X-axis coordinate system instead [downstream]–0–[anchored]-[upstream+anchored]</li>
+          </ul>
+          <p>PACKAGE:</p>
+          <ul>
+          <li>package really on reference class system including MotifSetup, PlotSetArray, PlotSetList and PlotSetPair</li>
+          <li>generic subset and data manipulation methods for SeqPlots-classes including ‘[’, “[[” and “unlist”, which allows to switch between classes</li>
+          <li>automatic tests for class system, calculations and plotting functions</li>
+          <li>documentation for all functions and classes</li>
+          <li>PDF vignette engine replaced by HTML one</li>
+          <li>QuickStart vignette added</li>
+          </ul>
+          <p>GUI:</p>
+          <ul>
+          <li>automated GUI tests using Rselenium package</li>
+          </ul>
+          <p>BUGFIX:</p>
+          <ul>
+          <li>issue #1: some server instances loads empty .Rdata file on startup</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.9.3" class="section level2">
+          <h2>CHANGES IN VERSION 0.9.3</h2>
+          <ul>
+          <li>The web GUI and R package projects merged into singe project distributed as Bioconductor compatible R package</li>
+          <li>The command line interface have the same capabilities as GUI version</li>
+          <li>Web GUI vignette added</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.9.2" class="section level2">
+          <h2>CHANGES IN VERSION 0.9.2</h2>
+          <p>GENERAL:</p>
+          <ul>
+          <li>use Cairo package for plotting, X11 installation no longer required</li>
+          <li>colors in plot grid are initiated automatically (same color palette as for auto-generated average plots), white color is allowed</li>
+          <li>more informative error messages during file upload</li>
+          <li>documentation is integrated with SeqPlots GUI help</li>
+          <li>Web GUI debug console added</li>
+          <li>Exit button, that closes web interface and background R process</li>
+          </ul>
+          <p>BUGFIX:</p>
+          <ul>
+          <li>fixed errors reporting in singe core/Windows mode</li>
+          <li>the custom color gradient controls for hetmap (three color pickers) work correctly now</li>
+          <li>heatmap main title no longer overlaps with sub-plot labels</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.9.1" class="section level2">
+          <h2>CHANGES IN VERSION 0.9.1</h2>
+          <p>GENERAL:</p>
+          <ul>
+          <li>inputs and features sorted alphabetically</li>
+          <li>DataTables v1.10.0 with pagination, selection number indicator and infinite row selections</li>
+          <li>buttons for heatmap and lineplots, PDF default sizes,</li>
+          <li>changes in GUI layout</li>
+          <li>default PDF output paper size set to A4 horizontal,</li>
+          <li>Font sizes are in points</li>
+          <li>preview is compatible with A4 PDF output (at 100 DPI)</li>
+          <li>color key for heatmap are always generated using image.plot function that provides better labeling</li>
+          <li>batch plots do not override individual labels if set</li>
+          <li>option to keep 1:1 aspect ratio (default for batch plots)</li>
+          <li>miscellaneous options renamed for clarity</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.9.0" class="section level2">
+          <h2>CHANGES IN VERSION 0.9.0</h2>
+          <p>FEATURES:</p>
+          <ul>
+          <li>Multi-plot grid option in batch mode - many line plots on single page</li>
+          </ul>
+          <p>GENERAL:</p>
+          <ul>
+          <li>R 3.1 and BioC 2.14 compatibility</li>
+          <li>faster BigWig signal retrieval, no need for modified rtracklayer C code in the package</li>
+          <li>warning message if JS File API is not supported (old browsers)</li>
+          <li>improved the performance of heatmap plotting by using list of matrices instead concatenated matrix</li>
+          </ul>
+          <p>BUGFIX:</p>
+          <ul>
+          <li>application start properly without any BSGenome genomic packages installed</li>
+          <li>cluster report - the final order agrees with cluster indicates</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.8.2" class="section level2">
+          <h2>CHANGES IN VERSION 0.8.2</h2>
+          <p>FEATURES:</p>
+          <ul>
+          <li>Hierarchical and super self-organizing network clustering added for heatmaps</li>
+          <li>Anchored motif plots</li>
+          <li>The row order of the heatmap is exported along with cluster report</li>
+          </ul>
+          <p>GENERAL:</p>
+          <ul>
+          <li>JS color picker added for browsers, that do not support select input type=“color” i.e. Firefox (checked with modernizr.js library)</li>
+          <li>Single process mode and Microsoft Windows compatibility (running without fork parallelization)</li>
+          <li>Shiny 0.9.1 compatibility</li>
+          <li>Saved datasets can be downloaded for local usage</li>
+          <li>Clicking row or column name in plot grid toggles the checkboxes</li>
+          <li>Minor GUI changes</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.8.1" class="section level2">
+          <h2>CHANGES IN VERSION 0.8.1</h2>
+          <p>GENERAL:</p>
+          <ul>
+          <li>GUI redesign: plot matrix incorporates sub-plot/heatmap specific controls, all heatmap options gathered in single tab</li>
+          <li>warning before closing/refreshing a webpage with active session</li>
+          <li>cookie based default options: user, genome and deactivate page exit warning</li>
+          <li>heat-map clusters provided as cluster report - a CSV file containing original features, annotations and cluster information, see more: <a href="https://bitbucket.org/przemol/seqplots/wiki/Heatmaps#markdown-header-cluster-report" class="uri">https://bitbucket.org/przemol/seqplots/wiki/Heatmaps#markdown-header-cluster-report</a></li>
+          <li>Wiggle files processing: correct for multiple header definitions and roman/arabic chromosome names correction</li>
+          <li>Optimised keyboard shortcuts: plot - RETUTRN or ctrl/cmd+SPACE, switch heatmap - ctrl/cmd+H, switch reactive plotting - ctrl/cmd+R</li>
+          <li>minor speed improvement</li>
+          </ul>
+          <p>BUGFIX:</p>
+          <ul>
+          <li>Motif density plots and heatmaps: flip rows on (-) strand</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.8.0" class="section level2">
+          <h2>CHANGES IN VERSION 0.8.0</h2>
+          <p>GENERAL:</p>
+          <ul>
+          <li>GUI redesign, option partitioned to more tabs</li>
+          <li>preview plot is zoomed on click rather than on mouse hover</li>
+          <li>possibility to remove multiple files</li>
+          <li>comments visible as popup in file managmed window</li>
+          <li>all chromosome naming conventions (most notably chrX/X and variants of chrM/M/MtDNA/MT etc.) are accepted (<a href="http://www.bioconductor.org/packages/release/data/annotation/html/seqnames.db.html" class="uri">http://www.bioconductor.org/packages/release/data/annotation/html/seqnames.db.html</a>)</li>
+          <li>incoming featurefiles (GFF and BED) are not processed, just chacked for errors</li>
+          <li>explicit error handling for incoming flies, the line with problem or unexpected chromosome(s) are indentified to the user</li>
+          <li>motif density tracks can be binned (defoult at 10bp)</li>
+          <li>tracks amd motif densities cna be mixed together in plots</li>
+          </ul>
+          <p>SERVER:</p>
+          <ul>
+          <li>server_config.R added - a configuration file that allows to set up server varaiables, e.g. the user data location</li>
+          </ul>
+          <p>MAC OS X APP:</p>
+          <ul>
+          <li>interface to insrall new genomes from Bioconductor and local resources (R BSgemome format: <a href="http://www.bioconductor.org/packages/release/bioc/html/BSgenome.html" class="uri">http://www.bioconductor.org/packages/release/bioc/html/BSgenome.html</a>)</li>
+          <li>option to set up data location</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.7.0" class="section level2">
+          <h2>CHANGES IN VERSION 0.7.0</h2>
+          <ul>
+          <li>SeqPlots for Mac OS X relesed - an user frienddly wrapper app containig R, packages and SeqPlots coede</li>
+          <li>heatmap plotting added</li>
+          <li>motif denstty plotting added for lineplot and heatmap</li>
+          <li>minior interface redesign</li>
+          <li>reactive interface can be turn off for plottting, user plots on demend</li>
+          <li>adding files from jQuery File Upload (<a href="http://blueimp.github.io/jQuery-File-Upload/" class="uri">http://blueimp.github.io/jQuery-File-Upload/</a>) is handled directly by R eliminating additional node.js server application and making proper file handling for desktop version</li>
+          <li>computationally expensive operations (calculating plot matrix and plotting) are handeled by new R process (parallel R library) - many proces can run simmutainously in same Shiny instance, user can get fedback from the calcualtion can be cancelled</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.6.0" class="section level2">
+          <h2>CHANGES IN VERSION 0.6.0</h2>
+          <ul>
+          <li>Shiny (<a href="https://github.com/rstudio/shiny" class="uri">https://github.com/rstudio/shiny</a>) used as R web fraimwork, support for Rserver/EXT JS version dropped</li>
+          <li>support for 145 genomes from UCSC database (via user provideing valid genome symbol)</li>
+          <li>new reactive user interface</li>
+          <li>new plot type: midpoint features - it calculates the middle of given features and centres the summary on it</li>
+          <li>the option to ignore the strand (plot always in the same direction)</li>
+          <li>the option to remove the zeros (0 value of score in Wiggle track) from mean and error estimate calculations</li>
+          <li>the support for BED feature files (in addition to GFF, Wiggle (all variants), BigWiggle)</li>
+          <li>automatic chromosome name correction for C. elegans genomes (I =&gt; chrI, MtDNA =&gt; chrM, etc.)</li>
+          <li>accepts wiggle with overlapping ranges (e.g. microarray experiments processed using MA2C)</li>
+          <li>basic user management for uploaded files</li>
+          <li>option to download the features and track files directly from application</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-0.5.0" class="section level2">
+          <h2>CHANGES IN VERSION 0.5.0</h2>
+          <ul>
+          <li>Initial test and alpha releases</li>
+          </ul>
+          <hr class="sectionend" />
+          </div>
+          </div>
+          <div id="explanations" class="section level1">
+          <h1>Explanations</h1>
+          <hr />
+          <ul>
+          <li><p>“<strong>feature</strong>” - a genomic interval defined by <strong>chromosome</strong> name, <strong>start</strong> and <strong>end</strong> positions and the <strong>directionality</strong> (strand). The end must always be a bigger number than start, so the width of the range is not negative. Start and end means here the numeric start of the interval and should not be confused with TSS and TTS.</p>
+          <p>For example, in BED format this information is stored in following text tab delimited format: <code>chr7    127471196  127472363  .  .  +</code></p>
+          <hr /></li>
+          <li><p>“<strong>directionality</strong>” - the strand of genomic feature, determining if the plotting range should be anchored around the star or and, and the direction in which signal is being processed to create the average track or heatmap. Unknown directionality is marked by <code>*</code> and treated as <code>+</code> for calculations.</p>
+          <hr /></li>
+          <li><p>“<strong>track</strong>” - the file assigning the continuous signal (score) to genomic locations across the chromosomes. The signal usually comes from sequencing experiments, like ChIP-seq, RNA-seq, DNase-seq, MNase-seq, or from computational tools, for example nucleosome occupancy prediction, CpG density.</p>
+          <p>For example, in BedGraph format this information is stored in following text tab delimited format: <code>chr19 49302300 49302600 -0.75</code></p>
+          <hr /></li>
+          <li><p>“<strong>reference genome package</strong>” - the R BSgemome package containing the full reference sequence for given species. It is also used to provide universal chromosome names and chromosome lengths taht are used as plotting boundaries.</p>
+          <hr /></li>
+          <li><p>“<strong>reads coverage</strong>” - The basic way to calculate the signal from sequencing based assays. The numeric representation shows how much reads was aligned to given genomic location. This can be a proxy to protein-DNA binding (ChIP-seq) or the expression (RNA-seq). Can be calculated using BedTools: <a href="http://bedtools.readthedocs.org/en/latest/content/tools/genomecov.html" class="uri">http://bedtools.readthedocs.org/en/latest/content/tools/genomecov.html</a> Also known as <code>pileups</code>.</p>
+          <hr /></li>
+          </ul>
+          <hr class="sectionend" />
+          </div>
+          <div id="references" class="section level1">
+          <h1>References</h1>
+          <blockquote>
+          <p>This section lists R, JavaScript and CSS libraries used by SeqPlots, important conceptual contributions to the software, and publication, where figures generated by SeqPlots are featured.</p>
+          </blockquote>
+          <p><strong>R project and Bioconductor</strong></p>
+          <ul>
+          <li>R Core Team (2014). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL <a href="http://www.R-project.org/" class="uri">http://www.R-project.org/</a>.</li>
+          <li>Bioconductor: Open software development for computational biology and bioinformatics R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, M.Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others 2004, Genome Biology, Vol. 5, R80. URL <a href="http://www.bioconductor.org/" class="uri">http://www.bioconductor.org/</a>.</li>
+          <li>RStudio and Inc. (2014). shiny: Web Application Framework for R. R package version 0.10.1. <a href="http://shiny.rstudio.com/" class="uri">http://shiny.rstudio.com/</a></li>
+          <li><strong>Other CRAN packages:</strong> digest, DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, ggplot2, Cairo and parallel</li>
+          <li><strong>Bioconductor packages:</strong> IRanges, BSgenome, Rsamtools, rtracklayer, GenomicRanges and Biostrings</li>
+          </ul>
+          <p><strong>JavaScript and CSS</strong></p>
+          <ul>
+          <li>jQuery framework - <a href="http://jquery.com" class="uri">http://jquery.com</a></li>
+          <li>Bootstrap - <a href="http://getbootstrap.com" class="uri">http://getbootstrap.com</a></li>
+          <li>DataTables, Table plug-in for jQuery - <a href="http://www.datatables.net" class="uri">http://www.datatables.net</a></li>
+          <li>jQuery File Upload Plugin - <a href="https://github.com/blueimp/jQuery-File-Upload" class="uri">https://github.com/blueimp/jQuery-File-Upload</a></li>
+          <li>jQuery throttle - <a href="http://benalman.com/projects/jquery-throttle-debounce-plugin/" class="uri">http://benalman.com/projects/jquery-throttle-debounce-plugin/</a></li>
+          <li>jQuery Cookie Plugin - <a href="https://github.com/carhartl/jquery-cookie" class="uri">https://github.com/carhartl/jquery-cookie</a></li>
+          <li>Modernizer JS library - <a href="http://modernizr.com" class="uri">http://modernizr.com</a></li>
+          <li>JavaScript Templates - <a href="https://github.com/blueimp/JavaScript-Templates" class="uri">https://github.com/blueimp/JavaScript-Templates</a></li>
+          <li>JavaScript Color Picker - <a href="http://jscolor.com" class="uri">http://jscolor.com</a></li>
+          <li>md5-js - <a href="https://github.com/wbond/md5-js" class="uri">https://github.com/wbond/md5-js</a></li>
+          <li>Font Awesome - <a href="http://fortawesome.github.io/Font-Awesome" class="uri">http://fortawesome.github.io/Font-Awesome</a></li>
+          <li>Google Fonts - <a href="https://www.google.com/fonts" class="uri">https://www.google.com/fonts</a></li>
+          <li>jQuery user interface - <a href="http://jqueryui.com" class="uri">http://jqueryui.com</a> (documentation)</li>
+          <li>jquery.tocify.js: jQuery Table of Contents - <a href="https://github.com/gfranko/jquery.tocify.js" class="uri">https://github.com/gfranko/jquery.tocify.js</a> (documentation)</li>
+          <li>Strapdown <a href="https://github.com/arturadib/strapdown" class="uri">https://github.com/arturadib/strapdown</a> (documentation)</li>
+          <li>Bootswatch themes - <a href="http://bootswatch.com" class="uri">http://bootswatch.com</a> (documentation)</li>
+          <li>google-code-prettify - <a href="https://code.google.com/p/google-code-prettify" class="uri">https://code.google.com/p/google-code-prettify</a> (documentation)</li>
+          <li>marked - <a href="https://github.com/chjj/marked" class="uri">https://github.com/chjj/marked</a> (documentation)</li>
+          </ul>
+          <p><strong>Important conceptual contribution to the project</strong></p>
+          <ul>
+          <li>Liu T, Ortiz J, Taing L, Meyer C, Lee B, Zhang Y, Shin H, Wong S, Ma J, Lei Y, et al. 2011. <a href="http://www.ncbi.nlm.nih.gov/pubmed/21859476">Cistrome: an integrative platform for transcriptional regulation studies.</a> Genome Biology 12: R83.</li>
+          <li>Thomas Williams, Colin Kelley and others (2010). Gnuplot 4.4: an interactive plotting program. URL <a href="http://www.R-project.org/" class="uri">http://www.R-project.org/</a>.</li>
+          <li>Kent, W.J., Sugnet, C.W., Furey, T.S., Roskin, K.M., Pringle, T.H., Zahler, A.M. and Haussler, a. D. (2002). <a href="http://www.ncbi.nlm.nih.gov/pubmed/12045153">The Human Genome Browser at UCSC</a>. Genome Research. 12:996–1006.</li>
+          <li>Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. (2010). <a href="http://www.ncbi.nlm.nih.gov/pubmed/20639541">BigWig and BigBed: enabling browsing of large distributed datasets.</a> Bioinformatics. 1;26(17):2204-7</li>
+          <li>Nicol, J.W., Helt, G.A., Blanchard, S.G., Raja, A. and Loraine, A.E. (2009). <a href="http://www.ncbi.nlm.nih.gov/pubmed/19654113">The Integrated Genome Browser: free software for distribution and exploration of genome-scale datasets.</a> Bioinformatics (Oxford, England). 25:2730–1.</li>
+          <li>Thorvaldsdóttir, H., Robinson, J.T. and Mesirov, J.P. (2012). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22517427">Integrative Genomics Viewer (IGV): high-performance genomics data visualization and exploration.</a> Briefings in bioinformatics. bbs017</li>
+          </ul>
+          <p><strong>Server deployment</strong></p>
+          <ul>
+          <li>Shiny Server - <a href="https://github.com/rstudio/shiny-server" class="uri">https://github.com/rstudio/shiny-server</a></li>
+          <li>ShinyApps - <a href="https://github.com/rstudio/shinyapps" class="uri">https://github.com/rstudio/shinyapps</a></li>
+          </ul>
+          <p><strong>Publications containing figures made by SeqPlots</strong></p>
+          <ul>
+          <li>Chen RA, Stempor P, Down TA, Zeiser E, Feuer SK, Ahringer J. <a href="http://www.ncbi.nlm.nih.gov/pubmed/24653213">Extreme HOT regions are CpG-dense promoters in C. elegans and humans.</a> Genome Res 24(7):1138-1146 Jul 2014</li>
+          <li>Latorre I, Chesney MA, Garrigues JM, Stempor P et al. <a href="http://www.ncbi.nlm.nih.gov/pubmed/25737279">The DREAM complex promotes gene body H2A.Z for target repression</a>. Genes Dev 2015 Mar 1;29(5):495-500.</li>
+          </ul>
+          <hr class="sectionend" />
+          </div>   
+        </div>
+        
+        <div class="col-md-4 hidden-print hidden-xs hidden-sm">
+                      <nav id="sidebar" class="bs-docs-sidebar affix">
+              <ul>
+              <li><a href="#welcome-to-seqplots">Welcome to <strong>SeqPlots</strong></a><ul>
+              <li><a href="#summary">Summary</a></li>
+              <li><a href="#availability">Availability</a></li>
+              <li><a href="#key-features">Key features</a></li>
+              <li><a href="#video-presentation">Video presentation</a></li>
+              <li><a href="#issues-and-bugs">Issues and bugs</a></li>
+              </ul></li>
+              <li><a href="#installation---mac-os-x-app">Installation - Mac OS X app</a><ul>
+              <li><a href="#how-to-install">How to install</a></li>
+              <li><a href="#how-to-start">How to start</a></li>
+              <li><a href="#package-content">Package content</a></li>
+              </ul></li>
+              <li><a href="#installation---rbioconductor">Installation - R/Bioconductor</a><ul>
+              <li><a href="#how-to-install-1">How to install</a></li>
+              <li><a href="#how-to-start-1">How to start</a></li>
+              </ul></li>
+              <li><a href="#installation---server-deployment">Installation - Server deployment</a><ul>
+              <li><a href="#installation">Installation</a></li>
+              <li><a href="#usage">Usage</a></li>
+              <li><a href="#alternative-installation">Alternative installation</a></li>
+              </ul></li>
+              <li><a href="#quick-start-demo">Quick start demo</a></li>
+              <li><a href="#adding-and-managing-files">Adding and managing files</a><ul>
+              <li><a href="#supported-file-formats">Supported file formats</a></li>
+              <li><a href="#adding-files">Adding files</a></li>
+              <li><a href="#downloading-and-removing-files">Downloading and removing files</a></li>
+              </ul></li>
+              <li><a href="#running-the-plot-set-jobs">Running the plot-set jobs</a><ul>
+              <li><a href="#selecting-files">Selecting files</a></li>
+              <li><a href="#setting-up-plot-options">Setting up plot options</a></li>
+              <li><a href="#plotting-sequence-motif-density">Plotting sequence motif density</a></li>
+              <li><a href="#starting-the-plot-set-calculation">Starting the plot set calculation</a></li>
+              </ul></li>
+              <li><a href="#plotting">Plotting</a><ul>
+              <li><a href="#previewing-plot">Previewing plot</a></li>
+              <li><a href="#titles-and-axis-panel">Titles and axis panel</a></li>
+              <li><a href="#guide-lines-and-data-scaling">Guide lines and data scaling</a></li>
+              <li><a href="#keys-labels-and-colors-panel">Keys, labels and colors panel</a></li>
+              </ul></li>
+              <li><a href="#heatmaps">Heatmaps</a><ul>
+              <li><a href="#heatmap-setup-tab">Heatmap setup tab</a></li>
+              <li><a href="#other-options-controlling-heatmap-appearance">Other options controlling heatmap appearance</a></li>
+              </ul></li>
+              <li><a href="#getting-pdfs-and-cluster-info">Getting PDFs and cluster info</a><ul>
+              <li><a href="#pdf-output-size">PDF output size</a></li>
+              </ul></li>
+              <li><a href="#batch-operations">Batch operations</a></li>
+              <li><a href="#saving-and-loading-plotsets">Saving and loading plotsets</a><ul>
+              <li><a href="#load-or-save-plotset">Load or save plotset</a></li>
+              <li><a href="#plot-set-files-structure">Plot set files structure</a></li>
+              </ul></li>
+              <li><a href="#advanced-options">Advanced options</a></li>
+              <li><a href="#genomes-managment">Genomes managment</a></li>
+              <li><a href="#error-messages">Error messages</a></li>
+              <li><a href="#version-history">Version history</a><ul>
+              <li><a href="#changes-in-version-1.2.0">CHANGES IN VERSION 1.2.0</a></li>
+              <li><a href="#changes-in-version-1.0.0">CHANGES IN VERSION 1.0.0</a></li>
+              <li><a href="#changes-in-version-0.99.1">CHANGES IN VERSION 0.99.1</a></li>
+              <li><a href="#changes-in-version-0.99">CHANGES IN VERSION 0.99</a></li>
+              <li><a href="#changes-in-version-0.9.3">CHANGES IN VERSION 0.9.3</a></li>
+              <li><a href="#changes-in-version-0.9.2">CHANGES IN VERSION 0.9.2</a></li>
+              <li><a href="#changes-in-version-0.9.1">CHANGES IN VERSION 0.9.1</a></li>
+              <li><a href="#changes-in-version-0.9.0">CHANGES IN VERSION 0.9.0</a></li>
+              <li><a href="#changes-in-version-0.8.2">CHANGES IN VERSION 0.8.2</a></li>
+              <li><a href="#changes-in-version-0.8.1">CHANGES IN VERSION 0.8.1</a></li>
+              <li><a href="#changes-in-version-0.8.0">CHANGES IN VERSION 0.8.0</a></li>
+              <li><a href="#changes-in-version-0.7.0">CHANGES IN VERSION 0.7.0</a></li>
+              <li><a href="#changes-in-version-0.6.0">CHANGES IN VERSION 0.6.0</a></li>
+              <li><a href="#changes-in-version-0.5.0">CHANGES IN VERSION 0.5.0</a></li>
+              </ul></li>
+              <li><a href="#explanations">Explanations</a></li>
+              <li><a href="#references">References</a></li>
+              </ul>
+            </nav>
+                  </div>
+      </div>
+        
+            
     </div>
-    <div class="span9" id='main' style="margin-left: 0px;"></div>
-  </div>
-</div>
-
-<script src="marked.min.js"></script>
-<script src="prettify.min.js"></script>
-<script src="strapdown.js"></script>
-
-<script src="jquery.min.js"></script>
-<script src="jquery-ui.min.js"></script>
-<script src="jquery.tocify.min.js"></script>
-<script src="bootstrap.min.js"></script>
-
-<script>
-  $(function() {
-    $("#content").removeClass();
-    $("#content").appendTo("#main");
-    $("#toc").tocify();
-    $("#top").show();
-    $("#right").show();
-  });
-</script>
-
+  
+      <script>
+    // add bootstrap table styles to pandoc tables
+    $(document).ready(function () {
+      $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+      $("#sidebar").find('ul').addClass('nav');
+    });
+    </script>
+    
+    
+  </body>
 </html>
