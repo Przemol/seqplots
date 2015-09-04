@@ -55,7 +55,7 @@
 #'    Application Framework for R. R package version 0.10.1.
 #'    \url{http://shiny.rstudio.com/}.
 #'   \item Other CRAN packages: digest,
-#'    DBI,RSQLite, RJSONIO, plotrix, fields, grid, kohonen, Cairo, parallel 
+#'    DBI,RSQLite, jsonlite, plotrix, fields, grid, kohonen, Cairo, parallel 
 #'   \item Bioconductor packages: IRanges, BSgenome, Rsamtools, rtracklayer,
 #'    GenomicRanges and Biostrings
 #'   }
@@ -135,9 +135,9 @@
 #' @author Przemyslaw Stempor
 #' 
 #' @import rtracklayer GenomicRanges BSgenome Biostrings IRanges GenomeInfoDb
-#' @import DBI RSQLite parallel RJSONIO Cairo
+#' @import DBI RSQLite parallel Cairo jsonlite
 #' @import grid methods digest methods
-#' @import ggplot2 reshape2 gridExtra
+#' @import ggplot2 reshape2 gridExtra DT RColorBrewer
 #' @importFrom fields image.plot set.panel imageplot.info imageplot.setup 
 #' tim.colors poly.image
 #' @importFrom kohonen supersom

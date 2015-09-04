@@ -1,28 +1,12 @@
-# Sample .travis.yml for R projects from https://github.com/craigcitro/r-travis
-
-language: c
-
-env:
-  global:
-    - BIOC_USE_DEVEL="TRUE"
-
-before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
-
-install:
-  - ./travis-tool.sh install_bioc_deps
-
-script: ./travis-tool.sh run_tests
+language: r
+bioc_required: true
+bioc_packages:
+  - BiocCheck
 
 after_script:
+  - ls -lah
   - FILE=$(ls -1t *.tar.gz | head -n 1)
-  - ./travis-tool.sh install_bioc BiocCheck
   - Rscript -e "library(BiocCheck); BiocCheck(\"${FILE}\")"
-
-on_failure:
-  - ./travis-tool.sh dump_logs
 
 notifications:
   email:

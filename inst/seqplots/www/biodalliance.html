@@ -1,0 +1,57 @@
+<div id="svgHolder" style=""></div>
+
+<script language="javascript" src="http://www.biodalliance.org/release-0.13/dalliance-compiled.js"></script>
+<script language="javascript">
+  new Browser({
+      chr:        'I',
+      viewStart:  3000000,
+      viewEnd:    3030000,
+      cookieKey:  'worm_ws220',
+    coordSystem: {
+        speciesName: 'Caenorhabditis elegans',
+        taxon: 6239,
+        auth: 'WS',
+        version: 220 
+    },
+
+    sources: [
+        {
+            name: 'Genome',
+            uri:  'http://www.derkholm.net:8080/das/cel_61_220/',
+            desc: 'Worm reference genome build WS220',
+            tier_type: 'sequence',
+            provides_entrypoints: true
+            
+        },{
+            name: 'Genes',
+            desc: 'Gene structures from Wormbase WS220',
+            uri:  'http://www.derkholm.net:8080/das/cel_61_220/',
+            collapseSuperGroups: true,
+            provides_karyotype: true,
+            provides_search: true
+            
+        },{
+            name: 'Test',     
+            bwgURI: '/files/H3K4me3_ab8580__rc03_F_Cfp1-GFP_L3_RC007_and_rc04_F_Cfp1-GFP_L3_RC008__NORM_linear_1bp_averaged.bw',
+        }, {
+            name: "test bed",
+            uri: "/files/CAP_transcripts_L3_DCPMs_band1.bed",
+            tier_type: 'memstore',
+            payload: 'bed'
+        }
+    ],
+    
+    searchEndpoint: new DASSource('http://www.derkholm.net:8080/das/cel_61_220/'),
+    karyoEndpoint: new DASSource('http://www.derkholm.net:8080/das/cel_61_220/'), 
+    browserLinks: {
+        Ensembl: 'http://www.ensembl.org/Caenorhabditis_elegans/Location/View?r=${chr}:${start}-${end}'
+    }
+    
+  });
+</script>
+
+
+
+
+
+      
