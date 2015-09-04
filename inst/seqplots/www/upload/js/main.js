@@ -182,6 +182,7 @@ function copyGenome(e) {
 
 function showDef(e) {
   $('.fileupload-defaults').show();
+  $('.f1_genome_default').children().remove();
   var mod = $('.f1_genome_default').append( $('#file_genome option').clone() );
   mod.children().removeAttr('selected').filter('[value='+ $.cookie('genome') +']').attr('selected', 'selected');
   $('.f1_user_default').val( $.cookie('user') );
