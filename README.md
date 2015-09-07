@@ -1,4 +1,4 @@
-![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/LogoSeqPlotsLabeled.png)
+![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/ico_full_color.png)
 =================================================================================
 
 > An interactive tool for visualizing track signals and sequence motif densities along genomic features using average plots and heatmaps
