@@ -1,3 +1,35 @@
+CHANGES IN VERSION 1.4.1
+--------------------------------------------------------------------------------
+
+PACKAGE:
+
+* RJSONIO replaced with jsonlite package for encoding/decoding JSON
+* Sub-heatmaps accepts multilevel color palettes in plotHeatmap function
+* Better dendrogram positioning for heatmaps with hclust and single sub-heatmap
+
+GUI:
+
+* "Load saved plot set" select input replaced with searchable selectize input
+* Tracks and feature names are shown without extensions
+* Plot Preview GUI elements are shown directly after calculation finishes or 
+  save dataset si loaded, even if no pair is selected. 
+* Download buttons moved to bottom of side panel 
+* Color palettes from RColorBrewer package can be selected in GUI
+* Web interface tab for managing the reference genomes
+
+BUGFIX:
+
+* Plot Preview shows up when needed with shiny 0.12.0 (issue #6)
+* Heatmap top labels and color key font sizing works properly
+* Clustering report download works when source feature file were deleted
+
+
+CHANGES IN VERSION 1.3.0
+--------------------------------------------------------------------------------
+
+* New package version for Bioconductor 3.1 release
+
+
 CHANGES IN VERSION 1.2.0
 --------------------------------------------------------------------------------
 
