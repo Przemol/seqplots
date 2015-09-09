@@ -216,7 +216,7 @@ getPlotSetArray <- function(
         
         #Get features to plot
         file_con <- file( normalizePath(j) )
-        sel <- rtracklayer::import(file_con , asRangedData=FALSE)
+        sel <- rtracklayer::import(file_con)
         close(file_con)
         
         proc <- list()
