@@ -5,7 +5,7 @@
 
 [![Build Status](https://travis-ci.org/Przemol/seqplots.svg?branch=master)](https://travis-ci.org/Przemol/seqplots)
 
-![Examples of Seq Plots interface and outputs](https://github.com/Przemol/seqplots/wiki/img/00_IntroS.png)
+![Examples of Seq Plots interface and outputs](https://github.com/Przemol/seqplots/wiki/img/SeqPlots_fig1_web.png)
 
 :exclamation: **RELEASE NOTE** :exclamation:
 
