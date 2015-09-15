@@ -83,6 +83,12 @@ https://github.com/Przemol/seqplots_osx/releases/latest**
 
 The bundle requires OS X 10.6 (Snow Leopard) and above with X11 installed. X11 was included with OS X up to version 10.7 (Lion). OS X 10.8 (Mountain Lion) and above require installation of Xquartz package, see more here: http://support.apple.com/en-us/HT201341
 
+Docker image
+------------
+SeqPlots is available as Docker image, which can be easily run on Mac OS, Windows and Linux systems. The image can be obtained from Docker Hub: https://hub.docker.com/r/przemol/seqplots/
+
+Refer to https://www.docker.com/ for instructions how to install Docker and run the image.
+
 References
 ----------
 
