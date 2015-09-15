@@ -189,7 +189,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             } else if( is.character(colvec[[i]]) & !any(is.na(colvec[[i]])) ) {
                 if( length(colvec[[i]]) == 1 )    
                     colorRampPalette(c('white', colvec[[i]]))(ncollevel)
-                else 
+                else
                     colorRampPalette(colvec[[i]])(ncollevel)
             } else {
                 gcol(ncollevel)
