@@ -184,12 +184,13 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             if( is.na(o_max[i]) ) keycolor_lim[2] <- zmax 
                 else keycolor_lim[2] <- o_max[i]
             
-            col <- if( is.character(colvec[[i]]) & !any(is.na(colvec[[i]])) ) {
+            col <- if( is.null(colvec) ) {
+                gcol(ncollevel)
+            } else if( is.character(colvec[[i]]) & !any(is.na(colvec[[i]])) ) {
                 if( length(colvec[[i]]) == 1 )    
                     colorRampPalette(c('white', colvec[[i]]))(ncollevel)
                 else 
                     colorRampPalette(colvec[[i]])(ncollevel)
-                    
             } else {
                 gcol(ncollevel)
             }
