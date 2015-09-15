@@ -140,6 +140,13 @@
               <li><a href="#usage">Usage</a></li>
               <li><a href="#alternative-installation">Alternative installation</a></li>
               </ul></li>
+              <li><a href="#running-seqplots-docker-image">Running SeqPlots Docker image</a><ul>
+              <li><a href="#how-to-install-docker">How to install Docker</a></li>
+              <li><a href="#how-to-use-on-mac-and-windows">How to use on Mac and Windows</a></li>
+              <li><a href="#how-to-use-linux">How to use Linux</a></li>
+              <li><a href="#troubleshooting">Troubleshooting</a></li>
+              <li><a href="#package-content-1">Package content</a></li>
+              </ul></li>
               <li><a href="#quick-start-demo">Quick start demo</a></li>
               <li><a href="#adding-and-managing-files">Adding and managing files</a><ul>
               <li><a href="#supported-file-formats">Supported file formats</a></li>
@@ -173,7 +180,9 @@
               <li><a href="#advanced-options">Advanced options</a></li>
               <li><a href="#genomes-managment">Genomes managment</a></li>
               <li><a href="#error-messages">Error messages</a></li>
-              <li><a href="#version-history">Version history</a><ul>
+              <li><a href="#versions-history">Versions history</a><ul>
+              <li><a href="#changes-in-version-1.4.1">CHANGES IN VERSION 1.4.1</a></li>
+              <li><a href="#changes-in-version-1.3.0">CHANGES IN VERSION 1.3.0</a></li>
               <li><a href="#changes-in-version-1.2.0">CHANGES IN VERSION 1.2.0</a></li>
               <li><a href="#changes-in-version-1.0.0">CHANGES IN VERSION 1.0.0</a></li>
               <li><a href="#changes-in-version-0.99.1">CHANGES IN VERSION 0.99.1</a></li>
@@ -444,6 +453,59 @@
           <hr class="sectionend" />
           </div>
           </div>
+          <div id="running-seqplots-docker-image" class="section level1">
+          <h1>Running SeqPlots Docker image</h1>
+          <blockquote>
+          <p>SeqPlots is available as Docker image, which can be easily run on Mac OS, Windows and Linux systems. The image can be obtained from Docker Hub: <a href="https://hub.docker.com/r/przemol/seqplots/" class="uri">https://hub.docker.com/r/przemol/seqplots/</a></p>
+          </blockquote>
+          <p><strong>System requirements</strong>: Windows, Mac OS X, Linux or any other system supporting the Docker software. Refer to <a href="https://www.docker.com/" class="uri">https://www.docker.com/</a> for details.</p>
+          <div id="how-to-install-docker" class="section level2">
+          <h2>How to install Docker</h2>
+          <p>Install the Docker Toolbox/Docker executables:</p>
+          <ul>
+          <li>Windows: <a href="http://docs.docker.com/windows/step_one" class="uri">http://docs.docker.com/windows/step_one</a></li>
+          <li>Mac OS X: <a href="http://docs.docker.com/mac/step_one" class="uri">http://docs.docker.com/mac/step_one</a></li>
+          <li>Linux: <a href="http://docs.docker.com/linux/step_one" class="uri">http://docs.docker.com/linux/step_one</a></li>
+          </ul>
+          </div>
+          <div id="how-to-use-on-mac-and-windows" class="section level2">
+          <h2>How to use on Mac and Windows</h2>
+          <ol style="list-style-type: decimal">
+          <li><p>On Mac or Windows start <a href="https://kitematic.com/">Kitematic</a>. The application will be installed as a part of Docker Toolbox. You may skip the registration/login.</p></li>
+          <li><p>Search for “seqplots”, then click on <code>CREATE</code> button. This will download the container, all it’s dependencies and run the application. The SeqPlots web interface should be shown in “WEB PREVIEW” window on right side of Kitematic.</p></li>
+          <li><p>To open SeqPlots interface click on <code>WEB PREVIEW</code>. This will open the GUI is system default web browser. At this point the SeqPlots is ready to use.</p></li>
+          <li><p>The uploaded files, datasets and downloaded reference genomes will be saved inside the Docker container. To use local system storage or access files previously added using SeqPlots Mac OS X app or R package click on the cog icon “VOLUMES” section of Kitematic (below <code>WEB PREVIEW</code>). There should be one Docker folder (/var/shiny-server/DATA), currently not mapped to local filesystem. Click on <code>CHANGE</code> button on the right side and select your data location, e.g. ~/SeqPlots_data. Verify that path is correct in <code>LOCAL FOLDER</code> column, restart SeqPlots Docker image if needed.</p></li>
+          </ol>
+          </div>
+          <div id="how-to-use-linux" class="section level2">
+          <h2>How to use Linux</h2>
+          <ol style="list-style-type: decimal">
+          <li><p>After installing Docker and verifying it works properly (<code>docker run hello-world</code>) run following commands in terminal:</p>
+          <pre><code>docker pull przemol/seqplots
+          docker run -p 80:80 przemol/seqplots</code></pre></li>
+          <li><p>At this point the SeqPlots should be available on port 80 of local web interface. Open the web browser and navigate to <a href="http://localhost"><a href="http://localhost" class="uri">http://localhost</a></a>.</p>
+          <p>If port 80 is already taken (e.g. by Apache web server), change port mapping in docker command, e.g. <code>docker run --rm -p 3838:80 przemol/seqplots</code> and navigate to <a href="http://localhost:3838"><a href="http://localhost:3838" class="uri">http://localhost:3838</a></a>.</p></li>
+          <li><p>To use local file system for SeqPlots data storage use <code>-v &lt;host_dir&gt;:&lt;container_dir&gt;</code> parameter:</p>
+          <pre><code>docker run -p 3838:80 -v ~/SeqPlots_data:/var/shiny-server/DATA przemol/seqplots</code></pre></li>
+          </ol>
+          </div>
+          <div id="troubleshooting" class="section level2">
+          <h2>Troubleshooting</h2>
+          <p>When using shared folder error messages <code>The application unexpectedly exited.</code> or <code>Error in plot.new() : could not open file 'tmp/sessionID_1b61fb3846.png'</code> indicate that shared file system is not writeable for SeqPlots in Docker container. Make sure all files and folders have “Read &amp; Write” permission set for everyone (all users). This can be changed using right click followed by “More info” (Mac) or “Properties” (Windows). On Mac and Linux the following command will fix all issues:</p>
+          <pre><code>chmod -R a+w ~/SeqPlots_data</code></pre>
+          </div>
+          <div id="package-content-1" class="section level2">
+          <h2>Package content</h2>
+          <ul>
+          <li>R (<a href="http://www.r-project.org/" class="uri">http://www.r-project.org/</a>) branch 3.2 for Linux</li>
+          <li>Shiny Server (<a href="https://github.com/rstudio/shiny-server" class="uri">https://github.com/rstudio/shiny-server</a>)</li>
+          <li>SeqPlots dependency packages (including Shiny, rtracklayer and BSgenome)</li>
+          <li>Full genome sequences for Caenorhabditis elegans (UCSC version ce10) - BSgenome.Celegans.UCSC.ce10 R package</li>
+          <li>SeqPlots package</li>
+          </ul>
+          <hr class="sectionend" />
+          </div>
+          </div>
           <div id="quick-start-demo" class="section level1">
           <h1>Quick start demo</h1>
           <ol style="list-style-type: decimal">
@@ -676,12 +738,12 @@
           <li><strong><code>Color key scaling</code></strong> - this slider influences how color key limits are generated. For example, 0.01 (default value) calculates limits using data ranging from 1-99 percentile of available data points. 0.1 uses data ranging from 10-90 percentile. The general formula for limit is: [quantile(data, <code>Color key scaling</code>); quantile(data, 1-<code>Color key scaling</code>)]</li>
           <li><strong><code>min</code></strong> and <strong><code>max</code></strong> numeric inputs - enter values to manually specify color key limits as numeric values.</li>
           </ul></li>
-          <li><strong><code>Set individual color key limits</code></strong> - this option is similar to manual set up of color key limits, but this allows one to specify different values for individual sub-heatmaps. When this checkbox is selected <strong><code>min</code></strong> and <strong><code>max</code></strong> numeric input menu is shown on the <strong>plot set grid</strong></li>
-          <li><p><strong><code>Set default colorspace</code></strong> - When this option is selected three color pickers are shown to set up custom color mappings for heatmaps. The following example below shows standard jet colors (left), default blue color mapping after selecting the checkbox (middle) and custom color selection (right):</p></li>
+          <li><p><strong><code>Set individual color key limits</code></strong> - this option is similar to manual set up of color key limits, but this allows one to specify different values for individual sub-heatmaps. When this checkbox is selected <strong><code>min</code></strong> and <strong><code>max</code></strong> numeric input menu is shown on the <strong>plot set grid</strong></p></li>
+          <li><p><strong><code>Set colorspace</code></strong> - This input allows to use color palettes from RColorBrewer package, which would replace default color palette for heatmaps. By selecting <strong><code>Reverse</code></strong> checkbox the reversed color palette will be used. Here are available color pallets (click <a href="http://przemol.github.io/plotsHg19/ColorMapTests">here</a> to see example heatmap plotted with different color palettes):</p>
+          <p><img src="img/palettes.png" alt="Color palettes from RColorBrewer" /></p>
+          <p>When the <code>Custom</code> option is selected three-color pickers are shown to setup custom color mappings for heatmaps. The following example below shows standard jet colors (left), default blue color mapping after selecting the checkbox (middle) and custom color selection (right):</p>
+          <p><img src="img/08_05.png" alt="Set default colorspace usage example: standard jet colors (left), default blue color mapping after selecting the checkbox (middle) and custom color selection (right)" /></p></li>
           </ul>
-          <blockquote>
-          <p><img src="img/08_05.png" alt="Set default colorspace usage example: standard jet colors (left), default blue color mapping after selecting the checkbox (middle) and custom color selection (right)" /></p>
-          </blockquote>
           </div>
           <div id="other-options-controlling-heatmap-appearance" class="section level2">
           <h2>Other options controlling heatmap appearance</h2>
@@ -972,9 +1034,38 @@
           <hr />
           <hr class="sectionend" />
           </div>
-          <div id="version-history" class="section level1">
-          <h1>Version history</h1>
-          <p><br /></p>
+          <div id="versions-history" class="section level1">
+          <h1>Versions history</h1>
+          <div id="changes-in-version-1.4.1" class="section level2">
+          <h2>CHANGES IN VERSION 1.4.1</h2>
+          <p>PACKAGE:</p>
+          <ul>
+          <li>RJSONIO replaced with jsonlite package for encoding/decoding JSON</li>
+          <li>Sub-heatmaps accepts multilevel color palettes in plotHeatmap function</li>
+          <li>Better dendrogram positioning for heatmaps with hclust and single sub-heatmap</li>
+          </ul>
+          <p>GUI:</p>
+          <ul>
+          <li>“Load saved plot set” select input replaced with searchable selectize input</li>
+          <li>Tracks and feature names are shown without extensions</li>
+          <li>Plot Preview GUI elements are shown directly after calculation finishes or save dataset si loaded, even if no pair is selected.</li>
+          <li>Download buttons moved to bottom of side panel</li>
+          <li>Color palettes from RColorBrewer package can be selected in GUI</li>
+          <li>Web interface tab for managing the reference genomes</li>
+          </ul>
+          <p>BUGFIX:</p>
+          <ul>
+          <li>Plot Preview shows up when needed with shiny 0.12.0 (issue #6)</li>
+          <li>Heatmap top labels and color key font sizing works properly</li>
+          <li>Clustering report download works when source feature file were deleted</li>
+          </ul>
+          </div>
+          <div id="changes-in-version-1.3.0" class="section level2">
+          <h2>CHANGES IN VERSION 1.3.0</h2>
+          <ul>
+          <li>New package version for Bioconductor 3.1 release</li>
+          </ul>
+          </div>
           <div id="changes-in-version-1.2.0" class="section level2">
           <h2>CHANGES IN VERSION 1.2.0</h2>
           <p>PACKAGE:</p>
@@ -1313,6 +1404,13 @@
               <li><a href="#usage">Usage</a></li>
               <li><a href="#alternative-installation">Alternative installation</a></li>
               </ul></li>
+              <li><a href="#running-seqplots-docker-image">Running SeqPlots Docker image</a><ul>
+              <li><a href="#how-to-install-docker">How to install Docker</a></li>
+              <li><a href="#how-to-use-on-mac-and-windows">How to use on Mac and Windows</a></li>
+              <li><a href="#how-to-use-linux">How to use Linux</a></li>
+              <li><a href="#troubleshooting">Troubleshooting</a></li>
+              <li><a href="#package-content-1">Package content</a></li>
+              </ul></li>
               <li><a href="#quick-start-demo">Quick start demo</a></li>
               <li><a href="#adding-and-managing-files">Adding and managing files</a><ul>
               <li><a href="#supported-file-formats">Supported file formats</a></li>
@@ -1346,7 +1444,9 @@
               <li><a href="#advanced-options">Advanced options</a></li>
               <li><a href="#genomes-managment">Genomes managment</a></li>
               <li><a href="#error-messages">Error messages</a></li>
-              <li><a href="#version-history">Version history</a><ul>
+              <li><a href="#versions-history">Versions history</a><ul>
+              <li><a href="#changes-in-version-1.4.1">CHANGES IN VERSION 1.4.1</a></li>
+              <li><a href="#changes-in-version-1.3.0">CHANGES IN VERSION 1.3.0</a></li>
               <li><a href="#changes-in-version-1.2.0">CHANGES IN VERSION 1.2.0</a></li>
               <li><a href="#changes-in-version-1.0.0">CHANGES IN VERSION 1.0.0</a></li>
               <li><a href="#changes-in-version-0.99.1">CHANGES IN VERSION 0.99.1</a></li>
