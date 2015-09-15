@@ -70,9 +70,13 @@
 #' @param o_max vector of length equal to number of sub heatmaps determining 
 #'   maximum value on color key for each sub plot, if NULL (default) or NA the 
 #'   global settings are used, ignored in \code{indi} is FALSE
-#' @param colvec The vector of colours used to plot the lines and error estimate
-#'   fields. If set value NULL (default) the automatically generated colour 
-#'   values will be used. Accpeted values are: vector of any of the three kinds 
+#' @param colvec The vector or list of colour values used generate sub-heatmaps 
+#'   colorspaces. If NULL (default) the automatically generated colour 
+#'   values will be used for all sub-heatmaps. If single color is provided, the 
+#'   sequential colorspace reging from given color to white will be created. 
+#'   If the vector of colors is provided, the continous pallete will be created 
+#'   using these colors. NA value indicates default color pallete to be used for 
+#'   give sub-heatmap. Accepted values are: vector of any of the three kinds 
 #'   of R colour specifications, i.e., either a color name (as listed by 
 #'   colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see 
 #'   rgb), or a positive integer i meaning palette()[i]. See 
