@@ -2,7 +2,7 @@
 title: "SeqPlots R workflow"
 author: "Przemyslaw Setmpor"
 date: "`r format(Sys.Date(), '%d %B %Y')`"
-package: "`r paste('SeqPlots', packageVersion('SeqPlots'))`"
+package: "`r paste('SeqPlots', packageVersion('seqplots'))`"
 abstract: >
   SeqPlots is a tool for plotting average track signals (e.g.
   read coverage) and sequence motif densities over user specified genomic

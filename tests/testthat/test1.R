@@ -38,6 +38,12 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
     expect_is(plot(psa[2], what='h'), 'data.frame')
     expect_is(plot(psa[2,1], what='h'), 'data.frame')
     
+    context("Extended functions tests for better test coverage")
+    expect_null(plotAverage(psa))
+    expect_null(plotAverage(unlist(psa)))
+    expect_is(plot(psa[2,1], what='h', ggplot=TRUE), 'data.frame')
+    
+    
 })
 
 test_that("Test motifs", {
@@ -80,7 +86,5 @@ test_that("Test motifs", {
     expect_true( all(is.na( plotHeatmap(psa[1,], clstmethod='none' )$ClusterID )) )
     
 })
-
-
 
 
