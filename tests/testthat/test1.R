@@ -38,6 +38,53 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
     expect_is(plot(psa[2], what='h'), 'data.frame')
     expect_is(plot(psa[2,1], what='h'), 'data.frame')
     
+    context("Extended functions tests for better test coverage")
+    expect_null(plotAverage(psa, plotScale = 'log2'))
+    expect_null(plotAverage(unlist(psa), plotScale = 'zscore'))
+    expect_null(plotAverage(unlist(psa)[[1]]))
+    expect_null(plotAverage(unlist(psa)[[1]], labels = 'A') )
+    
+    expect_is(plot(psa[2,1], what='h', ggplot=TRUE), 'data.frame')
+    
+    expect_is(
+        plotHeatmap(psa[[2,1]], plotScale= "log2", sortrows = 'decreasing', clstmethod = 'hclust' )
+        , 'data.frame'
+    )
+    expect_is(
+        plotHeatmap(unlist(psa)[1], plotScale= "zscore", sortrows = 'increasing', clstmethod = 'ssom')
+        , 'data.frame'
+    )
+    
+    expect_is(
+        plotHeatmap(unlist(psa)[[1]], ggplot = TRUE, indi = FALSE, autoscale=TRUE, raster=FALSE)
+        , 'data.frame'
+    )
+    
+    expect_is(
+        plotHeatmap(unlist(psa)[[1]], clspace=c('red', 'blue'), raster=FALSE)
+        , 'data.frame'
+    )
+    
+    expect_is(
+        plotHeatmap(unlist(psa)[[1]], clspace=c('red', 'blue'), raster=FALSE, ggplot = TRUE)
+        , 'data.frame'
+    )
+    
+    expect_is(
+        plotHeatmap(unlist(psa)[[1]], indi=FALSE, raster=FALSE, ggplot=TRUE)
+        , 'data.frame'
+    )
+    
+    expect_is(
+        plotHeatmap(psa[[1]], indi=FALSE, raster=FALSE, colved='red')
+        , 'data.frame'
+    )
+    
+    context("Anchored features test")
+    getPlotSetArray(bw1, c(bed1, bed2), 'ce10', type = 'af')
+
+    
+    
 })
 
 test_that("Test motifs", {
@@ -45,7 +92,7 @@ test_that("Test motifs", {
     
     ms <- MotifSetup()
     ms$addMotif('GAGA')
-    ms$addMotif('TATA')
+    ms$addMotif('TATA', revcomp=TRUE)
     ms$addBigWig(bw1)
     expect_is(ms, 'MotifSetup', info = NULL, label = NULL)
     expect_equal(ms$nmotifs(), 3, info = NULL, label = NULL)
@@ -79,8 +126,27 @@ test_that("Test motifs", {
     expect_true( all(is.na( psa[1,]$plot('h', clusters=0)$ClusterID )) )
     expect_true( all(is.na( plotHeatmap(psa[1,], clstmethod='none' )$ClusterID )) )
     
+    context("Anchored features test")
+    af <- getPlotSetArray(ms, c(bed1, bed2), 'ce10', type = 'af')
+    expect_null(plot(af, what='a'))
+    expect_is(plotHeatmap(af[[1]]), 'data.frame')
+    expect_null(plotAverage(af, type = 'legend'))
+    expect_null(plotAverage(af, type = 'legend', error.estimates=TRUE, legend_ext=TRUE))
+    
+    expect_is(plotHeatmap(af[[1]], indi=FALSE), 'data.frame')
+    
+    context("Server deployment test")
+    deployServerInstance(server=tempdir())
+    expect_error( run(root=tempdir(), shinyErrParam=TRUE) )
+    
+    context("Hepler functions")
+    expect_equal(num2sci(100000), '100k')
+    imPlot2(matrix(rnorm(100), 10, 10), xinds=1, horizontal = TRUE)
+    imPlot2(matrix(rnorm(100), 10, 10), xinds=1, add = TRUE)
+    imPlot2(matrix(rnorm(100), 10, 10), xinds=1, legend.only = TRUE)
+    imPlot2(matrix(rnorm(100), 10, 10), xinds=1, graphics.reset=TRUE)
+    
+    
 })
-
-
 
 
