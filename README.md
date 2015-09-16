@@ -1,11 +1,11 @@
-![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/LogoSeqPlotsLabeled.png)
+![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/ico_full_color.png)
 =================================================================================
 
 > An interactive tool for visualizing track signals and sequence motif densities along genomic features using average plots and heatmaps
 
 [![Build Status](https://travis-ci.org/Przemol/seqplots.svg?branch=master)](https://travis-ci.org/Przemol/seqplots)
 
-![Examples of Seq Plots interface and outputs](https://github.com/Przemol/seqplots/wiki/img/00_IntroS.png)
+![Examples of Seq Plots interface and outputs](https://github.com/Przemol/seqplots/wiki/img/SeqPlots_fig1_web.png)
 
 :exclamation: **RELEASE NOTE** :exclamation:
 
@@ -82,6 +82,12 @@ Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains R
 https://github.com/Przemol/seqplots_osx/releases/latest**
 
 The bundle requires OS X 10.6 (Snow Leopard) and above with X11 installed. X11 was included with OS X up to version 10.7 (Lion). OS X 10.8 (Mountain Lion) and above require installation of Xquartz package, see more here: http://support.apple.com/en-us/HT201341
+
+Docker image
+------------
+SeqPlots is available as Docker image, which can be easily run on Mac OS, Windows and Linux systems. The image can be obtained from Docker Hub: https://hub.docker.com/r/przemol/seqplots/
+
+Refer to https://www.docker.com/ for instructions how to install Docker and run the image.
 
 References
 ----------

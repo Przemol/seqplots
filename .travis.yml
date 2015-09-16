@@ -2,11 +2,16 @@ language: r
 bioc_required: true
 bioc_packages:
   - BiocCheck
+r_packages:
+  - covr
 
 after_script:
   - ls -lah
   - FILE=$(ls -1t *.tar.gz | head -n 1)
   - Rscript -e "library(BiocCheck); BiocCheck(\"${FILE}\")"
+  
+after_success:
+  - Rscript -e 'covr::codecov()'
 
 notifications:
   email:
