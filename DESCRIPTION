@@ -1,7 +1,7 @@
 Package: seqplots
 Maintainer: Przemyslaw Stempor <ps562@cam.ac.uk>
 Author: Przemyslaw Stempor
-Version: 1.7.2
+Version: 1.7.3
 License: GPL-3
 Title: An interactive tool for visualizing NGS signals and sequence
     motif densities along genomic features using average plots and heatmaps.
@@ -66,7 +66,8 @@ VignetteBuilder: knitr
 Suggests:
     testthat,
     BiocStyle,
-    knitr
+    knitr,
+    rmarkdown
 Collate:
     'MotifSetup-class.R'
     'PlotSetPair-class.R'
