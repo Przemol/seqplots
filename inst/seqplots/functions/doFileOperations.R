@@ -64,8 +64,8 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     type <- 'track'; file_type <- 'BigWiggle';
     testChromosomeNames(seqinfo(BigWigFile(x)), gnm)
     
-  } else if( grepl('.(wig|wig.gz|bgr|bgr.gz|bedGraph|bedGraph.gz)$', x, ignore.case = TRUE) ){
-    pth <- gsub('.(wig|wig.gz|bgr|bgr.gz|bedGraph|bedGraph.gz)$', '.bw', x, ignore.case = TRUE);
+  } else if( grepl('.(wig|wig.gz|bdg|bdg.gz|bedGraph|bedGraph.gz)$', x, ignore.case = TRUE) ){
+    pth <- gsub('.(wig|wig.gz|bdg|bdg.gz|bedGraph|bedGraph.gz)$', '.bw', x, ignore.case = TRUE);
     try_result <- try({ 
       #stop('test'); pth <- path(wigToBigWig(file.path('files', x), gnm)); 
       .Call(  get('BWGFile_fromWIG', environment(wigToBigWig)), x, seqlengths(gnm), pth )
