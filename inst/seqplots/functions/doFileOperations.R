@@ -52,20 +52,20 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   if( !file.exists(x) ) stop('Cannot add, file not on the server!')
   x <- normalizeName(x)
   
-  if( grepl('.(gff|GFF|gff.gz|GFF.gz)$', x) ) {
+  if( grepl('.(gff|gff.gz|gtf|gtf.gz)$', x, ignore.case = TRUE) ) {
     type <- 'feature'; file_type <- 'GFF';
     testFeatureFile(x, gnm);
     
-  } else if( grepl('.(bed|BED|bed.gz|BED.gz)$', x) ) {
+  } else if( grepl('.(bed|bed.gz)$', x, ignore.case = TRUE) ) {
     type <- 'feature'; file_type <- 'BED';
     testFeatureFile(x, gnm);
     
-  } else if( grepl('.(bw|BW)$', x) ) {
+  } else if( grepl('.(bw|bigWig|bigWiggle)$', x, ignore.case = TRUE) ) {
     type <- 'track'; file_type <- 'BigWiggle';
     testChromosomeNames(seqinfo(BigWigFile(x)), gnm)
     
-  } else if( grepl('.(wig|WIG|wig.gz|WIG.gz)$', x) ){
-    pth <- gsub('.(wig|WIG|wig.gz|WIG.gz)$', '.bw', x);
+  } else if( grepl('.(wig|wig.gz|bdg|bdg.gz|bedGraph|bedGraph.gz)$', x, ignore.case = TRUE) ){
+    pth <- gsub('.(wig|wig.gz|bdg|bdg.gz|bedGraph|bedGraph.gz)$', '.bw', x, ignore.case = TRUE);
     try_result <- try({ 
       #stop('test'); pth <- path(wigToBigWig(file.path('files', x), gnm)); 
       .Call(  get('BWGFile_fromWIG', environment(wigToBigWig)), x, seqlengths(gnm), pth )
