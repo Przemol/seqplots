@@ -168,7 +168,7 @@
 getPlotSetArray <- function(
     tracks, features, refgenome, bin=10L, rm0=FALSE, ignore_strand=FALSE, 
     xmin=2000L, xmax=2000L, xanchored=1000L, type='pf', add_heatmap=TRUE, 
-    verbose=FALSE, lvl1m=message, lvl2m=message) {
+    verbose=FALSE, stat='mean', lvl1m=message, lvl2m=message) {
     
     old_opt <- options('warn'); on.exit(options(old_opt));
     
@@ -324,7 +324,12 @@ getPlotSetArray <- function(
             
             if(verbose) lvl2m("Calculeating means/stderr/95%CIs...")
             if (rm0) M[M==0] <- NA
-            means   <- colMeans(M, na.rm=TRUE)
+            if( stat == 'median' ) {
+                means <- apply(M, 2, median, na.rm=TRUE)
+            } else {
+                means <- colMeans(M, na.rm=TRUE)
+            }
+            
             stderror<- apply(M, 2, function (n) {
                 sd(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )
             })
