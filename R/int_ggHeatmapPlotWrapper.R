@@ -196,11 +196,10 @@ ggHeatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
     
     #fix for importing ggplot2::ggplotGrob into namespace
     if(!"package:ggplot2" %in% search()) attachNamespace('ggplot2')
-    
-    grid <- do.call(arrangeGrob, c(plots, nrow=1))
-    out <- grid.arrange(grid,
-        main=textGrob(main,gp=gpar(fontsize=cex.title))
+    grid <- marrangeGrob(
+        plots, nrow=1, ncol=length(plots), 
+        top = textGrob(main,gp=gpar(fontsize=cex.title))
     )
-    show(out)
-    return(out)
+    grid.draw(grid[[1]])
+    return(grid)
 }

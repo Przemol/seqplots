@@ -80,8 +80,11 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
         , 'data.frame'
     )
     
-    context("Anchored features test")
-    getPlotSetArray(bw1, c(bed1, bed2), 'ce10', type = 'af')
+    context("Anchored features and median test")
+    if(.Platform$OS.type == "windows" && .Machine$sizeof.pointer == 4) 
+        skip('Skipping on Win 32bit')
+    expect_is( getPlotSetArray(bw1, c(bed1, bed2), 'ce10', type = 'af'), "PlotSetArray" )
+    expect_is( getPlotSetArray(bw1, c(bed1, bed2), 'ce10', stat = 'median'), "PlotSetArray" )
 
     
     
@@ -89,6 +92,7 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
 
 test_that("Test motifs", {
     
+    context("Test motif - aquire data")
     
     ms <- MotifSetup()
     ms$addMotif('GAGA')
@@ -127,6 +131,9 @@ test_that("Test motifs", {
     expect_true( all(is.na( plotHeatmap(psa[1,], clstmethod='none' )$ClusterID )) )
     
     context("Anchored features test")
+    if(.Platform$OS.type == "windows" && .Machine$sizeof.pointer == 4) 
+        skip('Skipping on Win 32bit')
+    
     af <- getPlotSetArray(ms, c(bed1, bed2), 'ce10', type = 'af')
     expect_null(plot(af, what='a'))
     expect_is(plotHeatmap(af[[1]]), 'data.frame')
@@ -134,19 +141,22 @@ test_that("Test motifs", {
     expect_null(plotAverage(af, type = 'legend', error.estimates=TRUE, legend_ext=TRUE))
     
     expect_is(plotHeatmap(af[[1]], indi=FALSE), 'data.frame')
+
+    
+})
+
+test_that("helper functions", {
     
     context("Server deployment test")
-    deployServerInstance(server=tempdir())
+    expect_null( deployServerInstance(server=tempdir()) )
     expect_error( run(root=tempdir(), shinyErrParam=TRUE) )
     
     context("Hepler functions")
     expect_equal(num2sci(100000), '100k')
-    imPlot2(matrix(rnorm(100), 10, 10), xinds=1, horizontal = TRUE)
-    imPlot2(matrix(rnorm(100), 10, 10), xinds=1, add = TRUE)
-    imPlot2(matrix(rnorm(100), 10, 10), xinds=1, legend.only = TRUE)
-    imPlot2(matrix(rnorm(100), 10, 10), xinds=1, graphics.reset=TRUE)
-    
-    
+    expect_null( imPlot2(matrix(rnorm(100), 10, 10), xinds=1, horizontal = TRUE) )
+    expect_null( imPlot2(matrix(rnorm(100), 10, 10), xinds=1, add = TRUE) )
+    expect_null( imPlot2(matrix(rnorm(100), 10, 10), xinds=1, legend.only = TRUE) )
+    expect_null( imPlot2(matrix(rnorm(100), 10, 10), xinds=1, graphics.reset=TRUE) )
 })
 
 
