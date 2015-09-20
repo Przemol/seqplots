@@ -24,7 +24,8 @@ tagList(
         div( class="modal-footer", div(
             id='modalToolbar', class='row',
             div(class="col-md-2", 
-                numericInput("BWbin", "Bin track @ [bp]: ", 10)
+                numericInput("BWbin", "Bin track @ [bp]: ", 10),
+                radioButtons('stat', 'Statistic:', c('mean', 'median'), 'mean')
             ),
             div(class="col-md-2", radioButtons('plot_type', 'Choose the plot type', c( 'Point Features', 'Midpoint Features', 'Endpoint Features', 'Anchored Features' ) ) ),
             div(class="col-md-2", p("Additional options:"), 
