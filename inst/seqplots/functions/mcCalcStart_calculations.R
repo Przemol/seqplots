@@ -44,6 +44,7 @@ mcCalcStart <- quote({
                 rm0=input$rm0,
                 ignore_strand=input$ignore_strand,
                 add_heatmap=input$add_heatmap,
+                stat = input$stat,
                 verbose=TRUE, lvl1m=cat3, lvl2m=message
             )       
         out$data 
