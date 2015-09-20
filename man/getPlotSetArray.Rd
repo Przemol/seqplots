@@ -6,8 +6,8 @@
 \usage{
 getPlotSetArray(tracks, features, refgenome, bin = 10L, rm0 = FALSE,
   ignore_strand = FALSE, xmin = 2000L, xmax = 2000L, xanchored = 1000L,
-  type = "pf", add_heatmap = TRUE, verbose = FALSE, lvl1m = message,
-  lvl2m = message)
+  type = "pf", add_heatmap = TRUE, verbose = FALSE, stat = "mean",
+  lvl1m = message, lvl2m = message)
 }
 \arguments{
 \item{tracks}{Character vector or list of BigWig track paths. For motif
@@ -51,6 +51,9 @@ in Shiny GUI environment, defaults to \code{\link[base]{message}}}
 
 \item{lvl2m}{function to handle lvl 2 messages, useful when invoked
  in Shiny GUI environment, defaults to \code{\link[base]{message}}}
+
+\item{stst}{If set to "median" the median is used as summarizing statistic
+for linear plots instead of mean}
 }
 \value{
 The \code{\link{PlotSetArray}} object.
