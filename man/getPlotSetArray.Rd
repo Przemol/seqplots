@@ -46,14 +46,14 @@ heatmap form output \code{\link{PlotSetArray}} class, defauls to TRUE}
 
 \item{verbose}{Print various messages and warnings, defaults to FALSE}
 
+\item{stat}{If set to "median" the median is used as summarizing statistic
+for linear plots instead of mean}
+
 \item{lvl1m}{function to handle lvl 1 messages, useful when invoked
 in Shiny GUI environment, defaults to \code{\link[base]{message}}}
 
 \item{lvl2m}{function to handle lvl 2 messages, useful when invoked
  in Shiny GUI environment, defaults to \code{\link[base]{message}}}
-
-\item{stst}{If set to "median" the median is used as summarizing statistic
-for linear plots instead of mean}
 }
 \value{
 The \code{\link{PlotSetArray}} object.
