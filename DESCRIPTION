@@ -1,10 +1,10 @@
 Package: seqplots
 Maintainer: Przemyslaw Stempor <ps562@cam.ac.uk>
 Author: Przemyslaw Stempor
-Version: 1.7.6
+Version: 1.7.7
 License: GPL-3
 Title: An interactive tool for visualizing NGS signals and sequence
-    motif densities along genomic features using average plots and heatmaps.
+    motif densities along genomic features using average plots and heatmaps
 Description: SeqPlots is a tool for plotting next generation sequencing (NGS)
     based experiments' signal tracks, e.g. reads coverage from ChIP-seq,
     RNA-seq and DNA accessibility assays like DNase-seq and MNase-seq, over
