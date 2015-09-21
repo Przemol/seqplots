@@ -28,7 +28,7 @@
 #'  features' strands, regardless of annotation in GFF/BED file, are treated 
 #'  as undetermined ("*"), defaults to FALSE
 #' @param verbose Print various messages and warnings, defaults to FALSE
-#' @param stst If set to "median" the median is used as summarizing statistic 
+#' @param stat If set to "median" the median is used as summarizing statistic 
 #'   for linear plots instead of mean 
 #' @param lvl1m function to handle lvl 1 messages, useful when invoked 
 #'  in Shiny GUI environment, defaults to \code{\link[base]{message}}
