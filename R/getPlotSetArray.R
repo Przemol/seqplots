@@ -179,6 +179,7 @@ getPlotSetArray <- function(
     
     n <- 1; k <- 1;
     TSS <- list(length(features))
+    ANNO <- list(length(features))
     GENOMES <- BSgenome::installed.genomes(
         splitNameParts=TRUE)$provider_version
     if( length(GENOMES) ) 
@@ -197,6 +198,7 @@ getPlotSetArray <- function(
                 as.character(strand(gr))=='-', ncol(M):1]
         return(M)
     }
+    
     
     for (j in features) {
         
@@ -357,8 +359,9 @@ getPlotSetArray <- function(
         }
         names(proc) <- sub("\\.(bw|BW)$", "", basename( sapply(tracks, '[[', 1) ))
         TSS[[n]] <- proc
+        ANNO[[n]] <- sel
         n <- n+1
     }
     names(TSS) <- sub("\\.(gff|GFF|bed|BED)$", "", basename( features ))
-    return( PlotSetArray(data=TSS) )
+    return( PlotSetArray(data = TSS, annotations = ANNO) )
 }
