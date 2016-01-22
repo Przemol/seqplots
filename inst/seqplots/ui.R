@@ -53,7 +53,8 @@ head <- tags$head(
     ,singleton(tags$script(src = "upload/js/jquery.fileupload-validate.js"))
     ,singleton(tags$script(src = "upload/js/md5.js"))
     ,singleton(tags$script(src = "http://mozilla.github.io/pdf.js/build/pdf.js"))
-    ,singleton(tags$script(src = "upload/js/main.js")),
+    ,singleton(tags$script(src = "upload/js/main.js"))
+    ,singleton(tags$script(src = "js/tutorial.js")),
     
     
     
