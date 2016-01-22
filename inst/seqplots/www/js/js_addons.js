@@ -80,10 +80,7 @@ $(function() {
 //    }
 //  })
   
-  $('#image').click(function(e){
-    $(this).find('img').toggleClass('zoom_image');
-    e.preventDefault();
-  });
+
   
 	
 	$('#downloadLegend').tooltip({title:'Legend'});
