@@ -48,7 +48,6 @@ Imports:
     fields,
     grid,
     kohonen,
-    Cairo,
     parallel,
     GenomeInfoDb,
     class,
@@ -87,3 +86,4 @@ Collate:
     'run.R'
     'seqplots-package.R'
     'zzz.R'
+RoxygenNote: 5.0.1

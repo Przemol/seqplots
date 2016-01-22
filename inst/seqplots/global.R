@@ -7,7 +7,6 @@ suppressPackageStartupMessages({
     require(rtracklayer)
     require(BSgenome)
     require(kohonen)
-    require(Cairo)
     require(plotrix)
     require(fields)
     library(RColorBrewer) 

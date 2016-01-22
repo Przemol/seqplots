@@ -176,37 +176,38 @@ input#BWbin {
 }
 
 p > label {
-	
 	display: inline;
 }
 
+/* Preview and zoom for PDF display  */
 
-
-
-img {
-    margin-top: 10px;
-    width: 100%;
+#preview-pdf-div {
     cursor: -webkit-zoom-in; 
     cursor: -moz-zoom-in;
+    text-align: center;
 }
 
 .zoom_image { 
-      max-width: 100% !important;
-      max-height: 120% !important;
-      width: auto !important;
-      cursor: -webkit-zoom-out !important; 
-      cursor: -moz-zoom-out !important;
-      position: fixed !important;
-      top: 10px !important;
-      left: 10px !important;
-      margin-right: 0px !important;
-      margin-bottom: 0px !important;
-      margin-top: 0px !important;
-      z-index:3;
+      height: 100%;
+      width: 100%;
+      cursor: -webkit-zoom-out 
+      cursor: -moz-zoom-out;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 3;
+      text-align: center;
+
+}
+
+.zoom_image > canvas {
       border-style: dotted;
-      border-width: 3px;
+      border-width: 5px;
       border-color: grey;
 }
+
+/* Tutorial CSS  */
 
 #tutorial { 
       height: 100%;
@@ -216,6 +217,7 @@ img {
       left: 0px;
       background-color: rgba(0,0,0,0.8);
       text-align: center;
+      
 }
 
 .popover {
@@ -256,6 +258,8 @@ img {
 .carousel-indicators li {
     border-color: black;
 }
+
+/* Plot grid CSS  */
 
 th > span {
       position: relative;
