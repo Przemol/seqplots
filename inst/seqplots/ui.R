@@ -52,7 +52,9 @@ head <- tags$head(
     ,singleton(tags$script(src = "upload/js/jquery.fileupload-ui.js"))
     ,singleton(tags$script(src = "upload/js/jquery.fileupload-validate.js"))
     ,singleton(tags$script(src = "upload/js/md5.js"))
+    ,singleton(tags$script(src = "http://mozilla.github.io/pdf.js/build/pdf.js"))
     ,singleton(tags$script(src = "upload/js/main.js")),
+    
     
     
     
@@ -63,16 +65,20 @@ head <- tags$head(
 # 0) Plot panel ############################################################
 plotPanel <- conditionalPanel(
     condition = "input.showplot",
-    imageOutput(outputId = "image", width = "100%", height = "100%"),
-    p(div(
-          class="btn-toolbar", 
-          HTML("Preview:"),
-          tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(tags$i(class="icon-picture"), 'Line plot' )),
-          tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-info', tags$span(tags$i(class="icon-th"), 'Heatmap' )), 
+    div(
+        HTML('<canvas class="pdf-output" id="thecanvas"></canvas>'),
+        id='preview-pdf-div'
+    ),
+    div(
+          class="btn-toolbar",
+          tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(icon("line-chart", "fa-lg"), 'Profile' )),
+          tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-info', tags$span(icon("th", "fa-lg"), 'Heatmap' )), 
           actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"))), 
+          htmlOutput('pdfLink', inline=TRUE),
           hlp("plotting", 3)
           
-    ), tags$hr())
+    ), 
+    tags$hr()
 )
 
 # 1) New plot panel ############################################################
