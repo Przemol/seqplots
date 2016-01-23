@@ -150,49 +150,9 @@ SpotlightRect = (function (window, document) {
 }(window, document));
 
 
+
 $(function() {
     
-    carousel = `
-<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-  <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-    </ol>
-    
-  <!-- Wrapper for slides -->
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="help/img/01_QuickStart/01_QuickStart_10.png" alt="...">
-
-        </div>
-        <div class="item">
-            <img src="help/img/01_QuickStart/01_QuickStart_12.png" alt="...">
- 
-        </div>
-           <div class="item">
-            <img src="help/img/09_04.png" alt="...">
-            <div class="carousel-caption">
-                <h3></h3>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Controls -->
-    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-    </a>
-</div>
-`
-
-
-
 paddedRect =  function (el, pad) {
     var rect = el.getBoundingClientRect();
     var padT = pad[0];
@@ -240,14 +200,9 @@ paddedRect =  function (el, pad) {
         }
     }
     
-    var buttons = `
-<hr/><div style="text-align: right"> 
-    <button class="btn btn-lg" onClick="$('#tutorial').remove()">Skip</button>
-    <button class="btn btn-success btn-lg" onClick="tutorial.next()">Start tutorial</button>
-<div><br/>
-    `;
 
-    $('body').append('<div id="tutorial"><div id="intro"> <h1>Welcome to SeqPlots tutorial</h1><hr/>' + carousel + buttons +'</div></div>')
+    $('body').append('<div id="tutorial"></div>');
+    $('#tutorial').load('tutorial.html');
 
 });
 
