@@ -180,7 +180,7 @@ setMethod(
         #Optional scalling
         if ( plotScale ==  "log2" ) {
             HLST <- lapply(HLST, log2 )
-            HLST[is.infinite(HLST)] <- NA
+            HLST <- lapply(HLST, function(x) {x[is.infinite(x)] <- NA; return(x)} )
         } else if ( plotScale == "zscore" ) {
             HLST <- lapply(HLST, scale )
         }
