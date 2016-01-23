@@ -78,15 +78,21 @@ var renderPDF = function(el, fw, url) {
 };
 
 $( window ).resize(function() { 
-    if(Shiny.shinyapp.$values.thecanvas) renderPDF(document.getElementById('thecanvas'), true);
+    if(Shiny.shinyapp.$values.thecanvas.im) {
+        renderPDF(document.getElementById('thecanvas'), true);
+    }
 });
 
 binding.renderValue = function(el, data) {
-                // If absolute URL from the remote server is provided, configure the CORS
-	                 // header on that server.
-	                 //
-	                 console.log(data);
-                    renderPDF(el, true);
+
+    if(Shiny.shinyapp.$values.thecanvas.im) {
+        renderPDF(el, true);
+    } else {
+        var message = 'Select feature/track pair(s) and press "Profile" or "Heatmap" button to activate the preview';
+            $('#preview-pdf-div').append('<div id="err"><b>'+ message +'</b><hr\><\div>');
+    el.height = 1;
+    $('#preview-pdf-div').unbind( "click" );
+    }
 };
 
 binding.renderError = function(el, err) {

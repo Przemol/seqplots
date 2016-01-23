@@ -162,19 +162,18 @@ shinyServer(function(input, output, clientData, session) {
 	}
 	
 	output$thecanvas <- renderPDF({
-
-	    if( is.null(values$plotid) ) stop('Select feature/track pair(s) and press "Profile" or "Heatmap" button to activate the preview')
 	    list(im=values$im, id=values$plotid)
 	})
   
 	output$pdfLink <- renderUI({
-	    if( is.null(values$plotid) ) return()
+	    #if( is.null(values$plotid) ) return()
 	    tags$a(
 	        tags$span(icon("file-pdf-o", "fa-lg"), 'PDF'), 
 	        class="btn btn-small btn-primary", href=values$im, 
 	        target='_new', style='margin-left: 5px'
 	   )
 	}) 
+	
 	#rendering data dependant plot controles
 	observe({
 	    if(!is.null(values$grfile)) {
@@ -520,8 +519,13 @@ shinyServer(function(input, output, clientData, session) {
   
   #Generate file table for tracks and features with function
   fileSelectionDataTable <- function(type) {
+
+      
     dt_opt <- reactive({
         values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile;
+        if( nrow(dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "'"))) == 0 ) {
+            stop('Upload files first.')
+        }
             dat <- I(jsonlite::toJSON(as.matrix(cbind(
                 dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "'"))[,c(-1,-4)],
             se='',  dl='',  rm=''))))
@@ -583,10 +587,12 @@ shinyServer(function(input, output, clientData, session) {
   	session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = function () { $(document.body).addClass('disconnected'); alert('Connection to server lost!'); }")
     session$sendCustomMessage("jsExec", "$('.load_div').fadeOut(1000);")
     session$sendCustomMessage("jsExec", "animateTitle();")
+    
     #Session elem:  "clientData","input","isClosed","onFlush","onFlushed","onSessionEnded","output","request","sendCustomMessage","sendInputMessage" 
     #sapply(ls(session$request), function(x) session$request[[x]])
   	#sapply(names(session$clientData), function(x) session$clientData[[x]])
   	#str(as.list(session$clientData))
+    
     message(Sys.time(), ' -> Running at ', session$request$HTTP_ORIGIN, ', ', session$clientData$url_hostname, ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']')
   })
   session$onSessionEnded(function() { 
