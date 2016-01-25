@@ -1,5 +1,6 @@
 language: r
 sudo: required
+dist: trusty
 
 bioc_required: true
 bioc_packages:
