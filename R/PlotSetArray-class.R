@@ -86,6 +86,10 @@ PlotSetArray <- setRefClass("PlotSetArray",
         subset = function(i, j) {
             "Subseting method, get PlotSetPair as list"
             data[[as.integer(i)]][[as.integer(j)]]
+        },
+        anno = function(n) {
+            'Extracts the genomic locations for nth feature as GRanges'
+            if( length(annotations) < n ) return(NA) else return(annotations[[n]])
         }
     )
 )
