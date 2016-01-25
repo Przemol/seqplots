@@ -166,36 +166,89 @@ paddedRect =  function (el, pad) {
       h: rect.height + padT + padB
     };
   }
+ 
+hints = [{
+    p: 'right', 
+    el: '[data-target="#calcModal"]', 
+    head: 'Bring up plot setup', 
+    body: "In order to set up the plot press this button. It brings up the list of files avilable for plotting."
+},{
+    p: 'bottom', 
+    el: 'tr[class="odd"]', 
+    head: 'Select track', 
+    body: "Select first track by clicking it"
+},{
+    p: 'bottom', 
+    el: '[data-value="Features"]', 
+    head: 'Select genomic features', 
+    body: "Go to Features selection panel"
+},{
+    p: 'bottom', 
+    el: "#featureDT tbody tr:first-child", 
+    head: 'Select genomic features', 
+    body: "Select first feature by clicking it"
+},{
+    p: 'bottom', 
+    el: '[data-value="Sequence features"]', 
+    head: 'Select motifs', 
+    body: "Go to Sequence features selection panelt"
+},{
+    p: 'bottom', 
+    el: '#SFpattern', 
+    head: 'Select motifs', 
+    body: "Enrer pattern, e.g. GC"
+},{
+    p: 'bottom', 
+    el: '#SFname', 
+    head: 'Select motifs', 
+    body: "Go to Sequence features selection panelt"
+},{
+    p: 'top', 
+    el: '#SFadd', 
+    head: 'Add motif', 
+    body: "Go to Sequence features selection panelt"
+},{
+    p: 'top', 
+    el: '#plot_type', 
+    head: 'Select anchored plot', 
+    body: "Go to Sequence features selection panelt"
+},{
+    p: 'top', 
+    el: '[onclick="sendToCalc()"]', 
+    head: 'Start calcualtion', 
+    body: "Go to Sequence features selection panelt"
+},{
+    p: '[onclick="sendToCalc()"]', 
+    el: '#plot_type', 
+    head: 'Select motifs', 
+    body: "Go to Sequence features selection panelt"
+}];
   
     tutorial = {
         step: 0,
         light: light = new SpotlightRect({x: 0, y: 0, w: window.innerWidth, h: window.innerHeight}, {opacity: 0}),
-        hints: [
-           
-            {el: '[data-target="#calcModal"]', head: 'Bring up plot setup', body: "In order to set up the plot press this button. It brings up the list of files avilable for plotting."},
-            {el: 'tr[class="odd"]', head: 'Select track', body: "Click the first row"},
-            {el: '[data-value="Features"]', head: 'Select feature', body: "Please select feature"},
-            {el: "#featureDT tbody tr:first-child", head: 'Plotting', body: "let's plot"}
-        ],
+        hints: hints,
         next: function() {
             $('#tutorial').remove();
             var hint = tutorial.hints[tutorial.step];
             
             var check = function(){
                 if($(hint.el).length){
-                    var item = $(hint.el);
+                    var item = $(hint.el).first();
                     tutorial.light.animateTo(paddedRect(item[0], [5]), {opacity: .65});
-                    item.first().popover({title: hint.head, content: hint.body, animation: true}).popover('show');
+                    hint=hint; item=item;
+                    item.popover({title: hint.head, content: hint.body, animation: true, placement: hint.p, container: 'body'}).popover('show');
                     tutorial.step = tutorial.step + 1;
                     item.one('click', function() {
                         $(this).popover("destroy");
                         tutorial.next();
                     })
                 } else {
-                    setTimeout(check, 1000); // check again in a second
+                    setTimeout(check, 100); // check again in a second
                 }
             };
-            check();
+            
+            setTimeout(function(){ check(); }, 200);
         
         }
     }
