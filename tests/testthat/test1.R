@@ -76,7 +76,7 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
     )
     
     expect_is(
-        plotHeatmap(psa[[1]], indi=FALSE, raster=FALSE, colved='red')
+        plotHeatmap(psa[[1]], indi=FALSE, raster=FALSE, colvec='red')
         , 'data.frame'
     )
     
