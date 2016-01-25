@@ -29,10 +29,10 @@ run <- function(
     message('Starting...')
     oldwd <- getwd()
     on.exit( {
-        rm(list=c(
+        suppressWarnings(rm(list=c(
             "doFileOperations", "GENOMES", "mcCalcStart", "mcDoParallel", 
             "renderHTMLgrid"
-        ), envir=.GlobalEnv)
+        ), envir=.GlobalEnv))
         setwd(oldwd) 
     })
     
