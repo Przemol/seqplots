@@ -311,10 +311,10 @@ shinyServer(function(input, output, clientData, session) {
 	  },
 	  content = function( file ) {
 	    if(!nchar(input$clusters) & !nchar(input$sortingord)) stop('Plot heatmap with clusters or ordering first!')
-	    infile <- file.path(
-            'files', 
-            basename(names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ))
-        )
+	      
+	    nam <- basename(names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ))
+	    nam <- dbGetQuery(con, sprintf('SELECT name FROM files WHERE name LIKE "%s.%%"', nam))
+	    infile <- file.path('files', nam)
         
         if(file.exists(infile)) {
             fcon <- file(infile); gr <- rtracklayer::import( fcon ); close(fcon);
