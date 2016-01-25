@@ -523,18 +523,18 @@ shinyServer(function(input, output, clientData, session) {
       
     dt_opt <- reactive({
         values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile;
-        if( nrow(dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "'"))) == 0 ) {
-            stop('Upload files first.')
-        }
-            dat <- I(jsonlite::toJSON(as.matrix(cbind(
-                dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "'"))[,c(-1,-4)],
-            se='',  dl='',  rm=''))))
+        #if( nrow(dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "'"))) == 0 ) {
+        #    stop('Upload files first.')
+        #}
+        #    dat <- I(jsonlite::toJSON(as.matrix(cbind(
+        #        dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "'"))[,c(-1,-4)],
+        #    se='',  dl='',  rm=''))))
             list(
               ##Force client side processing, should be avoided for very long tables
-              data=dat,
-              ajax='',
-              processing=FALSE,
-              serverSide=FALSE,
+              #data=dat,
+              #ajax='',
+              #processing=FALSE,
+              #serverSide=FALSE,
               
               ##Other options
               lengthMenu=I('[[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]'),
