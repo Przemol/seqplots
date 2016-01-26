@@ -583,10 +583,16 @@ shinyServer(function(input, output, clientData, session) {
 
   
   #Server initiation actions
+  observeEvent(input$runTutorial, {
+      session$sendCustomMessage("jsExec", "startTutorial();")
+  })
+  
   observe({
   	session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = function () { $(document.body).addClass('disconnected'); alert('Connection to server lost!'); }")
     session$sendCustomMessage("jsExec", "$('.load_div').fadeOut(1000);")
     session$sendCustomMessage("jsExec", "animateTitle();")
+    if(Sys.getenv('tutorial', TRUE)) session$sendCustomMessage("jsExec", "startTutorial();")
+    
     
     #Session elem:  "clientData","input","isClosed","onFlush","onFlushed","onSessionEnded","output","request","sendCustomMessage","sendInputMessage" 
     #sapply(ls(session$request), function(x) session$request[[x]])

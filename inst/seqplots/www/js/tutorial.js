@@ -1,3 +1,5 @@
+var startTutorial = function() { $(function() {
+    
 SpotlightRect = (function (window, document) {
   'use strict';
 
@@ -148,10 +150,6 @@ SpotlightRect = (function (window, document) {
 
   return SpotlightRect;
 }(window, document));
-
-
-
-$(function() {
     
 paddedRect =  function (el, pad) {
     var rect = el.getBoundingClientRect();
@@ -218,8 +216,24 @@ hints = [{
     head: 'Start calcualtion', 
     body: "Go to Sequence features selection panelt"
 },{
-    p: '[onclick="sendToCalc()"]', 
-    el: '#plot_type', 
+    el: '#progressModal .modal-content',
+    p: 'bottom',
+    head: 'Select motifs', 
+    body: "Go to Sequence features selection panelt",
+    wait: 'plot_this'
+},{
+    el: 'input[value="[1,1]"]',
+    p: 'bottom',
+    head: 'Select motifs', 
+    body: "Go to Sequence features selection panelt"
+},{
+    el: '#replotL',
+    p: 'bottom',
+    head: 'Select motifs', 
+    body: "Go to Sequence features selection panelt"
+},{
+    el: '#replotH',
+    p: 'bottom',
     head: 'Select motifs', 
     body: "Go to Sequence features selection panelt"
 }];
@@ -231,33 +245,97 @@ hints = [{
         next: function() {
             $('#tutorial').remove();
             var hint = tutorial.hints[tutorial.step];
-            
+            if(!hint) {
+                tutorial.stop();
+                return;
+            }
             var check = function(){
                 if($(hint.el).length){
                     var item = $(hint.el).first();
                     tutorial.light.animateTo(paddedRect(item[0], [5]), {opacity: .65});
+                    
                     hint=hint; item=item;
+                    
                     item.popover({title: hint.head, content: hint.body, animation: true, placement: hint.p, container: 'body'}).popover('show');
                     tutorial.step = tutorial.step + 1;
-                    item.one('click', function() {
-                        $(this).popover("destroy");
-                        tutorial.next();
-                    })
+                    if(hint.wait) {
+                        var observer = new MutationObserver(function(mutations) {
+                          mutations.forEach(function(mutation) {
+                            if (!mutation.addedNodes) return
+                        
+                            for (var i = 0; i < mutation.addedNodes.length; i++) {
+                              // do things to your newly added nodes here
+                              var node = mutation.addedNodes[i];
+                              if(hint.wait==node.id) {
+                                  console.log(node.id);
+                                    item.popover("destroy");
+                                    tutorial.next();
+                                    observer.disconnect()
+                              }
+                            }
+                         })
+                        })
+                            observer.observe(document.body, {
+                                childList: true
+                              , subtree: true
+                              , attributes: false
+                              , characterData: false
+                            })
+                        
+                    } else {
+                        item.one('click', function() {
+                            $(this).popover("destroy");
+                            tutorial.next();
+                        })
+                    }
+
                 } else {
                     setTimeout(check, 100); // check again in a second
                 }
             };
             
-            setTimeout(function(){ check(); }, 200);
+            setTimeout(function(){ check(); }, 500);
         
+        },
+        stop: function() {
+            var hint = tutorial.hints[tutorial.step-1];
+            var item = $(hint.el).first();
+            item.popover("destroy");
+            
+            var ms = tutorial.light.animateTo({x: 0, y: 0, w: window.innerWidth, h: window.innerHeight}, {opacity: 0});
+            setTimeout(function (light) {
+              tutorial.light.detach();
+            }.bind(null, tutorial.light), ms);
+            
+            
+            
         }
     }
     
 
+    
+
+    
+    // stop watching using:
+    //observer.disconnect()
+    
+
     $('body').append('<div id="tutorial"></div>');
     $('#tutorial').load('tutorial.html');
+    
+    $(document).keyup(function(e) {
 
-});
+        if(e.keyCode === 27) {
+            if(tutorial.step == 0) {
+                $('#tutorial').remove();
+            } else {
+                tutorial.stop();
+                
+            }
+        }
+    });
+
+})};
 
 
 
