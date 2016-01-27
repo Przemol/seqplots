@@ -193,18 +193,20 @@ hints = [{
 },{
     p: 'bottom', 
     el: '#SFpattern', 
-    head: 'Select motifs', 
-    body: "Enrer pattern, e.g. GC"
+    head: 'Select motifs - pattern', 
+    body: "Enrer DNA motif, e.g. CG"
 },{
     p: 'bottom', 
     el: '#SFname', 
-    head: 'Select motifs', 
-    body: "Go to Sequence features selection panelt"
+    head: 'Select motifs - name', 
+    body: "Enrer pattern name, e.g. CpG",
+    delay: 2000
 },{
     p: 'top', 
     el: '#SFadd', 
     head: 'Add motif', 
-    body: "Go to Sequence features selection panelt"
+    body: "Go to Sequence features selection panelt",
+    delay: 2000
 },{
     p: 'top', 
     el: '#plot_type', 
@@ -229,14 +231,60 @@ hints = [{
 },{
     el: '#replotL',
     p: 'bottom',
-    head: 'Select motifs', 
-    body: "Go to Sequence features selection panelt"
+    head: 'Plot average signal profile', 
+    body: "",
+ 
 },{
     el: '#replotH',
     p: 'bottom',
-    head: 'Select motifs', 
-    body: "Go to Sequence features selection panelt"
-}];
+    head: 'Plot heatmap', 
+    body: "",
+    delay: 2000
+},{
+    el: '#pdfLink > a',
+    p: 'bottom',
+    head: 'Get PDF putput', 
+    body: "",
+    delay: 1000
+},{
+    el: '#replotL',
+    p: 'bottom',
+    head: 'Return to profile plot', 
+    body: "",
+},{
+    el: '.well li:nth-child(2)',
+    p: 'bottom',
+    head: 'Change plot options', 
+    body: "",
+},{
+    el: '#title',
+    p: 'bottom',
+    head: 'Select plot title', 
+    body: "",
+},{
+    el: '#xlabel',
+    p: 'bottom',
+    head: 'X-axis label', 
+    body: "",
+},{
+    el: '.well li:nth-child(3)',
+    p: 'bottom',
+    head: 'Go to color oprions tab', 
+    body: "",
+},{
+    el: '#subplot_options div:nth-child(1)',
+    p: 'bottom',
+    head: 'Bring up color selections', 
+    body: "",
+    delay: 500
+},{
+    el: '#subplot_options div:nth-child(1)',
+    p: 'bottom',
+    head: 'Bring up color selections', 
+    body: "",
+    delay: 500
+}
+];
   
     tutorial = {
         step: 0,
@@ -259,6 +307,16 @@ hints = [{
                     item.popover({title: hint.head, content: hint.body, animation: true, placement: hint.p, container: 'body'}).popover('show');
                     tutorial.step = tutorial.step + 1;
                     if(hint.wait) {
+                        if(isFinite(hint.wait)) {
+                            item.one('click', function() {
+                                
+                                $(this).popover("destroy");
+                                setTimeout(function(){ tutorial.next() }, 3000)
+                                
+                            })
+                            
+                            console.log('wait is num')
+                        } else {
                         var observer = new MutationObserver(function(mutations) {
                           mutations.forEach(function(mutation) {
                             if (!mutation.addedNodes) return
@@ -281,20 +339,19 @@ hints = [{
                               , attributes: false
                               , characterData: false
                             })
-                        
+                        }
                     } else {
                         item.one('click', function() {
                             $(this).popover("destroy");
                             tutorial.next();
                         })
                     }
-
+                    
                 } else {
                     setTimeout(check, 100); // check again in a second
                 }
             };
-            
-            setTimeout(function(){ check(); }, 500);
+            setTimeout(function(){ check(); }, hint.delay | 0);
         
         },
         stop: function() {
@@ -306,9 +363,12 @@ hints = [{
             setTimeout(function (light) {
               tutorial.light.detach();
             }.bind(null, tutorial.light), ms);
-            
-            
-            
+            alert('The tutorial is done!')
+        },
+        prev: function() {
+            $('.popover').popover("destroy");
+            tutorial.step=tutorial.step-2;
+            tutorial.next();
         }
     }
     

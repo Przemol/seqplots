@@ -1,0 +1,119 @@
+[{
+    p: 'right', 
+    el: '[data-target="#calcModal"]', 
+    head: 'Bring up plot setup', 
+    body: "In order to set up the plot press this button. It brings up the list of files avilable for plotting."
+},{
+    p: 'bottom', 
+    el: 'tr[class="odd"]', 
+    head: 'Select track', 
+    body: "Select first track by clicking it"
+},{
+    p: 'bottom', 
+    el: '[data-value="Features"]', 
+    head: 'Select genomic features', 
+    body: "Go to Features selection panel"
+},{
+    p: 'bottom', 
+    el: "#featureDT tbody tr:first-child", 
+    head: 'Select genomic features', 
+    body: "Select first feature by clicking it"
+},{
+    p: 'bottom', 
+    el: '[data-value="Sequence features"]', 
+    head: 'Select motifs', 
+    body: "Go to Sequence features selection panelt"
+},{
+    p: 'bottom', 
+    el: '#SFpattern', 
+    head: 'Select motifs - pattern', 
+    body: "Enrer DNA motif, e.g. CG"
+},{
+    p: 'bottom', 
+    el: '#SFname', 
+    head: 'Select motifs - name', 
+    body: "Enrer pattern name, e.g. CpG",
+    delay: 2000
+},{
+    p: 'top', 
+    el: '#SFadd', 
+    head: 'Add motif', 
+    body: "Go to Sequence features selection panelt",
+    delay: 2000
+},{
+    p: 'top', 
+    el: '#plot_type', 
+    head: 'Select anchored plot', 
+    body: "Go to Sequence features selection panelt"
+},{
+    p: 'top', 
+    el: '[onclick="sendToCalc()"]', 
+    head: 'Start calcualtion', 
+    body: "Go to Sequence features selection panelt"
+},{
+    el: '#progressModal .modal-content',
+    p: 'bottom',
+    head: 'Select motifs', 
+    body: "Go to Sequence features selection panelt",
+    wait: 'plot_this'
+},{
+    el: 'input[value="[1,1]"]',
+    p: 'bottom',
+    head: 'Select motifs', 
+    body: "Go to Sequence features selection panelt"
+},{
+    el: '#replotL',
+    p: 'bottom',
+    head: 'Plot average signal profile', 
+    body: "",
+ 
+},{
+    el: '#replotH',
+    p: 'bottom',
+    head: 'Plot heatmap', 
+    body: "",
+    delay: 2000
+},{
+    el: '#pdfLink > a',
+    p: 'bottom',
+    head: 'Get PDF putput', 
+    body: "",
+    delay: 1000
+},{
+    el: '#replotL',
+    p: 'bottom',
+    head: 'Return to profile plot', 
+    body: "",
+},{
+    el: '.well li:nth-child(2)',
+    p: 'bottom',
+    head: 'Change plot options', 
+    body: "",
+},{
+    el: '#title',
+    p: 'bottom',
+    head: 'Select plot title', 
+    body: "",
+},{
+    el: '#xlabel',
+    p: 'bottom',
+    head: 'X-axis label', 
+    body: "",
+},{
+    el: '.well li:nth-child(3)',
+    p: 'bottom',
+    head: 'Go to color oprions tab', 
+    body: "",
+},{
+    el: '#subplot_options div:nth-child(1)',
+    p: 'bottom',
+    head: 'Bring up color selections', 
+    body: "",
+    delay: 500
+},{
+    el: '#subplot_options div:nth-child(1)',
+    p: 'bottom',
+    head: 'Bring up color selections', 
+    body: "",
+    delay: 500
+}]
