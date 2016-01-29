@@ -172,9 +172,9 @@ hints = [{
     body: "In order to set up the plot press this button. It brings up the list of files avilable for plotting."
 },{
     p: 'bottom', 
-    el: 'tr[class="odd"]', 
+    el: '#trackDT tbody tr:nth-child(3)', 
     head: 'Select track', 
-    body: "Select first track by clicking it"
+    body: "Select H3K4me3 coverage track by clicking it"
 },{
     p: 'bottom', 
     el: '[data-value="Features"]', 
@@ -182,14 +182,19 @@ hints = [{
     body: "Go to Features selection panel"
 },{
     p: 'bottom', 
-    el: "#featureDT tbody tr:first-child", 
+    el: "#featureDT tbody tr:nth-child(1)", 
     head: 'Select genomic features', 
-    body: "Select first feature by clicking it"
+    body: "Select lowly expressed genes in C. elegans BED file by clicking it"
+},{
+    p: 'bottom', 
+    el: "#featureDT tbody tr:nth-child(2)", 
+    head: 'Select genomic features', 
+    body: "Select highly expressed genes in C. elegans BED file by clicking it"
 },{
     p: 'bottom', 
     el: '[data-value="Sequence features"]', 
     head: 'Select motifs', 
-    body: "Go to Sequence features selection panelt"
+    body: "Go to Sequence features selection panel"
 },{
     p: 'bottom', 
     el: '#SFpattern', 
@@ -205,83 +210,107 @@ hints = [{
     p: 'top', 
     el: '#SFadd', 
     head: 'Add motif', 
-    body: "Go to Sequence features selection panelt",
+    body: "Click 'Add' this button to confirm selections",
     delay: 2000
 },{
     p: 'top', 
     el: '#plot_type', 
-    head: 'Select anchored plot', 
-    body: "Go to Sequence features selection panelt"
+    head: 'Select "Anchored Features"', 
+    body: 'Anchored plot alows to investigate signal along genomic intervals, e.g. TSS to TTS on genes. Intervals with diferent lengts are scaled to width selected in "Anchored"input'
 },{
     p: 'top', 
     el: '[onclick="sendToCalc()"]', 
     head: 'Start calcualtion', 
-    body: "Go to Sequence features selection panelt"
+    body: 'Confirm the settings and start a calculation by clickng "Run calculation" button'
 },{
     el: '#progressModal .modal-content',
     p: 'bottom',
-    head: 'Select motifs', 
-    body: "Go to Sequence features selection panelt",
+    head: '"Wait for calculation to finish', 
+    body: "This panel allows you to track the progress. The calculation might take a while, depending on settings selected and computer speed",
     wait: 'plot_this'
 },{
     el: 'input[value="[1,1]"]',
     p: 'bottom',
-    head: 'Select motifs', 
-    body: "Go to Sequence features selection panelt"
+    head: 'Select what to plot', 
+    body: "Click on this checkbox to select H3K4me3 on lowly expressed genes"
+},{
+    el: 'input[value="[1,2]"]',
+    p: 'bottom',
+    head: 'Select what to plot', 
+    body: "Click on this checkbox to select H3K4me3 on highly"
 },{
     el: '#replotL',
     p: 'bottom',
     head: 'Plot average signal profile', 
-    body: "",
+    body: "This button profile generates the plot in preview - you can download PDF version as well",
  
 },{
-    el: '#replotH',
+    el: 'thead th:nth-child(1) button',
     p: 'bottom',
-    head: 'Plot heatmap', 
-    body: "",
-    delay: 2000
-},{
-    el: '#pdfLink > a',
-    p: 'bottom',
-    head: 'Get PDF putput', 
-    body: "",
+    head: 'Toggle selecton to CpG profiles', 
+    body: "Buttons in table header allows toggling/clearing selections or select multiple featres at once.",
     delay: 1000
 },{
     el: '#replotL',
     p: 'bottom',
-    head: 'Return to profile plot', 
+    head: 'Replot average signal profile', 
+    body: "This will appy new selections",
+},{
+    el: 'thead th:nth-child(1) button:nth-child(3)',
+    p: 'bottom',
+    head: 'Clear selections', 
+    body: "Buttons in table header allows toggling/clearing selections or select multiple featres at once.",
+    delay: 1000
+},{
+    el: 'tbody tr:nth-child(2) a',
+    p: 'bottom',
+    head: 'Select H3K4me3 and CpG profiles on highly expressed genes', 
+    body: "Buttons in table header allows toggling/clearing selections or select multiple featres at once.",
+    delay: 1000
+},{
+    el: '#replotH',
+    p: 'bottom',
+    head: 'Plot heatmap', 
+    body: "This button profile generates the heatmaps in preview - you can download PDF version as well",
+    delay: 3000
+},{
+    el: '#replotL',
+    p: 'bottom',
+    head: 'Come back to profile plot', 
     body: "",
+    delay: 1000
 },{
     el: '.well li:nth-child(2)',
     p: 'bottom',
     head: 'Change plot options', 
-    body: "",
+    body: "Plot apirance and annotaions can be set up in these tabs",
 },{
     el: '#title',
     p: 'bottom',
     head: 'Select plot title', 
-    body: "",
+    body: "This would be main title for the plot",
+    delay: 3000
 },{
     el: '#xlabel',
     p: 'bottom',
-    head: 'X-axis label', 
-    body: "",
+    head: 'Select X-axis label', 
+    body: 'This annotation will show below X-axis, for example "Gene body"',
 },{
-    el: '.well li:nth-child(3)',
+    el: '.well li:nth-child(4)',
     p: 'bottom',
     head: 'Go to color oprions tab', 
-    body: "",
+    body: "You can control multiple other features of the plot, for example colors of avaerange profiles and heatmaps",
 },{
     el: '#subplot_options div:nth-child(1)',
     p: 'bottom',
     head: 'Bring up color selections', 
-    body: "",
+    body: "The default colors are preselected, you can change them using color picker",
     delay: 500
 },{
-    el: '#subplot_options div:nth-child(1)',
+    el: '#replotH',
     p: 'bottom',
-    head: 'Bring up color selections', 
-    body: "",
+    head: 'Replot heatmaps with new color scheme', 
+    body: 'More advanced colorspaces can be set up in "Heatmap setup" tabs',
     delay: 500
 }
 ];
@@ -295,10 +324,13 @@ hints = [{
             var hint = tutorial.hints[tutorial.step];
             if(!hint) {
                 tutorial.stop();
+                $('body').append('<div id="tutorial"></div>');
+                $('#tutorial').load('outro.html');
                 return;
             }
             var check = function(){
                 if($(hint.el).length){
+                    $('.popover').popover("destroy");
                     var item = $(hint.el).first();
                     tutorial.light.animateTo(paddedRect(item[0], [5]), {opacity: .65});
                     
@@ -346,6 +378,10 @@ hints = [{
                             tutorial.next();
                         })
                     }
+                    if(false) setTimeout(function() {
+                        item.click();
+                        if(item.is('input')) item.val('GC').change();
+                    }, 1000)
                     
                 } else {
                     setTimeout(check, 100); // check again in a second
@@ -357,17 +393,28 @@ hints = [{
         stop: function() {
             var hint = tutorial.hints[tutorial.step-1];
             var item = $(hint.el).first();
-            item.popover("destroy");
+            $('.popover').popover("destroy");
+            item.unbind('click');
             
             var ms = tutorial.light.animateTo({x: 0, y: 0, w: window.innerWidth, h: window.innerHeight}, {opacity: 0});
-            setTimeout(function (light) {
-              tutorial.light.detach();
-            }.bind(null, tutorial.light), ms);
-            alert('The tutorial is done!')
+            //setTimeout(function (light) {
+              //tutorial.light.detach();
+            //}.bind(null, tutorial.light), ms);
+            //alert('The tutorial is done!')
         },
         prev: function() {
             $('.popover').popover("destroy");
             tutorial.step=tutorial.step-2;
+            tutorial.next();
+        },
+        set: function(n) {
+            $('.popover').popover("destroy");
+            tutorial.step=n;
+            tutorial.next();
+        },
+        set: function(n) {
+            $('.popover').popover("destroy");
+            tutorial.step=n;
             tutorial.next();
         }
     }
