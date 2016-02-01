@@ -164,12 +164,12 @@ paddedRect =  function (el, pad) {
       h: rect.height + padT + padB
     };
   }
- 
+
 hints = [{
     p: 'right', 
     el: '[data-target="#calcModal"]', 
-    head: 'Bring up plot setup', 
-    body: "In order to set up the plot press this button. It brings up the list of files avilable for plotting."
+    head: 'Bring up plot setup window', 
+    body: "In order to set up the plot press this button. It brings up the list of files available for plotting and various plotting options."
 },{
     p: 'bottom', 
     el: '#trackDT tbody tr:nth-child(3)', 
@@ -183,28 +183,28 @@ hints = [{
 },{
     p: 'bottom', 
     el: "#featureDT tbody tr:nth-child(1)", 
-    head: 'Select genomic features', 
+    head: 'Select 1st set of genomic intervals for plotting', 
     body: "Select lowly expressed genes in C. elegans BED file by clicking it"
 },{
     p: 'bottom', 
     el: "#featureDT tbody tr:nth-child(2)", 
-    head: 'Select genomic features', 
+    head: 'Select 2nd set of genomic intervals for plotting', 
     body: "Select highly expressed genes in C. elegans BED file by clicking it"
 },{
     p: 'bottom', 
     el: '[data-value="Sequence features"]', 
     head: 'Select motifs', 
-    body: "Go to Sequence features selection panel"
+    body: 'Go to "Sequence features" selection panel'
 },{
     p: 'bottom', 
     el: '#SFpattern', 
     head: 'Select motifs - pattern', 
-    body: "Enrer DNA motif, e.g. CG"
+    body: "Enter DNA motif, e.g. CG"
 },{
     p: 'bottom', 
     el: '#SFname', 
     head: 'Select motifs - name', 
-    body: "Enrer pattern name, e.g. CpG",
+    body: "Enter pattern name, e.g. CpG",
     delay: 2000
 },{
     p: 'top', 
@@ -216,104 +216,143 @@ hints = [{
     p: 'top', 
     el: '#plot_type', 
     head: 'Select "Anchored Features"', 
-    body: 'Anchored plot alows to investigate signal along genomic intervals, e.g. TSS to TTS on genes. Intervals with diferent lengts are scaled to width selected in "Anchored"input'
+    body: 'Anchored plot allows to investigate signal along genomic intervals, e.g. TSS to TTS on genes. Intervals with different lengths are scaled to width selected in "Anchored distance" input.'
 },{
     p: 'top', 
     el: '[onclick="sendToCalc()"]', 
-    head: 'Start calcualtion', 
-    body: 'Confirm the settings and start a calculation by clickng "Run calculation" button'
+    head: 'Start calculation', 
+    body: 'Confirm the settings and start a calculation by clicking "Run calculation" button'
 },{
     el: '#progressModal .modal-content',
     p: 'bottom',
-    head: '"Wait for calculation to finish', 
-    body: "This panel allows you to track the progress. The calculation might take a while, depending on settings selected and computer speed",
+    head: 'Wait for calculation to finish', 
+    body: "This panel allows you to track the progress. The calculation might take a while, depending on settings selected and computer speed.",
     wait: 'plot_this'
-},{
+},
+// /?load=tutorial_plots.Rdata#
+// tutorial.set(12)
+{
     el: 'input[value="[1,1]"]',
     p: 'bottom',
     head: 'Select what to plot', 
-    body: "Click on this checkbox to select H3K4me3 on lowly expressed genes"
+    body: "Click on this check-box to select H3K4me3 on lowly expressed genes"
 },{
     el: 'input[value="[1,2]"]',
     p: 'bottom',
     head: 'Select what to plot', 
-    body: "Click on this checkbox to select H3K4me3 on highly"
+    body: "Click on this check-box to select H3K4me3 on highly"
 },{
     el: '#replotL',
     p: 'bottom',
     head: 'Plot average signal profile', 
-    body: "This button profile generates the plot in preview - you can download PDF version as well",
+    body: "This button profile generates the plot in preview - you can download PDF version as well"
  
 },{
     el: 'thead th:nth-child(1) button',
     p: 'bottom',
-    head: 'Toggle selecton to CpG profiles', 
-    body: "Buttons in table header allows toggling/clearing selections or select multiple featres at once.",
+    head: 'Toggle selection to CpG profiles', 
+    body: "Buttons in table header allows toggling/clearing selections or select multiple features at once.",
     delay: 1000
 },{
     el: '#replotL',
     p: 'bottom',
-    head: 'Replot average signal profile', 
-    body: "This will appy new selections",
+    head: 'Re-plot average signal profile', 
+    body: "This will apply new selections",
 },{
     el: 'thead th:nth-child(1) button:nth-child(3)',
     p: 'bottom',
     head: 'Clear selections', 
-    body: "Buttons in table header allows toggling/clearing selections or select multiple featres at once.",
+    body: "Buttons in table header allows toggling/clearing selections or select multiple features at once.",
     delay: 1000
-},{
+},
+// tutorial.set(18)
+{
     el: 'tbody tr:nth-child(2) a',
     p: 'bottom',
     head: 'Select H3K4me3 and CpG profiles on highly expressed genes', 
-    body: "Buttons in table header allows toggling/clearing selections or select multiple featres at once.",
-    delay: 1000
+    body: "Buttons in table header allows toggling/clearing selections or select multiple features at once."
 },{
     el: '#replotH',
     p: 'bottom',
     head: 'Plot heatmap', 
     body: "This button profile generates the heatmaps in preview - you can download PDF version as well",
-    delay: 3000
+},{
+    el: '#preview-pdf-div',
+    p: 'bottom',
+    head: 'The plot preview', 
+    body: "Click the plot preview to zoom it",
+    delay: 3000 //plotting heatmap
+},{
+    el: '#zoomcanvas',
+    p: 'left',
+    head: 'The plot preview', 
+    body: "Click the zoomed plot again to close it",
+    delay: 500 //canvas popup
 },{
     el: '#replotL',
     p: 'bottom',
     head: 'Come back to profile plot', 
     body: "",
-    delay: 1000
-},{
+    delay: 0 
+},
+// tutorial.set(23)
+{
     el: '.well li:nth-child(2)',
     p: 'bottom',
     head: 'Change plot options', 
-    body: "Plot apirance and annotaions can be set up in these tabs",
+    body: "Plot appearance and annotations can be set up in these tabs",
+    delay: 1000 //plotting line plot
 },{
     el: '#title',
     p: 'bottom',
     head: 'Select plot title', 
-    body: "This would be main title for the plot",
-    delay: 3000
+    body: "This would be main title for the plot"
+    
 },{
     el: '#xlabel',
     p: 'bottom',
     head: 'Select X-axis label', 
     body: 'This annotation will show below X-axis, for example "Gene body"',
+    delay: 3000 //text input
 },{
     el: '.well li:nth-child(4)',
     p: 'bottom',
-    head: 'Go to color oprions tab', 
-    body: "You can control multiple other features of the plot, for example colors of avaerange profiles and heatmaps",
+    head: 'Go to color options tab', 
+    body: "You can control multiple other features of the plot, for example colors of average profiles and heatmaps",
+    delay: 3000 //text input
 },{
     el: '#subplot_options div:nth-child(1)',
     p: 'bottom',
     head: 'Bring up color selections', 
-    body: "The default colors are preselected, you can change them using color picker",
-    delay: 500
+    body: "The default colors are pre-selected, you can change them using color picker",
+    delay: 0
 },{
     el: '#replotH',
     p: 'bottom',
-    head: 'Replot heatmaps with new color scheme', 
-    body: 'More advanced colorspaces can be set up in "Heatmap setup" tabs',
+    head: 'Re-plot heatmaps with new color scheme', 
+    body: 'More advanced color spaces can be set up in "Heatmap setup" tabs',
     delay: 500
-}
-];
+},
+// tutorial.set(29)
+{
+    el: '.well li:nth-child(1)',
+    p: 'bottom',
+    head: 'Come back to main panel', 
+    body: '',
+    delay: 3000
+},{
+    el: '[data-target="#fileUploadModal"]',
+    p: 'bottom',
+    head: 'Bring up file selection modal', 
+    body: '',
+    delay: 0
+},{
+    el: '#fileUploadModal > div',
+    p: 'bottom',
+    head: '"Add files" window', 
+    body: 'This window allows to upload new tracks and features to SeqPlots. Use it to upload your data. Before uploading a data coming from new organism make sure the corresponding reference genome is available in "Manage reference genomes" tab. To finish this tutorial click anywhere in highlighted area.',
+    delay: 500
+}];
   
     tutorial = {
         step: 0,
