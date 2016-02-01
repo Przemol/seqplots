@@ -582,12 +582,6 @@ shinyServer(function(input, output, clientData, session) {
   
   output$trackDT <- fileSelectionDataTable('track')
   output$featureDT <- fileSelectionDataTable('feature')
-
-  
-  #Server initiation actions
-  observeEvent(input$runTutorial, {
-      session$sendCustomMessage("jsExec", "startTutorial();")
-  })
   
   observe({
   	session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = function () { $(document.body).addClass('disconnected'); alert('Connection to server lost!'); }")

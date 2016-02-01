@@ -109,7 +109,7 @@ newPlotPanel <-  tabPanel(
     tags$a(class='', tags$span(class="label label-success", 'Help'), href=paste0("help/help.html"), target="_blank", 'Read documentation'),
     ' or press ', tags$i(class="icon-question-sign icon-large", style='color:orange'), 
     ' button to get help on specific controls.', #'Also available as ', tags$a(class='', href=paste0("http://przemol.github.io/seqplots/SeqPlots.pdf"), target="_blank", 'print ready PDF file.'),
-    ' To run tutorial click ', actionLink('runTutorial', 'here.'),
+    ' To run tutorial click ', a(href='/?tutorial#', 'here.'),
     tags$em(paste0('SeqPlots v', packageVersion('seqplots'), '.'))
     
 )

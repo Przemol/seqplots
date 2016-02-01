@@ -1,5 +1,10 @@
 var startTutorial = function() { $(function() {
     
+    if(!window.location.search.substring(1).match('tutorial')) 
+        if(!!$.cookie('skip_tutoial')) 
+        return;
+    
+
 SpotlightRect = (function (window, document) {
   'use strict';
 
@@ -353,6 +358,10 @@ hints = [{
     body: 'This window allows to upload new tracks and features to SeqPlots. Use it to upload your data. Before uploading a data coming from new organism make sure the corresponding reference genome is available in "Manage reference genomes" tab. To finish this tutorial click anywhere in highlighted area.',
     delay: 500
 }];
+
+  function preventDefault(e) {
+    e.preventDefault();
+  }
   
     tutorial = {
         step: 0,
@@ -372,6 +381,8 @@ hints = [{
                     $('.popover').popover("destroy");
                     var item = $(hint.el).first();
                     tutorial.light.animateTo(paddedRect(item[0], [5]), {opacity: .65});
+                    window.addEventListener('wheel', preventDefault);
+                    window.addEventListener('mousewheel', preventDefault);
                     
                     hint=hint; item=item;
                     
@@ -436,6 +447,8 @@ hints = [{
             item.unbind('click');
             
             var ms = tutorial.light.animateTo({x: 0, y: 0, w: window.innerWidth, h: window.innerHeight}, {opacity: 0});
+            window.removeEventListener('wheel', preventDefault);
+            window.removeEventListener('mousewheel', preventDefault);
             //setTimeout(function (light) {
               //tutorial.light.detach();
             //}.bind(null, tutorial.light), ms);
@@ -468,6 +481,15 @@ hints = [{
 
     $('body').append('<div id="tutorial"></div>');
     $('#tutorial').load('tutorial.html');
+    
+    tutorial.cancel = function() {
+        $('#tutorial').remove();
+        if (confirm('Always skip tutorial?')) {
+            $.cookie('skip_tutoial', true);
+        } else {
+            $.removeCookie('skip_tutoial');
+        }
+    }
     
     $(document).keyup(function(e) {
 
