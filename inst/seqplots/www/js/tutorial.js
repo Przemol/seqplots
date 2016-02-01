@@ -380,6 +380,7 @@ hints = [{
                 if($(hint.el).length){
                     $('.popover').popover("destroy");
                     var item = $(hint.el).first();
+                    $('[placeholder="user"]').val('demo').keyup();
                     tutorial.light.animateTo(paddedRect(item[0], [5]), {opacity: .65});
                     window.addEventListener('wheel', preventDefault);
                     window.addEventListener('mousewheel', preventDefault);
@@ -388,6 +389,9 @@ hints = [{
                     
                     item.popover({title: hint.head, content: hint.body, animation: true, placement: hint.p, container: 'body'}).popover('show');
                     tutorial.step = tutorial.step + 1;
+                    
+                    
+                    
                     if(hint.wait) {
                         if(isFinite(hint.wait)) {
                             item.one('click', function() {
@@ -445,7 +449,7 @@ hints = [{
             var item = $(hint.el).first();
             $('.popover').popover("destroy");
             item.unbind('click');
-            
+            $('[placeholder="user"]').val('').keyup();
             var ms = tutorial.light.animateTo({x: 0, y: 0, w: window.innerWidth, h: window.innerHeight}, {opacity: 0});
             window.removeEventListener('wheel', preventDefault);
             window.removeEventListener('mousewheel', preventDefault);
