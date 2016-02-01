@@ -378,9 +378,10 @@ hints = [{
             }
             var check = function(){
                 if($(hint.el).length){
+                    $('[placeholder="user"]').val('demo').keyup();
+                    
                     $('.popover').popover("destroy");
                     var item = $(hint.el).first();
-                    $('[placeholder="user"]').val('demo').keyup();
                     tutorial.light.animateTo(paddedRect(item[0], [5]), {opacity: .65});
                     window.addEventListener('wheel', preventDefault);
                     window.addEventListener('mousewheel', preventDefault);
