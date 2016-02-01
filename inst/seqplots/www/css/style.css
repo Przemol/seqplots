@@ -217,6 +217,7 @@ p > label {
       left: 0px;
       background-color: rgba(0,0,0,0.8);
       text-align: center;
+      z-index:9999;
       
 }
 
