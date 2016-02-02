@@ -177,7 +177,7 @@ hints = [{
     body: "In order to set up the plot press this button. It brings up the list of files available for plotting and various plotting options."
 },{
     p: 'bottom', 
-    el: '#trackDT tbody tr:nth-child(3)', 
+    el: 'tr:contains(H3K36me3_celegans_N2_L3_chrI.bw)', 
     head: 'Select track', 
     body: "Select H3K4me3 coverage track by clicking it"
 },{
@@ -378,7 +378,7 @@ hints = [{
             }
             var check = function(){
                 if($(hint.el).length){
-                    $('[placeholder="user"]').val('demo').keyup();
+                    
                     
                     $('.popover').popover("destroy");
                     var item = $(hint.el).first();
@@ -439,6 +439,7 @@ hints = [{
                     }, 1000)
                     
                 } else {
+                    $('[placeholder="user"]').val('demo').keyup();
                     setTimeout(check, 100); // check again in a second
                 }
             };
