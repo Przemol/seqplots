@@ -177,7 +177,7 @@ hints = [{
     body: "In order to set up the plot press this button. It brings up the list of files available for plotting and various plotting options."
 },{
     p: 'bottom', 
-    el: 'tr:contains(H3K36me3_celegans_N2_L3_chrI.bw)', 
+    el: 'tr:contains(H3K4me3_celegans_N2_L3_chrI.bw)', 
     head: 'Select track', 
     body: "Select H3K4me3 coverage track by clicking it"
 },{
@@ -447,7 +447,7 @@ hints = [{
                     tutorial.niter=tutorial.niter+1;
                     console.log(tutorial.niter);
                     if(tutorial.niter > 20) {
-                        alert('Make sure you have tutorial data uploaded to seqplots!');
+                        alert('Make sure you have tutorial data uploaded to SeqPlots!');
                         tutorial.stop();
                         clearTimeout(timer);
                     }
