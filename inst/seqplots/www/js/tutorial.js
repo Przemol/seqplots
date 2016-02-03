@@ -179,7 +179,7 @@ hints = [{
     p: 'bottom', 
     el: 'tr:contains(H3K4me3_celegans_N2_L3_chrI.bw)', 
     head: 'Select track', 
-    body: "Select H3K4me3 coverage track by clicking it"
+    body: 'Select H3K4me3 coverage track by clicking "H3K4me3_celegans_N2_L3_chrI.bw"'
 },{
     p: 'bottom', 
     el: '[data-value="Features"]', 
@@ -187,14 +187,14 @@ hints = [{
     body: "Go to Features selection panel"
 },{
     p: 'bottom', 
-    el: "#featureDT tbody tr:nth-child(1)", 
+    el: 'tr:contains(Genes_celegans_bottom_20pct_expression_chr1.bed)', 
     head: 'Select 1st set of genomic intervals for plotting', 
-    body: "Select lowly expressed genes in C. elegans BED file by clicking it"
+    body: 'Select lowly (bootom 20%) expressed genes in C. elegans BED file by clicking "Genes_celegans_bottom_20pct_expression_chr1.bed" file'
 },{
     p: 'bottom', 
-    el: "#featureDT tbody tr:nth-child(2)", 
+    el: 'tr:contains(Genes_celegans_top_20pct_expression_chr1.bed)', 
     head: 'Select 2nd set of genomic intervals for plotting', 
-    body: "Select highly expressed genes in C. elegans BED file by clicking it"
+    body: 'Select highly (top 20%) expressed genes in C. elegans BED file by clicking "Genes_celegans_top_20pct_expression_chr1.bed" file'
 },{
     p: 'bottom', 
     el: '[data-value="Sequence features"]', 
@@ -220,8 +220,8 @@ hints = [{
 },{
     p: 'top', 
     el: '#plot_type', 
-    head: 'Select "Anchored Features"', 
-    body: 'Anchored plot allows to investigate signal along genomic intervals, e.g. TSS to TTS on genes. Intervals with different lengths are scaled to width selected in "Anchored distance" input.'
+    head: 'Select plot type', 
+    body: 'This panel allows to select plot type. "Point Features" anchor plots on the start of a genomic intervals. "Midpoint" and "Endpoint" features are similar to point features, but plots are centered on the midpoint and end of the feature respectively. Anchored plot allows to investigate signal along genomic intervals, e.g. TSS to TTS on genes. Intervals with different lengths are scaled to width selected in "Anchored distance" input. Click on "Point Features" to confirm selection.'
 },{
     p: 'top', 
     el: '[onclick="sendToCalc()"]', 
@@ -240,12 +240,12 @@ hints = [{
     el: 'input[value="[1,1]"]',
     p: 'bottom',
     head: 'Select what to plot', 
-    body: "Click on this check-box to select H3K4me3 on lowly expressed genes"
+    body: "Click on this check-box to select H3K4me3 on lowly (bottom 20%) expressed genes"
 },{
     el: 'input[value="[1,2]"]',
     p: 'bottom',
     head: 'Select what to plot', 
-    body: "Click on this check-box to select H3K4me3 on highly"
+    body: "Click on this check-box to select H3K4me3 on highly (top 20%) expressed genes"
 },{
     el: '#replotL',
     p: 'bottom',
@@ -253,9 +253,15 @@ hints = [{
     body: "This button profile generates the plot in preview - you can download PDF version as well"
  
 },{
-    el: 'thead th:nth-child(1) button',
+    el: 'thead th:nth-child(2) button',
     p: 'bottom',
-    head: 'Toggle selection to CpG profiles', 
+    head: 'Clear selection of H3K4me3 tracks', 
+    body: "Buttons in table header allows toggling/clearing selections or select multiple features at once.",
+    delay: 1000
+},{
+    el: 'thead th:nth-child(3) button',
+    p: 'bottom',
+    head: 'Select CpG profiles', 
     body: "Buttons in table header allows toggling/clearing selections or select multiple features at once.",
     delay: 1000
 },{
