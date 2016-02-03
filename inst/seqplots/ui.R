@@ -109,7 +109,7 @@ newPlotPanel <-  tabPanel(
     tags$a(class='', tags$span(class="label label-success", 'Help'), href=paste0("help/help.html"), target="_blank", 'Read documentation'),
     ' or press ', tags$i(class="icon-question-sign icon-large", style='color:orange'), 
     ' button to get help on specific controls.', #'Also available as ', tags$a(class='', href=paste0("http://przemol.github.io/seqplots/SeqPlots.pdf"), target="_blank", 'print ready PDF file.'),
-    ' To run tutorial click ', a(href='/?tutorial#', 'here.'),
+    ' To run tutorial click ', a(href='?tutorial', 'here.'),
     tags$em(paste0('SeqPlots v', packageVersion('seqplots'), '.'))
     
 )
@@ -249,7 +249,8 @@ heatmapPanel <- tabPanel(
             div(class='col-md-4', HTML('Mid: <input type="color" class="color {hash:true}" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
             div(class='col-md-4', HTML('Max: <input type="color" class="color {hash:true}" id="heat_csp_max" value="#00008B" style="width:40px;" title=""/>'))
         )
-    )
+    ),
+    HTML('Click <a href="http://przemol.github.io/plotsHg19/ColorMapTests">here</a> to see example heatmaps plotted with different color palettes.')
     
 )
 
