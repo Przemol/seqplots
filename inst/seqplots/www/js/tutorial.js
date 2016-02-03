@@ -365,6 +365,7 @@ hints = [{
   
     tutorial = {
         step: 0,
+        niter: 0,
         light: light = new SpotlightRect({x: 0, y: 0, w: window.innerWidth, h: window.innerHeight}, {opacity: 0}),
         hints: hints,
         next: function() {
@@ -376,6 +377,7 @@ hints = [{
                 $('#tutorial').load('outro.html');
                 return;
             }
+            tutorial.niter=0;
             var check = function(){
                 if($(hint.el).length){
                     
@@ -439,8 +441,16 @@ hints = [{
                     }, 1000)
                     
                 } else {
-                    $('[placeholder="user"]').val('demo').keyup();
-                    setTimeout(check, 100); // check again in a second
+                    demo='demo';
+                    $('[placeholder="user"]').val('demo');
+                    var timer = setTimeout(check, 100); // check again in a second
+                    tutorial.niter=tutorial.niter+1;
+                    console.log(tutorial.niter);
+                    if(tutorial.niter > 20) {
+                        alert('Make sure you have tutorial data uploaded to seqplots!');
+                        tutorial.stop();
+                        clearTimeout(timer);
+                    }
                 }
             };
             setTimeout(function(){ check(); }, hint.delay | 0);
@@ -451,6 +461,7 @@ hints = [{
             var item = $(hint.el).first();
             $('.popover').popover("destroy");
             item.unbind('click');
+            demo=null;
             $('[placeholder="user"]').val('').keyup();
             var ms = tutorial.light.animateTo({x: 0, y: 0, w: window.innerWidth, h: window.innerHeight}, {opacity: 0});
             window.removeEventListener('wheel', preventDefault);

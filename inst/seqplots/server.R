@@ -549,6 +549,7 @@ shinyServer(function(input, output, clientData, session) {
               scrollY=paste0(input$tabtest, "px"),
               scrollX="true",
               deferRender=I("false"),
+              searchCols=I('[null,null,null,null,{"search": typeof demo == "undefined" ? null : demo}]'),
               pageLength=10,
               #       rowCallback=I('function( row, data ) {
               #         console.log(data[0])
@@ -567,7 +568,8 @@ shinyServer(function(input, output, clientData, session) {
             if( nrow(tab) < 1 ) {return(p('No files found!'))} 
             return(cbind(tab, se='',  dl='',  rm=''))
         
-        }, options = dt_opt, 
+        }, 
+        options = dt_opt, 
         callback = I("function(oTable) {
           var table = $('#' + oTable.context[0].sTableId);
           var tables = table.parents('.dataTables_wrapper').find('table')
