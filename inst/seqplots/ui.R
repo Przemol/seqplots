@@ -361,7 +361,7 @@ btnToolbar <- conditionalPanel(
     div(class="btn-toolbar", 
         div(
             class="btn-group",
-            downloadLink('downloadPlot',     tags$span(tags$i(class="icon-picture icon-large icon-white"), 'Line plot'),   class="btn btn-small btn-success"),
+            downloadLink('downloadPlot',   tags$span(icon("line-chart", "fa-lg"), 'Profile' ), class="btn btn-small btn-success"),
             downloadLink('downloadLegend', tags$span(tags$i(class="icon-info icon-large")), class="btn btn-small btn-success") #Legend
         ),
         div(
