@@ -356,8 +356,11 @@ shinyServer(function(input, output, clientData, session) {
             gr$ClusterID <- fromJSON(input$clusters)
 	    if( nchar(input$sortingord) ) 
             gr$SortingOrder <- order(fromJSON(input$sortingord))
-      
+
         gr$FinalOrder <- order(fromJSON(input$finalord))
+        
+        if( nchar(input$rowmeans) ) 
+            gr$RowMeans <- fromJSON(input$rowmeans)
       
         out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
 	    out <- out[fromJSON(input$finalord),]

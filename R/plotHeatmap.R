@@ -189,11 +189,12 @@ setMethod(
         Hclc <- do.call(cbind, HLST[ include ])
         
         finalOrd <- 1:nrow(Hclc)
+        RowMeans <- rowMeans(Hclc, na.rm=TRUE)
         
         #Sorting
         if(sortrows == 'decreasing' | as.character(sortrows) == "TRUE") { 
             sorting_order <- order(
-                rowMeans(Hclc, na.rm=TRUE), decreasing = TRUE
+                RowMeans, decreasing = TRUE
             ) 
             finalOrd <- finalOrd[sorting_order] 
             Hclc <- Hclc[sorting_order,]
@@ -323,7 +324,8 @@ setMethod(
             originalOrder=1:length(finalOrd), 
             ClusterID=classes[order(sorting_order)], 
             SortingOrder=sorting_order, 
-            FinalOrder=finalOrd
+            FinalOrder=finalOrd,
+            RowMeans=RowMeans
         )
         return( invisible(out) )
     }

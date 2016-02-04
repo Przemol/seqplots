@@ -182,7 +182,7 @@ heatmapPanel <- tabPanel(
     h5(tags$u('Heatmap setup'), hlp("heatmaps")),
     div( class='hidden', checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]") ), 
     #checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
-    selectInput("img_sort", "Sort heatmap rows by mean signal", c('do not sort', "increasing", "decreasing"), 
+    selectInput("img_sort", "Sort heatmap rows by mean signal", c("decreasing", "increasing", 'do not sort'), 
                 selected = NULL, multiple = FALSE, selectize = TRUE, width = NULL),
     div(class='row',
         div(class='col-md-6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'Hierarchical'='hclust', 'SuperSOM'='ssom', 'do not cluster'='none'))),
@@ -389,7 +389,12 @@ sidebar <- wellPanel(
     ),
     tags$hr(),
     btnToolbar,
-    div( class='hidden', textInput('clusters', 'Clusters'), textInput('sortingord', 'Sorting'), textInput('finalord', 'Sorting') )
+    div( class='hidden', 
+         textInput('clusters', 'Clusters'), 
+         textInput('sortingord', 'Sorting'), 
+         textInput('finalord', 'finalord'),
+         textInput('rowmeans', 'rowmenas')
+         )
 )
 
 # MAIN ##################################################
