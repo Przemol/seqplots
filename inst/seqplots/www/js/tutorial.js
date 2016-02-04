@@ -468,7 +468,7 @@ hints = [{
             $('.popover').popover("destroy");
             item.unbind('click');
             demo=null;
-            $('[placeholder="user"]').val('').keyup();
+            $('input[type="search"]').filter(function(){return this.value=='demo'}).each(function(){$(this).addClass('demo').siblings().click();})
             var ms = tutorial.light.animateTo({x: 0, y: 0, w: window.innerWidth, h: window.innerHeight}, {opacity: 0});
             window.removeEventListener('wheel', preventDefault);
             window.removeEventListener('mousewheel', preventDefault);

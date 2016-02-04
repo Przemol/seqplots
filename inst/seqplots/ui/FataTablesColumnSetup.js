@@ -1,8 +1,9 @@
 [
 	{ "title": '<i class="icon-file-alt"></i> File name',
-    "render": function ( data, type, row ) {
-      var short = data.length>60 ? data.substr(0,37)+'[...]'+data.substr(data.length-20,data.length) : data;
-      if( data.length>60 ) { return '<abbr title="'+data+'">'+short+'</abbr>' } else { return short }
+      "width": "480px",
+      "render": function ( data, type, row ) {
+          var short = data.length>60 ? data.substr(0,37)+'[...]'+data.substr(data.length-20,data.length) : data;
+          if( data.length>60 ) { return '<abbr title="'+data+'">'+short+'</abbr>' } else { return short }
     }
 	},
 	{ "title": '<i class="icon-calendar"></i> Date created' },
@@ -18,7 +19,7 @@
     "render": function ( data, type, row ) {
       if (data.length) {
         return '<a class="btn btn-xs no_select" rel="popover" data-content="'+ data +'" data-original-title="Comment"'+ 
-          'onClick="$(this).popover({trigger: \'hover\', placement: \'left\'}).popover(\'show\')">'+'<i class="icon-comment icon-large no_select"></i></a>'
+          ' onmouseover="$(this).popover({trigger: \'hover\', placement: \'left\'}).popover(\'show\')">'+'<i class="icon-comment icon-large no_select"></i></a>'
       } else {
         return '<div style="width: 29px"></div>'
       }

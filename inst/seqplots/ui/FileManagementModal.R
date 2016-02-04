@@ -6,8 +6,8 @@ tagList(
             class="modal-body",
             tags$p(tags$span(class="label label-info", 'Info'), 'Choose file by clicking on file name.  Chosen files will be highlighted. Click file name again to cancel choice. At least one signal track or motif and one feature file must be selected.'),
             tabsetPanel(
-                tabPanel("Tracks",   dataTableOutput('trackDT') ),
-                tabPanel("Features", dataTableOutput('featureDT') ),
+                tabPanel("Tracks",   DT::dataTableOutput('trackDT') ),
+                tabPanel("Features", DT::dataTableOutput('featureDT') ),
                 tabPanel("Sequence features",   div(class='row', div(class='col-md-4', wellPanel(
                     class='SFform', 
                     #selectInput("SFgenome", "Reference sequence (genmoe)", GENOMES),

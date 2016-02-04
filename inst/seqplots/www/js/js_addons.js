@@ -34,8 +34,8 @@ sendToCalc = function() {
     var t_sel = [];
     var f_sel = [];
     var genomes = [];
-    if($('#trackDT table').length)  $.each(TableTools.fnGetInstance( $($('#trackDT table')[1]).attr('id')   ).fnGetSelectedData(), function(i, v) {  t_sel[i]=v[0];  genomes.push(v[3]); } );
-    if($('#featureDT table').length) $.each(TableTools.fnGetInstance( $($('#featureDT table')[1]).attr('id') ).fnGetSelectedData(), function(i, v) {  f_sel[i]=v[0];  genomes.push(v[3]); } );
+    if($('#trackDT table').length)  $.each(TableTools.fnGetInstance( $($('#trackDT table')[0]).attr('id')   ).fnGetSelectedData(), function(i, v) {  t_sel[i]=v[0];  genomes.push(v[3]); } );
+    if($('#featureDT table').length) $.each(TableTools.fnGetInstance( $($('#featureDT table')[0]).attr('id') ).fnGetSelectedData(), function(i, v) {  f_sel[i]=v[0];  genomes.push(v[3]); } );
     
 	if( !(f_sel.length >= 1 & (t_sel.length >= 1 | $('#SFsetup').text().length > 10 )) ) {
 		return( alert("Select >=1 track(s) or pattern and >=1 feature(s)!") )

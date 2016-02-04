@@ -36,7 +36,7 @@ head <- tags$head(
     ## DataTable libraries
     #singleton(tags$script(src = "js/DataTables/jquery.dataTables.js")),
     #singleton(tags$script(src = "js/DataTables/DT_bootstrap.js")),
-    singleton(tags$script(src = "js/DataTables/dataTables.tableTools.min.js")),
+    #singleton(tags$script(src = "js/DataTables/dataTables.tableTools.min.js")),
     #singleton(tags$script(src = "js/DataTables/DT_filter.js")),
     
     
