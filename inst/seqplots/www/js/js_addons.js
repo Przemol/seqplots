@@ -66,7 +66,7 @@ rmSelctedFiles = function() {
       if($('#trackDT table').length)   $.each(TableTools.fnGetInstance( $($('#trackDT table')[1]).attr('id')   ).fnGetSelectedData(), function(i, v) { rm.push(v[0]); } );
       if($('#featureDT table').length) $.each(TableTools.fnGetInstance( $($('#featureDT table')[1]).attr('id') ).fnGetSelectedData(), function(i, v) { rm.push(v[0]); } );
 	if(rm.length > 0) {
-    if ( confirm("Delate following files:\n " + rm.toString() + "?" ) ){
+    if ( confirm("Delete following files:\n " + rm.toString() + "?" ) ){
         Shiny.shinyapp.sendInput({"f_delate":rm});
         Shiny.shinyapp.sendInput({"TR_delate":new Date().getTime()}); 
 		}
