@@ -546,16 +546,16 @@ shinyServer(function(input, output, clientData, session) {
                 language=DT::JS('{"sLengthMenu": "_MENU_ records per page"}'),
                 dom="<'row'<'col-md-4'i><'.selectionsInfo col-md-1'><'col-md-6 pull-right'CTf>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
                 columns=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/FataTablesColumnSetup.js')) ),
-                oTableTools=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesToolsSetup.js')) ),
+                #oTableTools=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesToolsSetup.js')) ),
                 searchHighlight = TRUE,
                 searchCols=DT::JS('[null,null,null,null,{"search": typeof demo == "undefined" ? null : demo}]'),
                 pagingType="full_numbers"
             ),
-            selection = 'none',
+            #selection = 'none',
             extensions = c('TableTools', 'ColVis')
         ) 
         return(dt)
-      }, server = FALSE)
+      }, server = TRUE)
   }
       
         #options = dt_opt

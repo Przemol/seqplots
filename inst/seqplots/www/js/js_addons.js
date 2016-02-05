@@ -15,6 +15,15 @@ Shiny.addCustomMessageHandler("jsAssign", function(message) {
 Shiny.addCustomMessageHandler("jsDots", function(message) {
     $("#summary3").text( $("#summary3").text().length < 50 ? $("#summary3").text()+"." : "." );
 });
+
+var selected = [];
+$('#trackDT').on( 'click', 'tbody tr', function () {
+  if($(this).hasClass('selected')) {
+    jQuery(this).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );
+  } else {
+     jQuery(this).find(".select_indicator").removeClass( "icon-check" ).addClass( "icon-check-empty" );
+  }
+} );
     
 
 animateTitle = function() {
