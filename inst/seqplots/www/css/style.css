@@ -1,3 +1,43 @@
+.shiny-progress .progress {
+    height:10px;
+}
+
+.shiny-progress .progress-text {
+    top: 10px !important;
+    /* left: 50%; margin-left:-400px; */
+    height: auto;
+    opacity: 0.90;
+    width: 200px;
+    border-style: solid;
+    border-width: 3px;
+    display: block;
+    border-color: black;
+    text-align:center;
+
+}
+
+.shiny-progress .progress-text .progress-message {
+    margin-top: 5px;
+    font-size:130%;
+    display: block;
+    opacity: 1;
+    
+}
+
+.shiny-progress .progress-text .progress-detail {
+    font-size:130%;
+    display: block;
+    margin-bottom: 5px;
+    opacity: 1;
+}
+
+.shiny-progress .progress-text .progress-detail:before {
+    content: 'Progress: ';
+}
+
+
+
+
 #multi_name_flt {
     margin-right: 10px;
     margin-bottom: 10px;

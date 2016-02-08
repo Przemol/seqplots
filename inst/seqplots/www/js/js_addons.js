@@ -71,15 +71,11 @@ jsRmFile = function(x) {
 }
 
 rmSelctedFiles = function() {
-      var rm = [];
-      if($('#trackDT table').length)   $.each(TableTools.fnGetInstance( $($('#trackDT table')[1]).attr('id')   ).fnGetSelectedData(), function(i, v) { rm.push(v[0]); } );
-      if($('#featureDT table').length) $.each(TableTools.fnGetInstance( $($('#featureDT table')[1]).attr('id') ).fnGetSelectedData(), function(i, v) { rm.push(v[0]); } );
-	if(rm.length > 0) {
-    if ( confirm("Delete following files:\n " + rm.toString() + "?" ) ){
-        Shiny.shinyapp.sendInput({"f_delate":rm});
+
+    if ( confirm("Delete all selected files?" ) ){
         Shiny.shinyapp.sendInput({"TR_delate":new Date().getTime()}); 
-		}
-	}	else { alert("Select >=1 track(s) or >=1 feature(s)!") }
+	}
+
 }
 
 $(function() {

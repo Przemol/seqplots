@@ -457,18 +457,27 @@ shinyServer(function(input, output, clientData, session) {
   #Feature and track tables - multiple file removal
   observe({
     if( is.null(input$TR_delate) ) return()
-    isolate({      
+    isolate({    
+        f_delate <- c(
+            values$track[input$trackDT_rows_selected,'name'],
+            values$feature[input$featureDT_rows_selected,'name']
+        )
+    
+        #actionButton('test', 'TEST', onClick="Shiny.onInputChange('confirm', confirm('Are you sure?'));")    
+        
       rmf <- function(x) {
         sql_string <- paste0("DELETE FROM files WHERE name = '", x , "'")
         row_aff <- dbGetRowsAffected(dbSendQuery(con, sql_string))
         moved <- file.rename(file.path('files',  x), file.path('removedFiles', x))
         if(row_aff & moved) return(TRUE) else return(FALSE)
       }
-      res <- sapply( input$f_delate, rmf)
+      res <- sapply( f_delate, rmf)
       session$sendCustomMessage("jsAlert", sprintf("Db=%i; Mv=%i; OK", sum(res), sum(res)) )
       values$refFileGrids <- runif(1)	
     })
   })
+  
+
 
   #Subplot setup logic
   observe({ 
@@ -531,9 +540,13 @@ shinyServer(function(input, output, clientData, session) {
           
         tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
         if( nrow(tab) < 1 ) {return(p('No files found!'))} 
+        values[[type]] <- tab
+        
         tab$ctime <- as.Date(tab$ctime)
         tab <- cbind(tab, se='',  dl='',  rm='')
         rownames(tab) <- NULL
+        
+        
         
         dt <- DT::datatable(
             tab,
@@ -544,7 +557,7 @@ shinyServer(function(input, output, clientData, session) {
                 order=DT::JS('[[ 1, "desc" ]]'),
                 lengthMenu=DT::JS('[[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]'),
                 language=DT::JS('{"sLengthMenu": "_MENU_ records per page"}'),
-                dom="<'row'<'col-md-4'i><'.selectionsInfo col-md-1'><'col-md-6 pull-right'CTf>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
+                dom="<'row'<'col-md-3'i><'.selectionsInfo col-md-5'><'col-md-3 pull-right'CTf>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
                 columns=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/FataTablesColumnSetup.js')) ),
                 #oTableTools=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesToolsSetup.js')) ),
                 searchHighlight = TRUE,
@@ -552,10 +565,23 @@ shinyServer(function(input, output, clientData, session) {
                 pagingType="full_numbers"
             ),
             #selection = 'none',
-            extensions = c('TableTools', 'ColVis')
+            extensions = c('ColVis'),
+            callback = DT::JS(
+                '$("#TrackSelCtl").appendTo($("#trackDT").find(".selectionsInfo"));
+                $("#FeatureSelCtl").appendTo($("#featureDT").find(".selectionsInfo"));
+                 console.log($(table));
+                 table.on( "click", "tbody tr", function () {
+                  if($(this).hasClass("selected")) {
+                        jQuery(this).find(".select_indicator").removeClass( "icon-check" ).addClass( "icon-check-empty" );
+                      } else {
+                        jQuery(this).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );                   
+                      }
+                  } );'
+            ),
         ) 
         return(dt)
-      }, server = TRUE)
+      }, 
+      server = TRUE)
   }
       
         #options = dt_opt
@@ -708,6 +734,68 @@ shinyServer(function(input, output, clientData, session) {
     }
     #strsplit(strsplit("1,1;3,2", ';')[[1]], ',')
     # paste(names(reactiveValuesToList(input)), reactiveValuesToList(input), sep = "=", collapse="&")
+  })
+  
+  output$nselected <- renderText({
+      paste(length(input$trackDT_rows_selected), 'experiemnts selected')
+  })
+  
+  observe({
+      if(input$selFilt==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('trackDT')
+          DT::selectRows(proxy, NULL)
+          DT::selectRows(proxy, input$trackDT_rows_all)
+      })
+  })
+  
+  observe({
+      if(input$selPage==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('trackDT')
+          DT::selectRows(proxy, NULL)
+          DT::selectRows(proxy, input$trackDT_rows_current)
+      })
+  })
+  
+  observe({
+      if(input$selNone==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('trackDT')
+          DT::selectRows(proxy, NULL)
+      })
+  })
+  
+  #######
+  
+  output$nselectedFT <- renderText({
+      paste(length(input$featureDT_rows_selected), 'experiemnts selected')
+  })
+  
+  observe({
+      if(input$selFiltFT==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('featureDT')
+          DT::selectRows(proxy, NULL)
+          DT::selectRows(proxy, input$featureDT_rows_all)
+      })
+  })
+  
+  observe({
+      if(input$selPageFT==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('featureDT')
+          DT::selectRows(proxy, NULL)
+          DT::selectRows(proxy, input$featureDT_rows_current)
+      })
+  })
+  
+  observe({
+      if(input$selNoneFT==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('featureDT')
+          DT::selectRows(proxy, NULL)
+      })
   })
 
 ##Turn off experimental

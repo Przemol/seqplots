@@ -224,7 +224,7 @@ hints = [{
     body: 'This panel allows to select plot type. "Point Features" anchor plots on the start of a genomic intervals. "Midpoint" and "Endpoint" features are similar to point features, but plots are centered on the midpoint and end of the feature respectively. Anchored plot allows to investigate signal along genomic intervals, e.g. TSS to TTS on genes. Intervals with different lengths are scaled to width selected in "Anchored distance" input. Click on "Point Features" to confirm selection.'
 },{
     p: 'top', 
-    el: '[onclick="sendToCalc()"]', 
+    el: '#runcalc', 
     head: 'Start calculation', 
     body: 'Confirm the settings and start a calculation by clicking "Run calculation" button'
 },{
