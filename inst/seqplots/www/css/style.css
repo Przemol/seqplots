@@ -1,3 +1,11 @@
+#TrackSelCtl, #FeatureSelCtl {
+    text-align:right; 
+
+    margin-top:-39px;
+    margin-bottom:9px;
+    font-weight: bold;
+}
+
 .shiny-progress .progress {
     height:10px;
 }
@@ -91,11 +99,11 @@ input[name='plot_this'] {
   margin-bottom: 10px;
 }
 
-.selectionsInfo {
+/*.selectionsInfo {
   display: inline;
   margin-left: 20px;
   font-weight: bold;
-}
+}*/
 
 #lnh_pos {
   width: 80px;

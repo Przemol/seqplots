@@ -25,16 +25,6 @@
       }
     }
   },
-  { "title": '<i class="icon-check icon-large"></i>',
-    "className": "table-center",
-    "width": "1%",
-    "data": null,
-    "orderable": false,
-    "searchable": false,
-    "render": function ( data, type, row ) {
-      return '<i class="icon-check-empty select_indicator icon-large"></i>'
-    }
-  },
   { "title": '<i class="icon-hdd icon-large"></i>',
     "className": "table-center",
     "orderable": false,

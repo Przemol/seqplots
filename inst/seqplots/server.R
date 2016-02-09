@@ -543,47 +543,34 @@ shinyServer(function(input, output, clientData, session) {
         values[[type]] <- tab
         
         #tab$ctime <- as.POSIXct(tab$ctime)
-        tab <- cbind(tab, se='',  dl='',  rm='')
+        tab <- cbind(tab,  dl='',  rm='')
         rownames(tab) <- NULL
         
-        
+        options = list(
+            lengthChange = TRUE,
+            order=DT::JS('[[ 1, "desc" ]]'),
+            lengthMenu=DT::JS('[[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]'),
+            language=DT::JS('{"sLengthMenu": "_MENU_ records per page"}'),
+            dom="<'row'<'col-md-4'i><'col-md-3'C><'col-md-5'f>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
+            columns=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesColumnSetup.js')) ),
+            searchHighlight = TRUE,
+            searchCols=DT::JS('[null,null,null,null,{"search": typeof demo == "undefined" ? null : demo}]'),
+            pagingType="full_numbers",
+            searchDelay=10,
+            processing = TRUE
+        )
         
         dt <- DT::datatable(
             tab,
             rownames = FALSE,
             filter = 'bottom',
-            options = list(
-                lengthChange = TRUE,
-                order=DT::JS('[[ 1, "desc" ]]'),
-                lengthMenu=DT::JS('[[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]'),
-                language=DT::JS('{"sLengthMenu": "_MENU_ records per page"}'),
-                dom="<'row'<'col-md-3'i><'.selectionsInfo col-md-5'><'col-md-3 pull-right'CTf>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
-                columns=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/FataTablesColumnSetup.js')) ),
-                #oTableTools=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesToolsSetup.js')) ),
-                searchHighlight = TRUE,
-                searchCols=DT::JS('[null,null,null,null,{"search": typeof demo == "undefined" ? null : demo}]'),
-                pagingType="full_numbers",
-                searchDelay=10,
-                processing = TRUE
-            ),
-            #selection = 'none',
-            extensions = c('ColVis'),
-            callback = DT::JS(
-                '$("#TrackSelCtl").appendTo($("#trackDT").find(".selectionsInfo"));
-                $("#FeatureSelCtl").appendTo($("#featureDT").find(".selectionsInfo"));
-                 console.log($(table));
-                 table.on( "click", "tbody tr", function () {
-                  if($(this).hasClass("selected")) {
-                        jQuery(this).find(".select_indicator").removeClass( "icon-check" ).addClass( "icon-check-empty" );
-                      } else {
-                        jQuery(this).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );                   
-                      }
-                  } );'
-            ),
+            options = options,
+            selection = 'multiple',
+            extensions = c('ColVis')
+       
         ) 
         return(dt)
-      }, 
-      server = TRUE)
+      })
   }
       
         #options = dt_opt
@@ -739,7 +726,7 @@ shinyServer(function(input, output, clientData, session) {
   })
   
   output$nselected <- renderText({
-      paste(length(input$trackDT_rows_selected), 'experiemnts selected')
+      paste(length(input$trackDT_rows_selected), 'track(s) selected')
   })
   
   observe({
@@ -771,7 +758,7 @@ shinyServer(function(input, output, clientData, session) {
   #######
   
   output$nselectedFT <- renderText({
-      paste(length(input$featureDT_rows_selected), 'experiemnts selected')
+      paste(length(input$featureDT_rows_selected), 'feature(s) selected')
   })
   
   observe({
