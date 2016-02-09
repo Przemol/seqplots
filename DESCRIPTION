@@ -87,3 +87,4 @@ Collate:
     'seqplots-package.R'
     'zzz.R'
 RoxygenNote: 5.0.1
+Remotes: github::rstudio/DT
