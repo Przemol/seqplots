@@ -104,8 +104,9 @@ $('.chdr-numeric-auto-input').change(function() {
 $('.chdrrowcol').click(function() { 
     $('#plotTable input[id*=label_]').each( function(x) { 
         var z = $(this).attr('id'); 
-        var x = z.match('_(.)x(.)$')[1];
-        var y = z.match('_(.)x(.)$')[2];
+        console.log(this);
+        var x = z.match('_(.+)x(.+)$')[1];
+        var y = z.match('_(.+)x(.+)$')[2];
         var v = $('#hhdr_' + x).val() + ' @ ' + $('#rhdrs_' + y).val();
         $(this).val(v).change();
     })
