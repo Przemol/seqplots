@@ -542,7 +542,7 @@ shinyServer(function(input, output, clientData, session) {
         if( nrow(tab) < 1 ) {return(p('No files found!'))} 
         values[[type]] <- tab
         
-        tab$ctime <- as.Date(tab$ctime)
+        #tab$ctime <- as.POSIXct(tab$ctime)
         tab <- cbind(tab, se='',  dl='',  rm='')
         rownames(tab) <- NULL
         
