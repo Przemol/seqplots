@@ -562,7 +562,9 @@ shinyServer(function(input, output, clientData, session) {
                 #oTableTools=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesToolsSetup.js')) ),
                 searchHighlight = TRUE,
                 searchCols=DT::JS('[null,null,null,null,{"search": typeof demo == "undefined" ? null : demo}]'),
-                pagingType="full_numbers"
+                pagingType="full_numbers",
+                searchDelay=10,
+                processing = TRUE
             ),
             #selection = 'none',
             extensions = c('ColVis'),
