@@ -1,19 +1,16 @@
 Installation - Mac OS X app
 ===========================
 
-> The Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains all R binaries and packages that SeqPlots depends on. Additionally,  reference sequences for *Caenorhabditis elegans* is included. Sequences for other popular model organisms can be downloaded using a graphical user interface.
+> The Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains all R binaries and packages that SeqPlots depends on. Additionally, test tracks and genome annotations, and reference sequences for *Homo sapiens*, *Drosophila melanogaster* and *Caenorhabditis elegans* are included. Sequences for other organisms can be downloaded using a graphical user interface.
 
 **System requirements**
 
 * Mac OS X 10.6 (Snow Leopard) or higher
-* Xquartz package for OS X 10.8 (Mountain Lion) and above: http://xquartz.macosforge.org/landing/
-
-    > More info:  http://support.apple.com/en-us/HT201341
 
 How to install
 --------------
 
-1. Download the compressed application from https://github.com/Przemol/seqplots_osx/zipball/master
+1. Download the compressed application from https://github.com/Przemol/seqplots_osx/releases/latest
 2. Double-click on downloaded file to unzip the contents of archive
 3. Drag and drop SeqPlots.app to Applications folder
 
@@ -36,10 +33,8 @@ After starting SeqPlots the welcome screen displays the software version, the cu
 
 This screen allows you to set up following options:
 
-* Change your data location folder (by default your home directory will be used)
-* Install new genomes (requires internet connection). The correct genome packages need to be installed before before uploading files for plotting. A full list of supported genomes is available here: http://www.bioconductor.org/packages/release/BiocViews.html#___BSgenome
-
-    > ![Genomic packages installer window](img/03_03.png)
+* Change your data location folder - by default your home directory will be used (**`Change data location`** button)
+* Exit application (**`Quit`** button)
 
 Press the **`START`** button to initiate SeqPlots. If initiation was successful the user interface should open in your default web browser.
 
@@ -49,7 +44,7 @@ The window in the background allows you to assess if SeqPlots is running properl
 
 > ![SeqPlots Mac OS X bindle - the diagnostic window](img/03_04.png)
 
-The "moving" animation progress bar indicates that SeqPlots is running. Press "Cancel" to stop it. Pressing "Details" will reveal a small text window that displays diagnostic and error messages.
+The full progress bar indicates that SeqPlots is running. Press "Cancel" to stop it. Pressing "Details" will reveal a small text window that displays diagnostic and error messages.
 
 Package content
 ---------------
