@@ -237,7 +237,7 @@ getPlotSetArray <- function(
             
             if( class(tracks[[i]]) == 'character' ) {
                 track <- BigWigFile( normalizePath(tracks[[i]]) )
-                if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track) }
+                if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track)[1] }
                 
             } else if ( class(tracks[[i]]) == 'list' ) {  
                 pattern <- tracks[[i]]$pattern
