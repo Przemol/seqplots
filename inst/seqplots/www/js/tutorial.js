@@ -232,6 +232,7 @@ hints = [{
     p: 'bottom',
     head: 'Wait for calculation to finish', 
     body: "This panel allows you to track the progress. The calculation might take a while, depending on settings selected and computer speed.",
+    delay: 500,
     wait: 'plot_this'
 },
 // /?load=tutorial_plots.Rdata#
