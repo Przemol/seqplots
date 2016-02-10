@@ -74,6 +74,7 @@ NULL
 #'      clspace = rev(rainbow(4, 0.7, 0.5)) )
 #' 
 setGeneric('plot')
+if(!isGeneric('unlist')) setGeneric('unlist')
 
 #' @describeIn plot Method plot for signature 'PlotSetPair'
 #' @include PlotSetPair-class.R

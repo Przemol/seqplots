@@ -6,8 +6,28 @@ tagList(
             class="modal-body",
             tags$p(tags$span(class="label label-info", 'Info'), 'Choose file by clicking on file name.  Chosen files will be highlighted. Click file name again to cancel choice. At least one signal track or motif and one feature file must be selected.'),
             tabsetPanel(
-                tabPanel("Tracks",   dataTableOutput('trackDT') ),
-                tabPanel("Features", dataTableOutput('featureDT') ),
+                tabPanel(
+                    "Tracks",   
+                    div(id='TrackSelCtl', 
+                        ' | ', textOutput('nselected', inline = TRUE),  ' | ', 
+                        actionButton('selFilt', 'Select filtered'),
+                        actionButton('selPage', 'Select visible on page'),
+                        actionButton('selNone', 'Select none')
+                    ),
+                    
+                    DT::dataTableOutput('trackDT') 
+                ),
+                tabPanel(
+                    "Features", 
+                    div(id='FeatureSelCtl', 
+                        ' | ', textOutput('nselectedFT', inline = TRUE),  ' | ', 
+                        actionButton('selFiltFT', 'Select filtered'),
+                        actionButton('selPageFT', 'Select visible on page'),
+                        actionButton('selNoneFT', 'Select none')
+                    ),
+                    
+                    DT::dataTableOutput('featureDT')
+                    ),
                 tabPanel("Sequence features",   div(class='row', div(class='col-md-4', wellPanel(
                     class='SFform', 
                     #selectInput("SFgenome", "Reference sequence (genmoe)", GENOMES),
@@ -43,8 +63,11 @@ tagList(
         div(class="pull-right", style="margin-top:25px",
             tags$button(tags$span(tags$i(class="icon-off"), "Close"),	class="btn", 'data-dismiss'="modal"),
             tags$button(tags$span(tags$i(class="icon-refresh icon-white"), 'Refresh'),  class="btn action-button btn-success", id="reloadgrid"),
+            #actionButton(inputId = 'rmfiles', label = 'Remove selected files', icon = icon('trash'), class='btn-danger' ),
+            
             tags$button(tags$span(tags$i(class="icon-trash icon-white"), 'Remove selected files'), 	class='btn btn-danger', onClick='rmSelctedFiles()'),
-            tags$button(tags$span(tags$i(class="icon-play icon-white"), 'Run calculation'), 			class='btn btn-primary', onClick='sendToCalc()'	)
+            #tags$button(tags$span(tags$i(class="icon-play icon-white"), 'Run calculation'), 			class='btn btn-primary', onClick='sendToCalc()'	)
+            actionButton(inputId = 'runcalc', label = 'Run calculation', icon = icon('play'), class='btn-primary' )
         )
         
         )

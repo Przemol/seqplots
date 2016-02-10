@@ -237,7 +237,7 @@ getPlotSetArray <- function(
             
             if( class(tracks[[i]]) == 'character' ) {
                 track <- BigWigFile( normalizePath(tracks[[i]]) )
-                if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track) }
+                if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track)[1] }
                 
             } else if ( class(tracks[[i]]) == 'list' ) {  
                 pattern <- tracks[[i]]$pattern
@@ -330,21 +330,23 @@ getPlotSetArray <- function(
             if (rm0) M[M==0] <- NA
             if( stat == 'median' ) {
                 means <- apply(M, 2, median, na.rm=TRUE)
+                stderror <- apply(M, 2, function (n) {
+                    mad(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )
+                })
+                conint  <- apply(M, 2, function (n) {
+                    quantile(n, .975, na.rm = TRUE)*mad(n, na.rm = TRUE)/sqrt(sum(!is.na(n)))
+                })
             } else {
                 means <- colMeans(M, na.rm=TRUE)
+                stderror <- apply(M, 2, function (n) {
+                    sd(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )
+                })
+                conint  <- apply(M, 2, function (n) {
+                    qt(0.975,sum(!is.na(n)))*sd(n,na.rm=TRUE)/sqrt(sum(!is.na(n)))
+                })
             }
             
-            stderror<- apply(M, 2, function (n) {
-                sd(n, na.rm=TRUE) / sqrt( sum(!is.na(n)) )
-            })
             stderror[is.na(stderror)] <- 0
-            
-            conint  <- apply(M, 2, function (n) {
-                qt(0.975,sum(!is.na(n)))*sd(n,na.rm=TRUE)/sqrt(sum(!is.na(n)))
-            })
-            #conint  <- apply(M, 2, function (n) {
-            #    quantile(n, .975, na.rm = TRUE)*mad(n, na.rm = TRUE)/sqrt(sum(!is.na(n)))
-            #})
             conint[is.na(conint)] <- 0
             
             if(verbose) lvl2m("Exporting results...")

@@ -1,3 +1,51 @@
+#TrackSelCtl, #FeatureSelCtl {
+    text-align:right; 
+
+    margin-top:-39px;
+    margin-bottom:9px;
+    font-weight: bold;
+}
+
+.shiny-progress .progress {
+    height:10px;
+}
+
+.shiny-progress .progress-text {
+    top: 10px !important;
+    /* left: 50%; margin-left:-400px; */
+    height: auto;
+    opacity: 0.90;
+    width: 200px;
+    border-style: solid;
+    border-width: 3px;
+    display: block;
+    border-color: black;
+    text-align:center;
+
+}
+
+.shiny-progress .progress-text .progress-message {
+    margin-top: 5px;
+    font-size:130%;
+    display: block;
+    opacity: 1;
+    
+}
+
+.shiny-progress .progress-text .progress-detail {
+    font-size:130%;
+    display: block;
+    margin-bottom: 5px;
+    opacity: 1;
+}
+
+.shiny-progress .progress-text .progress-detail:before {
+    content: 'Progress: ';
+}
+
+
+
+
 #multi_name_flt {
     margin-right: 10px;
     margin-bottom: 10px;
@@ -51,11 +99,11 @@ input[name='plot_this'] {
   margin-bottom: 10px;
 }
 
-.selectionsInfo {
+/*.selectionsInfo {
   display: inline;
   margin-left: 20px;
   font-weight: bold;
-}
+}*/
 
 #lnh_pos {
   width: 80px;
@@ -176,37 +224,91 @@ input#BWbin {
 }
 
 p > label {
-	
 	display: inline;
 }
 
+/* Preview and zoom for PDF display  */
 
-
-
-img {
-    margin-top: 10px;
-    width: 100%;
+#preview-pdf-div {
     cursor: -webkit-zoom-in; 
     cursor: -moz-zoom-in;
+    text-align: center;
 }
 
 .zoom_image { 
-      max-width: 100% !important;
-      max-height: 120% !important;
-      width: auto !important;
-      cursor: -webkit-zoom-out !important; 
-      cursor: -moz-zoom-out !important;
-      position: fixed !important;
-      top: 10px !important;
-      left: 10px !important;
-      margin-right: 0px !important;
-      margin-bottom: 0px !important;
-      margin-top: 0px !important;
-      z-index:3;
+      height: 100%;
+      width: 100%;
+      cursor: -webkit-zoom-out 
+      cursor: -moz-zoom-out;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 3;
+      text-align: center;
+
+}
+
+.zoom_image > canvas {
       border-style: dotted;
-      border-width: 3px;
+      border-width: 5px;
       border-color: grey;
 }
+
+/* Tutorial CSS  */
+
+#tutorial { 
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      background-color: rgba(0,0,0,0.8);
+      text-align: center;
+      z-index:9999;
+      
+}
+
+.popover {
+    z-index: 110000;
+}
+
+.carousel-control.left, .carousel-control.right {
+    background-image: none
+}
+
+#tutorial > div {
+    position: auto;
+    margin: auto;
+    width: 700px;
+    background-color: white;
+    border: 1px solid black;
+    margin-top: 30px;
+    border-radius: 5px;
+}
+
+#tutorial > div > div {
+    position: auto;
+    margin: auto;
+    width: 650px;
+
+}
+
+#tutorial img {
+    position: auto;
+    margin: auto;
+    border: 0px solid red;
+    height: 250px;
+}
+
+.carousel-indicators .active {
+    background-color:black;
+}
+.carousel-indicators li {
+    border-color: black;
+}
+
+/* Plot grid CSS  */
 
 th > span {
       position: relative;

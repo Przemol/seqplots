@@ -15,6 +15,15 @@ Shiny.addCustomMessageHandler("jsAssign", function(message) {
 Shiny.addCustomMessageHandler("jsDots", function(message) {
     $("#summary3").text( $("#summary3").text().length < 50 ? $("#summary3").text()+"." : "." );
 });
+
+var selected = [];
+$('#trackDT').on( 'click', 'tbody tr', function () {
+  if($(this).hasClass('selected')) {
+    jQuery(this).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );
+  } else {
+     jQuery(this).find(".select_indicator").removeClass( "icon-check" ).addClass( "icon-check-empty" );
+  }
+} );
     
 
 animateTitle = function() {
@@ -34,8 +43,8 @@ sendToCalc = function() {
     var t_sel = [];
     var f_sel = [];
     var genomes = [];
-    if($('#trackDT table').length)  $.each(TableTools.fnGetInstance( $($('#trackDT table')[1]).attr('id')   ).fnGetSelectedData(), function(i, v) {  t_sel[i]=v[0];  genomes.push(v[3]); } );
-    if($('#featureDT table').length) $.each(TableTools.fnGetInstance( $($('#featureDT table')[1]).attr('id') ).fnGetSelectedData(), function(i, v) {  f_sel[i]=v[0];  genomes.push(v[3]); } );
+    if($('#trackDT table').length)  $.each(TableTools.fnGetInstance( $($('#trackDT table')[0]).attr('id')   ).fnGetSelectedData(), function(i, v) {  t_sel[i]=v[0];  genomes.push(v[3]); } );
+    if($('#featureDT table').length) $.each(TableTools.fnGetInstance( $($('#featureDT table')[0]).attr('id') ).fnGetSelectedData(), function(i, v) {  f_sel[i]=v[0];  genomes.push(v[3]); } );
     
 	if( !(f_sel.length >= 1 & (t_sel.length >= 1 | $('#SFsetup').text().length > 10 )) ) {
 		return( alert("Select >=1 track(s) or pattern and >=1 feature(s)!") )
@@ -62,15 +71,11 @@ jsRmFile = function(x) {
 }
 
 rmSelctedFiles = function() {
-      var rm = [];
-      if($('#trackDT table').length)   $.each(TableTools.fnGetInstance( $($('#trackDT table')[1]).attr('id')   ).fnGetSelectedData(), function(i, v) { rm.push(v[0]); } );
-      if($('#featureDT table').length) $.each(TableTools.fnGetInstance( $($('#featureDT table')[1]).attr('id') ).fnGetSelectedData(), function(i, v) { rm.push(v[0]); } );
-	if(rm.length > 0) {
-    if ( confirm("Delate following files:\n " + rm.toString() + "?" ) ){
-        Shiny.shinyapp.sendInput({"f_delate":rm});
+
+    if ( confirm("Delete all selected files?" ) ){
         Shiny.shinyapp.sendInput({"TR_delate":new Date().getTime()}); 
-		}
-	}	else { alert("Select >=1 track(s) or >=1 feature(s)!") }
+	}
+
 }
 
 $(function() {
@@ -80,10 +85,7 @@ $(function() {
 //    }
 //  })
   
-  $('#image').click(function(e){
-    $(this).find('img').toggleClass('zoom_image');
-    e.preventDefault();
-  });
+
   
 	
 	$('#downloadLegend').tooltip({title:'Legend'});

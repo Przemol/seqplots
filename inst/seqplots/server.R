@@ -7,7 +7,7 @@
 
 #options("xtable.sanitize.text.function" = identity)
 options("shiny.maxRequestSize" = -1)
-options("bitmapType" = "cairo")
+#options("bitmapType" = "cairo")
 #options(shiny.reactlog = FALSE)
 
 ##Turn off experimental
@@ -33,17 +33,20 @@ if( Sys.getenv('root') != '' ) {
 
 
 shinyServer(function(input, output, clientData, session) {
-	
-  #Test if png is working, require x11 addon on newer Mac OS X if necessary
-  png(tempfile()); plot(1); dev.off()
   
   #Reactive values definition
   subplotSetup <- reactiveValues( )
   urlSetup <- reactiveValues( )
-  GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-  if( length(GENOMES) ) 
-      names(GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
-  values <- reactiveValues( grfile=NULL, calcID=NULL, plotMsg=NULL, refFileGrids=NULL, proc=NULL, im=NULL, clusters=NULL, SFsetup=list(), plotHistory=list(), genomes=GENOMES )
+  values <- reactiveValues( 
+      grfile=NULL, calcID=NULL, plotMsg=NULL, refFileGrids=NULL, proc=NULL, 
+      im=NULL, clusters=NULL, SFsetup=list(), plotHistory=list(),
+      sessionID=gsub('[^A-Za-z0-9]', '_', session$request$HTTP_SEC_WEBSOCKET_KEY),
+      GENOMES=BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+  )
+  observe({
+    if( length(values$GENOMES) ) 
+      names(values$GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+  })
   
   #Source functions
   if( Sys.getenv('web') != '' ) setwd(Sys.getenv('web'))
@@ -54,6 +57,7 @@ shinyServer(function(input, output, clientData, session) {
   
   if( Sys.getenv('root') != '' ) setwd(Sys.getenv('root'))
 	suppressMessages( addResourcePath(prefix='files', directoryPath='./files') )
+	suppressMessages( addResourcePath(prefix='tmp', directoryPath='./tmp') )
   
 	#Debug code: Testing eval statement
   if( Sys.getenv("seqplots_debug", FALSE) ) {
@@ -62,9 +66,9 @@ shinyServer(function(input, output, clientData, session) {
 	    isolate( eval(parse(text=input$debug_cmd)) )
 	  })
   }
-    observe({
-        updateSelectInput(session, "file_genome", choices = values$genomes)
-    })
+  observe({
+    updateSelectInput(session, "file_genome", choices = values$GENOMES)
+  })
   
 	
   #Add [S]equence [F]eature setup and reset observers
@@ -149,8 +153,29 @@ shinyServer(function(input, output, clientData, session) {
 	    contentType = 'image/png',
 	    alt = "Image cannot be displayed"
       )
-	}, deleteFile = TRUE)
+	}, deleteFile = FALSE)
+	
+	renderPDF <- function(expr, env=parent.frame(), quoted=FALSE) {
+	    func <- shiny::exprToFunction(expr, env, quoted)
+	    function() {
+	        value <- func()
+	        value
+	    }
+	}
+	
+	output$thecanvas <- renderPDF({
+	    list(im=values$im, id=values$plotid)
+	})
   
+	output$pdfLink <- renderUI({
+	    #if( is.null(values$plotid) ) return()
+	    tags$a(
+	        tags$span(icon("file-pdf-o", "fa-lg"), 'PDF'), 
+	        class="btn btn-small btn-primary", href=values$im, 
+	        target='_new', style='margin-left: 5px'
+	   )
+	}) 
+	
 	#rendering data dependant plot controles
 	observe({
 	    if(!is.null(values$grfile)) {
@@ -174,7 +199,7 @@ shinyServer(function(input, output, clientData, session) {
 	#Legend download handler
 	output$downloadLegend <- downloadHandler(
 		filename = function() {
-			paste('Legend_', gsub(' ', '_', Sys.time()), '.pdf', sep='')
+			paste('Legend_', chartr(' :', '_-', Sys.time()), '.pdf', sep='')
 		},
 		content = function(file) {
 			co <- lapply(input$plot_this, function(x) fromJSON(x))
@@ -331,8 +356,11 @@ shinyServer(function(input, output, clientData, session) {
             gr$ClusterID <- fromJSON(input$clusters)
 	    if( nchar(input$sortingord) ) 
             gr$SortingOrder <- order(fromJSON(input$sortingord))
-      
+
         gr$FinalOrder <- order(fromJSON(input$finalord))
+        
+        if( nchar(input$rowmeans) ) 
+            gr$RowMeans <- fromJSON(input$rowmeans)
       
         out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
 	    out <- out[fromJSON(input$finalord),]
@@ -429,18 +457,27 @@ shinyServer(function(input, output, clientData, session) {
   #Feature and track tables - multiple file removal
   observe({
     if( is.null(input$TR_delate) ) return()
-    isolate({      
+    isolate({    
+        f_delate <- c(
+            values$track[input$trackDT_rows_selected,'name'],
+            values$feature[input$featureDT_rows_selected,'name']
+        )
+    
+        #actionButton('test', 'TEST', onClick="Shiny.onInputChange('confirm', confirm('Are you sure?'));")    
+        
       rmf <- function(x) {
         sql_string <- paste0("DELETE FROM files WHERE name = '", x , "'")
         row_aff <- dbGetRowsAffected(dbSendQuery(con, sql_string))
         moved <- file.rename(file.path('files',  x), file.path('removedFiles', x))
         if(row_aff & moved) return(TRUE) else return(FALSE)
       }
-      res <- sapply( input$f_delate, rmf)
+      res <- sapply( f_delate, rmf)
       session$sendCustomMessage("jsAlert", sprintf("Db=%i; Mv=%i; OK", sum(res), sum(res)) )
       values$refFileGrids <- runif(1)	
     })
   })
+  
+
 
   #Subplot setup logic
   observe({ 
@@ -496,76 +533,84 @@ shinyServer(function(input, output, clientData, session) {
   
   #Generate file table for tracks and features with function
   fileSelectionDataTable <- function(type) {
-    dt_opt <- reactive({
-        values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile;
-            dat <- I(jsonlite::toJSON(as.matrix(cbind(
-                dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "'"))[,c(-1,-4)],
-            se='',  dl='',  rm=''))))
-            list(
-              ##Force client side processing, should be avoided for very long tables
-              data=dat,
-              ajax='',
-              processing=FALSE,
-              serverSide=FALSE,
-              
-              ##Other options
-              lengthMenu=I('[[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]'),
-              # "<'row'<'col-sm-6'l><'col-sm-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
-              dom="<'row'<'col-md-4'i><'.selectionsInfo col-md-1'><'col-md-6 pull-right'Tf>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
-              order=I('[[ 1, "desc" ]]'),
-              language=I('{"sLengthMenu": "_MENU_ records per page"}'),
-              columns=I( readLines(file.path(Sys.getenv("web", '.'), 'ui/FataTablesColumnSetup.js')) ),
-              oTableTools=I( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesToolsSetup.js')) ),
-              scrollY=paste0(input$tabtest, "px"),
-              scrollX="true",
-              deferRender=I("false"),
-              pageLength=10,
-              #       rowCallback=I('function( row, data ) {
-              #         console.log(data[0])
-              #         if ( $.inArray(data[0], selected) !== -1 ) {
-              #           $(row).addClass("selected");
-              #           $(row).find(".select_indicator").removeClass( "icon-check-empty" ).addClass( "icon-check" );
-              #         }
-              #       }'),
-              pagingType="full_numbers"
-           )
-      })
-      
-      out <- renderDataTable({
-        ##Client side processing, code irrelavent
-            tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
-            if( nrow(tab) < 1 ) {return(p('No files found!'))} 
-            return(cbind(tab, se='',  dl='',  rm=''))
+
+      out <- DT::renderDataTable({
         
-        }, options = dt_opt, 
-        callback = I("function(oTable) {
-          var table = $('#' + oTable.context[0].sTableId);
-          var tables = table.parents('.dataTables_wrapper').find('table')
-          tables.addClass('table-condensed table-bordered');
-          //zzz=oTable.context[0];
-          oTable.draw();
-          $(tables[2]).removeClass('table-bordered');
-        }")
-      )
-      return(out)
-    }
-  
-  output$trackDT <- fileSelectionDataTable('track')
-  output$featureDT <- fileSelectionDataTable('feature')
+        values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile;
+          
+        tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
+        if( nrow(tab) < 1 ) {return(p('No files found!'))} 
+        values[[type]] <- tab
+        
+        #tab$ctime <- as.POSIXct(tab$ctime)
+        tab <- cbind(tab,  dl='',  rm='')
+        rownames(tab) <- NULL
+        
+        options = list(
+            lengthChange = TRUE,
+            order=DT::JS('[[ 1, "desc" ]]'),
+            lengthMenu=DT::JS('[[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]'),
+            language=DT::JS('{"sLengthMenu": "_MENU_ records per page"}'),
+            dom="<'row'<'col-md-4'i><'col-md-3'C><'col-md-5'f>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
+            columns=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesColumnSetup.js')) ),
+            searchHighlight = TRUE,
+            searchCols=DT::JS('[null,null,null,null,{"search": typeof demo == "undefined" ? null : demo}]'),
+            pagingType="full_numbers",
+            searchDelay=10,
+            processing = TRUE
+        )
+        
+        dt <- DT::datatable(
+            tab,
+            rownames = FALSE,
+            filter = 'bottom',
+            options = options,
+            selection = 'multiple',
+            extensions = c('ColVis')
+       
+        ) 
+        return(dt)
+      })
+  }
+      
+        #options = dt_opt
+#         callback = DT::JS("function(oTable) {
+#           var table = $('#' + oTable.context[0].sTableId);
+#           var tables = table.parents('.dataTables_wrapper').find('table')
+#           tables.addClass('table-condensed table-bordered');
+#           //zzz=oTable.context[0];
+#           oTable.draw();
+#           $(tables[2]).removeClass('table-bordered');
+#         }")
+#      )
 
   
-  #Server initiation actions
+  output$trackDT <- fileSelectionDataTable('track')   
+                                        
+                                        
+      
+
+  output$featureDT <- fileSelectionDataTable('feature')
+  
   observe({
   	session$sendCustomMessage("jsExec", "Shiny.shinyapp.$socket.onclose = function () { $(document.body).addClass('disconnected'); alert('Connection to server lost!'); }")
     session$sendCustomMessage("jsExec", "$('.load_div').fadeOut(1000);")
     session$sendCustomMessage("jsExec", "animateTitle();")
+    if(Sys.getenv('tutorial', TRUE)) session$sendCustomMessage("jsExec", "startTutorial();")
+    
+    
     #Session elem:  "clientData","input","isClosed","onFlush","onFlushed","onSessionEnded","output","request","sendCustomMessage","sendInputMessage" 
     #sapply(ls(session$request), function(x) session$request[[x]])
   	#sapply(names(session$clientData), function(x) session$clientData[[x]])
   	#str(as.list(session$clientData))
+    
     message(Sys.time(), ' -> Running at ', session$request$HTTP_ORIGIN, ', ', session$clientData$url_hostname, ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']')
   })
+  session$onSessionEnded(function() { 
+      unlink(file.path(Sys.getenv('root'), 'tmp', isolate(values$sessionID)), recursive=TRUE) 
+  })
   session$onSessionEnded(function() { message(Sys.time(), ' -> Client connection closed', ' [', session$request$HTTP_SEC_WEBSOCKET_KEY, ']' ) })
+
   
   #Server reset action
   observe({
@@ -589,10 +634,9 @@ shinyServer(function(input, output, clientData, session) {
               try(remove.packages(input$inst_genomes, lib = lib))
           )
           updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
-          GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-          if( length(GENOMES) ) 
-              names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
-          values$genomes <- GENOMES
+          values$GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+          if( length(values$GENOMES) ) 
+              names(values$GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
           #updateSelectInput(session, "file_genome", choices = GENOMES)
       })
   })
@@ -608,11 +652,9 @@ shinyServer(function(input, output, clientData, session) {
               lib=file.path(Sys.getenv('root'), 'genomes'), type='source'
           )
           updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
-          GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-          if( length(GENOMES) ) 
-              names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
-          values$genomes <- GENOMES
-          
+          values$GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+          if( length(values$GENOMES) ) 
+              names(values$GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
       })
   })
   
@@ -627,10 +669,9 @@ shinyServer(function(input, output, clientData, session) {
               lib=file.path(Sys.getenv('root'), 'genomes')
           )
           updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
-          GENOMES <<- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-          if( length(GENOMES) ) 
-              names(GENOMES) <<- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
-          values$genomes <- GENOMES
+          values$GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+          if( length(values$GENOMES) ) 
+              names(values$GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
       })
   })
   
@@ -682,6 +723,68 @@ shinyServer(function(input, output, clientData, session) {
     }
     #strsplit(strsplit("1,1;3,2", ';')[[1]], ',')
     # paste(names(reactiveValuesToList(input)), reactiveValuesToList(input), sep = "=", collapse="&")
+  })
+  
+  output$nselected <- renderText({
+      paste(length(input$trackDT_rows_selected), 'track(s) selected')
+  })
+  
+  observe({
+      if(input$selFilt==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('trackDT')
+          DT::selectRows(proxy, NULL)
+          DT::selectRows(proxy, input$trackDT_rows_all)
+      })
+  })
+  
+  observe({
+      if(input$selPage==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('trackDT')
+          DT::selectRows(proxy, NULL)
+          DT::selectRows(proxy, input$trackDT_rows_current)
+      })
+  })
+  
+  observe({
+      if(input$selNone==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('trackDT')
+          DT::selectRows(proxy, NULL)
+      })
+  })
+  
+  #######
+  
+  output$nselectedFT <- renderText({
+      paste(length(input$featureDT_rows_selected), 'feature(s) selected')
+  })
+  
+  observe({
+      if(input$selFiltFT==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('featureDT')
+          DT::selectRows(proxy, NULL)
+          DT::selectRows(proxy, input$featureDT_rows_all)
+      })
+  })
+  
+  observe({
+      if(input$selPageFT==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('featureDT')
+          DT::selectRows(proxy, NULL)
+          DT::selectRows(proxy, input$featureDT_rows_current)
+      })
+  })
+  
+  observe({
+      if(input$selNoneFT==0) return()
+      isolate({
+          proxy <- DT::dataTableProxy('featureDT')
+          DT::selectRows(proxy, NULL)
+      })
   })
 
 ##Turn off experimental

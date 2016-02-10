@@ -92,7 +92,7 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   file.rename( x, file.path(final_folder, basename(x)) )
   
   sql_string <- paste0("INSERT INTO files (name, ctime, type, format, genome, user, comment) VALUES (", paste0("'",c(basename(x), as.character(Sys.time()), type, file_type, file_genome, file_user, file_comment), "'", collapse=", "),")") 
-  dbBeginTransaction(con)
+  dbBegin(con)
   res <- dbSendQuery(con, sql_string )
   
   if ( file.exists(file.path(final_folder, basename(x))) ) {

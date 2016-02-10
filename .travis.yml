@@ -1,11 +1,12 @@
 language: r
 sudo: required
+dist: trusty
 
 bioc_required: true
 bioc_packages:
   - BiocCheck
-r_packages:
-  - covr
+r_github_packages:
+  - jimhester/covr
 
 after_script:
   - ls -lah
@@ -13,7 +14,8 @@ after_script:
   - Rscript -e "library(BiocCheck); BiocCheck(\"${FILE}\")"
   
 after_success:
-  - Rscript -e 'covr::codecov()'
+  - Rscript -e 'library(covr);package_coverage()'
+  - Rscript -e 'library(covr);codecov()'
 
 notifications:
   email:

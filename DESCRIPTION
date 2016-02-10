@@ -1,7 +1,7 @@
 Package: seqplots
 Maintainer: Przemyslaw Stempor <ps562@cam.ac.uk>
 Author: Przemyslaw Stempor
-Version: 1.9.2
+Version: 1.9.3
 License: GPL-3
 Title: An interactive tool for visualizing NGS signals and sequence
     motif densities along genomic features using average plots and heatmaps
@@ -32,7 +32,7 @@ URL: http://github.com/przemol/seqplots
 BugReports: http://github.com/przemol/seqplots/issues
 biocViews: ChIPSeq, RNASeq, Sequencing, Software, Visualization
 Depends:
-    R (>= 3.1.0)
+    R (>= 3.2.0)
 Imports:
     methods,
     IRanges,
@@ -41,14 +41,13 @@ Imports:
     rtracklayer,
     GenomicRanges,
     Biostrings,
-    shiny (>= 0.11.0),
+    shiny (>= 0.13.0),
     DBI,
     RSQLite,
     plotrix,
     fields,
     grid,
     kohonen,
-    Cairo,
     parallel,
     GenomeInfoDb,
     class,
@@ -57,7 +56,7 @@ Imports:
     reshape2,
     gridExtra,
     jsonlite,
-    DT,
+    DT (>= 0.1.45),
     RColorBrewer
 Type: Package
 Date: 2014-09-15
@@ -87,3 +86,5 @@ Collate:
     'run.R'
     'seqplots-package.R'
     'zzz.R'
+RoxygenNote: 5.0.1
+Remotes: github::rstudio/DT
