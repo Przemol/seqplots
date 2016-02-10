@@ -45,7 +45,7 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
     }
     
     if( !nchar(input$heat_colorspace)) {
-        colorspace <- NULL
+        colorspace <- c('#011279', '#ffffff', '#ab1500')
     } else if(input$heat_colorspace == 'Custom') {
         colorspace <- c(input$heat_csp_min, input$heat_csp_mid, input$heat_csp_max)
     } else if(input$heat_colorspace %in% rownames(brewer.pal.info)) {
@@ -105,6 +105,9 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
     session$sendCustomMessage("jsExec", paste0(
         "$('#finalord').val('",   toJSON(out$FinalOrder  ), "').change()"
      ))
+    session$sendCustomMessage("jsExec", paste0(
+        "$('#rowmeans').val('",   toJSON(out$RowMeans    ), "').change()"
+    ))
     
     attr(out, "seed") <- seed
     return(out)

@@ -9,6 +9,7 @@ hlp <- function(target, top=-10) {
   ))
 }
 
+
 # HEAD #########################################################################
 
 head <- tags$head(
@@ -36,7 +37,7 @@ head <- tags$head(
     ## DataTable libraries
     #singleton(tags$script(src = "js/DataTables/jquery.dataTables.js")),
     #singleton(tags$script(src = "js/DataTables/DT_bootstrap.js")),
-    singleton(tags$script(src = "js/DataTables/dataTables.tableTools.min.js")),
+    #singleton(tags$script(src = "js/DataTables/dataTables.tableTools.min.js")),
     #singleton(tags$script(src = "js/DataTables/DT_filter.js")),
     
     
@@ -52,7 +53,10 @@ head <- tags$head(
     ,singleton(tags$script(src = "upload/js/jquery.fileupload-ui.js"))
     ,singleton(tags$script(src = "upload/js/jquery.fileupload-validate.js"))
     ,singleton(tags$script(src = "upload/js/md5.js"))
-    ,singleton(tags$script(src = "upload/js/main.js")),
+    ,singleton(tags$script(src = "http://mozilla.github.io/pdf.js/build/pdf.js"))
+    ,singleton(tags$script(src = "upload/js/main.js"))
+    ,singleton(tags$script(src = "js/tutorial.js")),
+    
     
     
     
@@ -63,16 +67,20 @@ head <- tags$head(
 # 0) Plot panel ############################################################
 plotPanel <- conditionalPanel(
     condition = "input.showplot",
-    imageOutput(outputId = "image", width = "100%", height = "100%"),
-    p(div(
-          class="btn-toolbar", 
-          HTML("Preview:"),
-          tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(tags$i(class="icon-picture"), 'Line plot' )),
-          tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-info', tags$span(tags$i(class="icon-th"), 'Heatmap' )), 
+    div(
+        HTML('<canvas class="pdf-output" id="thecanvas"></canvas>'),
+        id='preview-pdf-div'
+    ),
+    div(
+          class="btn-toolbar",
+          tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(icon("line-chart", "fa-lg"), 'Profile' )),
+          tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-info', tags$span(icon("th", "fa-lg"), 'Heatmap' )), 
           actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"))), 
+          htmlOutput('pdfLink', inline=TRUE),
           hlp("plotting", 3)
           
-    ), tags$hr())
+    ), 
+    tags$hr()
 )
 
 # 1) New plot panel ############################################################
@@ -101,7 +109,8 @@ newPlotPanel <-  tabPanel(
     tags$hr(),
     tags$a(class='', tags$span(class="label label-success", 'Help'), href=paste0("help/help.html"), target="_blank", 'Read documentation'),
     ' or press ', tags$i(class="icon-question-sign icon-large", style='color:orange'), 
-    ' button to get help on specific controls. Also available as ', tags$a(class='', href=paste0("http://przemol.github.io/seqplots/SeqPlots.pdf"), target="_blank", 'print ready PDF file.'),
+    ' button to get help on specific controls.', #'Also available as ', tags$a(class='', href=paste0("http://przemol.github.io/seqplots/SeqPlots.pdf"), target="_blank", 'print ready PDF file.'),
+    ' To run tutorial click ', a(href='?tutorial', 'here.'),
     tags$em(paste0('SeqPlots v', packageVersion('seqplots'), '.'))
     
 )
@@ -174,7 +183,7 @@ heatmapPanel <- tabPanel(
     h5(tags$u('Heatmap setup'), hlp("heatmaps")),
     div( class='hidden', checkboxInput("img_heatmap", "Preview heatmap [Ctrl+H]") ), 
     #checkboxInput("img_sort", "Sort heatmap rows by mean signal"),
-    selectInput("img_sort", "Sort heatmap rows by mean signal", c('do not sort', "increasing", "decreasing"), 
+    selectInput("img_sort", "Sort heatmap rows by mean signal", c("decreasing", "increasing", 'do not sort'), 
                 selected = NULL, multiple = FALSE, selectize = TRUE, width = NULL),
     div(class='row',
         div(class='col-md-6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'Hierarchical'='hclust', 'SuperSOM'='ssom', 'do not cluster'='none'))),
@@ -241,7 +250,8 @@ heatmapPanel <- tabPanel(
             div(class='col-md-4', HTML('Mid: <input type="color" class="color {hash:true}" id="heat_csp_mid" value="#87CEFA" style="width:40px;" title=""/>')),
             div(class='col-md-4', HTML('Max: <input type="color" class="color {hash:true}" id="heat_csp_max" value="#00008B" style="width:40px;" title=""/>'))
         )
-    )
+    ),
+    HTML('Click <a href="http://przemol.github.io/plotsHg19/ColorMapTests">here</a> to see example heatmaps plotted with different color palettes.')
     
 )
 
@@ -352,7 +362,7 @@ btnToolbar <- conditionalPanel(
     div(class="btn-toolbar", 
         div(
             class="btn-group",
-            downloadLink('downloadPlot',     tags$span(tags$i(class="icon-picture icon-large icon-white"), 'Line plot'),   class="btn btn-small btn-success"),
+            downloadLink('downloadPlot',   tags$span(icon("line-chart", "fa-lg"), 'Profile' ), class="btn btn-small btn-success"),
             downloadLink('downloadLegend', tags$span(tags$i(class="icon-info icon-large")), class="btn btn-small btn-success") #Legend
         ),
         div(
@@ -380,7 +390,12 @@ sidebar <- wellPanel(
     ),
     tags$hr(),
     btnToolbar,
-    div( class='hidden', textInput('clusters', 'Clusters'), textInput('sortingord', 'Sorting'), textInput('finalord', 'Sorting') )
+    div( class='hidden', 
+         textInput('clusters', 'Clusters'), 
+         textInput('sortingord', 'Sorting'), 
+         textInput('finalord', 'finalord'),
+         textInput('rowmeans', 'rowmenas')
+         )
 )
 
 # MAIN ##################################################
@@ -434,16 +449,17 @@ shinyUI(
         includeHTML( file.path(Sys.getenv("web", '.'), 'ui/loadModal.html') ), 
         
         #Calculation progress modal
-        div(id="progressModal", class="modal", 'data-backdrop'="false", 'data-keyboard'="false", tabindex=-1, div(class="modal-dialog", div(
-            class="modal-content",
-            div(class="modal-header", tags$h3(id="progressModalLabel", 'Calculating...')),
-            div(class="modal-body", verbatimTextOutput("summary2"), verbatimTextOutput("summary3"), actionButton('cancel', 'Cancel'))
-        ))),
+         div(id="progressModal", class="modal", 'data-backdrop'="false", 'data-keyboard'="false", tabindex=-1, div(class="modal-dialog", div(
+             class="modal-content",
+             div(class="modal-header", tags$h3(id="progressModalLabel", 'Calculating...')),
+             div(class="modal-body", verbatimTextOutput("summary2"), verbatimTextOutput("summary3"), actionButton('cancel', 'Cancel'))
+         ))),
         
         ##File management modal
         eval(parse( file.path(Sys.getenv("web", '.'), 'ui/FileManagementModal.R') )),
         
         #File upload modal
         includeHTML( file.path(Sys.getenv("web", '.'), 'www/upload/upload.html') )
+        
     )
 )

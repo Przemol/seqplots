@@ -1,17 +1,41 @@
 mcCalcStart <- quote({
   
-  if( is.null(input$TR_calculate) )  return()
+  if( input$runcalc == 0 )  return()
   if( is.null( isolate(values$proc)) ) {
-    values$calcID <- input$TR_calculate
+      
+    values$calcID <- input$runcalc
     updateSelectInput(session, 'publicRdata', 'Load public file', c( '', dir('publicFiles')))
     values$grfile <- NULL
-    pb_max <- (length(input$f_tracks)+length(values$SFsetup))*length(input$f_features)
+    pb_max <- isolate( (length(input$trackDT_rows_selected)+length(values$SFsetup))*length(input$featureDT_rows_selected) )
+    
+    if( pb_max == 0 ) {
+        session$sendCustomMessage("jsAlert", 'Select >=1 track(s) or pattern and >=1 feature(s)!' )
+        return()
+    }
+    
+    selected_genomes <- c(
+        values$track[input$trackDT_rows_selected,'genome'],
+        values$feature[input$featureDT_rows_selected,'genome']
+    )
+    if ( length(unique(selected_genomes)) > 1 ) {
+        msg <- paste0(
+            "More than one genome or genome version selected: ", paste0(unique(selected_genomes), collapse=', '), ". \n\n",
+            "All tracks and feature files should be in the same genome version. ",
+            "This setup is most likely to produce an error or non reliable plot. "
+            #"If you want to continue anyway press OK."
+        )
+        session$sendCustomMessage("jsAlert", msg )	
+    }
     values$progress <- shiny::Progress$new(session, min=0, max=pb_max)
+    
   }
   do <- quote({
       
     on.exit(values$progress$close())
-    values$progress$set(value = 0, message = 'Calculation in progress...', detail = '')  
+      
+    session$sendCustomMessage("jsExec", '$("#calcModal").modal("hide");')
+    session$sendCustomMessage("jsExec", '$("#progressModal").modal("show");')
+    values$progress$set(value = 0, message = 'Calculation in progress...', detail = '')
     session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary2').text('Initializing...').parent().find('#summary3').text('')")
     
     last_msg <- Sys.time()
@@ -30,30 +54,27 @@ mcCalcStart <- quote({
         }
     }
     
-    if ( length( values$SFsetup ) > 0 | length( input$f_tracks ) > 0 ) {
+    tracks <- values$track[input$trackDT_rows_selected,'name']
+    features <- values$feature[input$featureDT_rows_selected,'name']
         
-        out <- seqplots::getPlotSetArray(
-                tracks=c(file.path('files', sort(input$f_tracks)), values$SFsetup),
-                features=file.path('files', sort(input$f_features)),
-                refgenome=con,
-                xmin = input$plot_upstream, 
-                xanchored = input$anchored_downstream, 
-                xmax = input$plot_downstream,
-                type = gsub('^(.)[a-z]+ (.).+', '\\1\\2', tolower(input$plot_type)), 
-                bin= as.numeric(input$BWbin),
-                rm0=input$rm0,
-                ignore_strand=input$ignore_strand,
-                add_heatmap=input$add_heatmap,
-                stat = input$stat,
-                verbose=TRUE, lvl1m=cat3, lvl2m=message
-            )       
-        out$data 
-      #procQuick(c(sort(input$f_tracks), values$SFsetup), sort(input$f_features),
-       #         x1 = input$plot_upstream, xm = input$anchored_downstream, x2 = input$plot_downstream,
-        #        type = input$plot_type, bin= as.numeric(input$BWbin),
-         #       cat3=cat3, cat4=cat4, rm0=input$rm0, ignore_strand=input$ignore_strand, add_heatmap=input$add_heatmap, con=con)
+    out <- seqplots::getPlotSetArray(
+        tracks = c(file.path('files', tracks), values$SFsetup),
+        features = file.path('files', features),
+        refgenome = con,
+        xmin = input$plot_upstream,
+        xanchored = input$anchored_downstream,
+        xmax = input$plot_downstream,
+        type = gsub('^(.)[a-z]+ (.).+', '\\1\\2', tolower(input$plot_type)),
+        bin = as.numeric(input$BWbin),
+        rm0 = input$rm0,
+        ignore_strand = input$ignore_strand,
+        add_heatmap = input$add_heatmap,
+        stat = input$stat,
+        verbose = TRUE, lvl1m = cat3, lvl2m = message
+    )       
+    return( out$data )
       
-    }  else ( stop('Nothing to calculate!') )
+
   })
   
   if( .Platform$OS.type == 'windows' | isolate(input$setup_multithread) == FALSE) {

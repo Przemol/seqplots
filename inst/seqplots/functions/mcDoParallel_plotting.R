@@ -28,10 +28,16 @@ mcDoParallel <- quote({
   do <- quote({ 
       session$sendCustomMessage("jsExec", "$('#progressModal').modal('show').find('#summary2').text('Plotting...').parent().find('#summary3').text('')")
       out <- list()
-      a <- tempfile(pattern = "sessionID_", tmpdir = 'tmp', fileext = '.png')
-      # Generate the PNG
-      png(a, height = 210, width = 297, units='mm', res=100, pointsize = 12)
       
+      dir.create(file.path(Sys.getenv('root'), 'tmp', values$sessionID), showWarnings = FALSE)
+      
+      a <- file.path('tmp', values$sessionID, paste('Plot_', chartr(' :', '_-', Sys.time()), '.pdf', sep=''))
+      # Generate the PNG
+      #pdf(a, height = 210, width = 297, units='mm', res=100, pointsize = 12)
+      pdf(
+          file.path(Sys.getenv('root'), a), width = input$pdf_x_size, 
+          height = input$pdf_y_size, onefile = TRUE, paper=input$paper
+      )
       co <- lapply(input$plot_this, function(x) fromJSON(x))
       pl <- lapply(co, function(x) values$grfile[[x[2]]][[x[1]]] )
       
@@ -74,6 +80,7 @@ mcDoParallel <- quote({
       quote({ 
         values$im <- as.character(res$url)
         values$seed <- res$seed
+        values$plotid  <- isolate( if( is.numeric(values$plotid) ) values$plotid + 1 else 1 )
         if( !is.null(res$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
       })
     )

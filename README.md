@@ -78,12 +78,10 @@ To start with R scripting mode:
 
 Mac OS X bundle app
 -------------------
-Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains R binaries pre-installed Bioconductor dependencies. Additionally, the reference genome for *Caenorhabditis elegans* is included. The sequences for other popular model organisms can be downloaded using graphical user interface.
+The Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains all R binaries and packages that SeqPlots depends on. Additionally, test tracks and genome annotations, and reference sequences for *Homo sapiens*, *Drosophila melanogaster* and *Caenorhabditis elegans* are included. Sequences for other organisms can be downloaded using a graphical user interface.
 
 **Download the current version here:
 https://github.com/Przemol/seqplots_osx/releases/latest**
-
-The bundle requires OS X 10.6 (Snow Leopard) and above with X11 installed. X11 was included with OS X up to version 10.7 (Lion). OS X 10.8 (Mountain Lion) and above require installation of Xquartz package, see more here: http://support.apple.com/en-us/HT201341
 
 Docker image
 ------------
