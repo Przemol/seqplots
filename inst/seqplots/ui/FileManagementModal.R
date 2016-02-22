@@ -30,7 +30,6 @@ tagList(
                     ),
                 tabPanel("Sequence features", tags$br(), div(class='row', div(class='col-md-4', wellPanel(
                     class='SFform', 
-                    #selectInput("SFgenome", "Reference sequence (genmoe)", GENOMES),
                     textInput(inputId='SFpattern', label='DNA motif'),
                     numericInput(inputId='SFbin', label='Sliding window size in base pairs [bp]', value=200, min=10, step=10),
                     textInput(inputId='SFname', label='Display name'),
