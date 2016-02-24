@@ -54,6 +54,7 @@ mcDoParallel <- quote({
       dev.off()
       out$url <- a
       out$seed <- attr(ans, 'seed')
+      out$anno <- ans
       
       class(out) <- 'ans'; out 
   })
@@ -80,6 +81,8 @@ mcDoParallel <- quote({
       quote({ 
         values$im <- as.character(res$url)
         values$seed <- res$seed
+        values$clustrep  <- res$anno
+        values$clusters <- res$annoClusterID
         values$plotid  <- isolate( if( is.numeric(values$plotid) ) values$plotid + 1 else 1 )
         if( !is.null(res$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
       })
