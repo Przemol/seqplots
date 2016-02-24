@@ -220,7 +220,7 @@ getPlotSetArray <- function(
         
         #Get features to plot
         file_con <- file( normalizePath(j) )
-        sel <- rtracklayer::import(file_con)
+        anno_out <- sel <- rtracklayer::import(file_con)
         close(file_con)
         
         proc <- list()
@@ -355,7 +355,8 @@ getPlotSetArray <- function(
                 e=if (type == 'af') xanchored else NULL,
                 desc=paste(sub("\\.(bw|BW)$", "", basename(tracks[[i]][[1]])), 
                             sub("\\.(gff|GFF)$", "", basename(j)), sep="\n@"),
-                heatmap=if (add_heatmap) M else NULL
+                heatmap=if (add_heatmap) M else NULL,
+                anno=anno_out
             )
             k <- k+1
         }
