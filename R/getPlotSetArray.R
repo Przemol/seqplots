@@ -177,6 +177,12 @@ getPlotSetArray <- function(
     if( !verbose ) options('warn'=-1)
     if( class(tracks) == "MotifSetup" ) tracks <- tracks$data
     
+    if( class(tracks) == "BigWigFile" ) tracks <- list(tracks)
+    if( class(tracks) == "BigWigFileList" ) tracks <- as.list(tracks)
+    
+    if( class(features) == "GRanges" ) features <- list(features)
+    if( class(features) == "GRangesList" ) features <- as.list(features)
+    
     n <- 1; k <- 1;
     TSS <- list(length(features))
     ANNO <- list(length(features))
@@ -219,15 +225,24 @@ getPlotSetArray <- function(
         remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(genomeStyles())
         
         #Get features to plot
-        file_con <- file( normalizePath(j) )
-        anno_out <- sel <- rtracklayer::import(file_con)
-        close(file_con)
+        message(class(j))
+        if(class(j) == "character") {
+            file_con <- file( normalizePath(j) )
+            anno_out <- sel <- rtracklayer::import(file_con)
+            close(file_con)
+        } else if(class(j) == "GRanges") {
+            anno_out <- sel <- j
+        }
         
         proc <- list()
         for(i in 1:length(tracks) ) {
             
+            fe_name <- if(class(j) == "character") basename(j) else paste0('feature', '_', n)
+            tr_name <- if(class(tracks[[i]]) == 'BigWigFile') basename(path(as.list(bwfl)[[1]])) else tracks[[i]][[1]]
+            proc_names <- character()
+                        
             lvl1m(paste(
-                'Processing:', basename(j), '@', tracks[[i]][[1]], 
+                'Processing:', fe_name, '@', tr_name, 
                 '[', k, '/',length(features)*length(tracks), ']'
             ))
             
@@ -246,6 +261,9 @@ getPlotSetArray <- function(
                 revcomp <- tracks[[i]]$revcomp
                 if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(GENOME) }
                 
+            } else if ( class(tracks[[i]]) == 'BigWigFile' ) {
+                track <- tracks[[i]]
+                if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track)[1] }
             }
             
             if ( (type == 'pf') | (type == 'mf') | (type == 'ef') ) {
@@ -253,7 +271,7 @@ getPlotSetArray <- function(
                 gr <- GenomicRanges::promoters(sel, xmin, xmax)
                 all_ind  <- seq(-xmin, xmax, by=as.numeric(bin) )
                 
-                if( class(tracks[[i]]) == 'character' ) {
+                if( class(tracks[[i]]) == 'character' | class(tracks[[i]]) == 'BigWigFile') {
                     M <- extarct_matrix(
                         track, gr, length(all_ind), ignore_strand)
                     
@@ -277,7 +295,7 @@ getPlotSetArray <- function(
                 right_ind <- seq(xanchored+bin, xanchored+xmax, by=bin) 
                 all_ind <- c(left_ind, mid_ind, right_ind)
                 
-                if( class(tracks[[i]]) == 'character' ) {
+                if( class(tracks[[i]]) == 'character' | class(tracks[[i]]) == 'BigWigFile') {
                     M.left <- extarct_matrix(
                         track, flank(sel, xmin, start=TRUE), length(left_ind), 
                         ignore_strand) #left
@@ -353,18 +371,26 @@ getPlotSetArray <- function(
             proc[[i]] <- list(
                 means=means, stderror=stderror, conint=conint, all_ind=all_ind,
                 e=if (type == 'af') xanchored else NULL,
-                desc=paste(sub("\\.(bw|BW)$", "", basename(tracks[[i]][[1]])), 
-                            sub("\\.(gff|GFF)$", "", basename(j)), sep="\n@"),
+                desc=paste(sub("\\.(bw|BW)$", "", tr_name), 
+                            sub("\\.(gff|GFF)$", "", fe_name), sep="\n@"),
                 heatmap=if (add_heatmap) M else NULL,
                 anno=anno_out
             )
             k <- k+1
+            proc_names <- c(proc_names, tr_name)
+            
         }
-        names(proc) <- sub("\\.(bw|BW)$", "", basename( sapply(tracks, '[[', 1) ))
+        names(proc) <- sub("\\.(bw|BW)$", "", proc_names)
         TSS[[n]] <- proc
         ANNO[[n]] <- sel
         n <- n+1
     }
-    names(TSS) <- sub("\\.(gff|GFF|bed|BED)$", "", basename( features ))
+    names(TSS) <- sub(
+        "\\.(gff|GFF|bed|BED)$", "", 
+        if(!is.null(names(features[[1]]))) 
+            basename( features ) 
+        else 
+            paste0('feature_', 1:length(features))
+    )
     return( PlotSetArray(data = TSS, annotations = ANNO) )
 }
