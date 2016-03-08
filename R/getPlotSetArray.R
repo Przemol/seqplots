@@ -238,7 +238,7 @@ getPlotSetArray <- function(
         for(i in 1:length(tracks) ) {
             
             fe_name <- if(class(j) == "character") basename(j) else paste0('feature', '_', n)
-            tr_name <- if(class(tracks[[i]]) == 'BigWigFile') basename(path(as.list(bwfl)[[1]])) else tracks[[i]][[1]]
+            tr_name <- if(class(tracks[[i]]) == 'BigWigFile') basename(path(tracks[[i]])) else tracks[[i]][[1]]
             proc_names <- character()
                         
             lvl1m(paste(
