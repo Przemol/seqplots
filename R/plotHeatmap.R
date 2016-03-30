@@ -298,28 +298,8 @@ setMethod(
             title(main, outer = TRUE, cex.main=cex.main/pointsize)
         }
         
-
-        
-        infile <- strsplit( plotset[[1]]$desc, '\n@')[[1]][[2]]
-        # TODO: implement saving GenomicRanges in GetPlotSetArray
-        #           elementMetadata(gr) <- elementMetadata(gr)[!
-        #               sapply( elementMetadata(gr), function(x) all(is.na(x)))]
-        #           if( length(colnames(elementMetadata(gr))) ) { 
-        #               colnames(elementMetadata(gr)) <- 
-        #                    paste0('metadata_', colnames(elementMetadata(gr))) 
-        #           }
-        #              
-        #           gr$OriginalOrder <- 1:length(gr); 
-        #           if( nchar(input$clusters) ) 
-        #               gr$ClusterID <- fromJSON(input$clusters)
-        #           if( nchar(input$sortingord) ) 
-        #               gr$SortingOrder <- order(fromJSON(input$sortingord))
-        #               
-        #           gr$FinalOrder <- order(finalOrd)
-        #               
-        #           out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
-        #           out <- out[finalOrd,]
         par(opar)
+        
         out <- data.frame(
             originalOrder=1:length(finalOrd), 
             ClusterID=classes[order(sorting_order)], 
@@ -327,6 +307,27 @@ setMethod(
             FinalOrder=finalOrd,
             RowMeans=RowMeans
         )
+        
+        anno_list <- unique(lapply(plotset, '[[', 'anno'))
+        if(length(anno_list) > 1) warning('Multiple features used to generate the heatmaps, first will be used to generate features report')
+        anno <- anno_list[[1]]
+        if( !is.null(anno) ) {
+            
+            meta <- elementMetadata(anno)
+            meta <- meta[!grepl('IRanges', sapply(meta, class))]
+            meta <- meta[sapply( meta, function(x) !all(is.na(x)))]
+     
+            if( length(colnames(meta)) ) {
+                colnames(meta) <- paste0('metadata_', colnames(meta))
+            }
+            elementMetadata(anno) <- meta
+            
+            out_meta <- as.data.frame(anno)
+            colnames(out_meta)[1] <- 'chromosome'
+            out <- cbind(out_meta, out)[finalOrd,]
+            
+        }
+        
         return( invisible(out) )
     }
 )
