@@ -56,6 +56,9 @@ mcCalcStart <- quote({
     
     tracks <- values$track[input$trackDT_rows_selected,'name']
     features <- values$feature[input$featureDT_rows_selected,'name']
+    
+    #rownames(tracks) <- NULL
+    #rownames(features) <- NULL
         
     out <- seqplots::getPlotSetArray(
         tracks = c(file.path('files', tracks), values$SFsetup),
