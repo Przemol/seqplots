@@ -1,7 +1,7 @@
 Package: seqplots
 Maintainer: Przemyslaw Stempor <ps562@cam.ac.uk>
 Author: Przemyslaw Stempor
-Version: 1.9.4
+Version: 1.9.6
 License: GPL-3
 Title: An interactive tool for visualizing NGS signals and sequence
     motif densities along genomic features using average plots and heatmaps
