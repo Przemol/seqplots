@@ -312,7 +312,7 @@ setMethod(
         if(length(anno_list) > 1) warning('Multiple features used to generate the heatmaps, first will be used to generate features report')
         anno <- anno_list[[1]]
         if( !is.null(anno) ) {
-        
+
             meta <- elementMetadata(anno)
             meta <- meta[!grepl('IRanges', sapply(meta, class))]
             meta <- meta[sapply( meta, function(x) !all(is.na(x)))]
