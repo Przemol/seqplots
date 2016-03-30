@@ -389,13 +389,7 @@ sidebar <- wellPanel(
         genomesPanel
     ),
     tags$hr(),
-    btnToolbar,
-    div( class='hidden', 
-         textInput('clusters', 'Clusters'), 
-         textInput('sortingord', 'Sorting'), 
-         textInput('finalord', 'finalord'),
-         textInput('rowmeans', 'rowmenas')
-         )
+    btnToolbar
 )
 
 # MAIN ##################################################
