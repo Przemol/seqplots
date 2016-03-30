@@ -713,8 +713,7 @@ shinyServer(function(input, output, clientData, session) {
       if(input$selPage==0) return()
       isolate({
           proxy <- DT::dataTableProxy('trackDT')
-          DT::selectRows(proxy, NULL)
-          DT::selectRows(proxy, input$trackDT_rows_current)
+          DT::selectRows(proxy, union(input$trackDT_rows_selected, input$trackDT_rows_current))
       })
   })
   
@@ -745,8 +744,7 @@ shinyServer(function(input, output, clientData, session) {
       if(input$selPageFT==0) return()
       isolate({
           proxy <- DT::dataTableProxy('featureDT')
-          DT::selectRows(proxy, NULL)
-          DT::selectRows(proxy, input$featureDT_rows_current)
+          DT::selectRows(proxy, union(input$featureDT_rows_selected, input$featureDT_rows_current))
       })
   })
   
