@@ -96,19 +96,6 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
         ylim=ylim
     ) 
     
-    session$sendCustomMessage("jsExec", paste0(
-        "$('#sortingord').val('", toJSON(out$SortingOrder), "').change()"
-    ))
-    session$sendCustomMessage("jsExec", paste0(
-        "$('#clusters').val('",   toJSON(out$ClusterID   ), "').change()"
-    ))
-    session$sendCustomMessage("jsExec", paste0(
-        "$('#finalord').val('",   toJSON(out$FinalOrder  ), "').change()"
-     ))
-    session$sendCustomMessage("jsExec", paste0(
-        "$('#rowmeans').val('",   toJSON(out$RowMeans    ), "').change()"
-    ))
-    
     attr(out, "seed") <- seed
     return(out)
 }
