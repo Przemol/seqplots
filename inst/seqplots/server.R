@@ -527,7 +527,8 @@ shinyServer(function(input, output, clientData, session) {
             searchCols=DT::JS('[null,null,null,null,{"search": typeof demo == "undefined" ? null : demo}]'),
             pagingType="full_numbers",
             searchDelay=10,
-            processing = TRUE
+            processing = TRUE,
+            search = list(regex = TRUE)
         )
         
         dt <- DT::datatable(
