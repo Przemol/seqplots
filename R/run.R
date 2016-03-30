@@ -52,13 +52,13 @@ run <- function(
         
         sqlite <- RSQLite::SQLite()
         con <- dbConnect(sqlite, dbname = 'files.sqlite')
-        if (!dbListTables(con) == "files") {
+        if ( !length(dbListTables(con)) ) {
             dbGetQuery(con, paste(
                 'CREATE TABLE files (id INTEGER PRIMARY KEY ASC, name TEXT UNIQUE,',
                 'ctime TEXT, type TEXT, format TEXT, genome TEXT, user TEXT,',
                 'comment TEXT)'
             ))
-            if (!dbListTables(con) == "files") warning('Database not created!')
+            if ( !length(dbListTables(con)) ) warning('Database not created!')
         }
         dbDisconnect(con)
         
