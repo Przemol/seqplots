@@ -183,14 +183,15 @@ getPlotSetArray <- function(
     if( class(features) == "GRanges" ) features <- list(features)
     if( class(features) == "GRangesList" ) features <- as.list(features)
     
-    n <- 1; k <- 1;
+    n <- 1; k <- 1; fe_names <- character();
+    
     TSS <- list(length(features))
     ANNO <- list(length(features))
     GENOMES <- BSgenome::installed.genomes(
         splitNameParts=TRUE)$provider_version
     if( length(GENOMES) ) 
         names(GENOMES) <- gsub('^BSgenome.', '', BSgenome::installed.genomes())
-    
+    if( !length(GENOMES) ) stop('No genomes installed!')
     extarct_matrix <- function(track, gr, size, ignore_strand) {
         sum <- .Call(
             'BWGFile_summary', path.expand(path(track)),
@@ -234,12 +235,21 @@ getPlotSetArray <- function(
             anno_out <- sel <- j
         }
         
-        proc <- list()
+        proc <- list(); proc_names <- character();
         for(i in 1:length(tracks) ) {
+
+            fe_name <- if(class(j) == "character") {
+                basename(j) 
+            } else if(length(names(features)[n])) {
+                names(features)[n] 
+            } else {
+                paste0('feature', '_', n)
+            }
             
-            fe_name <- if(class(j) == "character") basename(j) else if(length(names(features)[n])) names(features)[n] else paste0('feature', '_', n)
-            tr_name <- if(class(tracks[[i]]) == 'BigWigFile') basename(path(tracks[[i]])) else tracks[[i]][[1]]
-            proc_names <- character()
+            tr_name <- if(class(tracks[[i]]) == 'BigWigFile') 
+                basename(path(tracks[[i]])) 
+            else 
+                basename(tracks[[i]][[1]])
                         
             lvl1m(paste(
                 'Processing:', fe_name, '@', tr_name, 
@@ -372,25 +382,21 @@ getPlotSetArray <- function(
                 means=means, stderror=stderror, conint=conint, all_ind=all_ind,
                 e=if (type == 'af') xanchored else NULL,
                 desc=paste(sub("\\.(bw|BW)$", "", tr_name), 
-                            sub("\\.(gff|GFF)$", "", fe_name), sep="\n@"),
+                            sub("\\.(gff|GFF|bed|BED)$", "", fe_name), sep="\n@"),
                 heatmap=if (add_heatmap) M else NULL,
                 anno=anno_out
             )
-            k <- k+1
             proc_names <- c(proc_names, tr_name)
+            k <- k+1
             
         }
         names(proc) <- sub("\\.(bw|BW)$", "", proc_names)
+        fe_names <- c(fe_names, sub("\\.(gff|GFF|bed|BED)$", "", fe_name))
+        
         TSS[[n]] <- proc
         ANNO[[n]] <- sel
         n <- n+1
     }
-    names(TSS) <- sub(
-        "\\.(gff|GFF|bed|BED)$", "", 
-        if(!is.null(names(features[[1]]))) 
-            basename( features ) 
-        else 
-            paste0('feature_', 1:length(features))
-    )
+    names(TSS) <- fe_names
     return( PlotSetArray(data = TSS, annotations = ANNO) )
 }
