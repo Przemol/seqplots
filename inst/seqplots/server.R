@@ -98,13 +98,13 @@ shinyServer(function(input, output, clientData, session) {
   
   #Subclust logic
   observe({
-      input$clusters; input$replot
+      values$clusters; input$replot
       if( !isolate(input$heat_seed) ) {
           updateSelectInput(session, 'heat_subclust', choices='All clusters')
           return()
       }
       if( isolate(input$heat_subclust) != "All clusters") return()
-      clusters <- fromJSON(input$clusters)
+      clusters <- values$clusters
       updateSelectInput(session, 'heat_subclust', choices = c('All clusters', sort(unique(clusters))))
       
   })
@@ -335,38 +335,8 @@ shinyServer(function(input, output, clientData, session) {
 	    paste('Clusters_', gsub(' ', '_', Sys.time()), '.csv', sep='')
 	  },
 	  content = function( file ) {
-	    if(!nchar(input$clusters) & !nchar(input$sortingord)) stop('Plot heatmap with clusters or ordering first!')
-	      
-	    nam <- basename(names( values$grfile[fromJSON(input$plot_this[[1]])[2]] ))
-	    nam <- dbGetQuery(con, sprintf('SELECT name FROM files WHERE name LIKE "%s.%%"', nam))
-	    infile <- file.path('files', nam)
-        
-        if(file.exists(infile)) {
-            fcon <- file(infile); gr <- rtracklayer::import( fcon ); close(fcon);
-            elementMetadata(gr) <- elementMetadata(gr)[!sapply( elementMetadata(gr), function(x) all(is.na(x)))]
-	        if( length(colnames(elementMetadata(gr))) ) { colnames(elementMetadata(gr)) <- paste0('metadata_', colnames(elementMetadata(gr))) }
-            gr$OriginalOrder <- 1:length(gr); 
-        } else {
-            warning('The file "', infile, '" does not exist on local file system.')
-            gr <- data.frame( OriginalOrder=1:length(fromJSON(input$finalord)) ) 
-        }
-        
-        
-        if( nchar(input$clusters) ) 
-            gr$ClusterID <- fromJSON(input$clusters)
-	    if( nchar(input$sortingord) ) 
-            gr$SortingOrder <- order(fromJSON(input$sortingord))
-
-        gr$FinalOrder <- order(fromJSON(input$finalord))
-        
-        if( nchar(input$rowmeans) ) 
-            gr$RowMeans <- fromJSON(input$rowmeans)
-      
-        out <- as.data.frame(gr); colnames(out)[1] <- 'chromosome'
-	    out <- out[fromJSON(input$finalord),]
-      
-	    write.csv(out, file=file, row.names = FALSE)
-	    #cat(fromJSON(input$clusters), sep='\n', file=file)
+	    if( is.null(values$clustrep) ) stop('Plot heatmap with clusters or ordering first!')
+	    write.csv(values$clustrep, file=file, row.names = FALSE)
 	  }
 	)
 

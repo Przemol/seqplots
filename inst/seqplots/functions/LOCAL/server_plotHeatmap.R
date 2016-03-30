@@ -41,7 +41,7 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
         ylim <- c(nrow(pl[[1]]$heatmap), 1)
     } else{
         n <- as.numeric(input$heat_subclust)
-        ylim <- rev(range(which(fromJSON(input$clusters)[fromJSON(input$finalord)]==n)))
+        ylim <- rev(range(values$clusters==n))
     }
     
     if( !nchar(input$heat_colorspace)) {
