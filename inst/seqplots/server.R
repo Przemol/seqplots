@@ -41,11 +41,18 @@ shinyServer(function(input, output, clientData, session) {
       grfile=NULL, calcID=NULL, plotMsg=NULL, refFileGrids=NULL, proc=NULL, 
       im=NULL, clusters=NULL, SFsetup=list(), plotHistory=list(),
       sessionID=gsub('[^A-Za-z0-9]', '_', session$request$HTTP_SEC_WEBSOCKET_KEY),
-      GENOMES=BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+      GENOMES=NULL
   )
+  
+  updateGenomes <- function() {
+      gen <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
+      if( length(gen) ) 
+          names(gen) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+      return( gen[!duplicated(gen)] )
+  }    
+
   observe({
-    if( length(values$GENOMES) ) 
-      names(values$GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+      values$GENOMES <- updateGenomes()
   })
   
   #Source functions
@@ -68,6 +75,7 @@ shinyServer(function(input, output, clientData, session) {
   }
   observe({
     updateSelectInput(session, "file_genome", choices = values$GENOMES)
+    updateCheckboxGroupInput(session, 'inst_genomes', choices = unique(installed.genomes()))
   })
   
 	
@@ -604,11 +612,7 @@ shinyServer(function(input, output, clientData, session) {
           sapply(.libPaths(), function(lib) 
               try(remove.packages(input$inst_genomes, lib = lib))
           )
-          updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
-          values$GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-          if( length(values$GENOMES) ) 
-              names(values$GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
-          #updateSelectInput(session, "file_genome", choices = GENOMES)
+          values$GENOMES <- updateGenomes()
       })
   })
   
@@ -622,10 +626,7 @@ shinyServer(function(input, output, clientData, session) {
               input$genomes_file$datapath, repos = NULL, 
               lib=file.path(Sys.getenv('root'), 'genomes'), type='source'
           )
-          updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
-          values$GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-          if( length(values$GENOMES) ) 
-              names(values$GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+          values$GENOMES <- updateGenomes()
       })
   })
   
@@ -639,10 +640,8 @@ shinyServer(function(input, output, clientData, session) {
               input$avil_geneomes, suppressUpdates=TRUE, ask=FALSE, 
               lib=file.path(Sys.getenv('root'), 'genomes')
           )
-          updateCheckboxGroupInput(session, 'inst_genomes', choices = installed.genomes())
-          values$GENOMES <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
-          if( length(values$GENOMES) ) 
-              names(values$GENOMES) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
+          updateSelectInput(session, 'avil_geneomes', selected = '')
+          values$GENOMES <- updateGenomes()
       })
   })
   
