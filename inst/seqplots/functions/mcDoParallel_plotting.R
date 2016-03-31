@@ -81,6 +81,8 @@ mcDoParallel <- quote({
       quote({ 
         values$im <- as.character(res$url)
         values$seed <- res$seed
+        values$clustrep  <- res$anno
+        values$clusters <- res$anno$ClusterID
         values$plotid  <- isolate( if( is.numeric(values$plotid) ) values$plotid + 1 else 1 )
         values$clustrep  <- res$anno
         values$clusters <- res$annoClusterID

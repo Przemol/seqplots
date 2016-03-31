@@ -518,6 +518,8 @@ shinyServer(function(input, output, clientData, session) {
           
         tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
         if( nrow(tab) < 1 ) {return(p('No files found!'))} 
+        
+        rownames(tab) <- tab$name
         values[[type]] <- tab
         
         #tab$ctime <- as.POSIXct(tab$ctime)

@@ -10,9 +10,12 @@ tagList(
                     "Tracks",   
                     div(id='TrackSelCtl', 
                         ' | ', textOutput('nselected', inline = TRUE),  ' | ', 
-                        actionButton('selFilt', 'Select filtered'),
-                        actionButton('selPage', 'Add visible on page'),
-                        actionButton('selNone', 'Select none')
+                        div(
+                            style = if( packageVersion("DT") >= '0.1.45' ) "display: inline;" else "display: none;",
+                            actionButton('selFilt', 'Select filtered'),
+                            actionButton('selPage', 'Add visible on page'),
+                            actionButton('selNone', 'Select none')
+                        )
                     ),
                     
                     DT::dataTableOutput('trackDT') 
