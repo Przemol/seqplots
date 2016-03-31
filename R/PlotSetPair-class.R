@@ -16,7 +16,8 @@
 PlotSetPair <- setRefClass("PlotSetPair", 
     fields = list(
         means='numeric', stderror='numeric', conint='numeric', 
-        all_ind='numeric', e='ANY', desc='character', heatmap='matrix'
+        all_ind='numeric', e='ANY', desc='character', heatmap='matrix',
+        anno='ANY'
     ),
     methods = list(
         show = function() {

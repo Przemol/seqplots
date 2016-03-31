@@ -41,7 +41,7 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
         ylim <- c(nrow(pl[[1]]$heatmap), 1)
     } else{
         n <- as.numeric(input$heat_subclust)
-        ylim <- rev(range(values$clusters==n))
+        ylim <- rev(range(which(values$clusters==n)))
     }
     
     if( !nchar(input$heat_colorspace)) {
@@ -95,19 +95,6 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
         ggplot=input$ggplot,
         ylim=ylim
     ) 
-    
-    session$sendCustomMessage("jsExec", paste0(
-        "$('#sortingord').val('", toJSON(out$SortingOrder), "').change()"
-    ))
-    session$sendCustomMessage("jsExec", paste0(
-        "$('#clusters').val('",   toJSON(out$ClusterID   ), "').change()"
-    ))
-    session$sendCustomMessage("jsExec", paste0(
-        "$('#finalord').val('",   toJSON(out$FinalOrder  ), "').change()"
-     ))
-    session$sendCustomMessage("jsExec", paste0(
-        "$('#rowmeans').val('",   toJSON(out$RowMeans    ), "').change()"
-    ))
     
     attr(out, "seed") <- seed
     return(out)
