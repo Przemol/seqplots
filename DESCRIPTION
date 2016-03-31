@@ -88,4 +88,3 @@ Collate:
     'zzz.R'
 RoxygenNote: 5.0.1
 Remotes: github::rstudio/DT
-PackageStatus: Deprecated
