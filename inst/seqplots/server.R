@@ -531,7 +531,7 @@ shinyServer(function(input, output, clientData, session) {
             order=DT::JS('[[ 1, "desc" ]]'),
             lengthMenu=DT::JS('[[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]'),
             language=DT::JS('{"sLengthMenu": "_MENU_ records per page"}'),
-            dom="<'row'<'col-md-4'i><'col-md-3'C><'col-md-5'f>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
+            dom="<'row'<'col-md-4'i><'col-md-3'B><'col-md-5'f>><'row'<'col-md-12'tr>><'row'<'col-md-6'l><'col-md-6'p>>",
             columns=DT::JS( readLines(file.path(Sys.getenv("web", '.'), 'ui/DataTablesColumnSetup.js')) ),
             searchHighlight = TRUE,
             searchCols=DT::JS('[null,null,null,null,{"search": typeof demo == "undefined" ? null : demo}]'),
@@ -539,6 +539,7 @@ shinyServer(function(input, output, clientData, session) {
             searchDelay=10,
             processing = TRUE,
             search = list(regex = TRUE)
+            #,buttons = list(list(extend = 'colvis', columns = c(0, 1, 2, 3, 4)))
         )
         
         dt <- DT::datatable(
@@ -546,8 +547,8 @@ shinyServer(function(input, output, clientData, session) {
             rownames = FALSE,
             filter = 'bottom',
             options = options,
-            selection = 'multiple',
-            extensions = c('ColVis')
+            selection = 'multiple'
+            #,extensions = 'Buttons'
        
         ) 
         return(dt)
