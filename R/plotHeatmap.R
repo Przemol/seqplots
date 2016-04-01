@@ -370,7 +370,7 @@ setMethod(
     "plotHeatmap", signature(plotset='PlotSetArray'), 
     function(plotset, ...) {
         plotHeatmap(
-            unlist(plotset)$data, main, labels, legend, keepratio, 
+            plotset$unlist()$data, main, labels, legend, keepratio, 
             plotScale, sortrows, clusters, clstmethod, 
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
