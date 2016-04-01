@@ -8,7 +8,6 @@
 \alias{[[,PlotSetArray,ANY,ANY-method}
 \alias{[[,PlotSetList,ANY,ANY-method}
 \alias{seqplots-generic}
-\alias{unlist,PlotSetArray-method}
 \title{SeqPlots generic methods}
 \usage{
 \S4method{[}{PlotSetList,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
@@ -20,8 +19,6 @@
 \S4method{[}{PlotSetArray,ANY,vector,ANY}(x, i, j)
 
 \S4method{[[}{PlotSetArray,ANY,ANY}(x, i, j, ...)
-
-\S4method{unlist}{PlotSetArray}(x)
 }
 \arguments{
 \item{x}{an object of class \code{\link{PlotSetArray}}, 
@@ -65,8 +62,7 @@ If \code{x} is \strong{\code{\link{PlotSetArray}}} class: \itemize{ \item
 \code{x[1:2,1:2]} produces \code{\link{PlotSetArray}} with 2 feature(s) and
 2 tracks. \item \code{x[1:2]} produces \code{\link{PlotSetList}} with 2
 feature/tracks pairs. \item \code{x[[1]]} produces single
-\code{\link{PlotSetPair}}. \item \code{unlist(x)} produces
-\code{\link{PlotSetList}} with all feature/tracks pairs. \item
+\code{\link{PlotSetPair}}. \item
 \code{x$as.array()} produces the matrix of \code{\link{PlotSetPair}} classes
 with all feature/tracks pairs. }
 
