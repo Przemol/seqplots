@@ -4,7 +4,6 @@ cache: packages
 os:
   - linux
   - osx
-  - windows
 
 bioc_required: true
 bioc_packages:
