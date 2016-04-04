@@ -12,7 +12,7 @@ require(BSgenome)
 options("xtable.sanitize.text.function" = identity)
 options("shiny.maxRequestSize" = -1)
 options("bitmapType" = "cairo")
-options(shiny.reactlog = TRUE)
+options(shiny.reactlog = FALSE)
 
 require(rCharts)
 options(RCHART_WIDTH = 800)
