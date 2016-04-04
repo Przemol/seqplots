@@ -27,7 +27,7 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
     
     context("Testing utils")
     expect_is(capture.output(show(psa)),    'character', info = NULL, label = NULL)
-    expect_is(unlist(psa), 'PlotSetList', info = NULL, label = NULL)
+    expect_is(psa$unlist(), 'PlotSetList', info = NULL, label = NULL)
     expect_is(psa[1],      'PlotSetList', info = NULL, label = NULL)
     expect_is(psa[2,1],    'PlotSetArray', info = NULL, label = NULL)
     expect_is(psa[[2]],    'PlotSetPair', info = NULL, label = NULL)
@@ -40,9 +40,9 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
     
     context("Extended functions tests for better test coverage")
     expect_null(plotAverage(psa, plotScale = 'log2'))
-    expect_null(plotAverage(unlist(psa), plotScale = 'zscore'))
-    expect_null(plotAverage(unlist(psa)[[1]]))
-    expect_null(plotAverage(unlist(psa)[[1]], labels = 'A') )
+    expect_null(plotAverage(psa$unlist(), plotScale = 'zscore'))
+    expect_null(plotAverage(psa$unlist()[[1]]))
+    expect_null(plotAverage(psa$unlist()[[1]], labels = 'A') )
     
     expect_is(plot(psa[2,1], what='h', ggplot=TRUE), 'data.frame')
     
@@ -51,27 +51,27 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
         , 'data.frame'
     )
     expect_is(
-        plotHeatmap(unlist(psa)[1], plotScale= "zscore", sortrows = 'increasing', clstmethod = 'ssom')
+        plotHeatmap(psa$unlist()[1], plotScale= "zscore", sortrows = 'increasing', clstmethod = 'ssom')
         , 'data.frame'
     )
     
     expect_is(
-        plotHeatmap(unlist(psa)[[1]], ggplot = TRUE, indi = FALSE, autoscale=TRUE, raster=FALSE)
+        plotHeatmap(psa$unlist()[[1]], ggplot = TRUE, indi = FALSE, autoscale=TRUE, raster=FALSE)
         , 'data.frame'
     )
     
     expect_is(
-        plotHeatmap(unlist(psa)[[1]], clspace=c('red', 'blue'), raster=FALSE)
+        plotHeatmap(psa$unlist()[[1]], clspace=c('red', 'blue'), raster=FALSE)
         , 'data.frame'
     )
     
     expect_is(
-        plotHeatmap(unlist(psa)[[1]], clspace=c('red', 'blue'), raster=FALSE, ggplot = TRUE)
+        plotHeatmap(psa$unlist()[[1]], clspace=c('red', 'blue'), raster=FALSE, ggplot = TRUE)
         , 'data.frame'
     )
     
     expect_is(
-        plotHeatmap(unlist(psa)[[1]], indi=FALSE, raster=FALSE, ggplot=TRUE)
+        plotHeatmap(psa$unlist()[[1]], indi=FALSE, raster=FALSE, ggplot=TRUE)
         , 'data.frame'
     )
     
@@ -112,7 +112,7 @@ test_that("Test motifs", {
     
     context("Testing utils with motifs")
     expect_is(capture.output(show(psa)),    'character', info = NULL, label = NULL)
-    expect_is(unlist(psa), 'PlotSetList', info = NULL, label = NULL)
+    expect_is(psa$unlist(), 'PlotSetList', info = NULL, label = NULL)
     expect_is(psa[1],      'PlotSetList', info = NULL, label = NULL)
     expect_is(psa[2,1],    'PlotSetArray', info = NULL, label = NULL)
     expect_is(psa[[2]],    'PlotSetPair', info = NULL, label = NULL)

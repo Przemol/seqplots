@@ -186,7 +186,7 @@ setMethod(
     "plotAverage", signature(plotset='PlotSetArray'),
     function(plotset, ...) {
         plotAverage(
-            unlist(plotset)$data, keepratio, labels, xlim, ylim, main, 
+            plotset$unlist()$data, keepratio, labels, xlim, ylim, main, 
             xlab, ylab, plotScale, type, error.estimates, legend, legend_ext, 
             legend_pos, legend_ext_pos, cex.axis, cex.lab, cex.main, 
             cex.legend, ln.v, ln.h, colvec, pointsize, ...
