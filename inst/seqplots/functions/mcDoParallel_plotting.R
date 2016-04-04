@@ -84,8 +84,6 @@ mcDoParallel <- quote({
         values$clustrep  <- res$anno
         values$clusters <- res$anno$ClusterID
         values$plotid  <- isolate( if( is.numeric(values$plotid) ) values$plotid + 1 else 1 )
-        values$clustrep  <- res$anno
-        values$clusters <- res$annoClusterID
         if( !is.null(res$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
       })
     )
