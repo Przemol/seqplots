@@ -5,11 +5,13 @@ os:
   - linux
   - osx
 
+r_packages:
+  - covr
+
 bioc_required: true
 bioc_packages:
   - BiocCheck
-r_github_packages:
-  - jimhester/covr
+
 
 after_script:
   - ls -lah
