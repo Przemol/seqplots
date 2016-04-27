@@ -1,5 +1,5 @@
 #Heatmap plotting function
-plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
+plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE, batchcolor=NULL) {
   
     if( length(pl) > 10 ) 
         stop('Heatmap plotting: Select less than 10 checkboxes!', call.=FALSE)
@@ -89,7 +89,7 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE) {
         ln.v = input$lnv, 
         indi = input$indi, 
         s = input$hsccoef,
-        colvec=if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL,
+        colvec=if("color" %in% input$subplot_options) { if(!is.null(batchcolor)) batchcolor else subplotSetup$color[ord] } else NULL,
         clspace=colorspace,
         raster=input$raster,
         ggplot=input$ggplot,

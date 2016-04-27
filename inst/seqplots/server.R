@@ -298,7 +298,7 @@ shinyServer(function(input, output, clientData, session) {
             if (input$batch_what == "lineplots") {
               plotLineplotLocal(pl, title=title, legend=FALSE, batchcolor=color) 
             } else {
-              plotHeatmapLocal(pl, title=title, legend=FALSE) 
+              plotHeatmapLocal(pl, title=title, legend=FALSE, batchcolor=color) 
             } 
           }  
         }
