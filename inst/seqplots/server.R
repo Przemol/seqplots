@@ -293,9 +293,10 @@ shinyServer(function(input, output, clientData, session) {
           for(m in 1:nc) {
             pl <- list(values$grfile[[n]][[m]])
             title <- input[[paste0('label_',m,'x',n)]]
+            color <- input[[paste0('color_',m,'x',n)]]
             if(!nchar(title)) title <- pl[[1]]$desc
             if (input$batch_what == "lineplots") {
-              plotLineplotLocal(pl, title=title, legend=FALSE) 
+              plotLineplotLocal(pl, title=title, legend=FALSE, batchcolor=color) 
             } else {
               plotHeatmapLocal(pl, title=title, legend=FALSE) 
             } 
