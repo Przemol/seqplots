@@ -20,7 +20,7 @@ or GFF).}
 \item{refgenome}{The UCSC code of reference genome, e.g. 'hg19' for 
 Homo sapiens (see details)}
 
-\item{bin}{Binning window size in base pairs, defaults to 1L}
+\item{bin}{Binning window size in base pairs, defaults to 10L}
 
 \item{rm0}{Remove zeros from mean/error estimate calculation, 0 in track 
 file will be treated as missing data, defaults to FALSE}
