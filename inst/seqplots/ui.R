@@ -145,7 +145,7 @@ guideLinesAndDataScaling <- tabPanel(
     value = 'panel4', 
     title=tags$i(class="icon-tags icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Guide lines and data scaling"),# "Setup", 
     h5(tags$u('Guide lines and data scaling'), hlp("guide-lines-and-data-scaling")),
-    selectInput('scale_signal', 'Transform signal:', c( 'Do not transform', 'Log2 transform', 'Z-score transform (only for plot range)')),
+    selectInput('scale_signal', 'Transform signal:', c( 'Do not transform', 'Log2 transform'='Log2 transform', 'Z-score transform (only for plot range)'='Z-score transform')),
     checkboxInput("lnv", "Show vertical guide line", TRUE),
     div(class='row',  
         div(class='col-md-8',checkboxInput("lnh", "Show horizontal guide line", FALSE)),
