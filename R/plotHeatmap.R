@@ -313,14 +313,16 @@ setMethod(
         anno <- anno_list[[1]]
         if( !is.null(anno) ) {
 
-            meta <- elementMetadata(anno)
-            meta <- meta[!grepl('IRanges', sapply(meta, class))]
-            meta <- meta[sapply( meta, function(x) !all(is.na(x)))]
-     
-            if( length(colnames(meta)) ) {
-                colnames(meta) <- paste0('metadata_', colnames(meta))
+            if( ncol(elementMetadata(anno)) ) {
+                meta <- elementMetadata(anno)
+                meta <- meta[!grepl('IRanges', sapply(meta, class))]
+                meta <- meta[sapply( meta, function(x) !all(is.na(x)))]
+                
+                if( length(colnames(meta)) ) {
+                    colnames(meta) <- paste0('metadata_', colnames(meta))
+                }
+                elementMetadata(anno) <- meta
             }
-            elementMetadata(anno) <- meta
             
             out_meta <- as.data.frame(anno)
             colnames(out_meta)[1] <- 'chromosome'
