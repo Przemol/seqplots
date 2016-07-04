@@ -14,7 +14,8 @@
 #'   k-means (default, see \code{\link[stats]{kmeans}}), "hclust" (see 
 #'   \code{\link[stats]{hclust}}) for hierarchical clustering, "ssom" for 
 #'   (super) self organising map (see \code{\link[kohonen]{supersom}}) with 
-#'   torus topology and "none" of FALSE to turn off the clustering
+#'   torus topology, "bed_scores" to use scores stored in BED/GFF file as 
+#'   cluster indicates, and "none" of FALSE to turn off the clustering
 #' @param clusters The number of cluster for "kmeans" and "hclust", ignored for 
 #'   "ssom", defaults to 5L
 #' @param ssomt1 Determines , the dimensionality of SOM - number of neurons in 
@@ -260,9 +261,24 @@ setMethod(
             finalOrd <- finalOrd[cls_order]
             clusts <- table(classes)
             
+        } else if(clstmethod == 'bed_scores') {
+            
+            anno_list <- unique(lapply(plotset, '[[', 'anno'))
+            if(length(anno_list) > 1) warning('Multiple features used to generate the heatmaps, first will be used to generate features report')
+            anno <- anno_list[[1]]
+            if(!is.numeric(anno$score)) stop('Scores are missing or invalid, use different clustering method.')
+            
+            
+            cls_order <- order(anno$score)
+            classes <- anno$score
+            finalOrd <- finalOrd[cls_order]
+            clusts <- table(classes)
+            
         } else {
+            
             classes <- NA
             clusts <- NULL
+            
         }
         
         HLST <- lapply(HLST, function(x) { return(x[finalOrd, ]) } )

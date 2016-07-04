@@ -186,7 +186,18 @@ heatmapPanel <- tabPanel(
     selectInput("img_sort", "Sort heatmap rows by mean signal", c("decreasing", "increasing", 'do not sort'), 
                 selected = NULL, multiple = FALSE, selectize = TRUE, width = NULL),
     div(class='row',
-        div(class='col-md-6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'Hierarchical'='hclust', 'SuperSOM'='ssom', 'do not cluster'='none'))),
+        div(class='col-md-6', 
+            selectInput(
+                "img_clstmethod", 'Clustering algorithm', 
+                c(
+                    'K-means' = 'kmeans',
+                    'Hierarchical' = 'hclust',
+                    'SuperSOM' = 'ssom',
+                    'BED/GFF scores as clusters' = 'bed_scores',
+                    'do not cluster' = 'none'
+                )
+            )
+        ),
         div(class='col-md-6',   
             conditionalPanel( 
                 condition = "input.img_clstmethod != 'none' && input.img_clstmethod != 'ssom'", 
