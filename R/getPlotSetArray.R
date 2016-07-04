@@ -180,6 +180,9 @@ getPlotSetArray <- function(
     if( class(tracks) == "BigWigFile" ) tracks <- list(tracks)
     if( class(tracks) == "BigWigFileList" ) tracks <- as.list(tracks)
     
+    if( class(tracks) == "BamFile" ) tracks <- list(tracks)
+    if( class(tracks) == "BamFileList" ) tracks <- as.list(tracks)
+    
     if( class(features) == "GRanges" ) features <- list(features)
     if( class(features) == "GRangesList" ) features <- as.list(features)
     
@@ -246,7 +249,7 @@ getPlotSetArray <- function(
                 paste0('feature', '_', n)
             }
             
-            tr_name <- if(class(tracks[[i]]) == 'BigWigFile') 
+            tr_name <- if(class(tracks[[i]]) == 'BigWigFile' | class(tracks[[i]]) == 'BamFile') 
                 basename(path(tracks[[i]])) 
             else 
                 basename(tracks[[i]][[1]])
@@ -274,6 +277,9 @@ getPlotSetArray <- function(
             } else if ( class(tracks[[i]]) == 'BigWigFile' ) {
                 track <- tracks[[i]]
                 if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track)[1] }
+            } else if ( class(tracks[[i]]) == 'BamFile' ) {
+                bf <- tracks[[i]]
+                if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(bf)[1] }
             }
             
             if ( (type == 'pf') | (type == 'mf') | (type == 'ef') ) {
@@ -297,6 +303,44 @@ getPlotSetArray <- function(
                         GENOME, gr, pattern, seq_win, !add_heatmap, 
                         revcomp=revcomp,  nbins=length(all_ind)
                     )
+                } else if ( class(tracks[[i]]) == 'BamFile' ) {
+                    
+                    seqinfo(sel) <- seqinfo(bf)[seqlevels(sel)]
+                    
+                    what <- c("mapq")
+                    flag <- scanBamFlag(isUnmappedQuery = FALSE)
+                    w <- reduce(GenomicRanges::promoters(sel, xmin*1.2, xmax*1.2), ignore.strand = TRUE)
+                    #w <- reduce( c(flank(w, width = 0.5*(xmax-xmin), both = TRUE), w))
+                    
+                    param <- ScanBamParam(
+                        which=w, 
+                        flag = flag, simpleCigar = FALSE, what = what
+                    )
+                    ga <- readGAlignments(bf, param=param)
+                    
+                    #system.time(ga <- readGAlignments(
+                    #    BamViews('test.bam', bamRanges=reduce(gr, ignore.strand=TRUE))
+                    #)[[1]])
+                    
+                    grng <- trim(resize(GRanges(ga), 200L))
+                    covr <- coverage(grng)
+                    
+                    tmp <- tempfile()
+                    export.bw(covr, tmp)
+                    bwf <- BigWigFile(tmp)
+                    M <- extarct_matrix(
+                        bwf, gr, length(all_ind), ignore_strand)
+                    
+                    #M1 <- do.call(rbind, as.list(NumericList(covr[trim(gr)])))
+                    
+                    #ii <- seq(1, ncol(M1), by=as.numeric(bin) )
+                    #zero <- (which(all_ind==0)*bin)-bin/2
+                    
+                    #M <- do.call(cbind, Map(function(s, e) {
+                    #    rowMeans(M1 [,s:e])
+                    #}, ii, ii + (as.numeric(bin)-1)))
+                    #M <- cbind(M[,which(all_ind < 0)], M1[zero], M[,which(all_ind > 0)-1])
+                
                 }
                 
             } else if (type == 'af') {
