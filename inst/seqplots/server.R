@@ -175,14 +175,22 @@ shinyServer(function(input, output, clientData, session) {
 	    list(im=values$im, id=values$plotid)
 	})
   
-	output$pdfLink <- renderUI({
-	    #if( is.null(values$plotid) ) return()
-	    tags$a(
-	        tags$span(icon("file-pdf-o", "fa-lg"), 'PDF'), 
-	        class="btn btn-small btn-primary", href=values$im, 
-	        target='_new', style='margin-left: 5px'
-	   )
-	}) 
+	
+	output$pdfLink <- output$downloadPlot <- downloadHandler(
+	    filename = function() {
+	        paste('Plot_', gsub(' ', '_', Sys.time()), '.pdf', sep='')
+	    },
+	    content = function( file ) {			
+	        if(is.null(values$im)) {
+	            stop('Select feature/track pair(s) and press "Profile" or "Heatmap" button to activate the preview')
+	        } else {
+	            file.copy(file.path(Sys.getenv('root'), values$im), file)
+	        }
+	    },
+	    contentType = 'application/pdf'
+	)
+	
+
 	
 	#rendering data dependant plot controles
 	observe({
@@ -580,6 +588,10 @@ shinyServer(function(input, output, clientData, session) {
     session$sendCustomMessage("jsExec", "$('.load_div').fadeOut(1000);")
     session$sendCustomMessage("jsExec", "animateTitle();")
     if(Sys.getenv('tutorial', TRUE)) session$sendCustomMessage("jsExec", "startTutorial();")
+    session$sendCustomMessage("jsExec",
+        "if( navigator.userAgent.includes('Electron') ) { $('a.shiny-bound-output').prop('target', '_top'); }"
+    )
+    
     
     
     #Session elem:  "clientData","input","isClosed","onFlush","onFlushed","onSessionEnded","output","request","sendCustomMessage","sendInputMessage" 

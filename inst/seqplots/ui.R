@@ -76,7 +76,8 @@ plotPanel <- conditionalPanel(
           tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(icon("line-chart", "fa-lg"), 'Profile' )),
           tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-info', tags$span(icon("th", "fa-lg"), 'Heatmap' )), 
           actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"))), 
-          htmlOutput('pdfLink', inline=TRUE),
+          #htmlOutput('pdfLink', inline=TRUE),
+          downloadLink('pdfLink',  tags$span(icon("file-pdf-o", "fa-lg"), 'PDF'), class="btn btn-small btn-primary"),
           hlp("plotting", 3)
           
     ), 
