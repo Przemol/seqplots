@@ -589,7 +589,11 @@ shinyServer(function(input, output, clientData, session) {
     session$sendCustomMessage("jsExec", "animateTitle();")
     if(Sys.getenv('tutorial', TRUE)) session$sendCustomMessage("jsExec", "startTutorial();")
     session$sendCustomMessage("jsExec",
-        "if( navigator.userAgent.includes('Electron') ) { $('a.shiny-bound-output').prop('target', '_top'); }"
+        "if( navigator.userAgent.includes('Electron') ) { 
+            $('a.shiny-bound-output').prop('target', '_top');
+            const {ipcRenderer} = require('electron');
+            $('a.pull-right').on('click', function() { ipcRenderer.send('help', this.toString()); });
+        }"
     )
     
     
