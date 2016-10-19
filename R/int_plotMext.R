@@ -82,7 +82,7 @@ plotMext <- function(
         if(error.estimates && legend_ext) { 
             legend(
                 legend_ext_pos, 
-                c("Mean\n(solid line)","Standard error\n(dark area)", 
+                c("Mean\n(solid line)","Std error\n(dark area)", 
                     "95% CI\n(light area)"), pch=c(-1, 0, 0), lwd=c(3,15,15), 
                 lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), 
                 bg=rainbow(1, alpha=0), bty="n", cex=cex.legend, y.intersp=2, 
@@ -146,7 +146,7 @@ plotMext <- function(
         if(error.estimates && legend_ext) { 
             legend(
                 legend_ext_pos, 
-                c("Mean\n(solid line)", "Standard error\n(dark area)", 
+                c("Mean\n(solid line)", "Std error\n(dark area)", 
                     "95% CI\n(light area)"), pch=c(-1, 0, 0), lwd=c(3,15,15), 
                 lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), 
                 bg=rainbow(1, alpha=0), bty="n", cex=cex.legend, y.intersp=2, 
