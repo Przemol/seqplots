@@ -264,9 +264,14 @@ getPlotSetArray <- function(
             if( type == 'ef' ) sel <- resize(sel, 1, fix='end')
             
             if( class(tracks[[i]]) == 'character' ) {
-                track <- BigWigFile( normalizePath(tracks[[i]]) )
-                if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track)[1] }
-                
+                if(grepl('bam$', tracks[[i]])) {
+                    tracks[[i]] <- Rsamtools::BamFile( normalizePath(tracks[[i]]) )
+                    bf <- tracks[[i]]
+                    if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(bf)[1] }
+                } else {
+                    track <- BigWigFile( normalizePath(tracks[[i]]) )
+                    if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track)[1] }
+                }
             } else if ( class(tracks[[i]]) == 'list' ) {  
                 pattern <- tracks[[i]]$pattern
                 seq_win <- tracks[[i]]$window
@@ -322,7 +327,8 @@ getPlotSetArray <- function(
                     #    BamViews('test.bam', bamRanges=reduce(gr, ignore.strand=TRUE))
                     #)[[1]])
                     
-                    grng <- trim(resize(GRanges(ga), 200L))
+                    #grng <- trim(resize(GRanges(ga), 200L))
+                    grng <- GRanges(ga)
                     covr <- coverage(grng)
                     
                     tmp <- tempfile()
