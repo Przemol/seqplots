@@ -42,8 +42,8 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     stop('File already exists, change the name or remove old one.', call. = FALSE)
   
   #File does not have correct genome
-  gnm <- SeqinfoForBSGenome(file_genome); if( is.null(gnm) ) { 
-    stop('Unknown genome name/genome not installed! Use UCSC compatible or contact administrator.', call. = FALSE) 
+  gnm <- SeqinfoForBSGenome(grep(file_genome, installed.genomes(), value=TRUE)[[1]]); if( is.null(gnm) ) { 
+    stop('Unknown genome name/genome not installed!', call. = FALSE)
   }
   
   #session$sendCustomMessage("jsAlert", sprintf("adding file: %s", x))
@@ -64,6 +64,10 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     type <- 'track'; file_type <- 'BigWiggle';
     testChromosomeNames(seqinfo(BigWigFile(x)), gnm)
     
+  }  else if( grepl('.(bam)$', x, ignore.case = TRUE) ) {
+      type <- 'track'; file_type <- 'BAM';
+      testChromosomeNames(seqinfo(Rsamtools::BamFile(x)), gnm)
+      
   } else if( grepl('.(wig|wig.gz|bdg|bdg.gz|bedGraph|bedGraph.gz)$', x, ignore.case = TRUE) ){
     pth <- gsub('.(wig|wig.gz|bdg|bdg.gz|bedGraph|bedGraph.gz)$', '.bw', x, ignore.case = TRUE);
     try_result <- try({ 
@@ -90,10 +94,22 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   }
   
   file.rename( x, file.path(final_folder, basename(x)) )
+  if( grepl('.(bam)$', x, ignore.case = TRUE) ) {
+      Rsamtools::indexBam( file.path(final_folder, basename(x)) )
+  }
   
   sql_string <- paste0("INSERT INTO files (name, ctime, type, format, genome, user, comment) VALUES (", paste0("'",c(basename(x), as.character(Sys.time()), type, file_type, file_genome, file_user, file_comment), "'", collapse=", "),")") 
   dbBegin(con)
-  res <- dbSendQuery(con, sql_string )
+  outcome <- try( { res <- dbSendQuery(con, sql_string ) })
+  
+  if(class(outcome) == "try-error") {
+      message('1st commit failed, repeting the dbSendQuery')
+      outcome2 <- try( { res <- dbSendQuery(con, sql_string ) })
+      if(class(outcome2) == "try-error") {
+          dbRollback(con)
+          stop(outcome)
+      }
+  }
   
   if ( file.exists(file.path(final_folder, basename(x))) ) {
     dbCommit(con)
