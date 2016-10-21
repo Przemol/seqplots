@@ -591,7 +591,7 @@ shinyServer(function(input, output, clientData, session) {
     session$sendCustomMessage("jsExec",
         "if( navigator.userAgent.includes('Electron') ) { 
             $('a.shiny-bound-output').prop('target', '_top');
-            $('a[href=\"help/help.html\"]').prop('target', '_top');
+            $('a[href=\"help/help.html\"]').on('click', function() { require('electron').ipcRenderer.send('help', this.toString()); });
             $('a.pull-right').on('click', function() { require('electron').ipcRenderer.send('help', this.toString()); });
         }"
     )
