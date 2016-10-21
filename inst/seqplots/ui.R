@@ -75,10 +75,11 @@ plotPanel <- conditionalPanel(
 )
 
 # 1) New plot panel ############################################################
+# gff|bw|wig.gz|wig|bed|gff.gz|bed.gz|gtf|gtf.gz|bdg|bdg.gz|bedGraph|bedGraph.gz|bigWiggle|bigWig|BAM|bam
 newPlotPanel <-  tabPanel(
     value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plot set/Upload files") #, "New"
     ,h5('Upload files:', hlp("adding-and-managing-files"))
-    ,helpText( "Add signal tracks (bigWig, wig or bedGraph) and feature files (GFF and BED) to the file collection.") # TIP: You can add multiple files at once.
+    ,helpText( "Add signal tracks (BigWig, BAM, Wig or BedGraph) and feature files (BED, GFF or GTF) to the file collection (also supports gzipped Wig, BedGraph and feature files).") # TIP: You can add multiple files at once.
     ,HTML('<button type="button" data-toggle="modal" data-target="#fileUploadModal" class="btn btn-success"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</button>')
     ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", NULL, selectize = FALSE)) #This should stay for clonning, unless I can figure out something better using JS
     ,tags$hr()
