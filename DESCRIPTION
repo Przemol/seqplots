@@ -57,7 +57,9 @@ Imports:
     gridExtra,
     jsonlite,
     DT (>= 0.1.0),
-    RColorBrewer
+    RColorBrewer,
+    Rsamtools,
+    GenomicAlignments
 Type: Package
 Date: 2014-09-15
 LazyLoad: yes
