@@ -205,14 +205,17 @@ setMethod(
             ) 
             finalOrd <- finalOrd[sorting_order] 
             Hclc <- Hclc[sorting_order,]
+            noSort <- FALSE
         } else if(sortrows == 'increasing') { 
             sorting_order <- order(
                 rowMeans(Hclc, na.rm=TRUE), decreasing = FALSE
             ) 
             finalOrd <- finalOrd[sorting_order] 
             Hclc <- Hclc[sorting_order,]
+            noSort <- FALSE
         } else {
             sorting_order <- 1:nrow(Hclc)
+            noSort <- TRUE
         }
         
         #Clustering
@@ -325,8 +328,8 @@ setMethod(
         out <- data.frame(
             originalOrder=1:length(finalOrd), 
             ClusterID=classes[order(sorting_order)], 
-            SortingOrder=sorting_order, 
-            FinalOrder=finalOrd,
+            SortingOrder=if(noSort) NA else order(sorting_order), 
+            FinalOrder=order(finalOrd),
             RowMeans=RowMeans
         )
         
