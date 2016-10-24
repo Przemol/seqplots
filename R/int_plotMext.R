@@ -61,6 +61,13 @@ plotMext <- function(
             max(INPUT$means + INPUT$conint, na.rm=TRUE) }) )
     }
     
+    err_text <- ''
+    if( any(is.na(ylim)) | any(is.infinite(ylim)) ) {
+        ylim <- c(0,1)
+        xlim <- c(0,1)
+        err_text <- 'No data to plot'
+    }
+    
     if ( !is.null(colvec) ) {
         cols <- colvec
     } else {
@@ -100,6 +107,9 @@ plotMext <- function(
                     ylab=ylab, xlim=xlim, ylim=ylim, cex.axis=cex.axis, 
                     cex.lab=cex.lab, cex.main=cex.main, xaxt="n", ...
                 ) 
+                if(nchar(err_text)) {
+                    text(0.5, 0.5, err_text, cex = cex.main)
+                }
                 if( !any(c( 
                     length(list(...)[['xaxt']])>0, 
                     list(...)[['axes']]==FALSE )

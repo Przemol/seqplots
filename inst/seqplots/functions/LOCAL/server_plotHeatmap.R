@@ -96,6 +96,6 @@ plotHeatmapLocal <- function(pl, title=input$title, legend=TRUE, batchcolor=NULL
         ylim=ylim
     ) 
     
-    attr(out, "seed") <- seed
+    if(!is.null(out)) attr(out, "seed") <- seed
     return(out)
 }

@@ -195,21 +195,22 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
                 gcol(ncollevel)
             }
             
-            
-            imPlot2(
-                bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlab, ylab=ylab, 
-                xlim=if (is.null(xlim)) range(bins) else xlim,  
-                zlim=keycolor_lim, col=col, ylim=ylim,
-                legend.width=1, horizontal=TRUE, useRaster=raster, 
-                xinds=xinds, e=e, xaxt="n", yaxt="n",
-                cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs, 
-                ylast=nrow(data), afs=afs, 
-                axis.args=list(cex.axis=afs), ...
-            )
-            
-            
-            
-            
+            if( any(is.na(keycolor_lim)) | any(is.infinite(keycolor_lim)) ) {
+                plot.new()
+                text(0.5, 0.5, 'No\ndata\nto\nplot', cex=cex.main/6)
+            } else {
+                imPlot2(
+                    bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlab, ylab=ylab, 
+                    xlim=if (is.null(xlim)) range(bins) else xlim,  
+                    zlim=keycolor_lim, col=col, ylim=ylim,
+                    legend.width=1, horizontal=TRUE, useRaster=raster, 
+                    xinds=xinds, e=e, xaxt="n", yaxt="n",
+                    cex=1, cex.main=lfs, cex.lab=lfs, cex.axis=afs, 
+                    ylast=nrow(data), afs=afs, 
+                    axis.args=list(cex.axis=afs), ...
+                )
+                
+            }
         }
         title( main=titles[i], cex.main=lfs ); box()
         if (!is.null(axhline)){

@@ -178,6 +178,12 @@ setMethod(
         #Heatmap data aquizition (as list of matrixes)
         HLST <- lapply(plotset, '[[', 'heatmap')
         
+        if( all(sapply(HLST, function(x) all(is.na(x)))) ) {
+            plot.new()
+            text(0.5, 0.5, 'No data to plot', cex=cex.main/4)
+            return()
+        }
+        
         #Optional scalling
         if ( plotScale ==  "log2" ) {
             HLST <- lapply(HLST, log2 )
