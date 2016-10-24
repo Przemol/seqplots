@@ -218,15 +218,23 @@ getPlotSetArray <- function(
                 refgenome, paste0("SELECT genome FROM files WHERE name = '", 
                                   basename(j), "'")
             )
+            if(genome_ind == 'custom') genome_ind <- NA
         } else {
             genome_ind <- refgenome  
         }
-        pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))[[1]]
-        suppressPackageStartupMessages(
-            library(pkg, character.only = TRUE, quietly=TRUE)
-        )
-        GENOME <- get(pkg)
-        remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(genomeStyles())
+        
+        if(!is.na(genome_ind)) {
+            pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))[[1]]
+            suppressPackageStartupMessages(
+                library(pkg, character.only = TRUE, quietly=TRUE)
+            )
+            GENOME <- get(pkg)
+            remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(genomeStyles())
+        } else {
+            GENOME <- NA
+            remap_chr <- FALSE
+        }
+     
         
         #Get features to plot
         message(class(j))
@@ -297,7 +305,7 @@ getPlotSetArray <- function(
                         track, gr, length(all_ind), ignore_strand)
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
-                    
+                    if(is.na(GENOME)) stop('Motif plots are not possible for undefined genomes.')
                     if(verbose) lvl2m("Processing genome...")
                     seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)]
                     gr <- trim(gr)
@@ -367,6 +375,7 @@ getPlotSetArray <- function(
                     M <- cbind(M.left, M.middle, M.right)   
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
+                    if(is.na(GENOME)) stop('Motif plots are not possible for undefined genomes.')
                     #MOTIF - left 
                     if(verbose) lvl2m(paste0(
                         "MOTIF: Processing upsterem ", pattern, " motif..."

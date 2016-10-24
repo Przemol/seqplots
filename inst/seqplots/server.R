@@ -74,7 +74,7 @@ shinyServer(function(input, output, clientData, session) {
 	  })
   }
   observe({
-    updateSelectInput(session, "file_genome", choices = values$GENOMES)
+    updateSelectInput(session, "file_genome", choices = c(values$GENOMES, 'custom'))
     updateCheckboxGroupInput(session, 'inst_genomes', choices = unique(installed.genomes()))
   })
   

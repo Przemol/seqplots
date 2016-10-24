@@ -13,18 +13,24 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   }
   
   testChromosomeNames <-  function(tss, gnm, ret=FALSE) {
+    if(gnm=='custom') if(ret) return(tss) else return()
     if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
       try( seqlevelsStyle(tss) <- seqlevelsStyle(gnm) )
-      if( !all(seqlevels(tss) %in% seqlevels(gnm)) & ret ) {
-        seqlevels(tss) <- as.character(as.roman( gsub('^chr', '', gsub('.*(M|m).*', 'M', seqlevels(tss)), ignore.case = TRUE) ))
+      if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) {
+        try(seqlevels(tss) <- as.character(as.roman( gsub('^chr', '', gsub('.*(M|m).*', 'M', seqlevels(tss)), ignore.case = TRUE) )))
         try( seqlevelsStyle(tss) <- seqlevelsStyle(gnm) )
+        if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) {
+            seqlevels(tss)[grepl('M', seqlevels(tss))] <- 'chrM'
+            try( seqlevelsStyle(tss) <- seqlevelsStyle(gnm) )
+        }
       }
       if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) 
-        stop('Chromosome names provided in the file does not match ones defined in reference genome. \nINPUT: [', 
+        stop('Chromosome names provided in the file does not match ones defined in reference genome. Correct the names or use custom genome option - skip chromosome names consistency checks, no motif plots. \nINPUT: [', 
              paste(seqlevels(tss)[!seqlevels(tss) %in% seqlevels(gnm)], collapse=', '), "]\nGENOME: [", paste(head(seqlevels(gnm), 5), collapse=', '), ', ...]', call. = FALSE) 
     }
     if(ret) return(tss)
   }
+  
   testFeatureFile <-  function(PATH, gnm){
     fcon <- file(PATH); tss <- try( rtracklayer::import( fcon ), silent = FALSE ); close(fcon);
     if (class(tss) == "try-error") {
@@ -42,8 +48,11 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     stop('File already exists, change the name or remove old one.', call. = FALSE)
   
   #File does not have correct genome
-  gnm <- SeqinfoForBSGenome(grep(file_genome, installed.genomes(), value=TRUE)[[1]]); if( is.null(gnm) ) { 
-    stop('Unknown genome name/genome not installed!', call. = FALSE)
+  gnm <- SeqinfoForBSGenome(grep(file_genome, installed.genomes(), value=TRUE)[[1]]); if( is.null(gnm) ) {
+    if(file_genome == 'custom') 
+        gnm <- 'custom'
+    else
+        stop('Unknown genome name/genome not installed!', call. = FALSE)
   }
   
   #session$sendCustomMessage("jsAlert", sprintf("adding file: %s", x))
