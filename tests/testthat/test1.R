@@ -18,7 +18,7 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
     tmp <- file.path(tempdir(), 'SeqPlots')
     context("Testing getPlotSetArray")
     if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
-         psa <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
+        psa <- getPlotSetArray(bw1, c(bed1, bed2), 'ce10')
     } else {
         psa <- get(load(system.file(
             "extdata", "precalc_plotset.Rdata", package="seqplots"))[[1]])
@@ -86,6 +86,10 @@ test_that("Test getPlotSetArray function and plotting interfaces", {
     expect_is( getPlotSetArray(bw1, c(bed1, bed2), 'ce10', type = 'af'), "PlotSetArray" )
     expect_is( getPlotSetArray(bw1, c(bed1, bed2), 'ce10', stat = 'median'), "PlotSetArray" )
 
+    context("Extended functions tests for PlotSetPair")
+    expect_null(psa[[1]]$show())
+    expect_null(plot(psa[[1]]))
+    expect_is(plot(psa[[1]], what='h'), 'data.frame')
     
     
 })
@@ -129,6 +133,11 @@ test_that("Test motifs", {
     context("Testing heatmap cluster report")
     expect_true( all(is.na( psa[1,]$plot('h', clusters=0)$ClusterID )) )
     expect_true( all(is.na( plotHeatmap(psa[1,], clstmethod='none' )$ClusterID )) )
+    expect_true( all(is.na( psa[1,]$plot('h')$SortingOrder )) )
+    
+    context("Testing heatmap cluster report consistancy")
+    meta <- psa[1,]$plot('h')
+    expect_true(all( import.bed(bed1)$name == meta$metadata_name[order(meta$originalOrder)] ))
     
     context("Anchored features test")
     if(.Platform$OS.type == "windows" && .Machine$sizeof.pointer == 4) 
