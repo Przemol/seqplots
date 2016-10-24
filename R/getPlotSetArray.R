@@ -239,9 +239,14 @@ getPlotSetArray <- function(
         #Get features to plot
         message(class(j))
         if(class(j) == "character") {
-            file_con <- file( normalizePath(j) )
-            anno_out <- sel <- rtracklayer::import(file_con)
-            close(file_con)
+            tss <- try( 
+                anno_out <- sel <- rtracklayer::import(normalizePath(j))
+            , silent = FALSE );
+            if (class(sel) == "try-error") {
+                file_con <- file( normalizePath(j) )
+                anno_out <- sel <- rtracklayer::import(file_con)
+                close(file_con)
+            }
         } else if(class(j) == "GRanges") {
             anno_out <- sel <- j
         }

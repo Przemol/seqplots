@@ -13,7 +13,7 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   }
   
   testChromosomeNames <-  function(tss, gnm, ret=FALSE) {
-    if(gnm=='custom') if(ret) return(tss) else return()
+    if(class(gnm)=="character") if(gnm=='custom') if(ret) return(tss) else return()
     if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
       try( seqlevelsStyle(tss) <- seqlevelsStyle(gnm) )
       if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) {
@@ -32,7 +32,12 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   }
   
   testFeatureFile <-  function(PATH, gnm){
-    fcon <- file(PATH); tss <- try( rtracklayer::import( fcon ), silent = FALSE ); close(fcon);
+    tss <- try( rtracklayer::import( PATH ), silent = FALSE );
+    if (class(tss) == "try-error") {
+        fcon <- file(PATH); 
+        tss <- try( rtracklayer::import( fcon ), silent = FALSE ); 
+        close(fcon);
+    }
     if (class(tss) == "try-error") {
     try({   nfields <- count.fields(PATH, comment.char = '', skip = 1)
             problem <- which(nfields != median( head(nfields, 1000) ))+1
