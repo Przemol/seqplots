@@ -197,7 +197,7 @@ heatmapPlotWrapper <- function(MAT, axhline=NULL, titles=rep('', length(MAT)),
             
             if( any(is.na(keycolor_lim)) | any(is.infinite(keycolor_lim)) ) {
                 plot.new()
-                text(0.5, 0.5, 'No\ndata\nto\nplot', cex=cex.main/6)
+                text(0.5, 0.5, 'No\ndata\nto\nplot', cex=lfs*2)
             } else {
                 imPlot2(
                     bins, 1:nrow(data), t(data), axes=TRUE, xlab=xlab, ylab=ylab, 
