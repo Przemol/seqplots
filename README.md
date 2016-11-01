@@ -1,5 +1,5 @@
 ![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/ico_full_color.png)
-#### Interactive software for exploratory data analyses, pattern discovery and visualization in genomics.
+**<h4 align="center" style="font-size:20px">Interactive software for exploratory data analyses, pattern discovery and visualization in genomics</h4>**
 
 [![Build Status](https://travis-ci.org/Przemol/seqplots.svg?branch=master)](https://travis-ci.org/Przemol/seqplots)
 [![codecov.io](http://codecov.io/github/Przemol/seqplots/coverage.svg?branch=master)](http://codecov.io/github/Przemol/seqplots?branch=master)
