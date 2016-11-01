@@ -74,7 +74,7 @@ The App bundle is an easy way to use SeqPlots for macOS, Win and Linux. It conta
 - Ubuntu 16.04 (possibly other distributions, not tested)
 
 #### Download the current version here:
-***https://github.com/Przemol/seqplots_electron/releases/latest**
+**https://github.com/Przemol/seqplots_electron/releases/latest**
 
 
 References
