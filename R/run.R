@@ -67,8 +67,6 @@ run <- function(
         ))) warning('Folders not created!')
     }
     
-    #.libPaths(c( .libPaths(), file.path(root, 'genomes') ))
-    
     message('\nData loaction: ', root)
     message( shiny::runApp(Sys.getenv('web'), ...) )
     
