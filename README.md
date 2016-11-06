@@ -1,7 +1,7 @@
 Bioconductor: [![How long since the package was first in a released Bioconductor version (or is it in devel only)](http://bioconductor.org/shields/years-in-bioc/seqplots.svg)](http://bioconductor.org/packages/seqplots)
-Code archive: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.163638.svg)](https://doi.org/10.5281/zenodo.163638)
+Archive: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.163638.svg)](https://doi.org/10.5281/zenodo.163638)
 Linux/macOS: [![Build Status](https://travis-ci.org/Przemol/seqplots.svg?branch=master)](https://travis-ci.org/Przemol/seqplots)
-Windows: [![Build status](https://ci.appveyor.com/api/projects/status/6p3vxtw9w0n4pe8p?svg=true)](https://ci.appveyor.com/project/Przemol/seqplots)
+Win: [![Build status](https://ci.appveyor.com/api/projects/status/6p3vxtw9w0n4pe8p?svg=true)](https://ci.appveyor.com/project/Przemol/seqplots)
 Tests: [![codecov.io](http://codecov.io/github/Przemol/seqplots/coverage.svg?branch=master)](http://codecov.io/github/Przemol/seqplots?branch=master)
 
 ![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/ico_full_color.png)
