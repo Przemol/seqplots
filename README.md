@@ -1,7 +1,13 @@
-[![Build Status](https://travis-ci.org/Przemol/seqplots.svg?branch=master)](https://travis-ci.org/Przemol/seqplots)
-[![codecov.io](http://codecov.io/github/Przemol/seqplots/coverage.svg?branch=master)](http://codecov.io/github/Przemol/seqplots?branch=master)
+<sup>Bioconductor:</sup>
 [![How long since the package was first in a released Bioconductor version (or is it in devel only)](http://bioconductor.org/shields/years-in-bioc/seqplots.svg)](http://bioconductor.org/packages/seqplots)
+<sup>Archive:</sup> 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.163638.svg)](https://doi.org/10.5281/zenodo.163638)
+<sup>Linux/macOS:</sup>
+[![Build Status](https://travis-ci.org/Przemol/seqplots.svg?branch=master)](https://travis-ci.org/Przemol/seqplots)
+<sup>Win:</sup>
+[![Build status](https://ci.appveyor.com/api/projects/status/6p3vxtw9w0n4pe8p?svg=true)](https://ci.appveyor.com/project/Przemol/seqplots)
+<sup>Tests:</sup>
+[![codecov.io](http://codecov.io/github/Przemol/seqplots/coverage.svg?branch=master)](http://codecov.io/github/Przemol/seqplots?branch=master)
 
 ![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/ico_full_color.png)
 **<h4 align="center">Interactive software for exploratory data analyses, pattern discovery and visualization in genomics</h4>**

@@ -8,9 +8,9 @@ test_that("Test BSgenome package installation", {
         if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
             source("http://bioconductor.org/biocLite.R")
             biocLite("BSgenome.Celegans.UCSC.ce10")
+            expect_true("BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes())
         }
     }
-    expect_true("BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes())
 })
 
 test_that("Test getPlotSetArray function and plotting interfaces", {
