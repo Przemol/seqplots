@@ -100,7 +100,7 @@ mcCalcStart <- quote({
         }),
         quote({ 
             values$grfile <- res
-            session$sendCustomMessage("jsAlert", "Job done!")
+            #session$sendCustomMessage("jsAlert", "Job done!")
         })
     )
     
