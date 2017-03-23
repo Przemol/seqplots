@@ -525,7 +525,7 @@ shinyServer(function(input, output, clientData, session) {
         
         values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile;
           
-        tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
+        tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"), row.names=NULL)[,c(-1,-4)]
         if( nrow(tab) < 1 ) {return(p('No files found!'))} 
         
         rownames(tab) <- make.names(tab$name, unique = TRUE)
