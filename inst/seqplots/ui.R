@@ -17,11 +17,7 @@ head <- tags$head(
     singleton(tags$script('var error = false; window.onerror =  function() { if (!error) {alert("JavaScript error! Some elements might not work proprely. Please reload the page."); error=true;} }')),
     
     # CSS impprt						
-    # singleton(tags$link(rel="stylesheet", type="text/css", href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css")),
     singleton(tags$link(rel="stylesheet", type="text/css", href="css/style.css")),
-    #singleton(tags$link(rel="stylesheet", type="text/css", href="css/DT_bootstrap.css")),
-    #singleton(tags$link(rel="stylesheet", type="text/css", href="http://cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/2/dataTables.bootstrap.css")),
-    #singleton(tags$link(rel="stylesheet", type="text/css", href="css/TableTools.css")),	
     singleton(tags$link(rel="stylesheet", type="text/css", href="css/TableTools.css")),
     
     singleton(tags$link(rel="stylesheet", type="text/css", href="css/font-awesome.min.css")),
@@ -34,12 +30,6 @@ head <- tags$head(
     singleton(tags$script(src = "js/tmpl.min.js")),
     singleton(tags$script(src = "js/jquery.cookie.js")),
     singleton(tags$script(src = "color/jscolor.js")),
-    ## DataTable libraries
-    #singleton(tags$script(src = "js/DataTables/jquery.dataTables.js")),
-    #singleton(tags$script(src = "js/DataTables/DT_bootstrap.js")),
-    #singleton(tags$script(src = "js/DataTables/dataTables.tableTools.min.js")),
-    #singleton(tags$script(src = "js/DataTables/DT_filter.js")),
-    
     
     ## My scripts
     singleton(tags$script(src = "js/color.js")),
@@ -53,7 +43,7 @@ head <- tags$head(
     ,singleton(tags$script(src = "upload/js/jquery.fileupload-ui.js"))
     ,singleton(tags$script(src = "upload/js/jquery.fileupload-validate.js"))
     ,singleton(tags$script(src = "upload/js/md5.js"))
-    ,singleton(tags$script(src = "http://mozilla.github.io/pdf.js/build/pdf.js"))
+    ,singleton(tags$script(src = "js/pdf.js"))
     ,singleton(tags$script(src = "upload/js/main.js"))
     ,singleton(tags$script(src = "js/tutorial.js")),
     
@@ -76,7 +66,8 @@ plotPanel <- conditionalPanel(
           tags$button(id='replotL', onClick="$('#img_heatmap').prop('checked', false).change(); $('#replot').click();", class='btn btn-success', tags$span(icon("line-chart", "fa-lg"), 'Profile' )),
           tags$button(id='replotH', onClick="$('#img_heatmap').prop('checked', true ).change(); $('#replot').click();", class='btn btn-info', tags$span(icon("th", "fa-lg"), 'Heatmap' )), 
           actionButton('replot', tags$span(tags$i(class="icon-refresh icon-large"))), 
-          htmlOutput('pdfLink', inline=TRUE),
+          #htmlOutput('pdfLink', inline=TRUE),
+          downloadLink('pdfLink',  tags$span(icon("file-pdf-o", "fa-lg"), 'PDF'), class="btn btn-small btn-primary"),
           hlp("plotting", 3)
           
     ), 
@@ -84,10 +75,11 @@ plotPanel <- conditionalPanel(
 )
 
 # 1) New plot panel ############################################################
+# gff|bw|wig.gz|wig|bed|gff.gz|bed.gz|gtf|gtf.gz|bdg|bdg.gz|bedGraph|bedGraph.gz|bigWiggle|bigWig|BAM|bam
 newPlotPanel <-  tabPanel(
     value = 'panel1', title=tags$i(class="icon-rocket icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="New plot set/Upload files") #, "New"
     ,h5('Upload files:', hlp("adding-and-managing-files"))
-    ,helpText( "Add signal tracks (bigWig, wig or bedGraph) and feature files (GFF and BED) to the file collection.") # TIP: You can add multiple files at once.
+    ,helpText( "Add signal tracks (BigWig, BAM, Wig or BedGraph) and feature files (BED, GFF or GTF) to the file collection (also supports gzipped Wig, BedGraph and feature files).") # TIP: You can add multiple files at once.
     ,HTML('<button type="button" data-toggle="modal" data-target="#fileUploadModal" class="btn btn-success"><i class="icon-cloud-upload icon-large icon-white"></i> Add files</button>')
     ,conditionalPanel("false", selectInput("file_genome", "Genmoe:", NULL, selectize = FALSE)) #This should stay for clonning, unless I can figure out something better using JS
     ,tags$hr()
@@ -145,7 +137,7 @@ guideLinesAndDataScaling <- tabPanel(
     value = 'panel4', 
     title=tags$i(class="icon-tags icon-large icon-blcak", 'data-placement'="right", 'data-toggle'="tooltip", title="Guide lines and data scaling"),# "Setup", 
     h5(tags$u('Guide lines and data scaling'), hlp("guide-lines-and-data-scaling")),
-    selectInput('scale_signal', 'Transform signal:', c( 'Do not transform', 'Log2 transform')), #, 'Z-score transform')),
+    selectInput('scale_signal', 'Transform signal:', c( 'Do not transform', 'Log2 transform'='Log2 transform', 'Z-score transform (only for plot range)'='Z-score transform')),
     checkboxInput("lnv", "Show vertical guide line", TRUE),
     div(class='row',  
         div(class='col-md-8',checkboxInput("lnh", "Show horizontal guide line", FALSE)),
@@ -186,7 +178,18 @@ heatmapPanel <- tabPanel(
     selectInput("img_sort", "Sort heatmap rows by mean signal", c("decreasing", "increasing", 'do not sort'), 
                 selected = NULL, multiple = FALSE, selectize = TRUE, width = NULL),
     div(class='row',
-        div(class='col-md-6', selectInput("img_clstmethod", 'Clustering algorithm', c('K-means'='kmeans', 'Hierarchical'='hclust', 'SuperSOM'='ssom', 'do not cluster'='none'))),
+        div(class='col-md-6', 
+            selectInput(
+                "img_clstmethod", 'Clustering algorithm', 
+                c(
+                    'K-means' = 'kmeans',
+                    'Hierarchical' = 'hclust',
+                    'SuperSOM' = 'ssom',
+                    'BED/GFF scores as clusters' = 'bed_scores',
+                    'do not cluster' = 'none'
+                )
+            )
+        ),
         div(class='col-md-6',   
             conditionalPanel( 
                 condition = "input.img_clstmethod != 'none' && input.img_clstmethod != 'ssom'", 

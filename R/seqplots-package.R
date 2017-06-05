@@ -138,6 +138,7 @@
 #' @import DBI RSQLite parallel jsonlite
 #' @import methods digest methods
 #' @import ggplot2 reshape2 gridExtra DT RColorBrewer
+#' @import Rsamtools GenomicAlignments
 #' @importFrom fields image.plot set.panel imageplot.info imageplot.setup 
 #' tim.colors poly.image
 #' @importFrom grid textGrob gpar grid.draw

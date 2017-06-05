@@ -18,6 +18,6 @@ suppressPackageStartupMessages({
 if(Sys.getenv('root') == '' ) {
   source('server_config.R')
 }
-.libPaths(c( .libPaths(), file.path(Sys.getenv('root'), 'genomes') ))
+.libPaths(c( file.path(Sys.getenv('root'), 'genomes'), .libPaths() ))
 
 options(shiny.deprecation.messages=FALSE)

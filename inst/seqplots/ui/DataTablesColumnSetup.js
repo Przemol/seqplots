@@ -31,7 +31,11 @@
     "searchable": false,
     "width": "1%",
     "render": function ( data, type, row ) {
-      return '<a class="btn btn-xs no_select" href="files/' + row[0] + '" target="_blank">'+'<i class="icon-download-alt icon-large no_select"></i></a>'
+        if( navigator.userAgent.includes('Electron') ) { 
+            return '<a class="btn btn-xs no_select" href="files/' + row[0] + '" target="_top">'+'<i class="icon-download-alt icon-large no_select"></i></a>'
+        } else {
+           return '<a class="btn btn-xs no_select" href="files/' + row[0] + '" target="_blank">'+'<i class="icon-download-alt icon-large no_select"></i></a>' 
+        }
     }
   },
   { "title": '<i class="icon-trash icon-large""></i>',

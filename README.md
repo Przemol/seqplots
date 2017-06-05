@@ -1,11 +1,16 @@
-![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/ico_full_color.png)
-=================================================================================
-
-> An interactive tool for visualizing track signals and sequence motif densities along genomic features using average plots and heatmaps
-
-[![Build Status](https://travis-ci.org/Przemol/seqplots.svg?branch=master)](https://travis-ci.org/Przemol/seqplots)
-[![codecov.io](http://codecov.io/github/Przemol/seqplots/coverage.svg?branch=master)](http://codecov.io/github/Przemol/seqplots?branch=master)
+<sup>Bioconductor:</sup>
 [![How long since the package was first in a released Bioconductor version (or is it in devel only)](http://bioconductor.org/shields/years-in-bioc/seqplots.svg)](http://bioconductor.org/packages/seqplots)
+<sup>Archive:</sup> 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.163638.svg)](https://doi.org/10.5281/zenodo.163638)
+<sup>Linux/macOS:</sup>
+[![Build Status](https://travis-ci.org/Przemol/seqplots.svg?branch=master)](https://travis-ci.org/Przemol/seqplots)
+<sup>Win:</sup>
+[![Build status](https://ci.appveyor.com/api/projects/status/6p3vxtw9w0n4pe8p?svg=true)](https://ci.appveyor.com/project/Przemol/seqplots)
+<sup>Tests:</sup>
+[![codecov.io](http://codecov.io/github/Przemol/seqplots/coverage.svg?branch=master)](http://codecov.io/github/Przemol/seqplots?branch=master)
+
+![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/ico_full_color.png)
+**<h4 align="center">Interactive software for exploratory data analyses, pattern discovery and visualization in genomics</h4>**
 
 ![Examples of Seq Plots interface and outputs](https://github.com/Przemol/seqplots/wiki/img/SeqPlots_fig1_web.png)
 
@@ -30,19 +35,7 @@ Demo limits:
 Introduction
 ------------
 
-The SeqPlots is universal, web browser based tool for plotting
-average track signal (e.g. reads coverage) and sequence motif density over
-user specified genomic features. The data are visualized on linear plot,
-with error estimates as fields, or as series of heatmaps that can be sorted
-and clustered. The dual-purpose implementation allows running the software
-locally on desktop or deploying it on server. The unique features of our
-software are collaboration and data sharing capabilities, as well as
-ability to store pre-calculated result matrixes, that combine many
-sequencing experiments and in-silico generated tracks with multiple
-different features. These binaries can be further used to generate new
-combination plots on fly, run automated batch operations or share with
-colleagues, who can adjust their plotting parameters without loading actual
-tracks and recalculating numeric values.
+SeqPlots is a user-friendly exploratory data analysis (EDA) and visualization software for genomics. After choosing groups of signal and feature files and defining plotting parameters, users can generate profile plots of average signal or heat maps clustered using different algorithms in a matter of seconds through the graphical user interface (GUI) controls. SeqPlots accepts all major genomic file formats as input and can also generate and plot user defined motif densities. Profile plots and heatmaps are highly configurable and batch operations can be used to generate a large number of plots at once. SeqPlots is available as a GUI application for Mac or Windows and Linux, or as an R/Bioconductor package.  It can also be deployed on a server for remote and collaborative usage. The analysis features and ease of use of SeqPlots encourages wide data exploration, which should aid the discovery of novel genomic associations.
 
 Installation
 ------------
@@ -76,20 +69,19 @@ To start with R scripting mode:
 ?getPlotSetArry
 ```
 
-Mac OS X bundle app
--------------------
-Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains R binaries pre-installed Bioconductor dependencies. Additionally, the reference genome for *Caenorhabditis elegans* is included. The sequences for other popular model organisms can be downloaded using graphical user interface.
+App for Mac, Win and Linux
+--------------------------
+The App bundle is an easy way to use SeqPlots for macOS, Win and Linux. It contains all R binaries and packages that SeqPlots depends on. Additionally, test tracks and genome annotations, and reference sequences for *Drosophila melanogaster* and *Caenorhabditis elegans* are included. Sequences for other organisms can be downloaded using a graphical user interface - follow the instructions here: http://przemol.github.io/seqplots/#genomes-managment
 
-**Download the current version here:
-https://github.com/Przemol/seqplots_osx/releases/latest**
+#### System requirements:
 
-The bundle requires OS X 10.6 (Snow Leopard) and above with X11 installed. X11 was included with OS X up to version 10.7 (Lion). OS X 10.8 (Mountain Lion) and above require installation of Xquartz package, see more here: http://support.apple.com/en-us/HT201341
+- Mac OS X 10.9 (Mavericks) or higher
+- Windows 7 or higher (64bit)
+- Ubuntu 16.04 (possibly other distributions, not tested)
 
-Docker image
-------------
-SeqPlots is available as Docker image, which can be easily run on Mac OS, Windows and Linux systems. The image can be obtained from Docker Hub: https://hub.docker.com/r/przemol/seqplots/
+#### Download the current version here:
+**https://github.com/Przemol/seqplots_electron/releases/latest**
 
-Refer to https://www.docker.com/ for instructions how to install Docker and run the image.
 
 References
 ----------
