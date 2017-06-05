@@ -397,7 +397,7 @@ hints = [{
                     
                     hint=hint; item=item;
                     
-                    item.popover({title: hint.head, content: hint.body, animation: true, placement: hint.p, container: 'body'}).popover('show');
+                    item.popover({title: hint.head, content: hint.body + " | Press [ESC] to stop the tutorial.", animation: true, placement: hint.p, container: 'body'}).popover('show');
                     tutorial.step = tutorial.step + 1;
                     
                     

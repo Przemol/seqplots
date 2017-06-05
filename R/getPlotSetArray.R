@@ -180,6 +180,9 @@ getPlotSetArray <- function(
     if( class(tracks) == "BigWigFile" ) tracks <- list(tracks)
     if( class(tracks) == "BigWigFileList" ) tracks <- as.list(tracks)
     
+    if( class(tracks) == "BamFile" ) tracks <- list(tracks)
+    if( class(tracks) == "BamFileList" ) tracks <- as.list(tracks)
+    
     if( class(features) == "GRanges" ) features <- list(features)
     if( class(features) == "GRangesList" ) features <- as.list(features)
     
@@ -215,22 +218,35 @@ getPlotSetArray <- function(
                 refgenome, paste0("SELECT genome FROM files WHERE name = '", 
                                   basename(j), "'")
             )
+            if(genome_ind == 'custom') genome_ind <- NA
         } else {
             genome_ind <- refgenome  
         }
-        pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))[[1]]
-        suppressPackageStartupMessages(
-            library(pkg, character.only = TRUE, quietly=TRUE)
-        )
-        GENOME <- get(pkg)
-        remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(genomeStyles())
+        
+        if(!is.na(genome_ind)) {
+            pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))[[1]]
+            suppressPackageStartupMessages(
+                library(pkg, character.only = TRUE, quietly=TRUE)
+            )
+            GENOME <- get(pkg)
+            remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(genomeStyles())
+        } else {
+            GENOME <- NA
+            remap_chr <- FALSE
+        }
+     
         
         #Get features to plot
         message(class(j))
         if(class(j) == "character") {
-            file_con <- file( normalizePath(j) )
-            anno_out <- sel <- rtracklayer::import(file_con)
-            close(file_con)
+            tss <- try( 
+                anno_out <- sel <- rtracklayer::import(normalizePath(j))
+            , silent = FALSE );
+            if (class(sel) == "try-error") {
+                file_con <- file( normalizePath(j) )
+                anno_out <- sel <- rtracklayer::import(file_con)
+                close(file_con)
+            }
         } else if(class(j) == "GRanges") {
             anno_out <- sel <- j
         }
@@ -246,7 +262,7 @@ getPlotSetArray <- function(
                 paste0('feature', '_', n)
             }
             
-            tr_name <- if(class(tracks[[i]]) == 'BigWigFile') 
+            tr_name <- if(class(tracks[[i]]) == 'BigWigFile' | class(tracks[[i]]) == 'BamFile') 
                 basename(path(tracks[[i]])) 
             else 
                 basename(tracks[[i]][[1]])
@@ -261,9 +277,14 @@ getPlotSetArray <- function(
             if( type == 'ef' ) sel <- resize(sel, 1, fix='end')
             
             if( class(tracks[[i]]) == 'character' ) {
-                track <- BigWigFile( normalizePath(tracks[[i]]) )
-                if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track)[1] }
-                
+                if(grepl('bam$', tracks[[i]])) {
+                    tracks[[i]] <- Rsamtools::BamFile( normalizePath(tracks[[i]]) )
+                    bf <- tracks[[i]]
+                    if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(bf)[1] }
+                } else {
+                    track <- BigWigFile( normalizePath(tracks[[i]]) )
+                    if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track)[1] }
+                }
             } else if ( class(tracks[[i]]) == 'list' ) {  
                 pattern <- tracks[[i]]$pattern
                 seq_win <- tracks[[i]]$window
@@ -274,6 +295,9 @@ getPlotSetArray <- function(
             } else if ( class(tracks[[i]]) == 'BigWigFile' ) {
                 track <- tracks[[i]]
                 if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(track)[1] }
+            } else if ( class(tracks[[i]]) == 'BamFile' ) {
+                bf <- tracks[[i]]
+                if(remap_chr) { seqlevelsStyle(sel) <- seqlevelsStyle(bf)[1] }
             }
             
             if ( (type == 'pf') | (type == 'mf') | (type == 'ef') ) {
@@ -286,7 +310,7 @@ getPlotSetArray <- function(
                         track, gr, length(all_ind), ignore_strand)
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
-                    
+                    if(is.na(GENOME)) stop('Motif plots are not possible for undefined genomes.')
                     if(verbose) lvl2m("Processing genome...")
                     seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)]
                     gr <- trim(gr)
@@ -297,6 +321,45 @@ getPlotSetArray <- function(
                         GENOME, gr, pattern, seq_win, !add_heatmap, 
                         revcomp=revcomp,  nbins=length(all_ind)
                     )
+                } else if ( class(tracks[[i]]) == 'BamFile' ) {
+                    
+                    seqinfo(sel) <- seqinfo(bf)[seqlevels(sel)]
+                    
+                    what <- c("mapq")
+                    flag <- scanBamFlag(isUnmappedQuery = FALSE)
+                    w <- reduce(GenomicRanges::promoters(sel, xmin*1.2, xmax*1.2), ignore.strand = TRUE)
+                    #w <- reduce( c(flank(w, width = 0.5*(xmax-xmin), both = TRUE), w))
+                    
+                    param <- ScanBamParam(
+                        which=w, 
+                        flag = flag, simpleCigar = FALSE, what = what
+                    )
+                    ga <- readGAlignments(bf, param=param)
+                    
+                    #system.time(ga <- readGAlignments(
+                    #    BamViews('test.bam', bamRanges=reduce(gr, ignore.strand=TRUE))
+                    #)[[1]])
+                    
+                    #grng <- trim(resize(GRanges(ga), 200L))
+                    grng <- GRanges(ga)
+                    covr <- coverage(grng)
+                    
+                    tmp <- tempfile()
+                    export.bw(covr, tmp)
+                    bwf <- BigWigFile(tmp)
+                    M <- extarct_matrix(
+                        bwf, gr, length(all_ind), ignore_strand)
+                    
+                    #M1 <- do.call(rbind, as.list(NumericList(covr[trim(gr)])))
+                    
+                    #ii <- seq(1, ncol(M1), by=as.numeric(bin) )
+                    #zero <- (which(all_ind==0)*bin)-bin/2
+                    
+                    #M <- do.call(cbind, Map(function(s, e) {
+                    #    rowMeans(M1 [,s:e])
+                    #}, ii, ii + (as.numeric(bin)-1)))
+                    #M <- cbind(M[,which(all_ind < 0)], M1[zero], M[,which(all_ind > 0)-1])
+                
                 }
                 
             } else if (type == 'af') {
@@ -317,6 +380,7 @@ getPlotSetArray <- function(
                     M <- cbind(M.left, M.middle, M.right)   
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
+                    if(is.na(GENOME)) stop('Motif plots are not possible for undefined genomes.')
                     #MOTIF - left 
                     if(verbose) lvl2m(paste0(
                         "MOTIF: Processing upsterem ", pattern, " motif..."

@@ -74,7 +74,7 @@ shinyServer(function(input, output, clientData, session) {
 	  })
   }
   observe({
-    updateSelectInput(session, "file_genome", choices = values$GENOMES)
+    updateSelectInput(session, "file_genome", choices = c(values$GENOMES, 'custom'))
     updateCheckboxGroupInput(session, 'inst_genomes', choices = unique(installed.genomes()))
   })
   
@@ -175,14 +175,22 @@ shinyServer(function(input, output, clientData, session) {
 	    list(im=values$im, id=values$plotid)
 	})
   
-	output$pdfLink <- renderUI({
-	    #if( is.null(values$plotid) ) return()
-	    tags$a(
-	        tags$span(icon("file-pdf-o", "fa-lg"), 'PDF'), 
-	        class="btn btn-small btn-primary", href=values$im, 
-	        target='_new', style='margin-left: 5px'
-	   )
-	}) 
+	
+	output$pdfLink <- output$downloadPlot <- downloadHandler(
+	    filename = function() {
+	        paste('Plot_', gsub(' ', '_', Sys.time()), '.pdf', sep='')
+	    },
+	    content = function( file ) {			
+	        if(is.null(values$im)) {
+	            stop('Select feature/track pair(s) and press "Profile" or "Heatmap" button to activate the preview')
+	        } else {
+	            file.copy(file.path(Sys.getenv('root'), values$im), file)
+	        }
+	    },
+	    contentType = 'application/pdf'
+	)
+	
+
 	
 	#rendering data dependant plot controles
 	observe({
@@ -293,11 +301,12 @@ shinyServer(function(input, output, clientData, session) {
           for(m in 1:nc) {
             pl <- list(values$grfile[[n]][[m]])
             title <- input[[paste0('label_',m,'x',n)]]
+            color <- input[[paste0('color_',m,'x',n)]]
             if(!nchar(title)) title <- pl[[1]]$desc
             if (input$batch_what == "lineplots") {
-              plotLineplotLocal(pl, title=title, legend=FALSE) 
+              plotLineplotLocal(pl, title=title, legend=FALSE, batchcolor=color) 
             } else {
-              plotHeatmapLocal(pl, title=title, legend=FALSE) 
+              plotHeatmapLocal(pl, title=title, legend=FALSE, batchcolor=color) 
             } 
           }  
         }
@@ -516,7 +525,7 @@ shinyServer(function(input, output, clientData, session) {
         
         values$refFileGrids; input$reloadgrid; input$files; input$TR_delfile; input$upload; input$TR_addFile;
           
-        tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"))[,c(-1,-4)]
+        tab <- dbGetQuery(con, paste0("SELECT * FROM files WHERE type='", type, "' AND name LIKE('%",input$filter_all,"%')"), row.names=NULL)[,c(-1,-4)]
         if( nrow(tab) < 1 ) {return(p('No files found!'))} 
         
         rownames(tab) <- make.names(tab$name, unique = TRUE)
@@ -579,6 +588,14 @@ shinyServer(function(input, output, clientData, session) {
     session$sendCustomMessage("jsExec", "$('.load_div').fadeOut(1000);")
     session$sendCustomMessage("jsExec", "animateTitle();")
     if(Sys.getenv('tutorial', TRUE)) session$sendCustomMessage("jsExec", "startTutorial();")
+    session$sendCustomMessage("jsExec",
+        "if( navigator.userAgent.includes('Electron') ) { 
+            $('a.shiny-bound-output').prop('target', '_top');
+            $('a[href=\"help/help.html\"]').on('click', function() { require('electron').ipcRenderer.send('help', this.toString()); });
+            $('a.pull-right').on('click', function() { require('electron').ipcRenderer.send('help', this.toString()); });
+        }"
+    )
+    
     
     
     #Session elem:  "clientData","input","isClosed","onFlush","onFlushed","onSessionEnded","output","request","sendCustomMessage","sendInputMessage" 

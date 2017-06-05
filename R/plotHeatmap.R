@@ -14,7 +14,8 @@
 #'   k-means (default, see \code{\link[stats]{kmeans}}), "hclust" (see 
 #'   \code{\link[stats]{hclust}}) for hierarchical clustering, "ssom" for 
 #'   (super) self organising map (see \code{\link[kohonen]{supersom}}) with 
-#'   torus topology and "none" of FALSE to turn off the clustering
+#'   torus topology, "bed_scores" to use scores stored in BED/GFF file as 
+#'   cluster indicates, and "none" of FALSE to turn off the clustering
 #' @param clusters The number of cluster for "kmeans" and "hclust", ignored for 
 #'   "ssom", defaults to 5L
 #' @param ssomt1 Determines , the dimensionality of SOM - number of neurons in 
@@ -177,6 +178,12 @@ setMethod(
         #Heatmap data aquizition (as list of matrixes)
         HLST <- lapply(plotset, '[[', 'heatmap')
         
+        if( all(sapply(HLST, function(x) all(is.na(x)))) ) {
+            plot.new()
+            text(0.5, 0.5, 'No data to plot', cex=cex.main/4)
+            return()
+        }
+        
         #Optional scalling
         if ( plotScale ==  "log2" ) {
             HLST <- lapply(HLST, log2 )
@@ -198,14 +205,17 @@ setMethod(
             ) 
             finalOrd <- finalOrd[sorting_order] 
             Hclc <- Hclc[sorting_order,]
+            noSort <- FALSE
         } else if(sortrows == 'increasing') { 
             sorting_order <- order(
                 rowMeans(Hclc, na.rm=TRUE), decreasing = FALSE
             ) 
             finalOrd <- finalOrd[sorting_order] 
             Hclc <- Hclc[sorting_order,]
+            noSort <- FALSE
         } else {
             sorting_order <- 1:nrow(Hclc)
+            noSort <- TRUE
         }
         
         #Clustering
@@ -252,7 +262,7 @@ setMethod(
             ssom <- supersom(
                 Hlist, grid = class::somgrid(
                     xdim = ssomt1, ydim = ssomt2, "hexagonal"), 
-                rlen = 100, toroidal=TRUE)
+                rlen = 100)
             
             classes <- ssom$unit.classif
             cls_order <- order(ssom$unit.classif)
@@ -260,9 +270,24 @@ setMethod(
             finalOrd <- finalOrd[cls_order]
             clusts <- table(classes)
             
+        } else if(clstmethod == 'bed_scores') {
+            
+            anno_list <- unique(lapply(plotset, '[[', 'anno'))
+            if(length(anno_list) > 1) warning('Multiple features used to generate the heatmaps, first will be used to generate features report')
+            anno <- anno_list[[1]]
+            if(!is.numeric(anno$score)) stop('Scores are missing or invalid, use different clustering method.')
+            
+            
+            cls_order <- order(anno$score)
+            classes <- anno$score
+            finalOrd <- finalOrd[cls_order]
+            clusts <- table(classes)
+            
         } else {
+            
             classes <- NA
             clusts <- NULL
+            
         }
         
         HLST <- lapply(HLST, function(x) { return(x[finalOrd, ]) } )
@@ -303,8 +328,8 @@ setMethod(
         out <- data.frame(
             originalOrder=1:length(finalOrd), 
             ClusterID=classes[order(sorting_order)], 
-            SortingOrder=sorting_order, 
-            FinalOrder=finalOrd,
+            SortingOrder=if(noSort) NA else order(sorting_order), 
+            FinalOrder=order(finalOrd),
             RowMeans=RowMeans
         )
         
@@ -313,14 +338,16 @@ setMethod(
         anno <- anno_list[[1]]
         if( !is.null(anno) ) {
 
-            meta <- elementMetadata(anno)
-            meta <- meta[!grepl('IRanges', sapply(meta, class))]
-            meta <- meta[sapply( meta, function(x) !all(is.na(x)))]
-     
-            if( length(colnames(meta)) ) {
-                colnames(meta) <- paste0('metadata_', colnames(meta))
+            if( ncol(elementMetadata(anno)) ) {
+                meta <- elementMetadata(anno)
+                meta <- meta[!grepl('IRanges', sapply(meta, class))]
+                meta <- meta[sapply( meta, function(x) !all(is.na(x)))]
+                
+                if( length(colnames(meta)) ) {
+                    colnames(meta) <- paste0('metadata_', colnames(meta))
+                }
+                elementMetadata(anno) <- meta
             }
-            elementMetadata(anno) <- meta
             
             out_meta <- as.data.frame(anno)
             colnames(out_meta)[1] <- 'chromosome'

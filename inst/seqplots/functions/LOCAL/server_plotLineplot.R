@@ -1,5 +1,5 @@
 #Lineplot plotting function
-plotLineplotLocal <- function(pl, title=input$title, type='dev', legend=TRUE) {
+plotLineplotLocal <- function(pl, title=input$title, type='dev', legend=TRUE, batchcolor=NULL) {
     
     ord <- if( length(subplotSetup$prior) & ('prior' %in% input$subplot_options) ) order(subplotSetup$prior, decreasing=TRUE) else 1:length(pl)
     pl <- pl[ ord ]
@@ -40,7 +40,7 @@ plotLineplotLocal <- function(pl, title=input$title, type='dev', legend=TRUE) {
         cex.legend = input$legend_font_size, 
         ln.v = input$lnv,
         ln.h = if(input$lnh) input$lnh_pos else NULL, 
-        colvec = if("color" %in% input$subplot_options) subplotSetup$color[ord] else NULL, 
+        colvec = if("color" %in% input$subplot_options) { if(!is.null(batchcolor)) batchcolor else subplotSetup$color[ord] } else NULL, 
         pointsize = 12
     ) 
   

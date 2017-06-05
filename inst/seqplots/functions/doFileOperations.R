@@ -13,20 +13,31 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   }
   
   testChromosomeNames <-  function(tss, gnm, ret=FALSE) {
+    if(class(gnm)=="character") if(gnm=='custom') if(ret) return(tss) else return()
     if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) { 
       try( seqlevelsStyle(tss) <- seqlevelsStyle(gnm) )
-      if( !all(seqlevels(tss) %in% seqlevels(gnm)) & ret ) {
-        seqlevels(tss) <- as.character(as.roman( gsub('^chr', '', gsub('.*(M|m).*', 'M', seqlevels(tss)), ignore.case = TRUE) ))
+      if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) {
+        try(seqlevels(tss) <- as.character(as.roman( gsub('^chr', '', gsub('.*(M|m).*', 'M', seqlevels(tss)), ignore.case = TRUE) )))
         try( seqlevelsStyle(tss) <- seqlevelsStyle(gnm) )
+        if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) {
+            seqlevels(tss)[grepl('M', seqlevels(tss))] <- 'chrM'
+            try( seqlevelsStyle(tss) <- seqlevelsStyle(gnm) )
+        }
       }
       if( !all(seqlevels(tss) %in% seqlevels(gnm)) ) 
-        stop('Chromosome names provided in the file does not match ones defined in reference genome. \nINPUT: [', 
+        stop('Chromosome names provided in the file does not match ones defined in reference genome. Correct the names or use custom genome option - skip chromosome names consistency checks, no motif plots. \nINPUT: [', 
              paste(seqlevels(tss)[!seqlevels(tss) %in% seqlevels(gnm)], collapse=', '), "]\nGENOME: [", paste(head(seqlevels(gnm), 5), collapse=', '), ', ...]', call. = FALSE) 
     }
     if(ret) return(tss)
   }
+  
   testFeatureFile <-  function(PATH, gnm){
-    fcon <- file(PATH); tss <- try( rtracklayer::import( fcon ), silent = FALSE ); close(fcon);
+    tss <- try( rtracklayer::import( PATH ), silent = FALSE );
+    if (class(tss) == "try-error") {
+        fcon <- file(PATH); 
+        tss <- try( rtracklayer::import( fcon ), silent = FALSE ); 
+        close(fcon);
+    }
     if (class(tss) == "try-error") {
     try({   nfields <- count.fields(PATH, comment.char = '', skip = 1)
             problem <- which(nfields != median( head(nfields, 1000) ))+1
@@ -42,8 +53,11 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     stop('File already exists, change the name or remove old one.', call. = FALSE)
   
   #File does not have correct genome
-  gnm <- SeqinfoForBSGenome(file_genome); if( is.null(gnm) ) { 
-    stop('Unknown genome name/genome not installed! Use UCSC compatible or contact administrator.', call. = FALSE) 
+  gnm <- SeqinfoForBSGenome(grep(file_genome, installed.genomes(), value=TRUE)[[1]]); if( is.null(gnm) ) {
+    if(file_genome == 'custom') 
+        gnm <- 'custom'
+    else
+        stop('Unknown genome name/genome not installed!', call. = FALSE)
   }
   
   #session$sendCustomMessage("jsAlert", sprintf("adding file: %s", x))
@@ -64,6 +78,10 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     type <- 'track'; file_type <- 'BigWiggle';
     testChromosomeNames(seqinfo(BigWigFile(x)), gnm)
     
+  }  else if( grepl('.(bam)$', x, ignore.case = TRUE) ) {
+      type <- 'track'; file_type <- 'BAM';
+      testChromosomeNames(seqinfo(Rsamtools::BamFile(x)), gnm)
+      
   } else if( grepl('.(wig|wig.gz|bdg|bdg.gz|bedGraph|bedGraph.gz)$', x, ignore.case = TRUE) ){
     pth <- gsub('.(wig|wig.gz|bdg|bdg.gz|bedGraph|bedGraph.gz)$', '.bw', x, ignore.case = TRUE);
     try_result <- try({ 
@@ -90,10 +108,22 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   }
   
   file.rename( x, file.path(final_folder, basename(x)) )
+  if( grepl('.(bam)$', x, ignore.case = TRUE) ) {
+      Rsamtools::indexBam( file.path(final_folder, basename(x)) )
+  }
   
   sql_string <- paste0("INSERT INTO files (name, ctime, type, format, genome, user, comment) VALUES (", paste0("'",c(basename(x), as.character(Sys.time()), type, file_type, file_genome, file_user, file_comment), "'", collapse=", "),")") 
   dbBegin(con)
-  res <- dbSendQuery(con, sql_string )
+  outcome <- try( { res <- dbSendQuery(con, sql_string ) })
+  
+  if(class(outcome) == "try-error") {
+      message('1st commit failed, repeting the dbSendQuery')
+      outcome2 <- try( { res <- dbSendQuery(con, sql_string ) })
+      if(class(outcome2) == "try-error") {
+          dbRollback(con)
+          stop(outcome)
+      }
+  }
   
   if ( file.exists(file.path(final_folder, basename(x))) ) {
     dbCommit(con)

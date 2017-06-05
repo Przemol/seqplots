@@ -2,11 +2,26 @@ language: r
 sudo: false
 cache: packages
 
+r: 
+  - bioc-devel
+  - bioc-release
+
+os:
+  - linux
+  - osx
+  
+matrix:
+  exclude:
+  - os: osx
+    r: bioc-devel
+
+r_packages:
+  - covr
+
 bioc_required: true
 bioc_packages:
   - BiocCheck
-r_github_packages:
-  - jimhester/covr
+
 
 after_script:
   - ls -lah
