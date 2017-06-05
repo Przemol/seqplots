@@ -120,7 +120,7 @@ $(function() {
   //});
 
   function closeEditorWarning() { 
-    if ( (Shiny.shinyapp.$socket.readyState == 1) && !($.cookie('warn')=='false') ) {
+    if ( (Shiny.shinyapp.$socket.readyState == 1) && !($.cookie('warn')=='false') && !navigator.userAgent.includes('Electron')) {
       return "If you leave unsaved changes will be lost."  
     }
   } 

@@ -87,7 +87,8 @@ is synonymous to "increasing".}
 k-means (default, see \code{\link[stats]{kmeans}}), "hclust" (see 
 \code{\link[stats]{hclust}}) for hierarchical clustering, "ssom" for 
 (super) self organising map (see \code{\link[kohonen]{supersom}}) with 
-torus topology and "none" of FALSE to turn off the clustering}
+torus topology, "bed_scores" to use scores stored in BED/GFF file as 
+cluster indicates, and "none" of FALSE to turn off the clustering}
 
 \item{include}{The logical vector indicating if given subplot should 
 influence clustering and sorting, if given element is FALSE the sub-heatmap

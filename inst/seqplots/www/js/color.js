@@ -36,7 +36,7 @@ binding.find = function(scope) {
 var renderPDF = function(el, fw, url) {
     
     if(!url) url=Shiny.shinyapp.$values.thecanvas.im;
-	PDFJS.workerSrc = "http://mozilla.github.io/pdf.js/build/pdf.worker.js";
+	PDFJS.workerSrc = "js/pdf.worker.js";
 	
 	PDFJS.getDocument(url).then(function getPdf(pdf) {
     	pdf.getPage(1).then(function getPage(page) {

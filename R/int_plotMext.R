@@ -61,6 +61,13 @@ plotMext <- function(
             max(INPUT$means + INPUT$conint, na.rm=TRUE) }) )
     }
     
+    err_text <- ''
+    if( any(is.na(ylim)) | any(is.infinite(ylim)) ) {
+        ylim <- c(0,1)
+        xlim <- c(0,1)
+        err_text <- 'No data to plot'
+    }
+    
     if ( !is.null(colvec) ) {
         cols <- colvec
     } else {
@@ -82,7 +89,7 @@ plotMext <- function(
         if(error.estimates && legend_ext) { 
             legend(
                 legend_ext_pos, 
-                c("Mean\n(solid line)","Standard error\n(dark area)", 
+                c("Mean\n(solid line)","Std error\n(dark area)", 
                     "95% CI\n(light area)"), pch=c(-1, 0, 0), lwd=c(3,15,15), 
                 lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), 
                 bg=rainbow(1, alpha=0), bty="n", cex=cex.legend, y.intersp=2, 
@@ -100,6 +107,9 @@ plotMext <- function(
                     ylab=ylab, xlim=xlim, ylim=ylim, cex.axis=cex.axis, 
                     cex.lab=cex.lab, cex.main=cex.main, xaxt="n", ...
                 ) 
+                if(nchar(err_text)) {
+                    text(0.5, 0.5, err_text, cex = cex.main)
+                }
                 if( !any(c( 
                     length(list(...)[['xaxt']])>0, 
                     list(...)[['axes']]==FALSE )
@@ -146,7 +156,7 @@ plotMext <- function(
         if(error.estimates && legend_ext) { 
             legend(
                 legend_ext_pos, 
-                c("Mean\n(solid line)", "Standard error\n(dark area)", 
+                c("Mean\n(solid line)", "Std error\n(dark area)", 
                     "95% CI\n(light area)"), pch=c(-1, 0, 0), lwd=c(3,15,15), 
                 lty=c(1,0,0), col=rgb(0,0,0, c(1,0.5, 0.3)), 
                 bg=rainbow(1, alpha=0), bty="n", cex=cex.legend, y.intersp=2, 
