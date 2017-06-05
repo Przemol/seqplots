@@ -16,7 +16,10 @@ cache:
 # Adapt as necessary starting from here
 
 build_script:
+  - travis-tool.sh install_bioc BiocGenerics BiocStyle 
+  - travis-tool.sh install_bioc IRanges BSgenome GenomicRanges Biostrings GenomeInfoDb S4Vectors Rsamtools GenomicAlignments
   - travis-tool.sh install_deps
+  - travis-tool.sh install_bioc rtracklayer
 
 test_script:
   - travis-tool.sh run_tests
