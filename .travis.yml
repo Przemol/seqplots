@@ -11,11 +11,6 @@ os:
   - linux
   - osx
   
-matrix:
-  exclude:
-  - os: osx
-    r: bioc-devel
-
 r_packages:
   - covr
 
