@@ -262,7 +262,7 @@ setMethod(
             ssom <- supersom(
                 Hlist, grid = class::somgrid(
                     xdim = ssomt1, ydim = ssomt2, "hexagonal"), 
-                rlen = 100, toroidal=TRUE)
+                rlen = 100)
             
             classes <- ssom$unit.classif
             cls_order <- order(ssom$unit.classif)
