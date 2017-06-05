@@ -13,7 +13,8 @@ install:
 # Adapt as necessary starting from here
 
 build_script:
-  - travis-tool.sh install_bioc BiocGenerics BiocStyle
+  - travis-tool.sh install_bioc BiocGenerics BiocStyle 
+  - travis-tool.sh install_bioc IRanges BSgenome rtracklayer GenomicRanges Biostrings GenomeInfoDb S4Vectors Rsamtools GenomicAlignments
   - travis-tool.sh install_deps
 
 test_script:
