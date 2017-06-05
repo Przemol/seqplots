@@ -1,4 +1,4 @@
-# SeqPlots server file
+# SeqPlots server file - initial cleaning
 # 
 # Author: PS
 ###############################################################################
