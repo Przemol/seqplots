@@ -2,8 +2,8 @@
 % Please edit documentation in R/PlotSetArray-class.R
 \docType{class}
 \name{PlotSetArray-class}
-\alias{PlotSetArray}
 \alias{PlotSetArray-class}
+\alias{PlotSetArray}
 \title{PlotSetArray Reference Class}
 \description{
 PlotSetArray Reference Class
@@ -15,6 +15,7 @@ PlotSetArray Reference Class
 
 \item{\code{annotations}}{list of annotations}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -45,6 +46,7 @@ See \code{\link{plot}} for datails.}
 
 \item{\code{unlist()}}{Flattens PlotSetArray to PlotSetList}
 }}
+
 \section{Subsetting}{
  \code{x} is an object of \code{PlotSetArray} class: 
   \itemize{ \item \code{x[1:2,1:2]} produces \code{\link{PlotSetArray}} with
@@ -55,9 +57,9 @@ See \code{\link{plot}} for datails.}
   \code{x$as.array()} produces the matrix of \code{\link{PlotSetPair}} 
   classes with all feature/tracks pairs. }
 }
+
 \seealso{
 Other classes: \code{\link{MotifSetup-class}},
   \code{\link{PlotSetList-class}},
   \code{\link{PlotSetPair-class}}
 }
-

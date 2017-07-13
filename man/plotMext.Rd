@@ -35,4 +35,3 @@ This function is package internal and should not be executed directly
 by users.
 }
 \keyword{internal}
-
