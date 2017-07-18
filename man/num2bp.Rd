@@ -18,4 +18,3 @@ Converts numeric values to labels with base pairs units,
 i.e bp, kb, Mb, Gb, etc.
 }
 \keyword{internal}
-

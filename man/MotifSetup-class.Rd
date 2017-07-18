@@ -2,8 +2,8 @@
 % Please edit documentation in R/MotifSetup-class.R
 \docType{class}
 \name{MotifSetup-class}
-\alias{MotifSetup}
 \alias{MotifSetup-class}
+\alias{MotifSetup}
 \title{MotifSetup Reference Class}
 \description{
 This class is used to initialize motif plots and mix them with track plots.
@@ -20,6 +20,7 @@ window=200L)$addBigWig("path/to/file.bw")}
 
 \item{\code{annotations}}{list of annotations}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -30,6 +31,7 @@ window=200L)$addBigWig("path/to/file.bw")}
 
 \item{\code{nmotifs()}}{Prints number of motifs in class}
 }}
+
 \examples{
 
 #Motifs only
@@ -51,4 +53,3 @@ Other classes: \code{\link{PlotSetArray-class}},
   \code{\link{PlotSetList-class}},
   \code{\link{PlotSetPair-class}}
 }
-

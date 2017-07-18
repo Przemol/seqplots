@@ -3,10 +3,10 @@
 \docType{methods}
 \name{plotAverage}
 \alias{plotAverage}
-\alias{plotAverage,PlotSetArray-method}
-\alias{plotAverage,PlotSetList-method}
-\alias{plotAverage,PlotSetPair-method}
 \alias{plotAverage,list-method}
+\alias{plotAverage,PlotSetPair-method}
+\alias{plotAverage,PlotSetList-method}
+\alias{plotAverage,PlotSetArray-method}
 \title{Create the average plot}
 \usage{
 plotAverage(plotset, keepratio = FALSE, labels = NULL, xlim = NULL,
@@ -165,6 +165,7 @@ about panel.first.} \item{\code{asp}}{the y/x aspect ratio, see plot.window.}
 
 \item \code{PlotSetArray}: Method for signature plotset='PlotSetArray'
 }}
+
 \examples{
 # Get the paths of example files                      
 bed1 <- system.file("extdata", 
@@ -193,11 +194,10 @@ plotAverage(plotset1) # equivalent to plot(plotset1) or plotset1$plot()
 
 
 }
+\seealso{
+Other plotting functions: \code{\link{getPlotSetArray}},
+  \code{\link{plotHeatmap}}, \code{\link{plot}}
+}
 \author{
 Przemyslaw Stempor
 }
-\seealso{
-Other plotting.functions: \code{\link{getPlotSetArray}},
-  \code{\link{plotHeatmap}}, \code{\link{plot}}
-}
-

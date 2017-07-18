@@ -16,4 +16,3 @@ num2sci(n)
 Converts numeric values labels with metric system suffix, i.e k, M, G, etc.
 }
 \keyword{internal}
-
