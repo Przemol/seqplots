@@ -3,10 +3,10 @@
 \docType{methods}
 \name{plotHeatmap}
 \alias{plotHeatmap}
-\alias{plotHeatmap,PlotSetArray-method}
-\alias{plotHeatmap,PlotSetList-method}
-\alias{plotHeatmap,PlotSetPair-method}
 \alias{plotHeatmap,list-method}
+\alias{plotHeatmap,PlotSetPair-method}
+\alias{plotHeatmap,PlotSetList-method}
+\alias{plotHeatmap,PlotSetArray-method}
 \title{Plot heatmap with optional clustering}
 \usage{
 plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
@@ -209,6 +209,7 @@ following format: \code{list[[FEATURE]][[TRACK/MOTIF]][[KEY_VALUE]]}
 
 \item \code{PlotSetArray}: Method for signature \code{\link{PlotSetArray}}
 }}
+
 \examples{
 # Get the paths of example files                      
 bed1 <- system.file("extdata", 
@@ -238,7 +239,6 @@ plotHeatmap(plotset1[1])
 
 }
 \seealso{
-Other plotting.functions: \code{\link{getPlotSetArray}},
+Other plotting functions: \code{\link{getPlotSetArray}},
   \code{\link{plotAverage}}, \code{\link{plot}}
 }
-

@@ -3,9 +3,9 @@
 \docType{methods}
 \name{plot}
 \alias{plot}
-\alias{plot,PlotSetArray,ANY-method}
-\alias{plot,PlotSetList,ANY-method}
 \alias{plot,PlotSetPair,ANY-method}
+\alias{plot,PlotSetList,ANY-method}
+\alias{plot,PlotSetArray,ANY-method}
 \title{Generic plot function for SeqPlots package calsses}
 \usage{
 plot(x, y, ...)
@@ -46,6 +46,7 @@ Generic plot function for SeqPlots package calsses
 
 \item \code{x = PlotSetArray,y = ANY}: Method plot for signature 'PlotSetPair'
 }}
+
 \examples{
 #load precalculated PlotSetArrays "plotset1" and "plotset2", usually these 
 #objects are the output of getPlotSetArray function
@@ -70,7 +71,6 @@ plot(plotset2[2,], what='h', main="The heatmap", labels=LETTERS,
 \seealso{
 \code{\link{getPlotSetArray}}
 
-Other plotting.functions: \code{\link{getPlotSetArray}},
+Other plotting functions: \code{\link{getPlotSetArray}},
   \code{\link{plotAverage}}, \code{\link{plotHeatmap}}
 }
-

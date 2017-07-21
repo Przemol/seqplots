@@ -19,4 +19,3 @@ shinyapps}
 See http://shiny.rstudio.com/articles/shinyapps.html for further info.
 }
 \keyword{internal}
-

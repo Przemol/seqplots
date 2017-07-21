@@ -259,9 +259,10 @@ setMethod(
                 return(x)
             })
             
+            toroidal=TRUE;
             ssom <- supersom(
-                Hlist, grid = class::somgrid(
-                    xdim = ssomt1, ydim = ssomt2, "hexagonal"), 
+                Hlist, grid = kohonen::somgrid(
+                    xdim = ssomt1, ydim = ssomt2, topo ="hexagonal", toroidal = TRUE), 
                 rlen = 100)
             
             classes <- ssom$unit.classif

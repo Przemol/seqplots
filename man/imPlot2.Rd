@@ -29,4 +29,3 @@ For more help see documentation of image.plot function:
 \code{\link[fields]{image.plot}}
 }
 \keyword{internal}
-

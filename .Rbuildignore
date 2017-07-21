@@ -9,3 +9,4 @@ inst/seqplots/NEWS
 \.gitignore
 \.Rhistory
 \.README.md
+^appveyor\.yml$
