@@ -41,9 +41,6 @@ Useful links:
   \item Bug reports: \url{http://github.com/przemol/seqplots/issues/new}
 }
 }
-\author{
-Przemyslaw Stempor
-}
 \references{
 \strong{R project and Bioconductor:}
 \itemize{
@@ -135,4 +132,6 @@ exploration.} Briefings in bioinformatics. bbs017
   24(7):1138-1146 Jul 2014
 }
 }
-
+\author{
+Przemyslaw Stempor
+}

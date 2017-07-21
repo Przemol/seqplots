@@ -2,8 +2,8 @@
 % Please edit documentation in R/PlotSetPair-class.R
 \docType{class}
 \name{PlotSetPair-class}
-\alias{PlotSetPair}
 \alias{PlotSetPair-class}
+\alias{PlotSetPair}
 \title{PlotSetPair Reference Class}
 \description{
 PlotSetPair Reference Class
@@ -27,6 +27,7 @@ feature plots}
 
 \item{\code{heatmap}}{numeric matrix used for plotting the heatmap}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -34,9 +35,9 @@ feature plots}
 
 \item{\code{plot(what = "a", ...)}}{Plot the PlotSetPair class. See \code{\link{plot}} for datails.}
 }}
+
 \seealso{
 Other classes: \code{\link{MotifSetup-class}},
   \code{\link{PlotSetArray-class}},
   \code{\link{PlotSetList-class}}
 }
-

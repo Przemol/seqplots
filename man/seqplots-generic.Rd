@@ -2,12 +2,12 @@
 % Please edit documentation in R/generic_methods.R
 \docType{methods}
 \name{seqplots-generic}
+\alias{seqplots-generic}
+\alias{[,PlotSetList,ANY,ANY,ANY-method}
+\alias{[[,PlotSetList,ANY,ANY-method}
 \alias{[,PlotSetArray,ANY,missing,ANY-method}
 \alias{[,PlotSetArray,ANY,vector,ANY-method}
-\alias{[,PlotSetList,ANY,ANY,ANY-method}
 \alias{[[,PlotSetArray,ANY,ANY-method}
-\alias{[[,PlotSetList,ANY,ANY-method}
-\alias{seqplots-generic}
 \title{SeqPlots generic methods}
 \usage{
 \S4method{[}{PlotSetList,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
@@ -79,4 +79,3 @@ the data structure.
 \seealso{
 \code{\link[base]{Extract}}
 }
-

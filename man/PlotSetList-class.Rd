@@ -2,8 +2,8 @@
 % Please edit documentation in R/PlotSetList-class.R
 \docType{class}
 \name{PlotSetList-class}
-\alias{PlotSetList}
 \alias{PlotSetList-class}
+\alias{PlotSetList}
 \title{PlotSetList Reference Class}
 \description{
 PlotSetList Reference Class
@@ -15,6 +15,7 @@ PlotSetList Reference Class
 
 \item{\code{annotations}}{list of annotations}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -27,6 +28,7 @@ PlotSetList Reference Class
 \item{\code{plot(what = "a", ...)}}{Plot the PlotSetList, i.e. all PlotSetPairs in the list. 
 See \code{\link{plot}} for datails.}
 }}
+
 \section{Subsetting}{
 
 
@@ -37,9 +39,9 @@ See \code{\link{plot}} for datails.}
  \item \code{x[[1]]} produces single \code{\link{PlotSetPair}}.
 }
 }
+
 \seealso{
 Other classes: \code{\link{MotifSetup-class}},
   \code{\link{PlotSetArray-class}},
   \code{\link{PlotSetPair-class}}
 }
-

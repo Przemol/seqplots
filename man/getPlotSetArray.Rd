@@ -190,7 +190,6 @@ plot(plotset2[1,], what='h') #Heatmap
  
 }
 \seealso{
-Other plotting.functions: \code{\link{plotAverage}},
+Other plotting functions: \code{\link{plotAverage}},
   \code{\link{plotHeatmap}}, \code{\link{plot}}
 }
-
