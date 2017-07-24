@@ -10,3 +10,4 @@ inst/seqplots/NEWS
 \.Rhistory
 \.README.md
 ^appveyor\.yml$
+docs
