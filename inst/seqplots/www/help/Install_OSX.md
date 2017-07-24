@@ -1,5 +1,5 @@
-Installation - Mac OS X app
-===========================
+Installation - Mac OS X legacy app
+==================================
 
 > The Mac OS X bundle is an easy way to use SeqPlots for Mac OS X users. It contains all R binaries and packages that SeqPlots depends on. Additionally, test tracks and genome annotations, and reference sequences for *Homo sapiens*, *Drosophila melanogaster* and *Caenorhabditis elegans* are included. Sequences for other organisms can be downloaded using a graphical user interface.
 

@@ -1,5 +1,5 @@
-# Error messages
-
+Error messages
+==============
 
 ```
 Problem with line N: "line_text" [internal_error]
@@ -37,5 +37,3 @@ ERROR: solving row 300: negative widths are not allowed
 > The the row 300 have end coordinate smaller than beginning, hence the width in negative. To fix it the start and stop indicates should be swapped. This error often happens when negative strand (-) ranges are misformatted. 
 
 -----------------
-
-

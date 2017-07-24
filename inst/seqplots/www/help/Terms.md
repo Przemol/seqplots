@@ -26,4 +26,3 @@ Explanations
 *  "**reads coverage**" - The basic way to calculate the signal from sequencing based assays. The numeric representation shows how much reads was aligned to given genomic location. This can be a proxy to protein-DNA binding (ChIP-seq) or the expression (RNA-seq). Can be calculated using BedTools: http://bedtools.readthedocs.org/en/latest/content/tools/genomecov.html  Also known as `pileups`.
 
     ------------------------------------------------------
-

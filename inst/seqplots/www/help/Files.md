@@ -8,7 +8,7 @@ Tracks:
 
 * BigWig (.bw) - http://genome.ucsc.edu/FAQ/FAQformat.html#format6.1
 * Wiggle (.wig) - http://genome.ucsc.edu/goldenPath/help/wiggle.html
-* BedGraph (.bdg) - http://genome.ucsc.edu/goldenPath/help/bedgraph.html
+* BedGraph (with .wig extension) - http://genome.ucsc.edu/goldenPath/help/bedgraph.html
 
 Features:
 
