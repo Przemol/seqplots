@@ -4,7 +4,7 @@ Title: An interactive tool for visualizing NGS signals and sequence motif
     densities along genomic features using average plots and heatmaps
 Version: 1.15.0
 Date: 2014-09-15
-Authors@R: 
+Authors@R:
     person(given = "Przemyslaw",
            family = "Stempor",
            role = c("aut", "cph", "cre"),
@@ -70,7 +70,8 @@ Suggests:
     testthat,
     BiocStyle,
     knitr,
-    rmarkdown
+    rmarkdown,
+    covr
 VignetteBuilder: knitr
 biocViews: ChIPSeq, RNASeq, Sequencing, Software, Visualization
 LazyLoad: yes

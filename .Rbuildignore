@@ -11,3 +11,7 @@ inst/seqplots/NEWS
 \.README.md
 ^appveyor\.yml$
 \.index.html
+^CONDUCT\.md$
+^codecov\.yml$
+^README\.Rmd$
+^README-.*\.png$
