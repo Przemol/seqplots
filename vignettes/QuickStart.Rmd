@@ -22,6 +22,7 @@ output:
 
 
 ```{r echo=FALSE, results='asis', echo=FALSE}
+message(getwd)
 npos <- which(rev(strsplit(getwd(), '/')[[1]]) == "seqplots")-1
 ppath <- paste(rep('../', npos), collapse = '')
 cat(knitr::knit_child(
