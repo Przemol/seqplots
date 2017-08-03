@@ -38,9 +38,12 @@ files <- c(
   'References.md'
 )
 
-npos <- which(rev(strsplit(getwd(), '/')[[1]]) == "seqplots")-1
-ppath <- paste(rep('../', npos), collapse = '')
-if(!length(npos)) npos <- 1
+err <- try({
+    npos <- which(rev(strsplit(getwd(), '/')[[1]]) == "seqplots")-1
+    if(!length(npos)) npos <- 1
+    ppath <- paste(rep('../', npos), collapse = '')
+})
+if(class(err) =='try-error') ppath <- '../../'
 
 cat(knitr::knit_child(
     

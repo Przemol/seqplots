@@ -28,8 +28,6 @@ err <- try({
     ppath <- paste(rep('../', npos), collapse = '')
 })
 if(class(err) =='try-error') ppath <- '../../'
-
-
 cat(knitr::knit_child(
     text = gsub(
         "img/",
