@@ -43,7 +43,7 @@ err <- try({
     if(!length(npos)) npos <- 1
     ppath <- paste(rep('../', npos), collapse = '')
 })
-if(class(err) =='try-error') ppath <- '../../'
+if(class(err) =='try-error') ppath <- '../'
 
 cat(knitr::knit_child(
     
