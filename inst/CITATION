@@ -1,0 +1,18 @@
+#year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(bibtype = "Article",
+    author = c(person("Przemyslaw", "Stempor"),
+                    person("Julie", "Ahringer")),
+    title = "SeqPlots - Interactive software for exploratory data analyses, pattern discovery and visualization in genomics [version 1; referees: 2 approved, 1 approved with reservations]",
+    year = 2014,
+    journal = 'Wellcome Open Research',
+    volume=1,
+    number=14,
+    doi='10.12688/wellcomeopenres.10004.1',
+    url = "https://CRAN.R-project.org/package=nlme",
+    note = note)
+
+
+
+
