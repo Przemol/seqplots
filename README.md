@@ -10,7 +10,7 @@
 [![codecov.io](http://codecov.io/github/Przemol/seqplots/coverage.svg?branch=master)](http://codecov.io/github/Przemol/seqplots?branch=master)
 
 ![SeqPlots](https://github.com/Przemol/seqplots/wiki/img/ico_full_color.png)
-**<h4 align="center">Article [PDF](https://wellcomeopenresearch.org/articles/1-14/v1/pdf)</h4>**
+**<h4 align="center">Article [[PDF](https://wellcomeopenresearch.org/articles/1-14/v1/pdf)]</h4>**
 
 Stempor P and Ahringer J. **SeqPlots - Interactive software for exploratory data analyses, pattern discovery and visualization in genomics** [version 1; referees: 2 approved, 1 approved with reservations]. *Wellcome Open Res 2016*, **1**:14 
 [doi: 10.12688/wellcomeopenres.10004.1](http://dx.doi.org/10.12688/wellcomeopenres.10004.1)
