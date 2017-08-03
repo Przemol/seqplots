@@ -15,3 +15,4 @@ inst/seqplots/NEWS
 ^codecov\.yml$
 ^README\.Rmd$
 ^README-.*\.png$
+^index.html$
