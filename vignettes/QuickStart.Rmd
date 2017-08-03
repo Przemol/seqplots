@@ -22,9 +22,10 @@ output:
 
 
 ```{r echo=FALSE, results='asis', echo=FALSE}
-message(getwd())
 npos <- which(rev(strsplit(getwd(), '/')[[1]]) == "seqplots")-1
+if(!length(npos)) npos <- 1
 ppath <- paste(rep('../', npos), collapse = '')
+
 cat(knitr::knit_child(
     text = gsub(
         "img/",
