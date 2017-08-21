@@ -2,7 +2,7 @@ Type: Package
 Package: seqplots
 Title: An interactive tool for visualizing NGS signals and sequence motif
     densities along genomic features using average plots and heatmaps
-Version: 1.15.0
+Version: 1.15.1
 Date: 2014-09-15
 Authors@R:
     person(given = "Przemyslaw",
