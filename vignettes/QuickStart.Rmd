@@ -22,14 +22,18 @@ output:
 
 
 ```{r echo=FALSE, results='asis', echo=FALSE}
-# knit the first three lines of first.Rmd
+err <- try({
+    npos <- which(rev(strsplit(getwd(), '/')[[1]]) == "seqplots")-1
+    if(!length(npos)) npos <- 1
+    ppath <- paste(rep('../', npos), collapse = '')
+})
+if(class(err) =='try-error') ppath <- '../'
 cat(knitr::knit_child(
     text = gsub(
         "img/",
-        "../inst/seqplots/www/help/img/",
-        readLines('../inst/seqplots/www/help/QuickStart.md')
-    ),
-    quiet = TRUE
+        paste0(ppath, "inst/seqplots/www/help/img/"),
+        readLines( paste0(ppath, "inst/seqplots/www/help/QuickStart.md") )
+    ), quiet = TRUE
 ), sep = '\n')
 ```
 

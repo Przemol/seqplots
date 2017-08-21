@@ -1,5 +1,5 @@
-Running SeqPlots Docker image
-=============================
+Installation - Docker image
+===========================
 
 > SeqPlots is available as Docker image, which can be easily run on Mac OS, Windows and Linux systems. The image can be obtained from Docker Hub: https://hub.docker.com/r/przemol/seqplots/
 

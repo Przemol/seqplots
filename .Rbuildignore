@@ -10,3 +10,9 @@ inst/seqplots/NEWS
 \.Rhistory
 \.README.md
 ^appveyor\.yml$
+\.index.html
+^CONDUCT\.md$
+^codecov\.yml$
+^README\.Rmd$
+^README-.*\.png$
+^index.html$

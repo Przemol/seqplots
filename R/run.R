@@ -20,7 +20,7 @@
 #' 
 #' @examples
 #' \donttest{
-#' run()
+#' # run()
 #' }
 
 run <- function(

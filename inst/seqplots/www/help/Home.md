@@ -1,17 +1,11 @@
-Welcome to **SeqPlots**
-=======================
-> An interactive tool for visualizing NGS signals and sequence motif densities along genomic features using average plots and heatmaps.
-
 ![Examples of Seq Plots interface and outputs](wiki/img/ico_full_color.png)
+> Interactive software for exploratory data analyses, pattern discovery and visualization in genomics.
+
 ![Examples of Seq Plots interface and outputs](wiki/img/SeqPlots_fig1_web.png)
 
 Summary
 -------
-SeqPlots is a web browser tool for plotting average track signals (e.g. read coverage) and sequence motif densities over user specified genomic features. The data can be visualized in linear plots with error estimates or as series of heatmaps that can be sorted and clustered. The software can be run locally on a desktop or deployed on a server and allows easy data sharing.  SeqPlots pre-calculates and stores binary result matrices, allowing rapid plot generation.  Plots can also be run in batch.
-
-Availability
-------------
-SeqPlots is distributed as [Bioconductor package](http://www.bioconductor.org/packages/release/bioc/html/seqplots.html) available on platforms and operating systems supported by R project. A standalone [SeqPlot OS X bundle](https://github.com/Przemol/seqplots_osx/zipball/master), combing R and all required packages, is available as for Mac OS X (10.6 or higher). SeqPlots can also be deployed on a server using free and open sourced (GPL licensed) [Shiny Server](https://github.com/rstudio/shiny-server).
+SeqPlots is a user-friendly exploratory data analysis (EDA) and visualization software for genomics. After choosing groups of signal and feature files and defining plotting parameters, users can generate profile plots of average signal or heat maps clustered using different algorithms in a matter of seconds through the graphical user interface (GUI) controls. SeqPlots accepts all major genomic file formats as input and can also generate and plot user defined motif densities. Profile plots and heatmaps are highly configurable and batch operations can be used to generate a large number of plots at once. SeqPlots is available as a GUI application for Mac or Windows and Linux, or as an R/Bioconductor package.  It can also be deployed on a server for remote and collaborative usage. The analysis features and ease of use of SeqPlots encourages wide data exploration, which should aid the discovery of novel genomic associations.
 
 Key features
 ------------

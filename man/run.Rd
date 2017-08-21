@@ -27,7 +27,7 @@ The default data directory is "~/SeqPlots_data".
 }
 \examples{
 \donttest{
-run()
+# run()
 }
 }
 \author{

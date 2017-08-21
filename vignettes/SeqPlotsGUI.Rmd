@@ -22,7 +22,7 @@ output:
 ---
 
 ```{r echo=FALSE, results='asis', echo=FALSE}
-# knit the first three lines of first.Rmd
+
 files <- c(
   'Files.md',
   'PlotSets.md',
@@ -38,11 +38,19 @@ files <- c(
   'References.md'
 )
 
+err <- try({
+    npos <- which(rev(strsplit(getwd(), '/')[[1]]) == "seqplots")-1
+    if(!length(npos)) npos <- 1
+    ppath <- paste(rep('../', npos), collapse = '')
+})
+if(class(err) =='try-error') ppath <- '../'
+
 cat(knitr::knit_child(
+    
     text = gsub(
         "img/",
-        "../inst/seqplots/www/help/img/",
-        unlist(lapply(file.path('../inst/seqplots/www/help', files), readLines))
+        paste0(ppath, "inst/seqplots/www/help/img/"),
+        unlist(lapply(file.path(paste0(ppath, 'inst/seqplots/www/help'), files), readLines))
     ),
     quiet = TRUE
 ), sep = '\n')

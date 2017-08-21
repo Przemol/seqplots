@@ -1,0 +1,125 @@
+---
+title: "SeqPlots"
+output:
+   html_document:
+    toc: true
+    toc_depth: 2
+    theme: united
+    smart: true
+    highlightjs: true
+    highlight: default
+    css: style.css
+    self_contained: false
+    mathjax: null
+    template: template2.html
+    includes:
+      in_header: topbar.html
+---
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(bootstrap.thumbnail=FALSE)
+```
+
+```{r child = 'Home2.md'}
+```
+
+<hr class="sectionend" />
+```{r child = 'Install_apps.md'}
+```
+
+
+<hr class="sectionend" />
+
+```{r child = 'Install_R.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Install_server.md'}
+```
+
+
+<hr class="sectionend" />
+
+```{r child = 'QuickStart.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Files.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'PlotSets.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Plotting.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Heatmaps.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Outputs.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Batch.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'SaveAndLoad.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'AdvOup.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Genomes.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Errors.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Legacy.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Versions.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'Terms.md'}
+```
+
+<hr class="sectionend" />
+
+```{r child = 'References.md'}
+```
+
+<hr class="sectionend" />
+
+
+```{r copy, include=FALSE}
+#file.remove('../seqplotsR/inst/seqplots/www/help/help.html')
+#file.copy('html/index.html', '../seqplotsR/inst/seqplots/www/help/help.html')
+```
+
+
