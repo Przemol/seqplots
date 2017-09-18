@@ -190,18 +190,14 @@ getPlotSetArray <- function(
     
     TSS <- list(length(features))
     ANNO <- list(length(features))
-    GENOMES <- BSgenome::installed.genomes(
-        splitNameParts=TRUE)$provider_version
-    if( length(GENOMES) ) 
-        names(GENOMES) <- gsub('^BSgenome.', '', BSgenome::installed.genomes())
-    if( !length(GENOMES) ) stop('No genomes installed!')
+    
     extarct_matrix <- function(track, gr, size, ignore_strand) {
-        sum <- .Call(
+        sum <- suppressWarnings(.Call(
             'BWGFile_summary', path.expand(path(track)),
             as.character(seqnames(gr)), ranges(gr), 
             S4Vectors::recycleIntegerArg(size, "size", length(gr)), 
             "mean", as.numeric(NA_real_), PACKAGE='rtracklayer'
-        )
+        ))
         M <- do.call( rbind, sum )
         if (!ignore_strand) 
             M[as.character(strand(gr))=='-',] <- M[
@@ -224,12 +220,12 @@ getPlotSetArray <- function(
         }
         
         if(!is.na(genome_ind)) {
-            pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome_ind]))[[1]]
-            suppressPackageStartupMessages(
-                library(pkg, character.only = TRUE, quietly=TRUE)
-            )
-            GENOME <- get(pkg)
-            remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(genomeStyles())
+            GENOME <- getREF(genome_ind)
+            if(class(GENOME) != "BSgenome") {
+                remap_chr <- FALSE
+            } else {
+                remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(genomeStyles())
+            }
         } else {
             GENOME <- NA
             remap_chr <- FALSE
@@ -303,6 +299,7 @@ getPlotSetArray <- function(
             if ( (type == 'pf') | (type == 'mf') | (type == 'ef') ) {
                 
                 gr <- GenomicRanges::promoters(sel, xmin, xmax)
+                gr <- trim(gr)
                 all_ind  <- seq(-xmin, xmax, by=as.numeric(bin) )
                 
                 if( class(tracks[[i]]) == 'character' | class(tracks[[i]]) == 'BigWigFile') {
@@ -310,17 +307,24 @@ getPlotSetArray <- function(
                         track, gr, length(all_ind), ignore_strand)
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
-                    if(is.na(GENOME)) stop('Motif plots are not possible for undefined genomes.')
+                    if(suppressWarnings(is.na(GENOME))) stop('Motif plots are not possible for undefined genomes.')
                     if(verbose) lvl2m("Processing genome...")
-                    seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)]
+                    
+                    suppressWarnings( seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)] )
                     gr <- trim(gr)
                     
                     if(verbose) 
                         lvl2m("Searching for motif...")
-                    M <- getSF(
-                        GENOME, gr, pattern, seq_win, !add_heatmap, 
+                    
+                    
+                    M <- suppressWarnings( getSF(
+                        GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
                         revcomp=revcomp,  nbins=length(all_ind)
-                    )
+                    ))
+                    
+                    
+                    
+                    
                 } else if ( class(tracks[[i]]) == 'BamFile' ) {
                     
                     seqinfo(sel) <- seqinfo(bf)[seqlevels(sel)]
@@ -370,49 +374,49 @@ getPlotSetArray <- function(
                 
                 if( class(tracks[[i]]) == 'character' | class(tracks[[i]]) == 'BigWigFile') {
                     M.left <- extarct_matrix(
-                        track, flank(sel, xmin, start=TRUE), length(left_ind), 
+                        track, trim(flank(sel, xmin, start=TRUE)), length(left_ind), 
                         ignore_strand) #left
                     M.middle <- extarct_matrix(
-                        track, sel, length(mid_ind), ignore_strand) #middle    
+                        track, trim(sel), length(mid_ind), ignore_strand) #middle    
                     M.right <- extarct_matrix(
-                        track, flank(sel, xmax, start=FALSE), 
+                        track, trim(flank(sel, xmax, start=FALSE)), 
                         length(right_ind), ignore_strand)  #right
                     M <- cbind(M.left, M.middle, M.right)   
                     
                 } else if ( class(tracks[[i]]) == 'list' ) {
-                    if(is.na(GENOME)) stop('Motif plots are not possible for undefined genomes.')
+                    if(suppressWarnings(is.na(GENOME))) stop('Motif plots are not possible for undefined genomes.')
                     #MOTIF - left 
                     if(verbose) lvl2m(paste0(
                         "MOTIF: Processing upsterem ", pattern, " motif..."
                     ))
-                    gr <- flank(sel, xmin, start=TRUE)
-                    seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)]
-                    M.left <- getSF(
+                    gr <- trim(flank(sel, xmin, start=TRUE))
+                    suppressWarnings( seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)] )
+                    M.left <- suppressWarnings( getSF(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
                         revcomp=revcomp, nbins=length(left_ind)
-                    )
+                    ) )
                     
                     #MOTIF - middle
                     if(verbose) lvl2m(paste0(
                         "MOTIF: Processing middle ", pattern, " motif..."
                     ))
                     gr <- sel
-                    seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
-                    M.middle <- getSF(
+                    suppressWarnings( seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)] )
+                    M.middle <- suppressWarnings(getSF(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap, 
                         revcomp=revcomp, nbins=length(mid_ind)
-                    )
+                    ))
                     
                     #MOTIF - right
                     if(verbose) lvl2m(paste0(
                         "MOTIF: Processing downsteream ", pattern, " motif..."
                     ))
                     gr <- flank(sel, xmin, start=FALSE)
-                    seqlengths(gr) <- seqlengths(GENOME)[seqlevels(gr)];
-                    M.right <- getSF(
+                    suppressWarnings( seqlengths(gr) <-  seqlengths(GENOME)[seqlevels(gr)] )
+                    M.right <- suppressWarnings(getSF(
                         GENOME, trim(gr), pattern, seq_win, !add_heatmap,
                         revcomp=revcomp, nbins=length(right_ind)
-                    )
+                    ))
                     M <- cbind(M.left, M.middle, M.right)
                     
                 }

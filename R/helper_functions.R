@@ -58,3 +58,32 @@ num2bp <- function( n ) {
     }
     return(sistring)
 }
+
+#' Get reference genome
+#'
+#' @param genome The filename of FASTA file or genome code for BSgenome
+#' 
+#' @return \code{DNAStringSet}
+#'
+#' @keywords internal
+#' 
+getREF <- function(genome) {
+    
+    if( file.exists(file.path(Sys.getenv('root'), 'genomes', genome)) ) {
+        REF <- Biostrings::readDNAStringSet( file.path(Sys.getenv('root'), 'genomes', genome) )
+    } else {
+        
+        GENOMES <- BSgenome::installed.genomes(
+            splitNameParts=TRUE)$provider_version
+        if( length(GENOMES) ) 
+            names(GENOMES) <- gsub('^BSgenome.', '', BSgenome::installed.genomes())
+        if( !length(GENOMES) ) stop('No genomes installed!')
+        
+        pkg <- paste0('BSgenome.', names(GENOMES[GENOMES %in% genome]))[[1]]
+        suppressPackageStartupMessages(
+            library(pkg, character.only = TRUE, quietly=TRUE)
+        )
+        REF <- get(pkg)
+    }
+    return(REF)
+}
