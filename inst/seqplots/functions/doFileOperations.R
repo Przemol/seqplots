@@ -85,15 +85,29 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   } else if( grepl('.(wig|wig.gz|bdg|bdg.gz|bedGraph|bedGraph.gz)$', x, ignore.case = TRUE) ){
     pth <- gsub('.(wig|wig.gz|bdg|bdg.gz|bedGraph|bedGraph.gz)$', '.bw', x, ignore.case = TRUE);
     try_result <- try({ 
-      #stop('test'); pth <- path(wigToBigWig(file.path('files', x), gnm)); 
-      .Call(  get('BWGFile_fromWIG', environment(wigToBigWig)), x, seqlengths(gnm), pth )
+        if(class('gnm') == "character") {
+            ln <- readLines(x)
+            vs <- grep('.+chrom=', ln)
+            si <- Seqinfo(
+                seqnames = gsub('.+chrom=', '', ln[vs]), 
+                as.numeric(gsub('\t.+', '', c(ln[vs[-1]-1], tail(ln, 1)))), 
+                genome = 'custom'
+            )
+            wigToBigWig(x=x, seqinfo = si, dest = pth, clip = TRUE)
+            
+        } else {
+            wigToBigWig(x=x, seqinfo = seqlengths(gnm), dest = pth, clip = TRUE)
+            
+        }
     }) 
     if(is(try_result, 'try-error')) {
       try_result2 <<- try({	
         fcon=file(x); wig <- rtracklayer::import.wig( fcon ); close(fcon);
         if( grepl('list', class(wig), ignore.case = TRUE) ) wig <- unlist(wig, use.names=FALSE)
-        wig <- testChromosomeNames(wig , gnm, ret=TRUE)
-        seqlengths(wig) <- seqlengths(gnm)[seqlevels(wig)];
+        if(class('gnm') != "character") {
+            wig <- testChromosomeNames(wig , gnm, ret=TRUE)
+            seqlengths(wig) <- seqlengths(gnm)[seqlevels(wig)]
+        }
         export.bw(coverage(wig, weight='score'), pth);
       })
       if(is(try_result2, 'try-error')) { stop('Error in adding wiggle: ', as.character(try_result2)) }
@@ -101,7 +115,10 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     
     file.remove( x )
     x <- pth; type <- 'track'; file_type <- 'Wiggle';
-    if( !all(seqlevels(BigWigFile(x)) %in% seqlevels(gnm)) ) { stop('Unknown chr names in Wiggle file, use UCSC compatible!', call. = FALSE) }
+    if(class('gnm') != "character") 
+        if( !all(seqlevels(BigWigFile(x)) %in% seqlevels(gnm)) ) { 
+            stop('Unknown chr names in Wiggle file, use UCSC compatible!', call. = FALSE) 
+        }
     
   } else {
     stop('Unknown file format!')
