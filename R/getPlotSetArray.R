@@ -298,7 +298,7 @@ getPlotSetArray <- function(
             
             if ( (type == 'pf') | (type == 'mf') | (type == 'ef') ) {
                 
-                gr <- GenomicRanges::promoters(sel, xmin, xmax)
+                gr <- suppressWarnings( GenomicRanges::promoters(sel, xmin, xmax) )
                 gr <- trim(gr)
                 all_ind  <- seq(-xmin, xmax, by=as.numeric(bin) )
                 

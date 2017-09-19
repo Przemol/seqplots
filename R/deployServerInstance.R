@@ -14,7 +14,7 @@ deployServerInstance <- function(
     server=getwd(), data=file.path(server, "DATA")
 ) {
     
-    dir.create(server)
+    if(!dir.exists(server)) dir.create(server)
     setwd(server)
     file.copy( 
         file.path(system.file("seqplots", package = "seqplots"), '/'), '.', 
