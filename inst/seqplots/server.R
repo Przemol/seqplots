@@ -682,13 +682,28 @@ shinyServer(function(input, output, clientData, session) {
   #Server  Query String action
   observe({
     query <- parseQueryString(clientData$url_search)
+    
+    if(length(query$addbw)){
+        
+        message('Adding: ', query$addbw)
+        
+        file_name <- basename(query$addbw)
+        file_genome <- 'ce11'
+        file_user	<- 'jadb'
+        file_comment<- ''
+        
+        download.file(query$addbw, file.path('tmp', file_name))
+        doFileOperations(file.path('tmp', file_name), final_folder='files', file_genome, file_user, file_comment, con=con)
+        
+    }
+    
     if(length(query$genome)){
       #updateSelectInput(session, "file_genome", "Genmoe:", GENOMES, selected = query$genome)
       #session$sendCustomMessage("jsAlert", sprintf('genome: [%s]', query$genome) )
       session$sendCustomMessage("jsExec", sprintf("$('#file_genome').children().removeAttr('selected').filter('[value=%s]').attr('selected', 'selected')", query$genome))
     }
     
-    for(n in names(query)[!names(query) %in% c('load', 'select', 'genome')] ){
+    for(n in names(query)[!names(query) %in% c('load', 'select', 'genome', 'addbw')] ){
         session$sendInputMessage(n, list(
             value = unlist(strsplit(query[[n]], ',')) 
         ) )
