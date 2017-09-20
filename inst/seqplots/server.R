@@ -700,10 +700,21 @@ shinyServer(function(input, output, clientData, session) {
         file_user	<- 'jadb'
         file_comment<- ''
         
-        download.file(query$addbw, file.path('tmp', file_name))
-        doFileOperations(file.path('tmp', file_name), final_folder='files', file_genome, file_user, file_comment, con=con)
+        if(RCurl::url.exists(query$addbw)) {
+            download.file(query$addbw, file.path('tmp', file_name))
+            doFileOperations(file.path('tmp', file_name), final_folder='files', file_genome, file_user, file_comment, con=con)
+            session$sendCustomMessage("jsExec", "window.open('','_self').close();")
+            
+        } else {
+            showModal(modalDialog(
+                title = 'ERROR',
+                paste0(query$addbw, " - URL does not exist!"),
+                easyClose = FALSE,
+                footer = NULL
+            ))
+        }
         
-        session$sendCustomMessage("jsExec", "window.open('','_self').close();")
+  
         
     }
     
