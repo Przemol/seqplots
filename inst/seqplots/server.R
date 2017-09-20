@@ -687,6 +687,14 @@ shinyServer(function(input, output, clientData, session) {
         
         message('Adding: ', query$addbw)
         
+        
+        showModal(modalDialog(
+            title = query$addbw,
+            "Adding file. This window will colose automatically after it's done.",
+            easyClose = FALSE,
+            footer = NULL
+        ))
+        
         file_name <- basename(query$addbw)
         file_genome <- 'ce11'
         file_user	<- 'jadb'
@@ -694,6 +702,8 @@ shinyServer(function(input, output, clientData, session) {
         
         download.file(query$addbw, file.path('tmp', file_name))
         doFileOperations(file.path('tmp', file_name), final_folder='files', file_genome, file_user, file_comment, con=con)
+        
+        session$sendCustomMessage("jsExec", "window.open('','_self').close();")
         
     }
     
