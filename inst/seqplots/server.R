@@ -689,16 +689,16 @@ shinyServer(function(input, output, clientData, session) {
         
         
         showModal(modalDialog(
-            title = query$addbw,
-            "Adding file. This window will colose automatically after it's done.",
+            title = "Adding file. This window will colose automatically after it's done.",
+            query$addbw,
             easyClose = FALSE,
             footer = NULL
         ))
         
         file_name <- basename(query$addbw)
-        file_genome <- 'ce11'
-        file_user	<- 'jadb'
-        file_comment<- ''
+        file_genome <- if(length(query$bw_genome)) query$bw_genome else 'ce11'
+        file_user	<- if(length(query$bw_user)) query$bw_user else 'jadb'
+        file_comment<- if(length(query$bw_comment)) query$bw_comment else ''
         
         if(RCurl::url.exists(query$addbw)) {
             download.file(query$addbw, file.path('tmp', file_name))
