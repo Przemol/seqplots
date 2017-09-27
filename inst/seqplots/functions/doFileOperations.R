@@ -54,7 +54,7 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   
   #File does not have correct genome
   gnm <- SeqinfoForBSGenome(grep(file_genome, installed.genomes(), value=TRUE)[[1]]); if( is.null(gnm) ) {
-    if(file_genome == 'custom') 
+    if(file_genome == 'custom' | grepl('\\.fa', file_genome)) 
         gnm <- 'custom'
     else
         stop('Unknown genome name/genome not installed!', call. = FALSE)

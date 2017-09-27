@@ -48,7 +48,10 @@ shinyServer(function(input, output, clientData, session) {
       gen <- BSgenome:::installed.genomes(splitNameParts=TRUE)$provider_version
       if( length(gen) ) 
           names(gen) <- gsub('^BSgenome.', '', BSgenome:::installed.genomes())
-      return( gen[!duplicated(gen)] )
+      
+      fa <- dir(file.path(Sys.getenv('root'), 'genomes'), pattern = '\\.fa')
+      names(fa) <- fa
+      return( c(gen[!duplicated(gen)], fa) )
   }    
 
   observe({
@@ -75,7 +78,7 @@ shinyServer(function(input, output, clientData, session) {
   }
   observe({
     updateSelectInput(session, "file_genome", choices = c(values$GENOMES, 'custom'))
-    updateCheckboxGroupInput(session, 'inst_genomes', choices = unique(installed.genomes()))
+    updateCheckboxGroupInput(session, 'inst_genomes', choices = values$GENOMES)
   })
   
 	
