@@ -2,6 +2,7 @@
 
 export(MotifSetup)
 export(getPlotSetArray)
+export(import.narrowPeak)
 export(plot)
 export(plotAverage)
 export(plotHeatmap)
