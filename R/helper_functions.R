@@ -1,3 +1,19 @@
+#' Import function for narrowPeak format
+#'
+#' @param x 
+#'
+#' @return GenomicRanges
+#' @export 
+#'
+import.narrowPeak <- function(x) {
+    extraCols <- c(signalValue="numeric", pValue="numeric", qValue="numeric",
+                   peak="integer")
+    gr <- import(x, forma="bed", extraCols=extraCols)
+    return(gr)
+}
+
+
+
 #' Converts numeric values labels with metric system suffix, i.e k, M, G, etc. 
 #'
 #' @param n The numeric value, that will be converted to label.
