@@ -221,10 +221,11 @@ getPlotSetArray <- function(
         
         if(!is.na(genome_ind)) {
             GENOME <- getREF(genome_ind)
-            if(class(GENOME) != "BSgenome") {
+            
+            if(class(try(seqlevelsStyle(GENOME))) == "character") {
                 remap_chr <- FALSE
             } else {
-                remap_chr <- gsub(' ', '_',organism(GENOME)) %in% names(genomeStyles())
+                remap_chr <- TRUE
             }
         } else {
             GENOME <- NA

@@ -87,6 +87,7 @@ getREF <- function(genome) {
     
     if( file.exists(file.path(Sys.getenv('root'), 'genomes', genome)) ) {
         REF <- Biostrings::readDNAStringSet( file.path(Sys.getenv('root'), 'genomes', genome) )
+        names(REF) <- gsub(' .+', '', names(REF))
     } else {
         
         GENOMES <- BSgenome::installed.genomes(
