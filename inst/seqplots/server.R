@@ -651,6 +651,18 @@ shinyServer(function(input, output, clientData, session) {
   })
   
   observe({
+      if( is.null(input$genomes_fasta) ) return()
+      isolate({
+          progress <- shiny::Progress$new(session, min=1, max=3)
+          on.exit(progress$close())
+          progress$set('Adding FASTA', value = 2)
+          str(input$genomes_fasta)
+          file.copy(input$genomes_fasta$datapath, file.path(Sys.getenv('root'), 'genomes', input$genomes_fasta$name) )
+          values$GENOMES <- updateGenomes()
+      })
+  })
+  
+  observe({
       if( !input$genomes_install ) return()
       isolate({
           progress <- shiny::Progress$new(session, min=1, max=3)

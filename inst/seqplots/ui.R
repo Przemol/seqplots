@@ -353,7 +353,9 @@ genomesPanel <- tabPanel(
     # plugins = list('remove_button', 'drag_drop') => includeScript("www/jquery-ui.js")
     actionButton('genomes_install', label = 'Install selected', icon = icon('plus'), class='btn-success'),
     tags$hr(),
-    fileInput('genomes_file', 'Install from file:')
+    fileInput('genomes_fasta', 'Install from FASTA file:'),
+    fileInput('genomes_file', 'Install from BSGenome R package:')
+    
     
 )
 
