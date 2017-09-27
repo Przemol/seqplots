@@ -30,7 +30,7 @@ $(function () {
       multipart: false,
       //maxFileSize: 1000000,
       sequentialUploads: true,
-      acceptFileTypes: /(\.|\/)(gff|bw|wig.gz|wig|bed|gff.gz|bed.gz|gtf|gtf.gz|bdg|bdg.gz|bedGraph|bedGraph.gz|bigWiggle|bigWig|BAM|bam)$/i,
+      acceptFileTypes: /(\.|\/)(gff|bw|wig.gz|wig|bed|gff.gz|bed.gz|gtf|gtf.gz|bdg|bdg.gz|bedGraph|bedGraph.gz|bigWiggle|bigWig|BAM|bam|narrowPeak|narrowPeak.gz)$/i,
       uploadTemplateId: null,
       downloadTemplateId: null,
       uploadTemplate: tmplUP('template-upload'),
