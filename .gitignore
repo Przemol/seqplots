@@ -6,3 +6,4 @@ tmpfile.txt
 tests/img
 .Rprofile
 svn.sh
+.httr-oauth

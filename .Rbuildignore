@@ -16,3 +16,4 @@ inst/seqplots/NEWS
 ^README\.Rmd$
 ^README-.*\.png$
 ^index.html$
+^\.httr-oauth$

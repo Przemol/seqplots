@@ -7,7 +7,7 @@
 import.narrowPeak(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{the path or connection to .narrowPeak file}
 }
 \value{
 GenomicRanges

@@ -1,6 +1,6 @@
 #' Import function for narrowPeak format
 #'
-#' @param x 
+#' @param x the path or connection to .narrowPeak file
 #'
 #' @return GenomicRanges
 #' @export 
