@@ -76,11 +76,12 @@ VignetteBuilder: knitr
 biocViews: ChIPSeq, RNASeq, Sequencing, Software, Visualization
 LazyLoad: yes
 RoxygenNote: 6.0.1
-Collate:
+Collate: 
     'MotifSetup-class.R'
     'PlotSetPair-class.R'
     'PlotSetArray-class.R'
     'PlotSetList-class.R'
+    'add_local_files.R'
     'deployServerInstance.R'
     'generic_methods.R'
     'getPlotSetArray.R'

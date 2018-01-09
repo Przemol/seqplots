@@ -134,16 +134,17 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
   sql_string <- paste0("INSERT INTO files (name, ctime, type, format, genome, user, comment) VALUES (", paste0("'",c(basename(x), as.character(Sys.time()), type, file_type, file_genome, file_user, file_comment), "'", collapse=", "),")") 
   dbBegin(con)
   outcome <- try( { res <- dbSendQuery(con, sql_string ) })
+  dbClearResult(res)
   
   if(class(outcome) == "try-error") {
       message('1st commit failed, repeting the dbSendQuery')
       outcome2 <- try( { res <- dbSendQuery(con, sql_string ) })
+      dbClearResult(res)
       if(class(outcome2) == "try-error") {
           dbRollback(con)
           stop(outcome)
       }
   }
-  
   if ( file.exists(file.path(final_folder, basename(x))) ) {
     dbCommit(con)
     message('File added.')
@@ -151,5 +152,6 @@ doFileOperations <- function(x, final_folder='files', file_genome, file_user, fi
     dbRollback(con)
     stop('File was not moved to final directory.', call. = FALSE)
   }
+  
 }
 
