@@ -260,9 +260,9 @@ getPlotSetArray <- function(
             }
             
             tr_name <- if(class(tracks[[i]]) == 'BigWigFile' | class(tracks[[i]]) == 'BamFile') 
-                basename(path(tracks[[i]])) 
+                if( is.null(names(tracks[i])) ) basename(path(tracks[[i]])) else names(tracks[i])
             else 
-                basename(tracks[[i]][[1]])
+                if( is.null(names(tracks[i])) ) basename(tracks[[i]][[1]]) else names(tracks[i])
                         
             lvl1m(paste(
                 'Processing:', fe_name, '@', tr_name, 
