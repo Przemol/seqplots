@@ -184,7 +184,7 @@ getPlotSetArray <- function(
     if( class(tracks) == "BamFileList" ) tracks <- as.list(tracks)
     
     if( class(features) == "GRanges" ) features <- list(features)
-    if( class(features) == "GRangesList" ) features <- as.list(features)
+    if( is(features, "GRangesList") ) features <- as.list(features)
     
     n <- 1; k <- 1; fe_names <- character();
     
