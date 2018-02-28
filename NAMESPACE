@@ -3,6 +3,7 @@
 export(MotifSetup)
 export(add_local_file)
 export(getPlotSetArray)
+export(getREF)
 export(import.narrowPeak)
 export(plot)
 export(plotAverage)

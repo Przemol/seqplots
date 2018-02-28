@@ -15,4 +15,3 @@ getREF(genome)
 \description{
 Get reference genome
 }
-\keyword{internal}

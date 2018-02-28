@@ -81,7 +81,7 @@ num2bp <- function( n ) {
 #' 
 #' @return \code{DNAStringSet}
 #'
-#' @keywords internal
+#' @export
 #' 
 getREF <- function(genome) {
     
