@@ -16,23 +16,20 @@ add_local_file <- function(
     root=file.path(path.expand("~"), "SeqPlots_data")
 ) {
     source(system.file('seqplots/functions/doFileOperations.R', package = 'seqplots'))
-    require(RSQLite)
-    require(BSgenome)
-    require(rtracklayer)
     
     owd <- getwd(); on.exit(setwd(owd))
     setwd(root)
     con <- RSQLite::dbConnect(RSQLite::SQLite(), dbname = 'files.sqlite')
-    on.exit(dbDisconnect(con))
+    on.exit(RSQLite::dbDisconnect(con))
     
     if( class(x)=="GRanges" ) {
         out <- paste0( file.path(tempdir(), name), '.bed')
         message(out)
-        export.bed(x, out)
+        rtracklayer::export.bed(x, out)
     } else if(class(x)=="SimpleRleList") {
         out <- paste0( file.path(tempdir(), name), '.bw')
         message(out)
-        export.bw(x, out)
+        rtracklayer::export.bw(x, out)
     } else if(class(x)=="BigWigFile") {
         out <- file.path(tempdir(), basename(path(x)))
         message(out)
