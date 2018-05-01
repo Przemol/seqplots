@@ -148,7 +148,9 @@ setGeneric(
         cex.lab=12.0, cex.axis=12.0, cex.legend=12.0, xlab='', ylab="",
         autoscale=TRUE, zmin=0, zmax=10, xlim=NULL, ln.v=TRUE, s = 0.01, 
         indi=TRUE, o_min=NA, o_max=NA, colvec=NULL, clspace=NULL, pointsize=12, 
-        embed=FALSE, ggplot=FALSE, raster=FALSE, ...
+        embed=FALSE, ggplot=FALSE, raster=FALSE, plotz=TRUE, FO=NULL, CL=NA, 
+        sort_by=NULL, sort_mids=FALSE, clst_mids=FALSE,
+        ...
     ) standardGeneric("plotHeatmap")
 )
 
@@ -192,11 +194,32 @@ setMethod(
             HLST <- lapply(HLST, scale )
         }
         
-        #Preparing flat matrix fro sorrting an clustering
-        Hclc <- do.call(cbind, HLST[ include ])
+        #Preparing flat matrix for sorrting an clustering
+        if(clst_mids) {
+            Hclc <- do.call(cbind, lapply(plotset[include], function(x) {
+                x[['heatmap']][ ,x[['all_ind']]>0 & x[['all_ind']]<=x[['e']] ]
+            }))
+        } else {
+            Hclc <- do.call(cbind, HLST[ include ])
+        }
+        
         
         finalOrd <- 1:nrow(Hclc)
-        RowMeans <- rowMeans(Hclc, na.rm=TRUE)
+        
+        if(is.null(sort_by) & !sort_mids) {
+            RowMeans <- rowMeans(Hclc, na.rm=TRUE)
+        } else {
+            if(sort_mids) {
+                if(is.null(sort_by)) { sort_by <- rep(TRUE, length(plotset)) }
+                
+                RowMeans <- rowMeans(sapply(plotset[sort_by], function(x) {
+                    rowMeans(x[['heatmap']][ ,x[['all_ind']]>0 & x[['all_ind']]<=x[['e']] ])
+                }))
+            } else {
+                RowMeans <- rowMeans(sapply(HLST[sort_by], rowMeans))
+            }
+        }
+        
         
         #Sorting
         if(sortrows == 'decreasing' | as.character(sortrows) == "TRUE") { 
@@ -284,11 +307,17 @@ setMethod(
             finalOrd <- finalOrd[cls_order]
             clusts <- table(classes)
             
+        } else if(clstmethod == 'set') { 
+            
+            cls_order <- order(CL)
+            classes <- CL
+            finalOrd <- finalOrd[cls_order]
+            clusts <- table(classes)
+            
         } else {
             
             classes <- NA
             clusts <- NULL
-            
         }
         
         HLST <- lapply(HLST, function(x) { return(x[finalOrd, ]) } )
@@ -297,6 +326,14 @@ setMethod(
         labels <- labels[1:length(plotset)]
         lab[!is.na(labels)] <- labels[!is.na(labels)]
         
+        if(!plotz) {return(list(
+            HLST=HLST, axhline=clusts, bins=plotset[[1]]$all_ind, titles=lab, 
+            e=plotset[[1]]$e, Leg=legend, cex.lab=cex.lab, cex.axis=cex.axis, 
+            cex.legend=cex.legend, xlab=xlab, ylab=ylab, autoscale=autoscale, 
+            zmin=zmin, zmax=zmax, xlim=xlim, ln.v=ln.v, s=s, indi=indi,
+            o_min=o_min, o_max=o_max, colvec=colvec, colorspace=clspace, 
+            pointsize=pointsize, embed=embed, main=main
+        ))}
         
         if( nchar(main) > 0 & !embed) par(oma=c(0,0,(cex.main/12)+1,0) )
         
@@ -371,7 +408,8 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embed, ggplot, raster, ...
+            embed, ggplot, raster, plotz, FO, CL, sort_by, sort_mids, clst_mids,
+            ...
         )
     }
 )
@@ -387,7 +425,8 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embed, ggplot, raster, ...
+            embed, ggplot, raster, plotz, FO, CL, sort_by, sort_mids, clst_mids,
+            ...
         )
     }
 )
@@ -403,7 +442,8 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embed, ggplot, raster, ...
+            embed, ggplot, raster, plotz, FO, CL, sort_by, sort_mids, clst_mids,
+            ...
         )
     }
 )

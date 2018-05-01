@@ -16,7 +16,9 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   xlab = "", ylab = "", autoscale = TRUE, zmin = 0, zmax = 10,
   xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE, o_min = NA,
   o_max = NA, colvec = NULL, clspace = NULL, pointsize = 12,
-  embed = FALSE, ggplot = FALSE, raster = FALSE, ...)
+  embed = FALSE, ggplot = FALSE, raster = FALSE, plotz = TRUE,
+  FO = NULL, CL = NA, sort_by = NULL, sort_mids = FALSE,
+  clst_mids = FALSE, ...)
 
 \S4method{plotHeatmap}{list}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
@@ -25,7 +27,9 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
   zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
   o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
-  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE, ...)
+  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE,
+  plotz = TRUE, FO = NULL, CL = NA, sort_by = NULL, sort_mids = FALSE,
+  clst_mids = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetPair}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
@@ -34,7 +38,9 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
   zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
   o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
-  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE, ...)
+  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE,
+  plotz = TRUE, FO = NULL, CL = NA, sort_by = NULL, sort_mids = FALSE,
+  clst_mids = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetList}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
@@ -43,7 +49,9 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
   zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
   o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
-  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE, ...)
+  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE,
+  plotz = TRUE, FO = NULL, CL = NA, sort_by = NULL, sort_mids = FALSE,
+  clst_mids = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetArray}(plotset, main = "", labels = NA,
   legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
@@ -52,7 +60,9 @@ plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
   cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
   zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
   o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
-  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE, ...)
+  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE,
+  plotz = TRUE, FO = NULL, CL = NA, sort_by = NULL, sort_mids = FALSE,
+  clst_mids = FALSE, ...)
 }
 \arguments{
 \item{plotset}{The dataset to plot - can be \code{\link{PlotSetArray}}, 
