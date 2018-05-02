@@ -149,7 +149,7 @@ setGeneric(
         autoscale=TRUE, zmin=0, zmax=10, xlim=NULL, ln.v=TRUE, s = 0.01, 
         indi=TRUE, o_min=NA, o_max=NA, colvec=NULL, clspace=NULL, pointsize=12, 
         embed=FALSE, ggplot=FALSE, raster=FALSE, plotz=TRUE, FO=NULL, CL=NA, 
-        sort_by=NULL, sort_mids=FALSE, clst_mids=FALSE,
+        sort_by=NULL, sort_mids=FALSE, sort_dst=0L, clst_mids=FALSE,
         ...
     ) standardGeneric("plotHeatmap")
 )
@@ -214,6 +214,12 @@ setMethod(
                 
                 RowMeans <- rowMeans(sapply(plotset[sort_by], function(x) {
                     rowMeans(x[['heatmap']][ ,x[['all_ind']]>0 & x[['all_ind']]<=x[['e']] ])
+                }))
+            } else if(sort_dst>0) {
+                if(is.null(sort_by)) { sort_by <- rep(TRUE, length(plotset)) }
+                
+                RowMeans <- rowMeans(sapply(plotset[sort_by], function(x) {
+                    rowMeans(x[['heatmap']][ ,x[['all_ind']]>=-sort_dst & x[['all_ind']]<=sort_dst ])
                 }))
             } else {
                 RowMeans <- rowMeans(sapply(HLST[sort_by], rowMeans))
@@ -408,8 +414,8 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embed, ggplot, raster, plotz, FO, CL, sort_by, sort_mids, clst_mids,
-            ...
+            embed, ggplot, raster, plotz, FO, CL, sort_by, sort_mids, sort_dst,
+            clst_mids, ...
         )
     }
 )
@@ -425,8 +431,8 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embed, ggplot, raster, plotz, FO, CL, sort_by, sort_mids, clst_mids,
-            ...
+            embed, ggplot, raster, plotz, FO, CL, sort_by, sort_mids, sort_dst,
+            clst_mids, ...
         )
     }
 )
@@ -442,8 +448,8 @@ setMethod(
             include, ssomt1, ssomt2, cex.main,  cex.lab, cex.axis, 
             cex.legend, xlab, ylab, autoscale, zmin, zmax, xlim, ln.v, 
             s, indi, o_min, o_max, colvec, clspace, pointsize, 
-            embed, ggplot, raster, plotz, FO, CL, sort_by, sort_mids, clst_mids,
-            ...
+            embed, ggplot, raster, plotz, FO, CL, sort_by, sort_mids, sort_dst,
+            clst_mids, ...
         )
     }
 )
