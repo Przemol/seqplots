@@ -46,8 +46,9 @@ Installation
 Install develpment version from Bioconductor:
 
 ```{r}
-source("http://bioconductor.org/biocLite.R")
-biocLite("seqplots")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("seqplots")
 ```
 
 To install GitHub vesrion (in order to solve dependencies install from Bioconductor first):
