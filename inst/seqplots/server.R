@@ -656,7 +656,7 @@ shinyServer(function(input, output, clientData, session) {
           progress <- shiny::Progress$new(session, min=1, max=3)
           on.exit(progress$close())
           progress$set('Installing packages: ', paste0(input$avil_geneomes, collapse = '  '), value = 2)
-          BiocInstaller::biocLite(
+          BiocManager::install(
               input$avil_geneomes, suppressUpdates=TRUE, ask=FALSE, 
               lib=file.path(Sys.getenv('root'), 'genomes')
           )

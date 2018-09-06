@@ -98,8 +98,9 @@
 #' #If required install C. elegans genomic package from Bioconductor
 #' if(!"BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes()) {
 #'     if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
-#'          source("http://bioconductor.org/biocLite.R")
-#'          biocLite("BSgenome.Celegans.UCSC.ce10")
+#'          if (!requireNamespace("BiocManager", quietly=TRUE))
+    #'          install.packages("BiocManager")
+#'          BiocManager::install("BSgenome.Celegans.UCSC.ce10")
 #'      }
 #' }
 #' 
