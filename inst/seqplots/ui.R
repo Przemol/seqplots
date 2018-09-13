@@ -330,7 +330,8 @@ batchPanel <- tabPanel(
     div(class='hidden', checkboxInput("showplot", "Show plot buttons", FALSE)),
     conditionalPanel(
         condition = tolower(as.character(Sys.getenv("SHINY_SERVER_VERSION") == '')),
-        checkboxInput('setup_multithread', 'Use multithreading for calculations', .Platform$OS.type != 'windows')
+        #checkboxInput('setup_multithread', 'Use multithreading for calculations', .Platform$OS.type != 'windows')
+        checkboxInput('setup_multithread', 'Use multithreading for calculations', FALSE)
     )
     
 )
