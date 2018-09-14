@@ -5,9 +5,9 @@
 \title{Process genomic signal}
 \usage{
 getPlotSetArray(tracks, features, refgenome, bin = 10L, rm0 = FALSE,
-  ignore_strand = FALSE, xmin = 2000L, xmax = 2000L, xanchored = 1000L,
-  type = "pf", add_heatmap = TRUE, verbose = FALSE, stat = "mean",
-  lvl1m = message, lvl2m = message)
+  ignore_strand = FALSE, xmin = 2000L, xmax = 2000L,
+  xanchored = 1000L, type = "pf", add_heatmap = TRUE,
+  verbose = FALSE, stat = "mean", lvl1m = message, lvl2m = message)
 }
 \arguments{
 \item{tracks}{Character vector or list of BigWig track paths. For motif 
@@ -162,7 +162,7 @@ bw1 <- system.file("extdata",
 if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
     if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
         if (!requireNamespace("BiocManager", quietly=TRUE))
-            install.packages("BiocManager")
+        install.packages("BiocManager")
         BiocManager::install("BSgenome.Celegans.UCSC.ce10")
     }
 }
@@ -194,3 +194,4 @@ plot(plotset2[1,], what='h') #Heatmap
 Other plotting functions: \code{\link{plotAverage}},
   \code{\link{plotHeatmap}}, \code{\link{plot}}
 }
+\concept{plotting functions}

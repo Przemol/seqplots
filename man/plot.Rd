@@ -74,3 +74,4 @@ plot(plotset2[2,], what='h', main="The heatmap", labels=LETTERS,
 Other plotting functions: \code{\link{getPlotSetArray}},
   \code{\link{plotAverage}}, \code{\link{plotHeatmap}}
 }
+\concept{plotting functions}

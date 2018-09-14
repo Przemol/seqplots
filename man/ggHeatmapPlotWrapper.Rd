@@ -4,13 +4,13 @@
 \alias{ggHeatmapPlotWrapper}
 \title{Wrapper function, plotting the heatmap}
 \usage{
-ggHeatmapPlotWrapper(MAT, axhline = NULL, titles = rep("", length(MAT)),
-  bins = 1:(ncol(MAT[[1]])/length(MAT)), cex.lab = 12, cex.axis = 12,
-  cex.legend = 12, xlab = "", ylab = "", Leg = TRUE, autoscale = TRUE,
-  zmin = 0, zmax = 10, xlim = NULL, ln.v = TRUE, e = NULL, s = 0.01,
-  indi = TRUE, o_min = NA, o_max = NA, colvec = NULL,
-  colorspace = NULL, pointsize = 12, embed = FALSE, raster = TRUE,
-  main = "", cex.title = 20, ...)
+ggHeatmapPlotWrapper(MAT, axhline = NULL, titles = rep("",
+  length(MAT)), bins = 1:(ncol(MAT[[1]])/length(MAT)), cex.lab = 12,
+  cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
+  Leg = TRUE, autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL,
+  ln.v = TRUE, e = NULL, s = 0.01, indi = TRUE, o_min = NA,
+  o_max = NA, colvec = NULL, colorspace = NULL, pointsize = 12,
+  embed = FALSE, raster = TRUE, main = "", cex.title = 20, ...)
 }
 \arguments{
 \item{MAT}{- list of matrixes holding heatmap data}

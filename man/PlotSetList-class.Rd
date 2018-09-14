@@ -45,3 +45,4 @@ Other classes: \code{\link{MotifSetup-class}},
   \code{\link{PlotSetArray-class}},
   \code{\link{PlotSetPair-class}}
 }
+\concept{classes}

@@ -4,7 +4,8 @@
 \alias{run}
 \title{SeqPlots innitiation}
 \usage{
-run(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FALSE, ...)
+run(root = file.path(path.expand("~"), "SeqPlots_data"), debug = FALSE,
+  ...)
 }
 \arguments{
 \item{root}{the path to data directory, it will be created if not existing}

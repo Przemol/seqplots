@@ -41,3 +41,4 @@ Other classes: \code{\link{MotifSetup-class}},
   \code{\link{PlotSetArray-class}},
   \code{\link{PlotSetList-class}}
 }
+\concept{classes}

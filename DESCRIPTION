@@ -2,7 +2,7 @@ Type: Package
 Package: seqplots
 Title: An interactive tool for visualizing NGS signals and sequence motif
     densities along genomic features using average plots and heatmaps
-Version: 1.19.2
+Version: 1.19.3
 Date: 2014-09-15
 Authors@R:
     person(given = "Przemyslaw",
@@ -65,7 +65,8 @@ Imports:
     DT (>= 0.1.0),
     RColorBrewer,
     Rsamtools,
-    GenomicAlignments
+    GenomicAlignments,
+    BiocManager
 Suggests:
     testthat,
     BiocStyle,
@@ -75,7 +76,7 @@ Suggests:
 VignetteBuilder: knitr
 biocViews: ChIPSeq, RNASeq, Sequencing, Software, Visualization
 LazyLoad: yes
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Collate: 
     'MotifSetup-class.R'
     'PlotSetPair-class.R'

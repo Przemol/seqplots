@@ -4,7 +4,8 @@
 \alias{deployServerInstance}
 \title{Prepares the instance of SeqPlots, that can be deployed to shinyapps.io}
 \usage{
-deployServerInstance(server = getwd(), data = file.path(server, "DATA"))
+deployServerInstance(server = getwd(), data = file.path(server,
+  "DATA"))
 }
 \arguments{
 \item{server}{The directory where server instance should be created.}

@@ -10,58 +10,63 @@
 \title{Plot heatmap with optional clustering}
 \usage{
 plotHeatmap(plotset, main = "", labels = NA, legend = TRUE,
-  keepratio = FALSE, plotScale = "no", sortrows = FALSE, clusters = 5L,
-  clstmethod = "kmeans", include = NULL, ssomt1 = 2L, ssomt2 = 2L,
-  cex.main = 16, cex.lab = 12, cex.axis = 12, cex.legend = 12,
-  xlab = "", ylab = "", autoscale = TRUE, zmin = 0, zmax = 10,
-  xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE, o_min = NA,
-  o_max = NA, colvec = NULL, clspace = NULL, pointsize = 12,
-  embed = FALSE, ggplot = FALSE, raster = FALSE, plotz = TRUE,
-  FO = NULL, CL = NA, sort_by = NULL, sort_mids = FALSE,
+  keepratio = FALSE, plotScale = "no", sortrows = FALSE,
+  clusters = 5L, clstmethod = "kmeans", include = NULL,
+  ssomt1 = 2L, ssomt2 = 2L, cex.main = 16, cex.lab = 12,
+  cex.axis = 12, cex.legend = 12, xlab = "", ylab = "",
+  autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL,
+  ln.v = TRUE, s = 0.01, indi = TRUE, o_min = NA, o_max = NA,
+  colvec = NULL, clspace = NULL, pointsize = 12, embed = FALSE,
+  ggplot = FALSE, raster = FALSE, plotz = TRUE, FO = NULL,
+  CL = NA, sort_by = NULL, sort_mids = FALSE, sort_dst = 0L,
   clst_mids = FALSE, ...)
 
 \S4method{plotHeatmap}{list}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
-  clusters = 5L, clstmethod = "kmeans", include = NULL, ssomt1 = 2L,
-  ssomt2 = 2L, cex.main = 16, cex.lab = 12, cex.axis = 12,
-  cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
-  zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
-  o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
-  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE,
-  plotz = TRUE, FO = NULL, CL = NA, sort_by = NULL, sort_mids = FALSE,
+  legend = TRUE, keepratio = FALSE, plotScale = "no",
+  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
+  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
+  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "",
+  ylab = "", autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL,
+  ln.v = TRUE, s = 0.01, indi = TRUE, o_min = NA, o_max = NA,
+  colvec = NULL, clspace = NULL, pointsize = 12, embed = FALSE,
+  ggplot = FALSE, raster = FALSE, plotz = TRUE, FO = NULL,
+  CL = NA, sort_by = NULL, sort_mids = FALSE, sort_dst = 0L,
   clst_mids = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetPair}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
-  clusters = 5L, clstmethod = "kmeans", include = NULL, ssomt1 = 2L,
-  ssomt2 = 2L, cex.main = 16, cex.lab = 12, cex.axis = 12,
-  cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
-  zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
-  o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
-  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE,
-  plotz = TRUE, FO = NULL, CL = NA, sort_by = NULL, sort_mids = FALSE,
+  legend = TRUE, keepratio = FALSE, plotScale = "no",
+  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
+  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
+  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "",
+  ylab = "", autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL,
+  ln.v = TRUE, s = 0.01, indi = TRUE, o_min = NA, o_max = NA,
+  colvec = NULL, clspace = NULL, pointsize = 12, embed = FALSE,
+  ggplot = FALSE, raster = FALSE, plotz = TRUE, FO = NULL,
+  CL = NA, sort_by = NULL, sort_mids = FALSE, sort_dst = 0L,
   clst_mids = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetList}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
-  clusters = 5L, clstmethod = "kmeans", include = NULL, ssomt1 = 2L,
-  ssomt2 = 2L, cex.main = 16, cex.lab = 12, cex.axis = 12,
-  cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
-  zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
-  o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
-  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE,
-  plotz = TRUE, FO = NULL, CL = NA, sort_by = NULL, sort_mids = FALSE,
+  legend = TRUE, keepratio = FALSE, plotScale = "no",
+  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
+  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
+  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "",
+  ylab = "", autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL,
+  ln.v = TRUE, s = 0.01, indi = TRUE, o_min = NA, o_max = NA,
+  colvec = NULL, clspace = NULL, pointsize = 12, embed = FALSE,
+  ggplot = FALSE, raster = FALSE, plotz = TRUE, FO = NULL,
+  CL = NA, sort_by = NULL, sort_mids = FALSE, sort_dst = 0L,
   clst_mids = FALSE, ...)
 
 \S4method{plotHeatmap}{PlotSetArray}(plotset, main = "", labels = NA,
-  legend = TRUE, keepratio = FALSE, plotScale = "no", sortrows = FALSE,
-  clusters = 5L, clstmethod = "kmeans", include = NULL, ssomt1 = 2L,
-  ssomt2 = 2L, cex.main = 16, cex.lab = 12, cex.axis = 12,
-  cex.legend = 12, xlab = "", ylab = "", autoscale = TRUE, zmin = 0,
-  zmax = 10, xlim = NULL, ln.v = TRUE, s = 0.01, indi = TRUE,
-  o_min = NA, o_max = NA, colvec = NULL, clspace = NULL,
-  pointsize = 12, embed = FALSE, ggplot = FALSE, raster = FALSE,
-  plotz = TRUE, FO = NULL, CL = NA, sort_by = NULL, sort_mids = FALSE,
+  legend = TRUE, keepratio = FALSE, plotScale = "no",
+  sortrows = FALSE, clusters = 5L, clstmethod = "kmeans",
+  include = NULL, ssomt1 = 2L, ssomt2 = 2L, cex.main = 16,
+  cex.lab = 12, cex.axis = 12, cex.legend = 12, xlab = "",
+  ylab = "", autoscale = TRUE, zmin = 0, zmax = 10, xlim = NULL,
+  ln.v = TRUE, s = 0.01, indi = TRUE, o_min = NA, o_max = NA,
+  colvec = NULL, clspace = NULL, pointsize = 12, embed = FALSE,
+  ggplot = FALSE, raster = FALSE, plotz = TRUE, FO = NULL,
+  CL = NA, sort_by = NULL, sort_mids = FALSE, sort_dst = 0L,
   clst_mids = FALSE, ...)
 }
 \arguments{
@@ -233,7 +238,7 @@ bw1 <- system.file("extdata",
 if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
     if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
          if (!requireNamespace("BiocManager", quietly=TRUE))
-             install.packages("BiocManager")
+         install.packages("BiocManager")
          BiocManager::install("BSgenome.Celegans.UCSC.ce10")
      }
 }
@@ -253,3 +258,4 @@ plotHeatmap(plotset1[1])
 Other plotting functions: \code{\link{getPlotSetArray}},
   \code{\link{plotAverage}}, \code{\link{plot}}
 }
+\concept{plotting functions}

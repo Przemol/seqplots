@@ -26,24 +26,24 @@ plotAverage(plotset, keepratio = FALSE, labels = NULL, xlim = NULL,
   colvec = NULL, pointsize = 12, ...)
 
 \S4method{plotAverage}{PlotSetPair}(plotset, keepratio = FALSE,
-  labels = NULL, xlim = NULL, ylim = NULL, main = NULL, xlab = "",
-  ylab = "", plotScale = "linear", type = "full",
+  labels = NULL, xlim = NULL, ylim = NULL, main = NULL,
+  xlab = "", ylab = "", plotScale = "linear", type = "full",
   error.estimates = TRUE, legend = TRUE, legend_ext = FALSE,
   legend_pos = "topright", legend_ext_pos = "topleft", cex.axis = 14,
   cex.lab = 16, cex.main = 20, cex.legend = 10, ln.v = TRUE,
   ln.h = NULL, colvec = NULL, pointsize = 12, ...)
 
 \S4method{plotAverage}{PlotSetList}(plotset, keepratio = FALSE,
-  labels = NULL, xlim = NULL, ylim = NULL, main = NULL, xlab = "",
-  ylab = "", plotScale = "linear", type = "full",
+  labels = NULL, xlim = NULL, ylim = NULL, main = NULL,
+  xlab = "", ylab = "", plotScale = "linear", type = "full",
   error.estimates = TRUE, legend = TRUE, legend_ext = FALSE,
   legend_pos = "topright", legend_ext_pos = "topleft", cex.axis = 14,
   cex.lab = 16, cex.main = 20, cex.legend = 10, ln.v = TRUE,
   ln.h = NULL, colvec = NULL, pointsize = 12, ...)
 
 \S4method{plotAverage}{PlotSetArray}(plotset, keepratio = FALSE,
-  labels = NULL, xlim = NULL, ylim = NULL, main = NULL, xlab = "",
-  ylab = "", plotScale = "linear", type = "full",
+  labels = NULL, xlim = NULL, ylim = NULL, main = NULL,
+  xlab = "", ylab = "", plotScale = "linear", type = "full",
   error.estimates = TRUE, legend = TRUE, legend_ext = FALSE,
   legend_pos = "topright", legend_ext_pos = "topleft", cex.axis = 14,
   cex.lab = 16, cex.main = 20, cex.legend = 10, ln.v = TRUE,
@@ -179,7 +179,7 @@ bw1 <- system.file("extdata",
 if(!"BSgenome.Celegans.UCSC.ce10" \%in\% BSgenome::installed.genomes()) {
     if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
          if (!requireNamespace("BiocManager", quietly=TRUE))
-             install.packages("BiocManager")
+         install.packages("BiocManager")
          BiocManager::install("BSgenome.Celegans.UCSC.ce10")
      }
 }
@@ -202,3 +202,4 @@ Other plotting functions: \code{\link{getPlotSetArray}},
 \author{
 Przemyslaw Stempor
 }
+\concept{plotting functions}

@@ -53,3 +53,4 @@ Other classes: \code{\link{PlotSetArray-class}},
   \code{\link{PlotSetList-class}},
   \code{\link{PlotSetPair-class}}
 }
+\concept{classes}

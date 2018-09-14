@@ -63,3 +63,4 @@ Other classes: \code{\link{MotifSetup-class}},
   \code{\link{PlotSetList-class}},
   \code{\link{PlotSetPair-class}}
 }
+\concept{classes}

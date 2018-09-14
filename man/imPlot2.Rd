@@ -6,12 +6,13 @@
 is used as background for heatmap, making NAs distinguishable from the data}
 \usage{
 imPlot2(..., add = FALSE, nlevel = 64, horizontal = FALSE,
-  legend.shrink = 0.9, legend.width = 1.2, legend.mar = ifelse(horizontal,
-  3.1, 5.1), legend.lab = NULL, legend.line = 2, graphics.reset = FALSE,
-  bigplot = NULL, smallplot = NULL, legend.only = FALSE,
-  col = tim.colors(nlevel), lab.breaks = NULL, axis.args = NULL,
-  legend.args = NULL, midpoint = FALSE, border = NA, lwd = 1,
-  xinds = NULL, e = NULL, ylast = 0, afs = 1)
+  legend.shrink = 0.9, legend.width = 1.2,
+  legend.mar = ifelse(horizontal, 3.1, 5.1), legend.lab = NULL,
+  legend.line = 2, graphics.reset = FALSE, bigplot = NULL,
+  smallplot = NULL, legend.only = FALSE, col = tim.colors(nlevel),
+  lab.breaks = NULL, axis.args = NULL, legend.args = NULL,
+  midpoint = FALSE, border = NA, lwd = 1, xinds = NULL, e = NULL,
+  ylast = 0, afs = 1)
 }
 \value{
 \code{NULL}
