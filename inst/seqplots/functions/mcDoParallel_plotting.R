@@ -52,11 +52,14 @@ mcDoParallel <- quote({
       if(input$recordHistory) { out$plot <- recordPlot(); dev.control(displaylist="inhibit");  }
       
       dev.off()
+      
       out$url <- a
       out$seed <- attr(ans, 'seed')
       out$anno <- ans
       
-      class(out) <- 'ans'; out 
+      
+      class(out) <- 'ans'
+      return(out)
   })
   
   
@@ -71,6 +74,10 @@ mcDoParallel <- quote({
     } else {
       values$im <-  as.character(out$url)
       values$seed <- out$seed
+      values$clustrep  <- out$anno
+      values$clusters <- out$anno$ClusterID
+      values$plotid  <- isolate( if( is.numeric(values$plotid) ) values$plotid + 1 else 1 )
+      if( !is.null(out$plot) ) isolate({ values$plotHistory[[length(values$plotHistory)+1]] <- res$plot })
     }
   } else {
     
