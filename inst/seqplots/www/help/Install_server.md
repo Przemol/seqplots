@@ -45,8 +45,9 @@ For further usage please refer to [quick start guide](Quick%20start) or specific
 Genomic packages can be installed using standard bioconductor installer (Internet connection required). For example, to instal human reference genome (hg19):
 
 ```{r eval=FALSE}
-source("http://bioconductor.org/biocLite.R")
-biocLite("BSgenome.Hsapiens.UCSC.hg19")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("BSgenome.Hsapiens.UCSC.hg19")
 ```
 
 Corresponding genome packages are required before uploading the files for plotting. 

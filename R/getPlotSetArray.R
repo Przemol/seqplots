@@ -140,8 +140,9 @@
 #' #If required install C. elegans genomic package from Bioconductor
 #' if(!"BSgenome.Celegans.UCSC.ce10" %in% BSgenome::installed.genomes()) {
 #'     if(.Platform$OS.type != "windows" || .Machine$sizeof.pointer != 4) {
-#'         source("http://bioconductor.org/biocLite.R")
-#'         biocLite("BSgenome.Celegans.UCSC.ce10")
+#'         if (!requireNamespace("BiocManager", quietly=TRUE))
+    #'         install.packages("BiocManager")
+#'         BiocManager::install("BSgenome.Celegans.UCSC.ce10")
 #'     }
 #' }
 #' 
@@ -184,7 +185,7 @@ getPlotSetArray <- function(
     if( class(tracks) == "BamFileList" ) tracks <- as.list(tracks)
     
     if( class(features) == "GRanges" ) features <- list(features)
-    if( class(features) == "GRangesList" ) features <- as.list(features)
+    if( is(features, "GRangesList") ) features <- as.list(features)
     
     n <- 1; k <- 1; fe_names <- character();
     

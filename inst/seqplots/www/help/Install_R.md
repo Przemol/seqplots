@@ -16,8 +16,9 @@ How to install
 To install SeqPlots package, start R and enter:
 
 ```{r eval=FALSE}
-source("http://bioconductor.org/biocLite.R")
-biocLite("seqplots")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("seqplots")
 ```
 
 How to start
@@ -49,8 +50,9 @@ Genomic packages can be installed using standard bioconductor installer
 genome (hg19):
 
 ```{r eval=FALSE}
-source("http://bioconductor.org/biocLite.R")
-biocLite("BSgenome.Hsapiens.UCSC.hg19")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("BSgenome.Hsapiens.UCSC.hg19")
 ```
 
 Genome packages are required before uploading files for plotting. Full
