@@ -318,7 +318,7 @@ setMethod(
             
             cls_order <- order(CL)
             classes <- CL
-            finalOrd <- finalOrd[cls_order]
+            finalOrd <- (1:nrow(Hclc))[cls_order]  #[sorting_order]
             clusts <- table(classes)
             
         } else {
@@ -327,7 +327,13 @@ setMethod(
             clusts <- NULL
         }
         
-        HLST <- lapply(HLST, function(x) { return(x[finalOrd, ]) } )
+        if(is.null(FO)) {
+            HLST <- lapply(HLST, function(x) { return(x[finalOrd, ]) } )
+        } else {
+            HLST <- lapply(HLST, function(x) { return(x[FO, ]) } )
+            finalOrd <- FO
+        }
+        
         
         lab <- sapply(plotset, '[[', 'desc')
         labels <- labels[1:length(plotset)]
