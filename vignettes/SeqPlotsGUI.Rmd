@@ -1,5 +1,5 @@
 ---
-title: "SeqPlots R workflow"
+title: "SeqPlots GUI"
 author: "Przemyslaw Setmpor"
 date: "`r format(Sys.Date(), '%d %B %Y')`"
 package: "`r paste('SeqPlots', packageVersion('seqplots'))`"
@@ -13,7 +13,7 @@ abstract: >
   result matrices, allowing rapid plot generation. Plots can also be run
   in batch.
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{SeqPlots GUI}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 output: 

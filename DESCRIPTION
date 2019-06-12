@@ -76,7 +76,7 @@ Suggests:
 VignetteBuilder: knitr
 biocViews: ChIPSeq, RNASeq, Sequencing, Software, Visualization
 LazyLoad: yes
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Collate: 
     'MotifSetup-class.R'
     'PlotSetPair-class.R'
