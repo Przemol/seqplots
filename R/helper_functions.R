@@ -8,7 +8,7 @@
 import.narrowPeak <- function(x) {
     extraCols <- c(signalValue="numeric", pValue="numeric", qValue="numeric",
                    peak="integer")
-    gr <- import(x, forma="bed", extraCols=extraCols)
+    gr <- import(x, format="bed", extraCols=extraCols)
     return(gr)
 }
 

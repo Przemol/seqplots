@@ -191,6 +191,24 @@ defaults to FALSE}
 "useRaster" option in \code{\link[graphics]{image}} function and 
 \code{\link[ggplot2]{geom_raster}} function for details, defaults to FALSE}
 
+\item{plotz}{if FALSE the functions returns a list of plot parameters, rather
+than actual plot}
+
+\item{FO}{If set, this vector determines a final order of features in the
+heatmap}
+
+\item{CL}{If set, this vector determines a class assignment of features in 
+the heatmap}
+
+\item{sort_by}{Set which subplots contribute to sorting}
+
+\item{sort_mids}{For anchored plot, sort using only middle values}
+
+\item{sort_dst}{For anchored plot, the flanking distance that should be added 
+to sorting calculation}
+
+\item{clst_mids}{For anchored plot, cluster using only middle values}
+
 \item{...}{parameters passed to internal plotting function}
 }
 \value{

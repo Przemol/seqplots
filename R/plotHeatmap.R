@@ -95,6 +95,17 @@
 #' @param raster The bitmap raster is used to plot the heatmap image, see 
 #'   "useRaster" option in \code{\link[graphics]{image}} function and 
 #'   \code{\link[ggplot2]{geom_raster}} function for details, defaults to FALSE
+#' @param plotz if FALSE the functions returns a list of plot parameters, rather
+#'   than actual plot
+#' @param FO If set, this vector determines a final order of features in the
+#'   heatmap
+#' @param CL If set, this vector determines a class assignment of features in 
+#'   the heatmap
+#' @param sort_by Set which subplots contribute to sorting
+#' @param sort_mids For anchored plot, sort using only middle values
+#' @param sort_dst For anchored plot, the flanking distance that should be added 
+#'   to sorting calculation
+#' @param clst_mids For anchored plot, cluster using only middle values
 #' @param ... parameters passed to internal plotting function
 #'   
 #' @return The cluster report \code{data.frame}, giving cluster assignments and
